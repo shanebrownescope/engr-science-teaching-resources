@@ -14,6 +14,7 @@ async function dbConnect({query, values}) {
     const results = await db.query(query, values)
     return results
   } catch (error) {
+    console.log("--nope")
     return { error };
   }
 }
