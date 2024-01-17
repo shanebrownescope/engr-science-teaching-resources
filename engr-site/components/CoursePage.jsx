@@ -1,9 +1,11 @@
 import React from 'react';
+import { HeaderMegaMenu, HeroBullets } from './mantine';
 
 const CoursePage = () => {
   return (
     <div>
-      <h1>Course Page</h1>
+      <HeaderMegaMenu />
+      <HeroBullets />
     </div>
   );
 };
