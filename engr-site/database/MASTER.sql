@@ -1,5 +1,5 @@
 SET foreign_key_checks = 0;
-DROP TABLE IF EXISTS Users, Files, Tags, FileTags, Pages, Comments;
+DROP TABLE IF EXISTS Users, Files, Tags, Courses, FileTags, Pages, Comments;
 SET foreign_key_checks = 1;
 
 CREATE TABLE Users (
@@ -36,6 +36,13 @@ CREATE TABLE FileTags (
   PRIMARY KEY (FileTagId),
   FOREIGN KEY (TagId) REFERENCES Tags(TagId) ON DELETE CASCADE,
   FOREIGN KEY (FileId) REFERENCES Files(FileId) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Courses (
+  courseId INT NOT NULL AUTO_INCREMENT,
+  courseName VARCHAR(255) NOT NULL,
+  PRIMARY KEY (courseId)
 );
 
 

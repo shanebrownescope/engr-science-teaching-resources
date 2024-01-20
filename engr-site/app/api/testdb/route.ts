@@ -1,14 +1,18 @@
 import dbConnect from "@/database/dbConnector";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req, res) {
+export async function GET(req: NextRequest) {
   try {
     const query = `
       SELECT Name
       FROM Users
     `;
 
-    const results = await dbConnect({ query });
+    // return NextResponse.json({message: `success`}, {status: 200})
+
+
+    console.log("here")
+    const results = await dbConnect(query);
     console.log("--results", results)
 
     if (results[0].length > 0) {
@@ -19,7 +23,7 @@ export async function GET(req, res) {
     }
   } catch (error) {
     console.error({message: 'Error getting test user name:', error});
-    return NextResponse({message: "server error"}, {status: 500})
+    return NextResponse.json({message: "server error"}, {status: 500})
   }
 };
 

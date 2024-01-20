@@ -1,5 +1,4 @@
-import mysql from 'mysql2/promise';
-
+import mysql, { RowDataPacket, FieldPacket } from 'mysql2/promise';
 
 const db = mysql.createPool({
   connectionLimit : 10,
@@ -9,13 +8,14 @@ const db = mysql.createPool({
   database        : process.env.DB_NAME
 })
 
-async function dbConnect({query, values}) {
+async function dbConnect(query: string, values?: any[]): Promise<any> {
   try {
     const results = await db.query(query, values)
-    return results
+    // console.log("== query", query, "value", values, "db result", results)
+    return { results }
   } catch (error) {
-    console.log("--nope")
-    return { error };
+    console.error("Error in dbConnect:", error);
+    return { error }
   }
 }
 
