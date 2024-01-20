@@ -1,0 +1,23 @@
+.containerr {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.wrapper  {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    width: 400px;
+    margin-top: 200px;
+    border: 1px solid white;
+    background: none;
+    padding: 20px;
+}
+
+.messageStyle {
+    background: lightYellow;
+    padding: 20px;
+    color: black;
+}
