@@ -1,5 +1,6 @@
-import React from 'react';
-import { HeaderMegaMenu, HeroBullets } from './mantine';
+"use client";
+import React from "react";
+import { HeaderMegaMenu, HeroBullets } from "./mantine";
 
 const CoursePage = () => {
   return (
