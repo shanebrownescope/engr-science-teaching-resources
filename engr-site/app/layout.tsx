@@ -22,9 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <MantineProvider theme={theme}>
-        <body className={inter.className}>{children}</body>
-      </MantineProvider>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

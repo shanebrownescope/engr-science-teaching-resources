@@ -11,18 +11,20 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.468.0",
     "@aws-sdk/s3-request-presigner": "^3.468.0",
-    "@mantine/core": "^7.4.1",
-    "@mantine/dates": "^7.4.1",
+    "@mantine/core": "^7.4.2",
+    "@mantine/dates": "^7.4.2",
     "@mantine/dropzone": "^7.4.2",
-    "@mantine/form": "^7.4.1",
-    "@mantine/hooks": "^7.4.1",
+    "@mantine/form": "^7.4.2",
+    "@mantine/hooks": "^7.4.2",
+    "@mantine/carousel": "7.4.2",
     "@mantinex/mantine-logo": "^1.0.1",
     "@tabler/icons-react": "^2.46.0",
     "dayjs": "^1.11.10",
     "mysql2": "^3.6.4",
     "next": "14.0.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-router-dom": "^6.22.0"
   },
   "devDependencies": {
     "@types/node": "20.11.5",

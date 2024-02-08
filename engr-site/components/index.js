@@ -1,3 +1,3 @@
-import CoursePage from './CoursePage';
-
-export { CoursePage };
+export { HomePage } from "./HomePage";
+export { CoursePage } from "./CoursePage";
+export { LecturePage } from "./LecturePage";

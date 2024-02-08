@@ -1,14 +1,13 @@
-"use client";
 import React from "react";
-import { HeaderMegaMenu, HeroBullets } from "./mantine";
+import { HeaderMegaMenu, CourseCard } from "./mantine";
 
-const CoursePage = () => {
+export const CoursePage = () => {
+  // let { title } = useParams();
   return (
     <div>
       <HeaderMegaMenu />
-      <HeroBullets />
+      {/* <div>Course: {title}</div> */}
+      <CourseCard />
     </div>
   );
 };
-
-export default CoursePage;
