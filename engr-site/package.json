@@ -16,7 +16,6 @@
     "@mantine/dropzone": "^7.4.2",
     "@mantine/form": "^7.4.2",
     "@mantine/hooks": "^7.4.2",
-    "@mantine/carousel": "7.4.2",
     "@mantinex/mantine-logo": "^1.0.1",
     "@tabler/icons-react": "^2.46.0",
     "dayjs": "^1.11.10",

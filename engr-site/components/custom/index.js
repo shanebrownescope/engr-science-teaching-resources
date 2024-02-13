@@ -1,0 +1,1 @@
+export { SimilarDocument } from "./SimilarDocument";

@@ -16,16 +16,21 @@ import {
   ScrollArea,
   rem,
   useMantineTheme,
-  NavLink,
 } from "@mantine/core";
 import { MantineLogo } from "@mantinex/mantine-logo";
 import { useDisclosure } from "@mantine/hooks";
 import {
-  IconBolt,
-  IconBarbell,
-  IconArrowsMove,
+  IconNotification,
+  IconCode,
+  IconBook,
+  IconChartPie3,
+  IconFingerprint,
+  IconCoin,
   IconChevronDown,
   IconAtom,
+  IconArrowsMove,
+  IconBarbell,
+  IconBolt,
 } from "@tabler/icons-react";
 import classes from "./HeaderMegaMenu.module.css";
 import Link from "next/link";
@@ -59,39 +64,35 @@ export function HeaderMegaMenu() {
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const theme = useMantineTheme();
 
-  // const links = mockdata.map((item) => (
-  //   <UnstyledButton className={classes.subLink} key={item.title}>
-  //     <NavLink
-  //       href=""
-  //       label="With icon"
-  //       leftSection={<IconHome2 size="1rem" stroke={1.5} />}
-  //     >
-  //       <Group wrap="nowrap" align="flex-start">
-  //         <ThemeIcon size={34} variant="default" radius="md">
-  //           <item.icon
-  //             style={{ width: rem(22), height: rem(22) }}
-  //             color={theme.colors.blue[6]}
-  //           />
-  //         </ThemeIcon>
-  //         <div>
-  //           <Text size="sm" fw={500}>
-  //             {item.title}
-  //           </Text>
-  //           <Text size="xs" c="dimmed">
-  //             {item.description}
-  //           </Text>
-  //         </div>
-  //       </Group>
-  //     </NavLink>
-  //   </UnstyledButton>
-  // ));
+  const links = mockdata.map((item) => (
+    // Wrap each item with Link and use an <a> tag inside for the clickable area
+    <Link href={`/course/${item.title}`} key={item.title} passHref>
+      <UnstyledButton className={classes.subLink}>
+        <Group wrap="nowrap" align="flex-start">
+          <ThemeIcon size={34} variant="default" radius="md">
+            <item.icon
+              style={{ width: rem(22), height: rem(22) }}
+              color={theme.colors.blue[6]}
+            />
+          </ThemeIcon>
+          <div>
+            <Text size="sm" fw={500}>
+              {item.title}
+            </Text>
+            <Text size="xs" c="dimmed">
+              {item.description}
+            </Text>
+          </div>
+        </Group>
+      </UnstyledButton>
+    </Link>
+  ));
 
   return (
     <Box pb={120}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
-          {/* <MantineLogo size={30} /> */}
-          <h3>Engineering Resources</h3>
+          <MantineLogo size={30} />
 
           <Group h="100%" gap={0} visibleFrom="sm">
             <a href="#" className={classes.link}>
@@ -128,9 +129,9 @@ export function HeaderMegaMenu() {
 
                 <Divider my="sm" />
 
-                {/* <SimpleGrid cols={2} spacing={0}>
+                <SimpleGrid cols={2} spacing={0}>
                   {links}
-                </SimpleGrid> */}
+                </SimpleGrid>
 
                 {/* <div className={classes.dropdownFooter}>
                   <Group justify="space-between">
@@ -148,10 +149,10 @@ export function HeaderMegaMenu() {
               </HoverCard.Dropdown>
             </HoverCard>
             <a href="#" className={classes.link}>
-              What we offer
+              Learn
             </a>
             <a href="#" className={classes.link}>
-              Acknowledgments
+              Academy
             </a>
           </Group>
 
@@ -194,7 +195,7 @@ export function HeaderMegaMenu() {
               />
             </Center>
           </UnstyledButton>
-          {/* <Collapse in={linksOpened}>{links}</Collapse> */}
+          <Collapse in={linksOpened}>{links}</Collapse>
           <a href="#" className={classes.link}>
             Learn
           </a>
