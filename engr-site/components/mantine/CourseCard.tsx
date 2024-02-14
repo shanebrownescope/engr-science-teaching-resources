@@ -1,24 +1,8 @@
-import { Card, Image, Text, Group, RingProgress } from "@mantine/core";
+import { Card, Image, Text, Group, RingProgress, Button } from "@mantine/core";
 import classes from "./CourseCard.module.css";
-
-const stats = [
-  { title: "Distance", value: "27.4 km" },
-  { title: "Avg. speed", value: "9.6 km/h" },
-  { title: "Score", value: "88/100" },
-];
+import Link from "next/link";
 
 export function CourseCard() {
-  const items = stats.map((stat) => (
-    <div key={stat.title}>
-      <Text size="xs" color="dimmed">
-        {stat.title}
-      </Text>
-      <Text fw={500} size="sm">
-        {stat.value}
-      </Text>
-    </div>
-  ));
-
   return (
     <Card withBorder padding="lg" className={classes.card}>
       <Group justify="space-between" mt="xl">
@@ -29,7 +13,9 @@ export function CourseCard() {
       <Text mt="sm" mb="md" c="dimmed" fz="xs">
         Learn about 1D kinematics... and more
       </Text>
-      <Card.Section className={classes.footer}>{items}</Card.Section>
+      <Link href="/lectures/1d-motion">
+        <Button>View all</Button>
+      </Link>
     </Card>
   );
 }

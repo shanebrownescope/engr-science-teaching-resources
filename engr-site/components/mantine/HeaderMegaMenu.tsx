@@ -40,21 +40,25 @@ const mockdata = [
     icon: IconAtom,
     title: "Statics",
     description: "Description goes here",
+    path: "/courses/statics",
   },
   {
     icon: IconArrowsMove,
     title: "Dynamics",
     description: "Description goes here",
+    path: "/courses/dynamics",
   },
   {
     icon: IconBarbell,
     title: "Strengths of Materials",
     description: "Description goes here",
+    path: "/courses/strengths-of-materials",
   },
   {
     icon: IconBolt,
     title: "Circuits & Electrical Fundamentals",
     description: "Description goes here",
+    path: "/courses/circuits-electrical-fundamentals",
   },
 ];
 
@@ -65,8 +69,7 @@ export function HeaderMegaMenu() {
   const theme = useMantineTheme();
 
   const links = mockdata.map((item) => (
-    // Wrap each item with Link and use an <a> tag inside for the clickable area
-    <Link href={`/course/${item.title}`} key={item.title} passHref>
+    <Link href={`${item.path}`} key={item.path} passHref>
       <UnstyledButton className={classes.subLink}>
         <Group wrap="nowrap" align="flex-start">
           <ThemeIcon size={34} variant="default" radius="md">

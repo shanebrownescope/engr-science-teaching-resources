@@ -8,7 +8,7 @@ const theme = createTheme({
   /** Put your mantine theme override here */
 });
 
-export default function Home({ Component, pageProps }) {
+export default function Home() {
   return (
     <MantineProvider>
       <HomePage />
