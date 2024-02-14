@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { HomePage } from "../components";
+import { HeaderMegaMenu, HeroBullets } from "@/components/mantine";
 import "@mantine/core/styles.css";
 import { createTheme, MantineProvider } from "@mantine/core";
 
@@ -11,7 +11,8 @@ const theme = createTheme({
 export default function Home() {
   return (
     <MantineProvider>
-      <HomePage />
+      <HeaderMegaMenu />
+      <HeroBullets />
     </MantineProvider>
   );
 }
