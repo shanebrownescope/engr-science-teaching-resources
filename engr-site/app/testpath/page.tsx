@@ -1,21 +1,21 @@
 "use client";
 import { useState, ChangeEvent } from "react";
 
-import { createTagPost, getSignedURL } from "@/config/action";
+import { getSignedURL } from "@/actions/uploadingFilesTags/getSignedUrl";
+import { createTagPost } from "@/actions/uploadingFilesTags/uploadTagsAction";
+
+// import { createTagPost, getSignedURL } from "@/config/action";
 import { DropzoneButton, ButtonProgress } from "../../components/mantine";
-import { TagsInput } from "@mantine/core";
-import { getSignedURL } from '@/actions/uploadingFilesTags/getSignedUrl'
-import { createTagPost } from '@/actions/uploadingFilesTags/uploadTagsAction'
+import { MantineProvider, TagsInput } from "@mantine/core";
 
 import Select from 'react-select';
 
-import styles from '@/styles/test.module.css'
+// import styles from '@/styles/test.module.css'
 import TestDb from './TestDb'
 import Tags from './Tags'
 
 import styles from "@/styles/test.module.css";
-import TestDb from "./TestDb";
-import Tags from "./Tags";
+
 
 //* Testing: file upload to s3 and db
 //* TestDb component: test db is working
@@ -205,6 +205,7 @@ const TestPath = () => {
 
   return (
     <div>
+      {/* <MantineProvider>  */}
       <form onSubmit={handleSubmit}>
         {statusMessage && (
           <p className={styles.messageStyle}> {statusMessage} </p>
@@ -257,15 +258,16 @@ const TestPath = () => {
         handleAddTag={handleAddTag}
         handleTagChange={handleTagChange}
       />
-      <DropzoneButton />
-      <ButtonProgress />
-      <TagsInput
+      {/* <DropzoneButton /> */}
+      {/* <ButtonProgress /> */}
+      {/* <TagsInput
         style={{ width: "25%", marginLeft: "10px" }}
         label="Press Enter to submit a tag"
         placeholder="Enter tag"
-      />
+      /> */}
       {/* {error && <div> {error} </div>} */}
       {/* {testDbResult && <div> {testDbResult} </div>} */}
+      {/* </MantineProvider> */}
     </div>
   );
 };

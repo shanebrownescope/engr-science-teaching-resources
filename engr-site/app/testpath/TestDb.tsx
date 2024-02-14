@@ -1,9 +1,9 @@
 "use client"
 import { useState } from "react"
 
-import { testingAction } from '@/actions/uploadingFilesTags/getSignedUrl'
+// import { testingAction } from '@/actions/uploadingFilesTags/getSignedUrl'
 
-import { testingAction } from "@/config/action";
+// import { testingAction } from "@/config/action";
 import { Button } from "@mantine/core";
 
 //* Test getting first user in db
@@ -31,10 +31,10 @@ const TestDb = () => {
   //* test inerst
   // Example usage
   const newUser = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    password: "securepassword",
-    role: "user",
+    name: "admin2",
+    email: "admin2@email.com",
+    password: "12345678",
+    role: "admin",
   };
 
   const [loading2, setLoading2] = useState(false);
@@ -60,23 +60,23 @@ const TestDb = () => {
   };
 
   const testAction = async () => {
-    try {
-      const response = await testingAction();
-      console.log(response);
-    } catch (error) {
-      throw Error("-- testAction failed");
-    }
+    // try {
+    //   const response = await testingAction();
+    //   console.log(response);
+    // } catch (error) {
+    //   throw Error("-- testAction failed");
+    // }
   };
 
   return (
     <div>
-      <Button onClick={testDB} variant="filled" style={{ margin: "10px" }}>
+      {/* <Button onClick={testDB} variant="filled" style={{ margin: "10px" }}>
         Test database
       </Button>
 
       <Button onClick={insertUser} variant="filled" style={{ margin: "10px" }}>
         Test insert user
-      </Button>
+      </Button> */}
 
       {loading1 && <p> chekcing database </p>}
       {testDbResult && <p> {testDbResult} </p>}
@@ -84,9 +84,9 @@ const TestDb = () => {
       {loading2 && <p> inserting user </p>}
       {insertResult && <p> user created id: {insertResult} </p>}
 
-      <Button onClick={testAction} variant="filled" style={{ margin: "10px" }}>
+      {/* <Button onClick={testAction} variant="filled" style={{ margin: "10px" }}>
         Test action
-      </Button>
+      </Button> */}
     </div>
   );
 };
