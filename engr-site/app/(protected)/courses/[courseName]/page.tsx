@@ -1,5 +1,6 @@
 import { fetchCoursesModules } from "@/actions/fetching/fetchCourseModules";
 import Link from "next/link";
+import { CourseCard } from "@/components/mantine";
 
 const CourseModules = async ({
   params,
@@ -27,29 +28,12 @@ const CourseModules = async ({
       ))}
 
       {modules?.failure && <p> here </p>}
+
+      <CourseCard />
+      <CourseCard />
+      <CourseCard />
     </div>
   );
 };
 
 export default CourseModules;
-
-// "use client";
-// import React from "react";
-// import "@mantine/core/styles.css";
-// import { createTheme, MantineProvider } from "@mantine/core";
-// import { HeaderMegaMenu, CourseCard } from "../../../components/mantine";
-// import { useParams } from "next/navigation";
-
-// export default function Course() {
-//   const params = useParams<{ coursename: string }>();
-
-//   return (
-//     <MantineProvider>
-//       <HeaderMegaMenu />
-//       <h1>Course: {params.coursename}</h1>
-//       <CourseCard />
-//       <CourseCard />
-//       <CourseCard />
-//     </MantineProvider>
-//   );
-// }
