@@ -11,7 +11,10 @@ const db = mysql.createPool({
 async function dbConnect(query: string, values?: any[]): Promise<any> {
   try {
     const results = await db.query(query, values)
+    // console.log("")
+    // console.log(typeof(results))
     // console.log("== query", query, "value", values, "db result", results)
+    // console.log("")
     return { results }
   } catch (error) {
     console.error("Error in dbConnect:", error);

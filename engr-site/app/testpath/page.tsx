@@ -4,6 +4,14 @@ import { useState, ChangeEvent } from "react";
 import { createTagPost, getSignedURL } from "@/config/action";
 import { DropzoneButton, ButtonProgress } from "../../components/mantine";
 import { TagsInput } from "@mantine/core";
+import { getSignedURL } from '@/actions/uploadingFilesTags/getSignedUrl'
+import { createTagPost } from '@/actions/uploadingFilesTags/uploadTagsAction'
+
+import Select from 'react-select';
+
+import styles from '@/styles/test.module.css'
+import TestDb from './TestDb'
+import Tags from './Tags'
 
 import styles from "@/styles/test.module.css";
 import TestDb from "./TestDb";
@@ -11,6 +19,12 @@ import Tags from "./Tags";
 
 //* Testing: file upload to s3 and db
 //* TestDb component: test db is working
+
+type Option = {
+  value: string;
+  label: string;
+}
+
 
 const TestPath = () => {
   //* state for form
@@ -21,6 +35,41 @@ const TestPath = () => {
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [error, setError] = useState(null);
+
+  const courseOptions: Option[] = [
+    { value: 'dynamics', label: 'Dynamics' },
+    { value: 'strength-of-materials', label: 'Strength of materials' },
+  ];
+
+  const [selectedCourseOption, setSelectedCourseOption] = useState<Option | null>(null);
+
+  const handleCourseChange = (selected: Option | null) => {
+    setSelectedCourseOption(selected);
+  };
+
+  const moduleOptions: Option[] = [
+    { value: '1d-motion', label: '1D motion' },
+    { value: 'kinematics', label: 'Kinematics' },
+  ];
+
+  const [selectedModuleOptions, setSelectedModuleOptions] = useState<Option | null>(null);
+
+  const handleModuleChange = (selected: Option | null) => {
+    setSelectedModuleOptions(selected);
+  };
+
+  const sectionOptions: Option[] = [
+    { value: 'course-notes', label: 'Course notes' },
+    { value: 'problems', label: 'Problems' },
+    { value: 'quizzes-and-exams', label: 'Quizzes and exams' },
+  ];
+
+  const [selectedSectionOptions, setSelectedSectionOptions] = useState<Option | null>(null);
+
+  const handleSectionChange = (selected: Option | null) => {
+    setSelectedSectionOptions(selected);
+  };
+
 
   const handleAddTag = () => {
     if (tags.length < 5) {
@@ -72,13 +121,16 @@ const TestPath = () => {
       }
 
       setStatusMessage("uploading file");
-      const checksum = await computeSHA256(file);
+      const checksum = await computeSHA256(file)
       const signedURLResult = await getSignedURL({
-        fileName: file!.name,
-        fileType: file!.type,
-        fileSize: file!.size,
-        checksum: checksum,
-      });
+        fileName: file!.name, 
+        fileType: file!.type, 
+        fileSize: file!.size, 
+        checksum: checksum, 
+        course: selectedCourseOption!.value,
+        module: selectedModuleOptions!.value,
+        section: selectedSectionOptions!.value
+      })
       // const signedURLResult = await getSignedURL()
 
       if (signedURLResult?.failure) {
@@ -173,14 +225,31 @@ const TestPath = () => {
               Remove
             </button>
           </div>
-        )}
-
+        )} 
+        
         <button
           type="submit"
           // disable={fileUrl != undefined ? true : false}
         >
           Upload
         </button>
+
+        <div>
+          <label>Select Course:</label>
+          <Select options={courseOptions} value={selectedCourseOption} onChange={handleCourseChange} />
+        </div>
+
+        <div>
+          <label>Select Module:</label>
+          <Select options={moduleOptions} value={selectedModuleOptions} onChange={handleModuleChange} />
+        </div>
+
+        <div>
+          <label>Select Section:</label>
+          <Select options={sectionOptions} value={selectedSectionOptions} onChange={handleSectionChange} />
+        </div>
+
+
       </form>
       <TestDb />
       <Tags

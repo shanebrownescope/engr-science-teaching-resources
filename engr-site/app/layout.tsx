@@ -3,6 +3,10 @@ import React from "react";
 import "./globals.css";
 import "@mantine/core/styles.css";
 import { createTheme, MantineProvider } from "@mantine/core";
+import { Inter } from 'next/font/google';
+import { SessionProvider } from 'next-auth/react';
+import { auth } from '@/auth';
+import { Navbar } from './(protected)/_components/Navbar';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,14 +19,22 @@ const theme = createTheme({
   /** Put your mantine theme override here */
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <SessionProvider session={session}>
+      <html lang="en">
+        <body className={inter.className}>
+          {session?.user?.email ? <Navbar /> : <div>Not logged in navbar</div>}
+
+          {children}
+        </body>
+      </html>
+    </SessionProvider>
   );
 }
