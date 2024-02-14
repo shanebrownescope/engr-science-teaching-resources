@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
 
-import { testingAction } from '@/config/action'
+import { testingAction } from '@/actions/uploadingFilesTags/getSignedUrl'
 
 
 //* Test getting first user in db
