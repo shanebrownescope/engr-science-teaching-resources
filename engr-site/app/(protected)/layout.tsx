@@ -1,16 +1,16 @@
-import { Navbar } from "./_components/Navbar";
+import { HeaderMegaMenu } from "@/components/mantine";
 
 type ProtectedLayoutProps = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return (
     <div>
-      {/* <Navbar /> */}
+      <HeaderMegaMenu />
       {children}
     </div>
-  )
-}
+  );
+};
 
 export default ProtectedLayout;

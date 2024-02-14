@@ -1,3 +1,4 @@
+"use client";
 import { useRef } from "react";
 import { Text, Group, Button, rem, useMantineTheme } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";

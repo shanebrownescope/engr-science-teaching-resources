@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useInterval } from "@mantine/hooks";
 import { Button, Progress, useMantineTheme, rgba } from "@mantine/core";
