@@ -1,0 +1,17 @@
+.comment {
+  padding: var(--mantine-spacing-lg) var(--mantine-spacing-xl);
+  width: 500px; /* Set the width of the card */
+  margin: 0 auto; /* Center the card horizontally */
+}
+
+.body {
+  padding-left: rem(54px);
+  padding-top: var(--mantine-spacing-sm);
+  font-size: var(--mantine-font-size-sm);
+}
+
+.content {
+  & > p:last-child {
+    margin-bottom: 0;
+  }
+}

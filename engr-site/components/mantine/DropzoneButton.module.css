@@ -1,0 +1,29 @@
+.wrapper {
+  position: relative;
+  margin-bottom: rem(30px);
+}
+
+.dropzone {
+  border-width: rem(1px);
+  padding-bottom: rem(50px);
+
+  margin: auto;
+  border: 1px dashed #000000; /* Dashed border, you can change the color */
+  width: 50%; /* Adjust the width as needed, e.g., in pixels or percentages */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.dropzone:hover {
+  background-color: #e0e0e0; /* Background color on hover, change as needed */
+}
+
+.icon {
+  color: light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-3));
+}
+
+.control {
+  position: absolute;
+  width: rem(250px);
+  left: calc(50% - rem(125px));
+  bottom: rem(-20px);
+}
