@@ -1,0 +1,25 @@
+.document-container {
+  position: relative;
+  width: fit-content; /* Adjust based on your needs */
+}
+
+.document-image {
+  display: block; /* Removes bottom space/margin */
+  width: 100%; /* Adjust based on your needs, or use max-width */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Gray transparent background */
+  color: white; /* Text color */
+  padding: 10px; /* Adjust based on your needs */
+}
+
+.image-title {
+  margin: 0; /* Removes default paragraph margins */
+  /* Additional styling for the title text */
+}
