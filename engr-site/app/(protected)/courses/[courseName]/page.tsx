@@ -1,6 +1,6 @@
 import { fetchCoursesModules } from "@/actions/fetching/fetchCourseModules";
 import Link from "next/link";
-import { CourseCard } from "@/components/mantine";
+import { ModuleCard } from "@/components/mantine";
 
 const CourseModules = async ({
   params,
@@ -17,21 +17,19 @@ const CourseModules = async ({
 
       {modules?.success?.map((item: any, index: number) => (
         <div>
-          <Link
+          <ModuleCard
+            title={item.original}
+            description="description here"
             href={`/courses/${params.courseName}/${item.formatted}`}
-            key={index}
-          >
-            {" "}
-            {item.original}{" "}
-          </Link>
+          />
         </div>
       ))}
 
       {modules?.failure && <p> here </p>}
 
-      <CourseCard />
-      <CourseCard />
-      <CourseCard />
+      {/* <ModuleCard />
+      <ModuleCard />
+      <ModuleCard /> */}
     </div>
   );
 };
