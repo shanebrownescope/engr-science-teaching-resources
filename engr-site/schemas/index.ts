@@ -17,3 +17,11 @@ export const RegisterSchema = z.object({
 })
 
 
+export const UploadFileAndTagsSchema = z.object({
+  file: z.instanceof(File),
+  tags: z.array(z.string()),
+  course: z.string(),
+  module: z.string(),
+  section: z.string()
+})
+

@@ -9,10 +9,9 @@ import {
   authRoutes,
   publicRoutes,
 } from "@/routes"
-import { getUserByEmail } from "./database/data/user";
 
 
-export default auth(async(req) => {
+export default auth((req) => {
   const { nextUrl } = req;
   // console.log("== nextUrl: ", nextUrl)
   const isLoggedIn = !!req.auth //* !! turns to boolean
