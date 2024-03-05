@@ -1,7 +1,7 @@
 "use server";
 
 
-import { FileData } from "@/utils/types";
+import { FileData, fetchedFilesDataArray } from "@/utils/types";
 import dbConnect from "@/database/dbConnector";
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { processFile } from "@/utils/helpers";
@@ -11,25 +11,21 @@ type fetchFilesByConceptIdProps = {
   id: string;
 };
 
-type fetchedFilesData = {
-  success?: fetchedFile[];
-  failure?: string;
-};
-
 
 export const fetchFilesByConceptId = async ({
   id,
-}: fetchFilesByConceptIdProps): Promise<fetchedFilesData> => {
+}: fetchFilesByConceptIdProps): Promise<fetchedFilesDataArray> => {
   try {
+  
     const selectQuery = `
-    SELECT f.FileId, f.FileName, f.S3Url, f.Description, f.UploadDate, f.Contributor,
-      JSON_ARRAYAGG(t.TagName) AS TagNames
-    FROM Files f
-    LEFT JOIN FileTags ft ON f.FileId = ft.FileId
-    LEFT JOIN Tags t ON ft.TagId = t.TagId
-    WHERE f.ConceptId = ?
-    GROUP BY f.FileId;`
-
+      SELECT f.FileId, f.FileName, f.S3Url, f.Description, f.UploadDate, f.Contributor,
+        JSON_ARRAYAGG(t.TagName) AS TagNames
+      FROM Files f
+      LEFT JOIN FileTags ft ON f.FileId = ft.FileId
+      LEFT JOIN Tags t ON ft.TagId = t.TagId
+      WHERE f.ConceptId = ?
+      GROUP BY f.FileId;`
+      
     const { results, error } = await dbConnect(selectQuery, [id]);
 
     console.log(results[0][0].TagNames)

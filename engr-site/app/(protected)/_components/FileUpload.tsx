@@ -144,6 +144,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
   //* WebCrypto API
   //* hash file and turn into string
+  //* used to make sure file doesn't change
   const computeSHA256 = async (file: File) => {
     //* convert file content to array buffer
     //* since crypto.subtle.digest operates on arrayBuffer data

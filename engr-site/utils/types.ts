@@ -16,7 +16,7 @@ export type fetchedFile = {
   contributor: string | undefined;
   conceptId: number;
   uploadedUserId: number;
-  tags: String[] | undefined;
+  tags: string[] | undefined;
 }
 
 export type FileData = {
@@ -60,3 +60,22 @@ export type searchParams = {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
+export type fetchedFilesDataArray = {
+  success?: fetchedFile[];
+  failure?: string;
+};
+
+export type fetchedFileData= {
+  success?: fetchedFile;
+  failure?: string;
+};
+
+export type fetchedLinksDataArray = {
+  success?: fetchedLink[];
+  failure?: string;
+};
+
+export type fetchedLinkData= {
+  success?: fetchedLink;
+  failure?: string;
+};

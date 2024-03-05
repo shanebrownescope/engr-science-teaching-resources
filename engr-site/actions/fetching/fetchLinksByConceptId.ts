@@ -3,30 +3,26 @@
 import dbConnect from "@/database/dbConnector";
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { processFile, processLink } from "@/utils/helpers";
-import { LinkData, fetchedFile, fetchedLink } from "@/utils/types"
+import { LinkData, fetchedFile, fetchedLink, fetchedLinksDataArray } from "@/utils/types"
 
 type fetchLinksByConceptIdProps = {
   id: string;
 };
 
-type fetchedLinksData = {
-  success?: fetchedLink[];
-  failure?: string;
-};
 
 
 export const fetchLinksByConceptId = async ({
   id,
-}: fetchLinksByConceptIdProps): Promise<fetchedLinksData> => {
+}: fetchLinksByConceptIdProps): Promise<fetchedLinksDataArray> => {
   try {
     const selectQuery = `
-    SELECT l.LinkId, l.LinkName, l.LinkUrl, l.Description, l.UploadDate, l.Contributor,
-      JSON_ARRAYAGG(t.TagName) AS TagNames
-    FROM Links l
-    LEFT JOIN LinkTags lt ON l.LinkId = lt.LinkId
-    LEFT JOIN Tags t ON lt.TagId = t.TagId
-    WHERE l.ConceptId = ?
-    GROUP BY l.LinkId;`
+      SELECT l.LinkId, l.LinkName, l.LinkUrl, l.Description, l.UploadDate, l.Contributor,
+        JSON_ARRAYAGG(t.TagName) AS TagNames
+      FROM Links l
+      LEFT JOIN LinkTags lt ON l.LinkId = lt.LinkId
+      LEFT JOIN Tags t ON lt.TagId = t.TagId
+      WHERE l.ConceptId = ?
+      GROUP BY l.LinkId;`
 
     const { results, error } = await dbConnect(selectQuery, [id]);
 

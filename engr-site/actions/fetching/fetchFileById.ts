@@ -11,7 +11,7 @@ type fetchFilesByIdProps = {
   id: string;
 };
 
-type fetchedFileData = {
+export type fetchedFileData = {
   success?: fetchedFile;
   failure?: string;
 };
@@ -23,13 +23,13 @@ export const fetchFileById = async ({
 }: fetchFilesByIdProps): Promise<fetchedFileData> => {
   try {
     const selectQuery = `
-    SELECT f.FileId, f.FileName, f.S3Url, f.Description, f.UploadDate, f.Contributor,
-      JSON_ARRAYAGG(t.TagName) AS TagNames
-    FROM Files f
-    LEFT JOIN FileTags ft ON f.FileId = ft.FileId
-    LEFT JOIN Tags t ON ft.TagId = t.TagId
-    WHERE f.FileId = ?
-    GROUP BY f.FileId;`
+      SELECT f.FileId, f.FileName, f.S3Url, f.Description, f.UploadDate, f.Contributor,
+        JSON_ARRAYAGG(t.TagName) AS TagNames
+      FROM Files f
+      LEFT JOIN FileTags ft ON f.FileId = ft.FileId
+      LEFT JOIN Tags t ON ft.TagId = t.TagId
+      WHERE f.FileId = ?
+      GROUP BY f.FileId;`
 
     const { results: fileResult, error } = await dbConnect(selectQuery, [id]);
 

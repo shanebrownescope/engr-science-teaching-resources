@@ -21,13 +21,13 @@ export const fetchLinkById = async ({
 }: fetchLinkByIdProps): Promise<fetchedLinkData> => {
   try {
     const selectQuery = `
-    SELECT l.LinkId, l.LinkName, l.LinkUrl, l.Description, l.UploadDate, l.Contributor,
-      JSON_ARRAYAGG(t.TagName) AS TagNames
-    FROM Links l
-    LEFT JOIN LinkTags lt ON l.LinkId = lt.LinkId
-    LEFT JOIN Tags t ON lt.TagId = t.TagId
-    WHERE l.LinkId = ?
-    GROUP BY l.LinkId;`
+      SELECT l.LinkId, l.LinkName, l.LinkUrl, l.Description, l.UploadDate, l.Contributor,
+        JSON_ARRAYAGG(t.TagName) AS TagNames
+      FROM Links l
+      LEFT JOIN LinkTags lt ON l.LinkId = lt.LinkId
+      LEFT JOIN Tags t ON lt.TagId = t.TagId
+      WHERE l.LinkId = ?
+      GROUP BY l.LinkId;`
 
     const { results: linkResult, error } = await dbConnect(selectQuery, [id]);
 
