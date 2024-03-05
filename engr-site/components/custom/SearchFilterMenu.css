@@ -1,0 +1,15 @@
+.filterMenu {
+  display: flex; /* Align components horizontally */
+  align-items: center; /* Center items vertically */
+  gap: 20px; /* Space between items */
+  background-color: #f0f0f0; /* Gray background */
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.yearSliderContainer {
+  width: 100px; /* Set the fixed width */
+}

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   TextInput,
   TextInputProps,
@@ -6,10 +7,16 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { IconSearch, IconArrowRight } from "@tabler/icons-react";
-import classes from "./HeaderMegaMenu.module.css";
+import classes from "./SearchButton.module.css";
+import Link from "next/link";
 
 export function SearchButton(props: TextInputProps) {
   const theme = useMantineTheme();
+
+  const [inputValue, setInputValue] = useState(""); // Add this line to manage input value
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setInputValue(event.currentTarget.value);
 
   return (
     <TextInput
@@ -18,16 +25,20 @@ export function SearchButton(props: TextInputProps) {
       size="md"
       placeholder="Search questions, modules, and more"
       rightSectionWidth={42}
+      value={inputValue}
+      onChange={handleInputChange}
       leftSection={<IconSearch className="iconStyle" stroke={1.5} />}
       rightSection={
-        <ActionIcon
-          size={32}
-          radius="xl"
-          color={theme.primaryColor}
-          variant="filled"
-        >
-          <IconArrowRight className="iconStyle" stroke={1.5} />
-        </ActionIcon>
+        <Link href={`/search/${encodeURIComponent(inputValue)}`}>
+          <ActionIcon
+            size={32}
+            radius="xl"
+            color={theme.primaryColor}
+            variant="filled"
+          >
+            <IconArrowRight className="iconStyle" stroke={1.5} />
+          </ActionIcon>
+        </Link>
       }
       {...props}
     />
