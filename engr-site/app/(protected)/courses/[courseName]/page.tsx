@@ -1,4 +1,6 @@
-import { fetchCoursesModules } from "@/actions/fetching/fetchCourseModules";
+import { fetchModulesByCourse } from "@/actions/fetching/fetchModulesByCourse";
+import { FormattedData, capitalizeAndReplaceDash } from "@/utils/formatting";
+import { fetchedFormattedData } from "@/utils/types";
 import Link from "next/link";
 
 const CourseModules = async ({
@@ -6,18 +8,24 @@ const CourseModules = async ({
 }: {
   params: { courseName: string };
 }) => {
-  const modules = await fetchCoursesModules(params.courseName);
+  const moduleName = capitalizeAndReplaceDash(params.courseName);
+  const modules: fetchedFormattedData = await fetchModulesByCourse(moduleName);
+  console.log(params.courseName);
 
-  console.log("== success: ", modules?.success);
+  console.log("== success: ", modules.success);
 
   return (
     <div>
-      <p> {params.courseName} </p>
+      <p> {moduleName} </p>
 
       {modules?.success?.map((item: any, index: number) => (
         <div>
           <Link
-            href={`/courses/${params.courseName}/${item.formatted}`}
+            href={`/courses/${params.courseName}/${
+              item.formatted
+            }?${new URLSearchParams({
+              id: item.id,
+            })}`}
             key={index}
           >
             {" "}
@@ -26,7 +34,7 @@ const CourseModules = async ({
         </div>
       ))}
 
-      {modules?.failure && <p> here </p>}
+      {modules?.failure && <p> No modules </p>}
     </div>
   );
 };

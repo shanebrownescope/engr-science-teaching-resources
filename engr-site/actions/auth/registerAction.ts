@@ -17,17 +17,20 @@ export const registerAction = async (values: z.infer<typeof RegisterSchema>) => 
   const { email, password, name } = validatedFields.data
   const hashedPassword = await bcrypt.hash(password, 10);
   
-  const exisitingUser = await getUserByEmail(email)
+  const existingUser = await getUserByEmail(email)
   
   //* User exists
-  if (exisitingUser) {
+  if (existingUser) {
     return { error: "Email already in use"}
   } 
 
   const insertQuery = `
     INSERT INTO Users (Name, Email, Password, Role) VALUES (?, ?, ?, ?)`
   
-  const { results: insertedUser } = await dbConnect(insertQuery, [name, email, hashedPassword, 'admin'])
+  const admin = "admin"
+  const instructor = "instructor"
+  
+  const { results: insertedUser } = await dbConnect(insertQuery, [name, email, hashedPassword, instructor])
   console.log("insertedUser: ", insertedUser)
 
   // TODO: Send verification token email

@@ -34,3 +34,21 @@ export const getUserById = async (id: string) => {
     return null
   }
 }
+
+
+export const fetchUserData = async () => {
+  try {
+    const selectQuery = `
+      SELECT * FROM Users`
+
+    const { results: user, error } = await dbConnect(selectQuery)
+
+    if (user[0].length > 0) {
+      return user[0][0]
+    }
+
+    return null
+  } catch (error) {
+    return null
+  }
+}

@@ -1,0 +1,42 @@
+"use server";
+import { ConceptData } from "@/database/data/concepts";
+import dbConnect from "@/database/dbConnector";
+import { lowercaseAndReplaceSpace } from "@/utils/formatting";
+import { fetchedFormattedData } from "@/utils/types";
+
+type fetchConceptsBySectionIdProps = {
+  id: number;
+};
+
+export const fetchConceptsBySectionId = async ({
+  id,
+}: fetchConceptsBySectionIdProps): Promise<fetchedFormattedData> => {
+  try {
+    const selectQuery = `
+    SELECT * FROM Concepts WHERE SectionId = ?`;
+
+    const { results, error } = await dbConnect(selectQuery, [id]);
+
+    if (error) {
+      console.error("Error retrieving data from the database:", error);
+      return { failure: "Internal server error" };
+    }
+
+    if (results[0].length > 0) {
+      const formattedModuleData = results[0].map((concept: ConceptData) =>
+        lowercaseAndReplaceSpace(concept.ConceptId, concept.ConceptName)
+      );
+      console.log("fetchCourseModules results: ", formattedModuleData);
+      return { success: formattedModuleData, failure: undefined };
+    }
+
+    return {
+      failure: "Internal server error, error retrieving modules from db",
+    };
+  } catch (error) {
+    console.error("An error occurred while fetching data:", error);
+    return {
+      failure: "Internal server error, error retrieving modules from db",
+    };
+  }
+};
