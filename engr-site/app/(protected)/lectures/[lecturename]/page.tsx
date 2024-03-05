@@ -2,8 +2,8 @@
 import React from "react";
 import "@mantine/core/styles.css";
 import { createTheme, MantineProvider } from "@mantine/core";
-import { HeaderMegaMenu, Comment } from "../../../components/mantine";
-import { SimilarDocument, Document } from "../../../components/custom";
+import { HeaderMegaMenu, Comment } from "../../../../components/mantine";
+import { SimilarDocument, Document } from "../../../../components/custom";
 import { useParams } from "next/navigation";
 import "./page.css";
 

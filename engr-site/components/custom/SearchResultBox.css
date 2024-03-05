@@ -1,0 +1,45 @@
+.resultBox {
+  border: 1px solid #ddd; /* Light grey border */
+  padding: 20px;
+  width: 1000px;
+  margin-bottom: 20px;
+  margin-left: 50px;
+  border-radius: 5px; /* Rounded corners */
+  background-color: #f9f9f9; /* Light background */
+}
+
+.resultTitle {
+  margin-top: 0;
+  font-weight: bold; /* Bold title */
+}
+
+.resultDescription {
+  margin-top: 10px;
+}
+
+.tagsContainer {
+  display: flex; /* Horizontal container */
+  gap: 10px; /* Space between tags */
+  margin-top: 15px;
+}
+
+.tag {
+  padding: 5px 10px;
+  border-radius: 15px; /* Elliptical shape */
+  color: white; /* White text */
+  font-size: 14px;
+}
+
+/* Example tag colors */
+.tag.science {
+  background-color: #4e9af1;
+}
+.tag.math {
+  background-color: #f34e4e;
+}
+.tag.history {
+  background-color: #4ef34e;
+}
+.tag.literature {
+  background-color: #9a4ef3;
+}

@@ -2,6 +2,7 @@ import { fetchModulesByCourse } from "@/actions/fetching/fetchModulesByCourse";
 import { FormattedData, capitalizeAndReplaceDash } from "@/utils/formatting";
 import { fetchedFormattedData } from "@/utils/types";
 import Link from "next/link";
+import { ModuleCard } from "@/components/mantine";
 
 const CourseModules = async ({
   params,
@@ -20,6 +21,12 @@ const CourseModules = async ({
 
       {modules?.success?.map((item: any, index: number) => (
         <div>
+          <ModuleCard
+            title={item.original}
+            description="description here"
+            href={`/courses/${params.courseName}/${item.formatted}`}
+          />
+        
           <Link
             href={`/courses/${params.courseName}/${
               item.formatted
@@ -40,24 +47,3 @@ const CourseModules = async ({
 };
 
 export default CourseModules;
-
-// "use client";
-// import React from "react";
-// import "@mantine/core/styles.css";
-// import { createTheme, MantineProvider } from "@mantine/core";
-// import { HeaderMegaMenu, CourseCard } from "../../../components/mantine";
-// import { useParams } from "next/navigation";
-
-// export default function Course() {
-//   const params = useParams<{ coursename: string }>();
-
-//   return (
-//     <MantineProvider>
-//       <HeaderMegaMenu />
-//       <h1>Course: {params.coursename}</h1>
-//       <CourseCard />
-//       <CourseCard />
-//       <CourseCard />
-//     </MantineProvider>
-//   );
-// }

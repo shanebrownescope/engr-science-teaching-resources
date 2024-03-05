@@ -11,6 +11,10 @@ import { fetchedFormattedData } from "@/utils/types";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "path";
+import {
+  SegmentedControlInput,
+  ModuleContentTable,
+} from "@/components/mantine";
 
 type sectionDataResults = {
   sectionName: string;
@@ -72,6 +76,9 @@ const ModulePage = async ({ params, searchParams }: ModulePageProps) => {
 
   return (
     <div>
+      <SegmentedControlInput />
+      <ModuleContentTable />
+      
       <p> {sectionName} </p>
       {/* {sections?.success && sections.success.map((item, index) => (
         <div key={index}> {item.original} </div> )) 
