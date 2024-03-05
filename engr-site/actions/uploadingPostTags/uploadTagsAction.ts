@@ -33,7 +33,7 @@ const getTagId = async(tagName: string) => {
 }
 
 //* inserts tags for file
-export const createTagPost = async (tags: string[], fileId: number) => {
+export const createTagPostFile = async (tags: string[], fileId: number) => {
   //* first check if user is logged before request
   const user = await getCurrentUser()
   console.log("parameters: ", tags, fileId, user?.id)
@@ -47,13 +47,13 @@ export const createTagPost = async (tags: string[], fileId: number) => {
       SELECT * FROM Files WHERE FileId = ? AND UploadedUserId = ?`
     const valuesFileExists = [fileId, user?.id]
     try {
-      const { results: fileResults, error } = await dbConnect(queryFileExists, valuesFileExists)
+      const { results: fileExistsResults, error } = await dbConnect(queryFileExists, valuesFileExists)
 
       if (error) {
         return { failure: "error in checking file is in Files"}
       }
 
-      if (fileResults[0][0].FileId != fileId) {
+      if (fileExistsResults[0][0].FileId != fileId) {
         console.error("Media not found")
         return { failure: "Media not found createTagPost"}
       }
@@ -63,7 +63,7 @@ export const createTagPost = async (tags: string[], fileId: number) => {
         const tagResponse = await getTagId(tagName);
 
         if (tagResponse.failure) {
-          return {failure: "failed in getTagId() "}
+          return { failure: "failed in getTagId() " }
         }
   
         const tagId = tagResponse.tagId 
@@ -75,6 +75,58 @@ export const createTagPost = async (tags: string[], fileId: number) => {
         await dbConnect(queryInsert, valuesInsert);
       }
       return { success: "Tags and FileTags inserted successful"}
+      
+    } catch (error) {
+      console.error("Internal server error in createTagPost()")
+      return { failure: "Internal server error in createTagPost()"}
+    }
+  }
+}
+
+
+//* inserts tags for file
+export const createTagPostLink = async (tags: string[], linkId: number) => {
+  //* first check if user is logged before request
+  const user = await getCurrentUser()
+  console.log("parameters: ", tags, linkId, user?.id)
+  if (user?.role && user?.role !== "admin") {
+    return { failure: "Not authenticated" }
+  }
+
+  //* check if fileId is created in db
+  if (linkId) {
+    const queryLinkExists = `
+      SELECT * FROM Links WHERE LinkId = ? AND UploadedUserId = ?`
+    const valuesFileExists = [linkId, user?.id]
+    try {
+      const { results: linkExistsResults, error } = await dbConnect(queryLinkExists, valuesFileExists)
+
+      if (error) {
+        return { failure: "error in checking file is in Files"}
+      }
+
+      if (linkExistsResults[0][0].LinkId != linkId) {
+        console.error("Link not found")
+        return { failure: "Link not found createTagPostLink"}
+      }
+
+      //* insert tags
+      for (const tagName of tags) {
+        const tagResponse = await getTagId(tagName);
+
+        if (tagResponse.failure) {
+          return { failure: "failed in getTagId() " }
+        }
+  
+        const tagId = tagResponse.tagId 
+      
+        // Linking tags to the file
+        const queryInsert = `
+          INSERT INTO LinkTags (LinkId, TagId) VALUES (?, ?)`
+        const valuesInsert = [linkId, tagId]
+        await dbConnect(queryInsert, valuesInsert);
+      }
+      return { success: "Tags and LinkTags inserted successful"}
       
     } catch (error) {
       console.error("Internal server error in createTagPost()")

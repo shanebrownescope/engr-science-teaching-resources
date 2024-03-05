@@ -2,7 +2,7 @@
  ** File has function for formatting dates, words, etc
  */
 
-export type formattedData = {
+export type FormattedData = {
   id: number,
   original: string | undefined,
   formatted: string | undefined
@@ -10,57 +10,49 @@ export type formattedData = {
 
 //* Ref: fetchCourses.ts
 export const lowercaseAndReplaceSpace = (
-  items: any,
-  fieldName: any,
-  idName: any
-): formattedData[] => {
-  const formattedDataList: formattedData[] = [];
+  id: number,
+  input: string
+): FormattedData => {
 
-  console.log(fieldName)
+  console.log(input, id)
 
-  items.forEach((item: any, index: number) => {
-    const fieldValue = item[fieldName];
-    const lowerCase = fieldValue.toLowerCase()
-    const formattedValue =
-      lowerCase &&
-      lowerCase.replace(/ /g, '-');
-
-    formattedDataList[index] = {
-      id: item[idName],
-      original: fieldValue,
-      formatted: formattedValue, // Handle cases where formattedValue is falsy
-    };
-  });
-
-  console.log(formattedDataList)
-
-  return formattedDataList;
+  const fieldValue = input;
+  const lowerCase = fieldValue.toLowerCase();
+  const formattedValue = lowerCase.replace(/ /g, '-');
+  console.log(formattedValue)
+  const final = {
+    id: id,
+    original: fieldValue,
+    formatted: formattedValue,
+  };
+  console.log(final)
+  return  final
 };
 
-// export const lowercaseAndReplaceSpace = ({items, field}: props) => {
-//   const formattedDataList: formattedData[] = [];
 
-//   // items.map((item, index) => {
-//   //   const formattedValue = item && item.field.charAt(0).toLowerCase() + item.field.slice(1).replace(/ /g, '-');
+export const capitalizeAndReplaceDash = (name: string): string => {
+  console.log(name)
+  const wordWithSpaces = name.replace(/-/g, ' ');
+  const formattedValue = capitalizeWords(wordWithSpaces)
+  console.log(formattedValue)
+  return formattedValue;
+}
 
-//   //   formattedDataList[index] = {
-//   //     id: item.CourseId,
-//   //     original: item.CourseName,
-//   //     formatted: formattedValue,
-//   //   };
 
-//   items.forEach((item, index) => {
-//     const fieldValue = item[field];
-//     console.log(fieldValue)
-//     const formattedValue =
-//       fieldValue &&
-//       fieldValue.charAt(0).toLowerCase() + fieldValue.slice(1).replace(/ /g, '-');
+export const capitalizeWords = (input: string): string => {
+  console.log(input)
+  const exceptions = new Set(["and", "an", "a", "the", "for"]); 
+  
+  //* split string into array of words
+  const splitWordIntoArray = input.toLowerCase().split(" ");
 
-//     formattedDataList[index] = {
-//       id: item.id,
-//       original: fieldValue,
-//       formatted: formattedValue || '', // Handle cases where formattedValue is falsy
-//     };
-//   });
-//   return formattedDataList
-// };
+  //* uppercase first letter in word if not found in exceptions
+  const formattedWord = splitWordIntoArray.map((word, i) => {
+    if (!exceptions.has(word)) {
+      return word = word.charAt(0).toUpperCase() + word.slice(1);
+    }
+  })
+
+  console.log(formattedWord)
+  return formattedWord.join(" ");
+}

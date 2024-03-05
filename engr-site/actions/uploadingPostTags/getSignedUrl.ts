@@ -30,9 +30,14 @@ type GetSignedURLProps = {
   course: string;
   module: string;
   section: string;
+  concept: string,
+  conceptId: number,
+  description: string | null,
+  contributor: string,
+  uploadDate: string
 };
 
-export const getSignedURL = async ({ fileName, fileType, fileSize, checksum, course, module, section }: GetSignedURLProps) => {
+export const getSignedURL = async ({ fileName, fileType, fileSize, checksum, course, module, section, concept, conceptId, description, contributor, uploadDate }: GetSignedURLProps) => {
   //* first check if user is logged before request
 
   const user = await getCurrentUser()
@@ -53,9 +58,9 @@ export const getSignedURL = async ({ fileName, fileType, fileSize, checksum, cou
   
 
   //* encapsulates metadata used for generating a pre-signed URL
-  const uniqueFilesName = generateTimestampedKey(fileName)
-  const fileLocationTest = "testFolder/" + uniqueFilesName
-  const fileLocation =  `courses/${course}/modules/${module}/${section}/${uniqueFilesName}`
+  const uniqueFileName = generateTimestampedKey(fileName)
+  // const fileLocationTest = "testFolder/" + uniqueFilesName
+  const fileLocation =  `courses/${course}/modules/${module}/${section}/${concept}/${uniqueFileName}`
   const putObjectCommand = new PutObjectCommand({
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: fileLocation,
@@ -71,9 +76,10 @@ export const getSignedURL = async ({ fileName, fileType, fileSize, checksum, cou
   });
 
   const query = `
-    INSERT INTO Files (FileName, S3Url, UploadedUserId) VALUES (?, ?, ?)`
-  //* extrats url without query parameters
-  const values = [uniqueFilesName, signedURL.split("?")[0], user?.id]
+    INSERT INTO Files (FileName, S3Url, Description, UploadDate, Contributor, ConceptId, UploadedUserId) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  //* extracts url without query parameters
+  console.log(uploadDate)
+  const values = [uniqueFileName, signedURL.split("?")[0], description, uploadDate, contributor, conceptId, user?.id]
 
   try {
     const { results, error } = await dbConnect(query, values)
@@ -113,7 +119,4 @@ export async function testingAction() {
 
   console.log("== results from test: ", selectResults)
   return {success: selectResults[0]}
-
-
-
 }

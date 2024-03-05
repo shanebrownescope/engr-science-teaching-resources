@@ -1,4 +1,6 @@
-import { fetchCoursesModules } from "@/actions/fetching/fetchCourseModules";
+import { fetchModulesByCourse } from "@/actions/fetching/fetchModulesByCourse";
+import { FormattedData, capitalizeAndReplaceDash } from "@/utils/formatting";
+import { fetchedFormattedData } from "@/utils/types";
 import Link from "next/link";
 import { ModuleCard } from "@/components/mantine";
 
@@ -7,13 +9,15 @@ const CourseModules = async ({
 }: {
   params: { courseName: string };
 }) => {
-  const modules = await fetchCoursesModules(params.courseName);
+  const moduleName = capitalizeAndReplaceDash(params.courseName);
+  const modules: fetchedFormattedData = await fetchModulesByCourse(moduleName);
+  console.log(params.courseName);
 
-  console.log("== success: ", modules?.success);
+  console.log("== success: ", modules.success);
 
   return (
     <div>
-      <p> {params.courseName} </p>
+      <p> {moduleName} </p>
 
       {modules?.success?.map((item: any, index: number) => (
         <div>
@@ -22,14 +26,22 @@ const CourseModules = async ({
             description="description here"
             href={`/courses/${params.courseName}/${item.formatted}`}
           />
+        
+          <Link
+            href={`/courses/${params.courseName}/${
+              item.formatted
+            }?${new URLSearchParams({
+              id: item.id,
+            })}`}
+            key={index}
+          >
+            {" "}
+            {item.original}{" "}
+          </Link>
         </div>
       ))}
 
-      {modules?.failure && <p> here </p>}
-
-      {/* <ModuleCard />
-      <ModuleCard />
-      <ModuleCard /> */}
+      {modules?.failure && <p> No modules </p>}
     </div>
   );
 };
