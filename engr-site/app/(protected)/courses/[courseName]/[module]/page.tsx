@@ -1,7 +1,8 @@
+"use client";
 import { fetchConceptsBySectionId } from "@/actions/fetching/fetchConceptsBySectionId";
 import { fetchSectionsByModule } from "@/actions/fetching/fetchSectionsByModule";
 import { useGetPathname } from "@/hooks/useGetPathname";
-
+import React, { useState, useEffect } from "react";
 import {
   FormattedData,
   capitalizeAndReplaceDash,
@@ -14,7 +15,9 @@ import { format } from "path";
 import {
   SegmentedControlInput,
   ModuleContentTable,
+  ConceptBar,
 } from "@/components/mantine";
+import "./page.css";
 
 type sectionDataResults = {
   sectionName: string;
@@ -26,89 +29,113 @@ type ModulePageProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-const ModulePage = async ({ params, searchParams }: ModulePageProps) => {
-  console.log(params);
-  console.log(searchParams);
-  const id = searchParams.id as string;
-  console.log(id);
+const ModulePage = ({ params, searchParams }: ModulePageProps) => {
+  const [selectedSegment, setSelectedSegment] = useState("Problems");
+  const [sections, setSections] = useState(null); // Initialize sections state
+  const [sectionDataResults, setSectionDataResults] = useState([]); // Store fetched section data
+  const [isLoading, setIsLoading] = useState(false); // Track loading state
 
-  const searchParamId = searchParams.id;
-
-  if (!searchParamId) {
-    return notFound()
-  }
-
-
-  const sectionName = capitalizeAndReplaceDash(params.module);
-  const sections: fetchedFormattedData = await fetchSectionsByModule({
-    id: id,
-  });
-  console.log(sections.success);
-
-  // Function to fetch data for a section based on its ID
-  const fetchDataForSection = async (
-    sectionId: number,
-    original: string | undefined
-  ) => {
-    // Replace the following line with your actual function to fetch data for a section
-    const results = await fetchConceptsBySectionId({ id: sectionId });
-
-    return {
-      sectionName: original,
-      concepts: results.success,
-    };
+  const handleSegmentChange = (value) => {
+    console.log("Segment changed to", value);
+    setSelectedSegment(value);
   };
 
-  let sectionDataPromises: any = [];
+  const id = searchParams.id; // Ensure this is consistent with your data structure
+  const sectionName = capitalizeAndReplaceDash(params.module);
+  const searchParamId = searchParams.id;
 
-  // Create an array of promises for fetching data for each section
-  if (sections.success) {
-    sectionDataPromises = sections.success.map((section) =>
-      fetchDataForSection(section.id, section.original)
-    );
+  // Fetch sections data
+  useEffect(() => {
+    setIsLoading(true); // Start loading
+    const fetchData = async () => {
+      if (!id) return;
+
+      try {
+        const fetchedData = await fetchSectionsByModule({ id });
+        setSections(fetchedData);
+      } catch (error) {
+        console.error("Failed to fetch sections", error);
+      } finally {
+        setIsLoading(false); // End loading regardless of outcome
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  // Fetch data for each section
+  useEffect(() => {
+    const fetchAllSectionData = async () => {
+      if (sections?.success) {
+        setIsLoading(true); // Start loading
+        try {
+          const promises = sections.success.map((section) =>
+            fetchConceptsBySectionId({ id: section.id }).then((results) => ({
+              sectionName: section.original,
+              concepts: results.success,
+            }))
+          );
+
+          const results = await Promise.all(promises);
+          setSectionDataResults(results);
+        } catch (error) {
+          console.error("Failed to fetch section details", error);
+        } finally {
+          setIsLoading(false); // End loading regardless of outcome
+        }
+      }
+    };
+
+    fetchAllSectionData();
+  }, [sections]); // Re-fetch whenever 'sections' changes
+
+  if (!searchParamId) {
+    return notFound();
   }
-
-  // Use Promise.all to wait for all promises to resolve
-  const sectionDataResults: sectionDataResults[] = await Promise.all(
-    sectionDataPromises
-  );
-  console.log({ sectionDataResults });
 
   return (
     <div>
-      <SegmentedControlInput />
-      <ModuleContentTable />
-      
-      <p> {sectionName} </p>
-      {/* {sections?.success && sections.success.map((item, index) => (
-        <div key={index}> {item.original} </div> )) 
-      } */}
+      <div className="concept-bar-container">
+        <ConceptBar />
+      </div>
+      <div className="main-content">
+        <SegmentedControlInput
+          value={selectedSegment}
+          onChange={handleSegmentChange}
+        />
+        <ModuleContentTable />
 
-      {sectionDataResults?.map((section: sectionDataResults) => (
-        <div>
-          <p> {section.sectionName}</p>
+        <p> {sectionName} </p>
+        {/* {sections?.success &&
+          sections.success.map((item, index) => (
+            <div key={index}> {item.original} </div>
+          ))} */}
+
+        {sectionDataResults?.map((section: sectionDataResults) => (
           <div>
-            {section.concepts?.map((concept: FormattedData) => {
-              return (
-                <div>
-                  <Link
-                    href={`/courses/${params.courseName}/${params.module}/${
-                      concept.formatted
-                    }?${new URLSearchParams({
-                      id: concept.id.toString(),
-                    })} `}
-                  >
-                    {concept.original}
-                  </Link>
-                </div>
-              );
-            })}
+            <p> {section.sectionName}</p>
+            <div>
+              {section.concepts?.map((concept: FormattedData) => {
+                return (
+                  <div>
+                    <Link
+                      href={`/courses/${params.courseName}/${params.module}/${
+                        concept.formatted
+                      }?${new URLSearchParams({
+                        id: concept.id.toString(),
+                      })} `}
+                    >
+                      {concept.original}
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
 
-      {sections?.failure && <div> No sections </div>}
-      {/* {sectionDataResults.map((item: any) => <div><p>hi</p></div>)} */}
+        {sections?.failure && <div> No sections </div>}
+      </div>
     </div>
   );
 };
