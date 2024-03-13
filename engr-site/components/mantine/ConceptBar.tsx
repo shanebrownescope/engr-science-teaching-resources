@@ -1,23 +1,14 @@
+// ConceptBar.js
 "use client";
 import { useState } from "react";
-import { Group, Code } from "@mantine/core";
-import { MantineLogo } from "@mantinex/mantine-logo";
+import { Group } from "@mantine/core";
 import classes from "./ConceptBar.module.css";
 
-const data = [
-  { link: "", label: "Notifications" },
-  { link: "", label: "Billing" },
-  { link: "", label: "Security" },
-  { link: "", label: "SSH Keys" },
-  { link: "", label: "Databases" },
-  { link: "", label: "Authentication" },
-  { link: "", label: "Other Settings" },
-];
+// Update props to include concepts data
+export function ConceptBar({ concepts }) {
+  const [active, setActive] = useState(concepts[0]?.label || "");
 
-export function ConceptBar() {
-  const [active, setActive] = useState("Billing");
-
-  const links = data.map((item) => (
+  const links = concepts.map((item) => (
     <a
       className={classes.link}
       data-active={item.label === active || undefined}

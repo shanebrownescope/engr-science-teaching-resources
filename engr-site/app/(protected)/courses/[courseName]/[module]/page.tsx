@@ -93,10 +93,21 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
     return notFound();
   }
 
+  const currentSection = sectionDataResults.find(
+    (section) => section.sectionName === selectedSegment
+  );
+
   return (
     <div>
       <div className="concept-bar-container">
-        <ConceptBar />
+        <ConceptBar
+          concepts={
+            currentSection?.concepts.map((concept) => ({
+              label: concept.original,
+              link: `/courses/${params.courseName}/${params.module}/${concept.formatted}`,
+            })) || []
+          }
+        />
       </div>
       <div className="main-content">
         <SegmentedControlInput

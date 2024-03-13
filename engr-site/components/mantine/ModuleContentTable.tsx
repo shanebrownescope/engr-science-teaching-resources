@@ -19,6 +19,16 @@ import {
 } from "@tabler/icons-react";
 import classes from "./ModuleContentTable.module.css";
 
+interface ModuleContent {
+  name: string;
+  tags: string[];
+}
+
+interface ModuleContentTableProps {
+  files: ModuleContent[];
+  links: ModuleContent[];
+}
+
 interface RowData {
   name: string;
   creator: string;
@@ -111,7 +121,7 @@ const data = [
   },
 ];
 
-export function ModuleContentTable() {
+export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
   const [search, setSearch] = useState("");
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
