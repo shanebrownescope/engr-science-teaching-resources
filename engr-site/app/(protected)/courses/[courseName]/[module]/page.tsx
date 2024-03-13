@@ -35,6 +35,7 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
   const [sectionDataResults, setSectionDataResults] = useState([]); // Store fetched section data
   const [isLoading, setIsLoading] = useState(false); // Track loading state
   const [selectedConcept, setSelectedConcept] = useState("");
+  const [selectedConceptId, setSelectedConceptId] = useState("");
 
   const handleSegmentChange = (value) => {
     console.log("Segment changed to", value);
@@ -98,6 +99,7 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
     // Set the first concept of the current section as the selectedConcept
     if (currentSection && currentSection.concepts.length > 0) {
       setSelectedConcept(currentSection.concepts[0].original);
+      setSelectedConceptId(currentSection.concepts[0].id);
     }
   }, [sectionDataResults, selectedSegment]);
 
@@ -117,10 +119,12 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
             currentSection?.concepts.map((concept) => ({
               label: concept.original,
               link: `/courses/${params.courseName}/${params.module}/${concept.formatted}`,
+              id: concept.id,
             })) || []
           }
           selectedConcept={selectedConcept}
-          onConceptChange={setSelectedConcept} // New prop to handle concept selection changes
+          onConceptChange={setSelectedConcept}
+          onConceptIdChange={setSelectedConceptId}
         />
       </div>
       <div className="main-content">
