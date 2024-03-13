@@ -1,12 +1,16 @@
 // ConceptBar.js
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Group } from "@mantine/core";
 import classes from "./ConceptBar.module.css";
 
-// Update props to include concepts data
-export function ConceptBar({ concepts }) {
-  const [active, setActive] = useState(concepts[0]?.label || "");
+export function ConceptBar({ concepts, selectedConcept, onConceptChange }) {
+  const [active, setActive] = useState(selectedConcept);
+
+  // Update the active state based on the selectedConcept prop
+  useEffect(() => {
+    setActive(selectedConcept); // This will set the active concept based on the prop passed from the parent
+  }, [selectedConcept]); // Dependency array ensures this effect runs only when selectedConcept changes
 
   const links = concepts.map((item) => (
     <a
@@ -17,6 +21,7 @@ export function ConceptBar({ concepts }) {
       onClick={(event) => {
         event.preventDefault();
         setActive(item.label);
+        onConceptChange(item.label);
       }}
     >
       <span>{item.label}</span>

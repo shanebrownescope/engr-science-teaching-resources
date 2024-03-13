@@ -34,6 +34,7 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
   const [sections, setSections] = useState(null); // Initialize sections state
   const [sectionDataResults, setSectionDataResults] = useState([]); // Store fetched section data
   const [isLoading, setIsLoading] = useState(false); // Track loading state
+  const [selectedConcept, setSelectedConcept] = useState("");
 
   const handleSegmentChange = (value) => {
     console.log("Segment changed to", value);
@@ -89,6 +90,17 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
     fetchAllSectionData();
   }, [sections]); // Re-fetch whenever 'sections' changes
 
+  // Update selectedConcept when sectionDataResults or selectedSegment changes
+  useEffect(() => {
+    const currentSection = sectionDataResults.find(
+      (section) => section.sectionName === selectedSegment
+    );
+    // Set the first concept of the current section as the selectedConcept
+    if (currentSection && currentSection.concepts.length > 0) {
+      setSelectedConcept(currentSection.concepts[0].original);
+    }
+  }, [sectionDataResults, selectedSegment]);
+
   if (!searchParamId) {
     return notFound();
   }
@@ -107,6 +119,8 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
               link: `/courses/${params.courseName}/${params.module}/${concept.formatted}`,
             })) || []
           }
+          selectedConcept={selectedConcept}
+          onConceptChange={setSelectedConcept} // New prop to handle concept selection changes
         />
       </div>
       <div className="main-content">
