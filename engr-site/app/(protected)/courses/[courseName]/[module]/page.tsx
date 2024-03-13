@@ -1,6 +1,8 @@
 "use client";
 import { fetchConceptsBySectionId } from "@/actions/fetching/fetchConceptsBySectionId";
 import { fetchSectionsByModule } from "@/actions/fetching/fetchSectionsByModule";
+import { fetchFilesByConceptId } from "@/actions/fetching/fetchFilesByConceptId";
+import { fetchLinksByConceptId } from "@/actions/fetching/fetchLinksByConceptId";
 import { useGetPathname } from "@/hooks/useGetPathname";
 import React, { useState, useEffect } from "react";
 import {
@@ -36,6 +38,8 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
   const [isLoading, setIsLoading] = useState(false); // Track loading state
   const [selectedConcept, setSelectedConcept] = useState("");
   const [selectedConceptId, setSelectedConceptId] = useState("");
+  const [conceptFiles, setConceptFiles] = useState<ModuleContent[]>([]);
+  const [conceptLinks, setConceptLinks] = useState<ModuleContent[]>([]);
 
   const handleSegmentChange = (value) => {
     console.log("Segment changed to", value);
@@ -103,6 +107,49 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
     }
   }, [sectionDataResults, selectedSegment]);
 
+  // Fetch files and links for the selected concept
+  useEffect(() => {
+    const fetchConceptData = async () => {
+      if (!selectedConceptId) return; // Check if there's a selected concept
+
+      setIsLoading(true);
+      try {
+        const filesResult = await fetchFilesByConceptId({
+          id: selectedConceptId,
+        });
+        const linksResult = await fetchLinksByConceptId({
+          id: selectedConceptId,
+        });
+
+        setConceptFiles(
+          filesResult.success
+            ? filesResult.success.map((file) => ({
+                name: file.originalFileName,
+                description: file.description || "",
+                tags: file.tags || [],
+              }))
+            : []
+        );
+
+        setConceptLinks(
+          linksResult.success
+            ? linksResult.success.map((link) => ({
+                name: link.originalLinkName,
+                description: link.description || "",
+                tags: link.tags || [],
+              }))
+            : []
+        );
+      } catch (error) {
+        console.error("Failed to fetch concept data", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchConceptData();
+  }, [selectedConceptId]); // Re-fetch whenever the selected concept changes
+
   if (!searchParamId) {
     return notFound();
   }
@@ -132,13 +179,13 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
           value={selectedSegment}
           onChange={handleSegmentChange}
         />
-        <ModuleContentTable />
+        <ModuleContentTable files={conceptFiles} links={conceptLinks} />
 
-        <p> {sectionName} </p>
-        {/* {sections?.success &&
+        {/* <p> {sectionName} </p>
+        {sections?.success &&
           sections.success.map((item, index) => (
             <div key={index}> {item.original} </div>
-          ))} */}
+          ))}
 
         {sectionDataResults?.map((section: sectionDataResults) => (
           <div>
@@ -163,7 +210,7 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
           </div>
         ))}
 
-        {sections?.failure && <div> No sections </div>}
+        {sections?.failure && <div> No sections </div>} */}
       </div>
     </div>
   );

@@ -19,3 +19,7 @@
   height: rem(21px);
   border-radius: rem(21px);
 }
+
+.tagsColumn {
+  width: 25%;
+}

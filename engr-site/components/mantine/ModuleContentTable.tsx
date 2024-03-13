@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Table,
   ScrollArea,
@@ -9,7 +9,6 @@ import {
   Center,
   TextInput,
   rem,
-  keys,
 } from "@mantine/core";
 import {
   IconSelector,
@@ -21,7 +20,8 @@ import classes from "./ModuleContentTable.module.css";
 
 interface ModuleContent {
   name: string;
-  tags: string[];
+  description: string; // Assuming files and links both have descriptions now
+  tags: string[]; // Assuming the 'tags' field is an array of strings
 }
 
 interface ModuleContentTableProps {
@@ -40,16 +40,17 @@ interface ThProps {
   reversed: boolean;
   sorted: boolean;
   onSort(): void;
+  width?: string;
 }
 
-function Th({ children, reversed, sorted, onSort }: ThProps) {
+function Th({ children, reversed, sorted, onSort, width }: ThProps) {
   const Icon = sorted
     ? reversed
       ? IconChevronUp
       : IconChevronDown
     : IconSelector;
   return (
-    <Table.Th className={classes.th}>
+    <Table.Th className={classes.th} style={{ width }}>
       <UnstyledButton onClick={onSort} className={classes.control}>
         <Group justify="space-between">
           <Text fw={500} fz="sm">
@@ -64,96 +65,58 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
   );
 }
 
-function filterData(data: RowData[], search: string) {
-  const query = search.toLowerCase().trim();
-  return data.filter((item) =>
-    keys(data[0]).some((key) => item[key].toLowerCase().includes(query))
+// Combined filter and sort function for the new data structure
+function filterAndSortData(
+  data: ModuleContent[],
+  search: string,
+  sortBy: keyof ModuleContent | null,
+  reverseSortDirection: boolean
+): ModuleContent[] {
+  let filteredData = data.filter(
+    (item) =>
+      item.name.toLowerCase().includes(search.toLowerCase()) ||
+      item.description.toLowerCase().includes(search.toLowerCase()) ||
+      item.tags.join(", ").toLowerCase().includes(search.toLowerCase())
   );
-}
 
-function sortData(
-  data: RowData[],
-  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
-) {
-  const { sortBy } = payload;
-
-  if (!sortBy) {
-    return filterData(data, payload.search);
+  if (sortBy) {
+    filteredData.sort((a, b) => {
+      const aValue = a[sortBy],
+        bValue = b[sortBy];
+      const comparison = aValue.localeCompare(bValue);
+      return reverseSortDirection ? -comparison : comparison;
+    });
   }
 
-  return filterData(
-    [...data].sort((a, b) => {
-      if (payload.reversed) {
-        return b[sortBy].localeCompare(a[sortBy]);
-      }
-
-      return a[sortBy].localeCompare(b[sortBy]);
-    }),
-    payload.search
-  );
+  return filteredData;
 }
-
-const data = [
-  {
-    name: "Introduction to Physics",
-    creator: "Alex Johnson",
-    dateUploaded: "2021-03-15",
-  },
-  {
-    name: "Advanced Mathematics",
-    creator: "Samantha Lee",
-    dateUploaded: "2021-06-07",
-  },
-  {
-    name: "Engineering Principles",
-    creator: "Michael Chen",
-    dateUploaded: "2021-08-22",
-  },
-  {
-    name: "Computer Science 101",
-    creator: "Karen Smith",
-    dateUploaded: "2021-11-03",
-  },
-  {
-    name: "Organic Chemistry Basics",
-    creator: "Elena Rodriguez",
-    dateUploaded: "2022-01-12",
-  },
-];
 
 export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
   const [search, setSearch] = useState("");
-  const [sortedData, setSortedData] = useState(data);
-  const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
+  const [sortBy, setSortBy] = useState<keyof ModuleContent | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
+  const [displayedData, setDisplayedData] = useState<ModuleContent[]>([]);
 
-  const setSorting = (field: keyof RowData) => {
-    const reversed = field === sortBy ? !reverseSortDirection : false;
-    setReverseSortDirection(reversed);
-    setSortBy(field);
-    setSortedData(sortData(data, { sortBy: field, reversed, search }));
-  };
+  useEffect(() => {
+    // Combine files and links into a single array and then filter and sort
+    const combinedData = [...files, ...links];
+    const updatedData = filterAndSortData(
+      combinedData,
+      search,
+      sortBy,
+      reverseSortDirection
+    );
+    setDisplayedData(updatedData);
+  }, [files, links, search, sortBy, reverseSortDirection]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget;
-    setSearch(value);
-    setSortedData(
-      sortData(data, { sortBy, reversed: reverseSortDirection, search: value })
-    );
+    setSearch(event.currentTarget.value);
   };
-
-  const rows = sortedData.map((row) => (
-    <Table.Tr key={row.name}>
-      <Table.Td>{row.name}</Table.Td>
-      <Table.Td>{row.creator}</Table.Td>
-      <Table.Td>{row.dateUploaded}</Table.Td>
-    </Table.Tr>
-  ));
 
   return (
     <ScrollArea>
       <TextInput
-        placeholder="Search by any field"
+        placeholder="Search by name, description, or tags"
         mb="md"
         leftSection={
           <IconSearch
@@ -164,46 +127,44 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
         value={search}
         onChange={handleSearchChange}
       />
-      <Table
-        horizontalSpacing="md"
-        verticalSpacing="xs"
-        miw={700}
-        layout="fixed"
-      >
-        <Table.Tbody>
+      <Table horizontalSpacing="md" verticalSpacing="xs">
+        <thead>
           <Table.Tr>
             <Th
+              width="25%"
               sorted={sortBy === "name"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("name")}
+              onSort={() => setSortBy("name")}
             >
               Name
             </Th>
             <Th
-              sorted={sortBy === "creator"}
+              width="50%"
+              sorted={sortBy === "description"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("creator")}
+              onSort={() => setSortBy("description")}
             >
-              Creator
+              Description
             </Th>
-            <Th
-              sorted={sortBy === "dateUploaded"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("dateUploaded")}
-            >
-              Date Uploaded
-            </Th>
+            <Table.Th className={`${classes.tagsColumn}`}>
+              <Text fw={500} fz="sm">
+                Tags
+              </Text>
+            </Table.Th>
           </Table.Tr>
-        </Table.Tbody>
+        </thead>
         <Table.Tbody>
-          {rows.length > 0 ? (
-            rows
-          ) : (
+          {displayedData.map((item, index) => (
+            <Table.Tr key={index}>
+              <Table.Td>{item.name}</Table.Td>
+              <Table.Td>{item.description}</Table.Td>
+              <Table.Td>{item.tags.join(", ")}</Table.Td>
+            </Table.Tr>
+          ))}
+          {displayedData.length === 0 && (
             <Table.Tr>
-              <Table.Td colSpan={Object.keys(data[0]).length}>
-                <Text fw={500} ta="center">
-                  Nothing found
-                </Text>
+              <Table.Td colSpan={3} style={{ textAlign: "center" }}>
+                No content found
               </Table.Td>
             </Table.Tr>
           )}
