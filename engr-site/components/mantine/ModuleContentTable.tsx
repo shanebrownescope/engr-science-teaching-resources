@@ -17,11 +17,14 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 import classes from "./ModuleContentTable.module.css";
+import Link from "next/link";
 
 interface ModuleContent {
-  name: string;
+  originalName: string;
+  formattedName: string;
   description: string; // Assuming files and links both have descriptions now
   tags: string[]; // Assuming the 'tags' field is an array of strings
+  id: number; // Assuming the 'id' field is a string
 }
 
 interface ModuleContentTableProps {
@@ -74,7 +77,7 @@ function filterAndSortData(
 ): ModuleContent[] {
   let filteredData = data.filter(
     (item) =>
-      item.name.toLowerCase().includes(search.toLowerCase()) ||
+      item.originalName.toLowerCase().includes(search.toLowerCase()) ||
       item.description.toLowerCase().includes(search.toLowerCase()) ||
       item.tags.join(", ").toLowerCase().includes(search.toLowerCase())
   );
@@ -156,7 +159,16 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
         <Table.Tbody>
           {displayedData.map((item, index) => (
             <Table.Tr key={index}>
-              <Table.Td>{item.name}</Table.Td>
+              <Link
+                href={`/resources/${item.formattedName}?${new URLSearchParams({
+                  id: item.id.toString(),
+                  type: "file",
+                })} `}
+                passHref
+              >
+                <p className={classes.linkStyle}>{item.originalName}</p>
+              </Link>
+
               <Table.Td>{item.description}</Table.Td>
               <Table.Td>{item.tags.join(", ")}</Table.Td>
             </Table.Tr>

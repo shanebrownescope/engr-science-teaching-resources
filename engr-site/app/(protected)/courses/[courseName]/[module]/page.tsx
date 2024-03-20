@@ -10,7 +10,7 @@ import {
   capitalizeAndReplaceDash,
   lowercaseAndReplaceSpace,
 } from "@/utils/formatting";
-import { FetchedFormattedData } from "@/utils/types";
+import { fetchedFormattedData } from "@/utils/types";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "path";
@@ -41,18 +41,12 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
   const [conceptFiles, setConceptFiles] = useState<ModuleContent[]>([]);
   const [conceptLinks, setConceptLinks] = useState<ModuleContent[]>([]);
 
-  // const [sections, setSections] = useState<FetchedFormattedData | null>(null); // Initialize sections state
-  //const [sectionDataResults, setSectionDataResults] = useState<null | {
-  //  sectionName: String;
-  //  concepts: FormattedData[] | undefined;
-  //}>(null); // Store fetched section data
-
-  const handleSegmentChange = (value: any) => {
+  const handleSegmentChange = (value) => {
     console.log("Segment changed to", value);
     setSelectedSegment(value);
   };
 
-  const id = searchParams.id as string; // Ensure this is consistent with your data structure
+  const id = searchParams.id; // Ensure this is consistent with your data structure
   const sectionName = capitalizeAndReplaceDash(params.module);
   const searchParamId = searchParams.id;
 
@@ -130,9 +124,11 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
         setConceptFiles(
           filesResult.success
             ? filesResult.success.map((file) => ({
-                name: file.originalFileName,
+                originalName: file.originalFileName,
+                formattedName: file.formattedFileName,
                 description: file.description || "",
                 tags: file.tags || [],
+                id: file.fileId,
               }))
             : []
         );
@@ -140,9 +136,11 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
         setConceptLinks(
           linksResult.success
             ? linksResult.success.map((link) => ({
-                name: link.originalLinkName,
+                originalName: link.originalLinkName,
+                formattedName: link.formattedLinkName,
                 description: link.description || "",
                 tags: link.tags || [],
+                id: link.linkId,
               }))
             : []
         );
