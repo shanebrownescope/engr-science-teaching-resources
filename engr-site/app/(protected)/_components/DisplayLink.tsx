@@ -1,11 +1,11 @@
 import { TagsData } from "@/actions/fetching/fetchTagsByFileId";
-import { fetchedLink } from "@/utils/types";
+import { FetchedLink } from "@/utils/types";
 
 type DisplayLinkProps = {
-  link: fetchedLink
-}
+  link: FetchedLink;
+};
 
-export const DisplayLink = ({link}: DisplayLinkProps) => {
+export const DisplayLink = ({ link }: DisplayLinkProps) => {
   return (
     <div
       style={{
@@ -22,22 +22,23 @@ export const DisplayLink = ({link}: DisplayLinkProps) => {
       <a href={link.linkUrl}> {link.originalLinkName} </a>
       <p> {link.contributor}</p>
       <div style={{ display: "flex", gap: "1em" }}>
-        {link.tags?.map((tag: string, index: number) => tag && (
-          <p
-            key={index}
-            style={{
-              background: "black",
-              color: "white",
-              padding: "0.5em",
-              borderRadius: "1em",
-            }}
-          >
-            {tag}
-          </p>
-        ))}
+        {link.tags?.map(
+          (tag: string, index: number) =>
+            tag && (
+              <p
+                key={index}
+                style={{
+                  background: "black",
+                  color: "white",
+                  padding: "0.5em",
+                  borderRadius: "1em",
+                }}
+              >
+                {tag}
+              </p>
+            )
+        )}
       </div>
     </div>
   );
 };
-
-

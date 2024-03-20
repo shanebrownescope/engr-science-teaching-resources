@@ -5,12 +5,21 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import dbConnect from "@/database/dbConnector";
 import { getCurrentUser } from "@/utils/authHelpers";
 
+
+const addPdfExtension = (fileName: string) => {
+  if (!fileName.endsWith('.pdf')) {
+      fileName += '.pdf';
+  }
+  return fileName;
+}
+
 // import crypto from "crypto"
 // const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString("hex")
-
 const generateTimestampedKey = (originalFilename: string) => {
   //* replacing any spaces with '-'
-  const filenameWithDashes = originalFilename.replace(/ /g, '-');
+  const nameWithExtension = addPdfExtension(originalFilename)
+  console.log(nameWithExtension)
+  const filenameWithDashes = nameWithExtension.replace(/ /g, '-');
   const timestamp = new Date().toISOString()
   return `${timestamp}_${filenameWithDashes}`;
 };

@@ -2,7 +2,7 @@
 
 import dbConnect from "@/database/dbConnector";
 
-type fetchedFilesData = {
+type FetchedFilesData = {
   success?: TagsData[];
   failure?: string;
 };
@@ -18,7 +18,7 @@ type fetchTagsByFileIdProps = {
 
 export const fetchTagsByFileId = async ({
   id,
-}: fetchTagsByFileIdProps): Promise<fetchedFilesData> => {
+}: fetchTagsByFileIdProps): Promise<FetchedFilesData> => {
   const selectFileTagsQuery = `
     SELECT * FROM FileTags WHERE FileId = ?`;
   const { results: fileTagsResult, error: fileTagsError } = await dbConnect(

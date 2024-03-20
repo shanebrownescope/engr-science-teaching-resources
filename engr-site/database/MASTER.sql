@@ -100,8 +100,6 @@ CREATE TABLE LinkTags (
   FOREIGN KEY (LinkId) REFERENCES Links(LinkId) ON DELETE CASCADE
 );
 
-
-
 CREATE TABLE Comments (
   CommentId INT NOT NULL AUTO_INCREMENT,
   PageType ENUM('file', 'link'),
@@ -150,3 +148,216 @@ INSERT INTO Modules (ModuleName, CourseId) VALUES ('1d-motion', 1);
 
 
 INSERT INTO Sections (SectionName, ModuleId) VALUES ('Problems', 1);
+
+
+-- search query test 
+-- files
+  SELECT f.FileId, f.FileName, f.S3Url, f.Description, f.UploadDate, f.Contributor,
+         JSON_ARRAYAGG(t.TagName) AS TagNames
+  FROM Files f
+  JOIN FileTags ft ON f.FileId = ft.FileId
+  JOIN Tags t ON ft.TagId = t.TagId
+  WHERE (f.FileName LIKE CONCAT('%', $1, '%') OR
+         t.TagName LIKE CONCAT('%', $1, '%'))
+  GROUP BY f.FileId
+
+-- links
+  SELECT l.LinkId, l.LinkName, l.LinkUrl, l.Description, l.UploadDate, l.Contributor,
+         JSON_ARRAYAGG(t.TagName) AS TagNames
+  FROM Links l
+  LEFT JOIN LinkTags lt ON l.LinkId = lt.LinkId
+  LEFT JOIN Tags t ON lt.TagId = t.TagId
+  WHERE (l.LinkName LIKE CONCAT('%', $1, '%') OR
+         t.TagName LIKE CONCAT('%', $1, '%'))
+  GROUP BY l.LinkId;
+
+
+
+
+
+
+-- 
+ SELECT 
+    'file' AS Type,
+    Files.FileId AS Id,
+    Files.FileName AS Name,
+    Files.Description AS Description,
+    Files.UploadDate AS UploadDate,
+    Files.Contributor AS Contributor,
+    GROUP_CONCAT(FileTagConcat.TagName SEPARATOR ', ') AS Tags
+  FROM 
+    Files
+  JOIN 
+  (
+    SELECT 
+      FileId, GROUP_CONCAT(Tags.TagName) AS TagName
+    FROM 
+      FileTags
+    JOIN 
+      Tags ON FileTags.TagId = Tags.TagId
+    GROUP BY 
+      FileId
+  ) AS FileTagConcat
+  ON 
+    Files.FileId = FileTagConcat.FileId
+  WHERE 
+    (FileTagConcat.TagName LIKE CONCAT('%', ?, '%') OR Files.FileName LIKE CONCAT('%', ?, '%'))
+  GROUP BY 
+    Files.FileId
+
+  UNION
+
+  SELECT 
+    'link' AS Type,
+    Links.LinkId AS Id,
+    Links.LinkName AS Name,
+    Links.Description AS Description,
+    Links.UploadDate AS UploadDate,
+    Links.Contributor AS Contributor,
+    GROUP_CONCAT(LinkTagConcat.TagName SEPARATOR ', ') AS Tags
+  FROM 
+    Links
+  JOIN 
+  (
+    SELECT 
+      LinkId, GROUP_CONCAT(Tags.TagName) AS TagName
+    FROM 
+      LinkTags
+    JOIN 
+      Tags ON LinkTags.TagId = Tags.TagId
+    GROUP BY 
+      LinkId
+  ) AS LinkTagConcat
+  ON 
+    Links.LinkId = LinkTagConcat.LinkId
+  WHERE 
+    (LinkTagConcat.TagName LIKE CONCAT('%', ?, '%') OR Links.LinkName LIKE CONCAT('%', ?, '%'))
+  GROUP BY 
+    Links.LinkId;
+
+
+
+
+-- * NAME first
+ SELECT 
+    'file' AS Type,
+    Files.FileId AS Id,
+    Files.FileName AS Name,
+    Files.Description AS Description,
+    Files.UploadDate AS UploadDate,
+    Files.Contributor AS Contributor,
+    GROUP_CONCAT(FileTagConcat.TagName SEPARATOR ', ') AS Tags
+  FROM 
+    Files
+  JOIN 
+  (
+    SELECT 
+      FileId, GROUP_CONCAT(Tags.TagName) AS TagName
+    FROM 
+      FileTags
+    JOIN 
+      Tags ON FileTags.TagId = Tags.TagId
+    GROUP BY 
+      FileId
+  ) AS FileTagConcat
+  ON 
+    Files.FileId = FileTagConcat.FileId
+  WHERE 
+    (Files.FileName LIKE CONCAT('%', ?, '%') OR FileTagConcat.TagName LIKE CONCAT('%', ?, '%'))
+  GROUP BY 
+    Files.FileId
+
+  UNION
+
+  SELECT 
+    'link' AS Type,
+    Links.LinkId AS Id,
+    Links.LinkName AS Name,
+    Links.Description AS Description,
+    Links.UploadDate AS UploadDate,
+    Links.Contributor AS Contributor,
+    GROUP_CONCAT(LinkTagConcat.TagName SEPARATOR ', ') AS Tags
+  FROM 
+    Links
+  JOIN 
+  (
+    SELECT 
+      LinkId, GROUP_CONCAT(Tags.TagName) AS TagName
+    FROM 
+      LinkTags
+    JOIN 
+      Tags ON LinkTags.TagId = Tags.TagId
+    GROUP BY 
+      LinkId
+  ) AS LinkTagConcat
+  ON 
+    Links.LinkId = LinkTagConcat.LinkId
+  WHERE 
+    (Links.LinkName LIKE CONCAT('%', ?, '%') OR LinkTagConcat.TagName LIKE CONCAT('%', ?, '%'))
+  GROUP BY 
+    Links.LinkId;
+
+
+
+
+
+-- !!!!
+
+-- * TAGS first USING
+  SELECT 
+    'file' AS Type,
+    Files.FileId AS Id,
+    Files.FileName AS Name,
+    Files.Description AS Description,
+    Files.UploadDate AS UploadDate,
+    Files.Contributor AS Contributor,
+    IFNULL(GROUP_CONCAT(FileTagConcat.TagName SEPARATOR ', '), '') AS Tags
+  FROM 
+    Files
+  LEFT JOIN 
+    (
+      SELECT 
+        FileId, GROUP_CONCAT(Tags.TagName) AS TagName
+      FROM 
+        FileTags
+      JOIN 
+        Tags ON FileTags.TagId = Tags.TagId
+      GROUP BY 
+        FileId
+    ) AS FileTagConcat
+  ON 
+    Files.FileId = FileTagConcat.FileId
+  WHERE 
+    ((FileTagConcat.TagName LIKE CONCAT('%', ?, '%') OR Files.FileName LIKE CONCAT('%', ?, '%')) OR (Files.FileName LIKE CONCAT('%', ?, '%') AND (FileTagConcat.TagName IS NULL OR FileTagConcat.TagName = '')))
+  GROUP BY 
+    Files.FileId
+
+  UNION
+
+  SELECT 
+    'link' AS Type,
+    Links.LinkId AS Id,
+    Links.LinkName AS Name,
+    Links.Description AS Description,
+    Links.UploadDate AS UploadDate,
+    Links.Contributor AS Contributor,
+    IFNULL(GROUP_CONCAT(LinkTagConcat.TagName SEPARATOR ', '), '') AS Tags
+  FROM 
+    Links
+  LEFT JOIN  
+    (
+      SELECT 
+        LinkId, GROUP_CONCAT(Tags.TagName) AS TagName
+      FROM 
+        LinkTags
+      JOIN 
+        Tags ON LinkTags.TagId = Tags.TagId
+      GROUP BY 
+        LinkId
+    ) AS LinkTagConcat
+  ON 
+    Links.LinkId = LinkTagConcat.LinkId
+  WHERE 
+    ((LinkTagConcat.TagName LIKE CONCAT('%', ?, '%') OR Links.LinkName LIKE CONCAT('%', ?, '%')) OR (Links.LinkName LIKE CONCAT('%', ?, '%') AND (LinkTagConcat.TagName IS NULL OR LinkTagConcat.TagName = '')))
+  GROUP BY 
+    Links.LinkId;

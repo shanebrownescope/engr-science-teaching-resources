@@ -1,15 +1,13 @@
 "use server";
 import { getCourseByName } from "@/database/data/courses";
 import dbConnect from "@/database/dbConnector";
-import {
-  lowercaseAndReplaceSpace,
-} from "@/utils/formatting";
+import { lowercaseAndReplaceSpace } from "@/utils/formatting";
 import { ModuleData } from "@/database/data/modules";
-import { fetchedFormattedData } from "@/utils/types";
+import { FetchedFormattedData } from "@/utils/types";
 
 export const fetchModulesByCourse = async (
   courseName: string
-): Promise<fetchedFormattedData> => {
+): Promise<FetchedFormattedData> => {
   console.log(courseName);
   try {
     const course = await getCourseByName(courseName);

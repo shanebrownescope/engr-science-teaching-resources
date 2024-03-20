@@ -1,19 +1,18 @@
-"use server"
+"use server";
 
 import dbConnect from "@/database/dbConnector";
 import { processLink } from "@/utils/helpers";
-import { LinkData, fetchedLink, fetchedLinksDataArray } from "@/utils/types";
-
+import { LinkData, FetchedLink, FetchedLinksDataArray } from "@/utils/types";
 
 type fetchSimilarLinksByTagsProps = {
+  linkId?: string;
   tags?: string[];
 };
 
-
-
 export const fetchSimilarLinksByTags = async ({
+  linkId,
   tags,
-}: fetchSimilarLinksByTagsProps): Promise<fetchedLinksDataArray> => {
+}: fetchSimilarLinksByTagsProps): Promise<FetchedLinksDataArray> => {
   try {
     const selectQuery = `
     SELECT l.LinkId, l.LinkName, l.LinkUrl, l.Description, l.UploadDate, l.Contributor,
@@ -21,11 +20,17 @@ export const fetchSimilarLinksByTags = async ({
     FROM Links l
     JOIN LinkTags lt ON l.LinkId = lt.LinkId
     JOIN Tags t ON lt.TagId = t.TagId
-    WHERE t.TagName IN  (${JSON.stringify(tags).replace("[", "").replace("]", "")})
+    WHERE t.TagName IN (${JSON.stringify(tags)
+      .replace("[", "")
+      .replace("]", "")})
+      AND l.LinkId != ?
     GROUP BY l.LinkId
-    LIMIT 3;`
+    LIMIT 3;`;
 
-    const { results: linksResult, error } = await dbConnect(selectQuery, [tags]);
+    const { results: linksResult, error } = await dbConnect(selectQuery, [
+      linkId,
+    ]);
+    console.log(linksResult);
 
     if (error) {
       console.error("Error retrieving data from the database:", error);
@@ -33,17 +38,17 @@ export const fetchSimilarLinksByTags = async ({
     }
 
     if (linksResult[0].length > 0) {
-      const formattedData: fetchedLink[] = await Promise.all(linksResult[0].map(async (link: LinkData) => {
-        const processedLink = await processLink(link);
-        return processedLink;
-      }));
-  
-      return { success: formattedData}
-    } 
+      const formattedData: FetchedLink[] = await Promise.all(
+        linksResult[0].map(async (link: LinkData) => {
+          const processedLink = await processLink(link);
+          return processedLink;
+        })
+      );
 
-    return {
-      failure: "Internal server error, error retrieving modules from db",
-    };
+      return { success: formattedData };
+    } else {
+      return { success: undefined };
+    }
   } catch (error) {
     console.error("An error occurred while fetching data:", error);
     return {

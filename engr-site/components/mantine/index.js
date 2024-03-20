@@ -1,3 +1,5 @@
+import { NavbarNested } from "./NavbarNested";
+
 export { HeaderMegaMenu } from "./HeaderMegaMenu";
 export { GuestHeaderMegaMenu } from "./GuestHeaderMegaMenu";
 export { HeroBullets } from "./HeroBullets";
@@ -10,3 +12,4 @@ export { ModuleContentTable } from "./ModuleContentTable";
 export { SearchButton } from "./SearchButton";
 export { YearSlider } from "./YearSlider";
 export { SelectDropdown } from "./SelectDropdown";
+export { NavbarNested } from "./NavbarNested"

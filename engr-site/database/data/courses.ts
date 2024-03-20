@@ -9,11 +9,11 @@ export const getCourseByName = async (name: string): Promise<CourseData | null> 
   console.log(name)
   try {
     const selectQuery = `
-      SELECT * FROM Courses WHERE CourseName = ?`
+      SELECT * FROM Courses WHERE CourseName LIKE ?`
 
     const { results, error } = await dbConnect(selectQuery, [name])
 
-    console.log(results[0])
+    console.log(results)
 
     if (results[0].length > 0) {
       return results[0][0]

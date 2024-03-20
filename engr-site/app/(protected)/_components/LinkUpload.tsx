@@ -14,7 +14,7 @@ import styles from "@/styles/test.module.css";
 import { SelectDropdown } from "@/components/mantine";
 import { fetchModulesByCourse } from "@/actions/fetching/fetchModulesByCourse";
 import { fetchSectionsByModule } from "@/actions/fetching/fetchSectionsByModule";
-import { FormattedData, capitalizeAndReplaceDash } from "@/utils/formatting";
+import { FormattedData, capitalizeAndReplaceDash, capitalizeWords } from "@/utils/formatting";
 import { fetchConceptsBySectionId } from "@/actions/fetching/fetchConceptsBySectionId";
 import { uploadLink } from "@/actions/uploadingPostTags/uploadLink";
 import { sanitizeUrl, trimCapitalizeFirstLetter, validUrlPattern } from "@/utils/helpers";
@@ -219,7 +219,11 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         console.log("success in link: ", linkId);
 
         const trimmedTags = tags
-          .map((tag) => tag.trim())
+          .map((tag) => {
+            const capWords = capitalizeWords(tag.trim())
+            console.log("capWords: ", capWords)
+            return capWords
+          })
           .filter((tag) => tag !== "");
 
         if (trimmedTags && trimmedTags.length > 0) {

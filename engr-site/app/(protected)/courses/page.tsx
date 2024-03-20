@@ -1,9 +1,9 @@
 import { fetchCourses } from "@/actions/fetching/fetchCourses";
 import Link from "next/link";
-import { fetchedFormattedData } from "@/utils/types";
+import { FetchedFormattedData } from "@/utils/types";
 
 const Courses = async () => {
-  const courseData: fetchedFormattedData = await fetchCourses();
+  const courseData: FetchedFormattedData = await fetchCourses();
 
   if (courseData?.failure) {
     console.log("bad stuff");

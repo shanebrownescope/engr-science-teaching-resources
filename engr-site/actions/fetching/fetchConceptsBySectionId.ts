@@ -1,8 +1,8 @@
 "use server";
 import { ConceptData } from "@/database/data/concepts";
 import dbConnect from "@/database/dbConnector";
-import { lowercaseAndReplaceSpace } from "@/utils/formatting";
-import { fetchedFormattedData } from "@/utils/types";
+import { FormattedData, lowercaseAndReplaceSpace } from "@/utils/formatting";
+import { FetchedFormattedData } from "@/utils/types";
 
 type fetchConceptsBySectionIdProps = {
   id: number;
@@ -10,7 +10,7 @@ type fetchConceptsBySectionIdProps = {
 
 export const fetchConceptsBySectionId = async ({
   id,
-}: fetchConceptsBySectionIdProps): Promise<fetchedFormattedData> => {
+}: fetchConceptsBySectionIdProps): Promise<FetchedFormattedData> => {
   try {
     const selectQuery = `
     SELECT * FROM Concepts WHERE SectionId = ?`;
@@ -23,8 +23,9 @@ export const fetchConceptsBySectionId = async ({
     }
 
     if (results[0].length > 0) {
-      const formattedModuleData = results[0].map((concept: ConceptData) =>
-        lowercaseAndReplaceSpace(concept.ConceptId, concept.ConceptName)
+      const formattedModuleData: FormattedData[] = results[0].map(
+        (concept: ConceptData) =>
+          lowercaseAndReplaceSpace(concept.ConceptId, concept.ConceptName)
       );
       console.log("fetchCourseModules results: ", formattedModuleData);
       return { success: formattedModuleData, failure: undefined };
