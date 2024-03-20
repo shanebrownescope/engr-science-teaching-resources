@@ -10,3 +10,4 @@ export { ModuleContentTable } from "./ModuleContentTable";
 export { SearchButton } from "./SearchButton";
 export { YearSlider } from "./YearSlider";
 export { SelectDropdown } from "./SelectDropdown";
+export { ConceptBar } from "./ConceptBar";
