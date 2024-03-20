@@ -3,17 +3,20 @@
 import dbConnect from "@/database/dbConnector";
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { processFile, processLink } from "@/utils/helpers";
-import { LinkData, fetchedFile, fetchedLink, fetchedLinksDataArray } from "@/utils/types"
+import {
+  LinkData,
+  FetchedFile,
+  FetchedLink,
+  FetchedLinksDataArray,
+} from "@/utils/types";
 
 type fetchLinksByConceptIdProps = {
   id: string;
 };
 
-
-
 export const fetchLinksByConceptId = async ({
   id,
-}: fetchLinksByConceptIdProps): Promise<fetchedLinksDataArray> => {
+}: fetchLinksByConceptIdProps): Promise<FetchedLinksDataArray> => {
   try {
     const selectQuery = `
       SELECT l.LinkId, l.LinkName, l.LinkUrl, l.Description, l.UploadDate, l.Contributor,
@@ -22,7 +25,7 @@ export const fetchLinksByConceptId = async ({
       LEFT JOIN LinkTags lt ON l.LinkId = lt.LinkId
       LEFT JOIN Tags t ON lt.TagId = t.TagId
       WHERE l.ConceptId = ?
-      GROUP BY l.LinkId;`
+      GROUP BY l.LinkId;`;
 
     const { results, error } = await dbConnect(selectQuery, [id]);
 
@@ -32,17 +35,17 @@ export const fetchLinksByConceptId = async ({
     }
 
     if (results[0].length > 0) {
-      const formattedData: fetchedLink[] = await Promise.all(results[0].map(async (link: LinkData) => {
-        const processedFile = await processLink(link);
-        return processedFile;
-      }));
-  
-      return { success: formattedData}
+      const formattedData: FetchedLink[] = await Promise.all(
+        results[0].map(async (link: LinkData) => {
+          const processedFile = await processLink(link);
+          return processedFile;
+        })
+      );
+
+      return { success: formattedData };
     } else {
-      return { success: undefined}
+      return { success: undefined };
     }
-
-
   } catch (error) {
     console.error("An error occurred while fetching data:", error);
     return {

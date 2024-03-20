@@ -1,14 +1,15 @@
-import { capitalizeAndReplaceDash, lowercaseAndReplaceSpace } from "@/utils/formatting";
 import {
-  fetchFilesByConceptId,
-} from "@/actions/fetching/fetchFilesByConceptId";
+  capitalizeAndReplaceDash,
+  lowercaseAndReplaceSpace,
+} from "@/utils/formatting";
+import { fetchFilesByConceptId } from "@/actions/fetching/fetchFilesByConceptId";
 import Link from "next/link";
-import { fetchedFile, fetchedLink } from "@/utils/types"
+import { FetchedFile, FetchedLink } from "@/utils/types";
 import { fetchLinksByConceptId } from "@/actions/fetching/fetchLinksByConceptId";
 import { notFound } from "next/navigation";
 
 type ConceptPageProps = {
-  params: { courseName: string, module: string, concept: string };
+  params: { courseName: string; module: string; concept: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
@@ -19,31 +20,31 @@ const ConceptPage = async ({ params, searchParams }: ConceptPageProps) => {
   const searchParamId = searchParams.id;
 
   if (!searchParamId) {
-    return notFound()
+    return notFound();
   }
 
   console.log(id);
   const conceptName = capitalizeAndReplaceDash(params.concept);
   console.log(conceptName);
   const filesResult = await fetchFilesByConceptId({ id });
-  const linksResult = await fetchLinksByConceptId({id})
+  const linksResult = await fetchLinksByConceptId({ id });
 
-  filesResult?.success?.map((file) => file.tags?.map((tag: any) => {
-    // const values = Object.values(tag)
-    console.log(typeof(tag), tag)
-    // console.log(values)
-  }))
-
-
+  filesResult?.success?.map((file) =>
+    file.tags?.map((tag: any) => {
+      // const values = Object.values(tag)
+      console.log(typeof tag, tag);
+      // console.log(values)
+    })
+  );
 
   return (
     <div>
-      {filesResult?.success?.map((file: fetchedFile, idx: number) => (
+      {filesResult?.success?.map((file: FetchedFile, idx: number) => (
         <Link
-        href={`/courses/${params.courseName}/${params.module}/${params.concept}/${file.formattedFileName}?${new URLSearchParams({
-          id: file.fileId.toString(),
-          type: "file"
-        })} `}
+          href={`/resources/${file.formattedFileName}?${new URLsearchParams({
+            id: file.fileId.toString(),
+            type: "file",
+          })} `}
           key={idx}
           style={{
             display: "flex",
@@ -54,31 +55,33 @@ const ConceptPage = async ({ params, searchParams }: ConceptPageProps) => {
             width: "450px",
             marginTop: "1em",
             textDecoration: "none",
-            color: "black"
+            color: "black",
           }}
         >
           <h3> {file.originalFileName} </h3>
           <p> {file.description} </p>
-        
+
           <div
             style={{
               display: "flex",
               gap: "1em",
             }}
           >
-            {file.tags && file.tags.length > 0 && file.tags?.map((tag: any) => (
-              <div
-                key={tag}
-                style={{
-                  background: "black",
-                  color: "white",
-                  padding: "0.5em",
-                  borderRadius: "1em",
-                }}
-              >
-                {tag}
-              </div>
-            ))}
+            {file.tags &&
+              file.tags.length > 0 &&
+              file.tags?.map((tag: any) => (
+                <div
+                  key={tag}
+                  style={{
+                    background: "black",
+                    color: "white",
+                    padding: "0.5em",
+                    borderRadius: "1em",
+                  }}
+                >
+                  {tag}
+                </div>
+              ))}
           </div>
 
           <div>
@@ -87,13 +90,12 @@ const ConceptPage = async ({ params, searchParams }: ConceptPageProps) => {
         </Link>
       ))}
 
-
-      {linksResult?.success?.map((link: fetchedLink, idx: number) => (
+      {linksResult?.success?.map((link: FetchedLink, idx: number) => (
         <Link
-        href={`/courses/${params.courseName}/${params.module}/${params.concept}/${link.formattedLinkName}?${new URLSearchParams({
-          id: link.linkId.toString(),
-          type: "link"
-        })} `}
+          href={`/resources/${link.formattedLinkName}?${new URLsearchParams({
+            id: link.linkId.toString(),
+            type: "link",
+          })} `}
           key={idx}
           style={{
             display: "flex",
@@ -104,7 +106,7 @@ const ConceptPage = async ({ params, searchParams }: ConceptPageProps) => {
             width: "450px",
             marginTop: "1em",
             textDecoration: "none",
-            color: "black"
+            color: "black",
           }}
         >
           <h3> {link.originalLinkName} </h3>
@@ -115,25 +117,29 @@ const ConceptPage = async ({ params, searchParams }: ConceptPageProps) => {
               gap: "1em",
             }}
           >
-            {link.tags?.map((tag: string) => tag && (
-              <div
-                key={tag}
-                style={{
-                  background: "black",
-                  color: "white",
-                  padding: "0.5em",
-                  borderRadius: "1em",
-                }}
-              >
-                {tag}
-              </div>
-            ))}
+            {link.tags?.map(
+              (tag: string) =>
+                tag && (
+                  <div
+                    key={tag}
+                    style={{
+                      background: "black",
+                      color: "white",
+                      padding: "0.5em",
+                      borderRadius: "1em",
+                    }}
+                  >
+                    {tag}
+                  </div>
+                )
+            )}
           </div>
-
         </Link>
       ))}
 
-      {!filesResult?.success &&  !filesResult?.success && <p> no files or links </p>}
+      {!filesResult?.success && !filesResult?.success && (
+        <p> no files or links </p>
+      )}
     </div>
   );
 };

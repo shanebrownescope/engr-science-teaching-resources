@@ -1,40 +1,41 @@
-"use server"
+"use server";
 
 import dbConnect from "@/database/dbConnector";
 import { processFile } from "@/utils/helpers";
-import { FileData, fetchedFile, fetchedFilesDataArray } from "@/utils/types"
-
+import { FileData, FetchedFile, FetchedFilesDataArray } from "@/utils/types";
 
 type fetchSimilarFilesByTagsProps = {
-  id: number,
+  fileId: string;
   tags?: string[];
 };
 
-
-
-
 export const fetchSimilarFilesByTags = async ({
-  id,
+  fileId,
   tags,
-}: fetchSimilarFilesByTagsProps): Promise<fetchedFilesDataArray> => {
-  console.log(tags)
-  const tagsString = tags?.map(tag => `'${tag}'`).join(',');
-  console.log(tagsString)
-  
-  console.log(JSON.stringify(tags).replace("[", "").replace("]", ""))
+}: fetchSimilarFilesByTagsProps): Promise<FetchedFilesDataArray> => {
+  console.log(tags);
+  const tagsString = tags?.map((tag) => `'${tag}'`).join(",");
+  console.log(tagsString);
+
+  console.log(JSON.stringify(tags).replace("[", "").replace("]", ""));
 
   try {
     const selectQuery = `
       SELECT f.FileId, f.FileName, f.S3Url, f.Description, f.UploadDate, f.Contributor,
-          JSON_ARRAYAGG(t.TagName) AS TagNames
+        JSON_ARRAYAGG(t.TagName) AS TagNames
       FROM Files f
       JOIN FileTags ft ON f.FileId = ft.FileId
       JOIN Tags t ON ft.TagId = t.TagId
-      WHERE t.TagName IN (${JSON.stringify(tags).replace("[", "").replace("]", "")})
+      WHERE t.TagName IN (${JSON.stringify(tags)
+        .replace("[", "")
+        .replace("]", "")})
+        AND f.FileId != ?
       GROUP BY f.FileId
-      LIMIT 3;`
+      LIMIT 3;`;
 
-    const { results: filesResult, error } = await dbConnect(selectQuery);
+    const { results: filesResult, error } = await dbConnect(selectQuery, [
+      fileId,
+    ]);
 
     if (error) {
       console.error("Error retrieving data from the database:", error);
@@ -42,14 +43,16 @@ export const fetchSimilarFilesByTags = async ({
     }
 
     if (filesResult[0].length > 0) {
-      const formattedData: fetchedFile[] = await Promise.all(filesResult[0].map(async (file: FileData) => {
-        const processedFile = await processFile(file);
-        return processedFile;
-      }));
-  
-      return { success: formattedData}
-    }  else {
-      return { success: undefined}
+      const formattedData: FetchedFile[] = await Promise.all(
+        filesResult[0].map(async (file: FileData) => {
+          const processedFile = await processFile(file);
+          return processedFile;
+        })
+      );
+
+      return { success: formattedData };
+    } else {
+      return { success: undefined };
     }
 
     return {

@@ -44,11 +44,31 @@ export const getModuleByName = async (name: string): Promise<ModuleData | null> 
 
 
 export const getModuleById = async (id: string): Promise<ModuleData | null> => {
+  console.log(id)
   try {
     const selectQuery = `
       SELECT * FROM Modules WHERE ModuleId = ?`
 
     const { results, error } = await dbConnect(selectQuery, [id])
+
+    if (results[0].length > 0) {
+      return results[0][0]
+    }
+
+    return null
+  } catch (error) {
+    return null
+  }
+}
+
+export const getModuleByIdAndCourseId = async(moduleId: string, courseId: string | null) => {
+  console.log(moduleId, courseId)
+  try {
+    const selectQuery = `
+      SELECT * FROM Modules WHERE ModuleId = ? AND CourseId = ?`
+
+    const { results, error } = await dbConnect(selectQuery, [moduleId, courseId])
+    console.log(results[0])
 
     if (results[0].length > 0) {
       return results[0][0]

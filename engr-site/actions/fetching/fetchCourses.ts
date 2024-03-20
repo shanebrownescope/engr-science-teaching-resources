@@ -2,9 +2,9 @@
 import dbConnect from "@/database/dbConnector";
 import { FormattedData, lowercaseAndReplaceSpace } from "@/utils/formatting";
 import { CourseData } from "@/database/data/courses";
-import { fetchedFormattedData } from "@/utils/types";
+import { FetchedFormattedData } from "@/utils/types";
 
-export const fetchCourses = async (): Promise<fetchedFormattedData> => {
+export const fetchCourses = async (): Promise<FetchedFormattedData> => {
   try {
     const query = `SELECT * FROM Courses`;
 

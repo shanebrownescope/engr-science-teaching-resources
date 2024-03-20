@@ -17,7 +17,7 @@ import styles from "@/styles/test.module.css";
 import { SelectDropdown } from "@/components/mantine";
 import { fetchModulesByCourse } from "@/actions/fetching/fetchModulesByCourse";
 import { fetchSectionsByModule } from "@/actions/fetching/fetchSectionsByModule";
-import { FormattedData } from "@/utils/formatting";
+import { FormattedData, capitalizeWords } from "@/utils/formatting";
 import { fetchConceptsBySectionId } from "@/actions/fetching/fetchConceptsBySectionId";
 import { trimCapitalizeFirstLetter } from "@/utils/helpers";
 
@@ -37,6 +37,7 @@ type FileUploadProps = {
 export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   console.log("data: ", coursesOptionsData);
   //* state for form
+  const [fileName, setFileName] = useState("");
   const [tags, setTags] = useState([""]);
 
   const [file, setFile] = useState<File | undefined>(undefined);
@@ -146,18 +147,21 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   //* hash file and turn into string
   //* used to make sure file doesn't change
   const computeSHA256 = async (file: File) => {
-    //* convert file content to array buffer
-    //* since crypto.subtle.digest operates on arrayBuffer data
-    //* calculates SHA-256 hash of buffer
-    //* converts ArrayBuffer to array of bytes (hashArray)
-    //* converts each byte to hexadecimal string
-    //* pads it with leading zeros to ensure string is two char long
+    // Convert file content to array buffer
     const buffer = await file.arrayBuffer();
+
+    // Calculate SHA-256 hash of buffer
     const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
+
+    // Convert ArrayBuffer to array of bytes (hashArray)
     const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+    // Convert each byte to hexadecimal string and pad it with leading zeros to ensure the string is two characters long
     const hashHex = hashArray
-      .map((b) => b.toString(16).padStart(2, "0"))
+      .map((byte) => byte.toString(16).padStart(2, "0"))
       .join("");
+
+    // Return the hexadecimal SHA-256 hash
     return hashHex;
   };
 
@@ -185,11 +189,12 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       console.log(formattedDescription)
       console.log(formattedContributor)
 
+      
 
 
       const checksum = await computeSHA256(file);
       const signedURLResult = await getSignedURL({
-        fileName: file!.name,
+        fileName: fileName.trim(),
         fileType: file!.type,
         fileSize: file!.size,
         checksum: checksum,
@@ -226,7 +231,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         });
 
         const trimmedTags = tags
-          .map((tag) => tag.trim())
+          .map((tag) => capitalizeWords(tag.trim()))
           .filter((tag) => tag !== "");
 
         if (trimmedTags && trimmedTags.length > 0) {
@@ -317,6 +322,16 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           Upload
         </button>
 
+        <h4> Enter file name </h4>
+        <input
+          type="text"
+          placeholder="Enter file name"
+          max={100}
+          name="fileName"
+          value={fileName}
+          onChange={(e) => setFileName(e.target.value)} 
+        />
+
         <h4> Select a course </h4>
         <SelectDropdown
           optionsList={coursesOptionsData}
@@ -352,13 +367,14 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           type="text"
           name="description"
           value={description}
+          placeholder="Enter description"
           onChange={(e) => setDescription(e.target.value)}
         />
 
         <h4> Add contributor </h4>
         <input
           type="text"
-          name="description"
+          name="contributor"
           value={contributor}
           onChange={(e) => setContributor(e.target.value)}
         />

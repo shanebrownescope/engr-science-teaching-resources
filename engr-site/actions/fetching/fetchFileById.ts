@@ -1,26 +1,23 @@
-"use server"
+"use server";
 
 import dbConnect from "@/database/dbConnector";
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { TagsData, fetchTagsByFileId } from "./fetchTagsByFileId";
 import { processFile } from "@/utils/helpers";
-import { FileData, fetchedFile } from "@/utils/types"
-
+import { FileData, FetchedFile } from "@/utils/types";
 
 type fetchFilesByIdProps = {
   id: string;
 };
 
-export type fetchedFileData = {
-  success?: fetchedFile;
+export type FetchedFileData = {
+  success?: FetchedFile;
   failure?: string;
 };
 
-
-
 export const fetchFileById = async ({
   id,
-}: fetchFilesByIdProps): Promise<fetchedFileData> => {
+}: fetchFilesByIdProps): Promise<FetchedFileData> => {
   try {
     const selectQuery = `
       SELECT f.FileId, f.FileName, f.S3Url, f.Description, f.UploadDate, f.Contributor,
@@ -29,7 +26,7 @@ export const fetchFileById = async ({
       LEFT JOIN FileTags ft ON f.FileId = ft.FileId
       LEFT JOIN Tags t ON ft.TagId = t.TagId
       WHERE f.FileId = ?
-      GROUP BY f.FileId;`
+      GROUP BY f.FileId;`;
 
     const { results: fileResult, error } = await dbConnect(selectQuery, [id]);
 
@@ -41,10 +38,10 @@ export const fetchFileById = async ({
     console.log(fileResult[0]);
 
     if (fileResult[0].length > 0) {
-      const file: FileData = fileResult[0][0]
+      const file: FileData = fileResult[0][0];
 
-      const processedFile: fetchedFile = await processFile(file)
-      console.log(processedFile)
+      const processedFile: FetchedFile = await processFile(file);
+      console.log(processedFile);
 
       return { success: processedFile };
     }

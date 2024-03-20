@@ -15,25 +15,42 @@ export const LoginForm = () => {
   const [error, setError] = useState<string | undefined>("")
   const [success, setSuccess] = useState<string | undefined>("")
   const [isPending, startTransition] = useTransition();
-  const { register, handleSubmit, formState: { errors } } = useForm<z.infer<typeof LoginSchema>>({
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<z.infer<typeof LoginSchema>>({
     defaultValues: {
       email: '',
       password: '',
     }
   });
 
+  /**
+   * Handle the login form submission
+   *
+   * @param {z.infer<typeof LoginSchema>} values - The form values
+   */
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    // Reset the error and success messages
     setError("");
     setSuccess("");
 
+    // Make a transition to asyncronously log the user in
     startTransition(() => {
+      /**
+       * Attempt to login the user
+       *
+       * @param {Object} data - The login result
+       */
       loginAction(values)
         .then((data) => {
-          setError(data?.error)
-          setSuccess(data?.success)
+          /**
+           * If there was an error, set the error message
+           * Otherwise, set the success message
+           */
+          setError(data?.error || "");
+          setSuccess(data?.success || "");
         })
     })
   }
+
 
   return (
     <div className={styles.cardFormWrapper}>
@@ -63,7 +80,7 @@ export const LoginForm = () => {
         <FormSuccess message={success} />
 
         <button 
-          disabled={isPending}
+          disabled={isSubmitting}
           type="submit"
         >
           Login
