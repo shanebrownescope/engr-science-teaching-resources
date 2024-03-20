@@ -13,3 +13,5 @@ export { SearchButton } from "./SearchButton";
 export { YearSlider } from "./YearSlider";
 export { SelectDropdown } from "./SelectDropdown";
 export { NavbarNested } from "./NavbarNested"
+export { ConceptBar } from "./ConceptBar";
+
