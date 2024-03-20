@@ -28,6 +28,20 @@ export const lowercaseAndReplaceSpace = (
   return final;
 };
 
+export const lowercaseAndReplaceSpaceString = (
+  input: string
+): string => {
+
+  const fieldValue = input;
+  const lowerCase = fieldValue.toLowerCase();
+  const formattedValue = lowerCase.replace(/ /g, '-');
+  console.log(formattedValue)
+  
+  return formattedValue
+};
+
+
+
 export const capitalizeAndReplaceDash = (name: string): string => {
   console.log(name);
   const wordWithSpaces = name.replace(/-/g, " ");
@@ -37,9 +51,9 @@ export const capitalizeAndReplaceDash = (name: string): string => {
 };
 
 export const capitalizeWords = (input: string): string => {
-  console.log(input);
-  const exceptions = new Set(["and", "an", "a", "the", "for"]);
-
+  console.log(input)
+  const exceptions = new Set(["and", "an", "a", "the", "for", "of"]); 
+  
   //* split string into array of words
   const splitWordIntoArray = input.toLowerCase().split(" ");
 

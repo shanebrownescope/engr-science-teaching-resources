@@ -1,6 +1,6 @@
 import { fetchModulesByCourse } from "@/actions/fetching/fetchModulesByCourse";
 import { FormattedData, capitalizeAndReplaceDash } from "@/utils/formatting";
-import { fetchedFormattedData } from "@/utils/types";
+import { FetchedFormattedData } from "@/utils/types";
 import Link from "next/link";
 import { ModuleCard } from "@/components/mantine";
 
@@ -10,7 +10,7 @@ const CourseModules = async ({
   params: { courseName: string };
 }) => {
   const moduleName = capitalizeAndReplaceDash(params.courseName);
-  const modules: fetchedFormattedData = await fetchModulesByCourse(moduleName);
+  const modules: FetchedFormattedData = await fetchModulesByCourse(moduleName);
   console.log(params.courseName);
 
   console.log("== success: ", modules.success);
@@ -26,7 +26,7 @@ const CourseModules = async ({
             description="description here"
             href={`/courses/${params.courseName}/${item.formatted}`}
           />
-        
+
           <Link
             href={`/courses/${params.courseName}/${
               item.formatted

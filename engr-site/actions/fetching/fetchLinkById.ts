@@ -1,24 +1,21 @@
-"use server"
+"use server";
 
 import dbConnect from "@/database/dbConnector";
 import { processLink } from "@/utils/helpers";
-import { LinkData, fetchedLink } from "@/utils/types"
-
+import { LinkData, FetchedLink } from "@/utils/types";
 
 type fetchLinkByIdProps = {
   id: string;
 };
 
-type fetchedLinkData = {
-  success?: fetchedLink;
+type FetchedLinkData = {
+  success?: FetchedLink;
   failure?: string;
 };
 
-
-
 export const fetchLinkById = async ({
   id,
-}: fetchLinkByIdProps): Promise<fetchedLinkData> => {
+}: fetchLinkByIdProps): Promise<FetchedLinkData> => {
   try {
     const selectQuery = `
       SELECT l.LinkId, l.LinkName, l.LinkUrl, l.Description, l.UploadDate, l.Contributor,
@@ -27,7 +24,7 @@ export const fetchLinkById = async ({
       LEFT JOIN LinkTags lt ON l.LinkId = lt.LinkId
       LEFT JOIN Tags t ON lt.TagId = t.TagId
       WHERE l.LinkId = ?
-      GROUP BY l.LinkId;`
+      GROUP BY l.LinkId;`;
 
     const { results: linkResult, error } = await dbConnect(selectQuery, [id]);
 
@@ -39,10 +36,10 @@ export const fetchLinkById = async ({
     console.log(linkResult[0]);
 
     if (linkResult[0].length > 0) {
-      const link: LinkData = linkResult[0][0]
+      const link: LinkData = linkResult[0][0];
 
-      const processedLink: fetchedLink = await processLink(link)
-      console.log(processedLink)
+      const processedLink: FetchedLink = await processLink(link);
+      console.log(processedLink);
 
       return { success: processedLink };
     }

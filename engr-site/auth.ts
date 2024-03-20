@@ -44,7 +44,9 @@ export const {
   callbacks: {
     async session({ session, token }) {
       //* adds id and role to session from token
-      console.log({ sessionToken: token, session })
+
+      //* console.log token and session
+      // console.log({ sessionToken: token, session })
       if (token.sub && session.user) {
         session.user.id = token.sub
       }
@@ -57,14 +59,14 @@ export const {
     async jwt({ token }) {
       if (!token.sub) return token;
 
-      const exisitingUser = await getUserById(token.sub)
+      const existingUser = await getUserById(token.sub)
 
-      if (!exisitingUser) {
+      if (!existingUser) {
         return token
       }
       
       //* adds role to token
-      token.role = exisitingUser.Role
+      token.role = existingUser.Role
 
       return token;
     },

@@ -10,7 +10,7 @@ import {
   capitalizeAndReplaceDash,
   lowercaseAndReplaceSpace,
 } from "@/utils/formatting";
-import { fetchedFormattedData } from "@/utils/types";
+import { FetchedFormattedData } from "@/utils/types";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "path";
@@ -41,12 +41,18 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
   const [conceptFiles, setConceptFiles] = useState<ModuleContent[]>([]);
   const [conceptLinks, setConceptLinks] = useState<ModuleContent[]>([]);
 
-  const handleSegmentChange = (value) => {
+  // const [sections, setSections] = useState<FetchedFormattedData | null>(null); // Initialize sections state
+  //const [sectionDataResults, setSectionDataResults] = useState<null | {
+  //  sectionName: String;
+  //  concepts: FormattedData[] | undefined;
+  //}>(null); // Store fetched section data
+
+  const handleSegmentChange = (value: any) => {
     console.log("Segment changed to", value);
     setSelectedSegment(value);
   };
 
-  const id = searchParams.id; // Ensure this is consistent with your data structure
+  const id = searchParams.id as string; // Ensure this is consistent with your data structure
   const sectionName = capitalizeAndReplaceDash(params.module);
   const searchParamId = searchParams.id;
 

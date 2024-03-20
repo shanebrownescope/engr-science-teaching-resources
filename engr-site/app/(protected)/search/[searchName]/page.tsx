@@ -1,7 +1,12 @@
+"use client"
 import Link from "next/link";
-import React from "react"; // Ensure React is imported
+import React, { useEffect, useState } from "react"; // Ensure React is imported
 import { SearchResultBox, SearchFilterMenu } from "@/components/custom";
 import { Pagination } from "@mantine/core";
+import { fetchSearchResults } from "@/actions/fetching/fetchSearchResults";
+import { AllFilesAndLinksDataFormatted, FetchedSearchResults } from "@/utils/types";
+import ResourcesWithPagination from "@/components/custom/ResourcesWithPagination";
+import { capitalizeAndReplaceDash } from "@/utils/formatting";
 
 // Mock data for demonstration
 const mockResults = [
@@ -33,21 +38,36 @@ const mockResults = [
 ];
 
 const SearchResults = ({ params }: { params: { searchName: string } }) => {
+  const formattedSearchName = capitalizeAndReplaceDash(params.searchName.toLowerCase().replace(/-/g, ' '));
+  const [data, setData] = useState<AllFilesAndLinksDataFormatted[]>([])
+ 
+  useEffect(() => {
+    const fetchFilesAndLinks = async() => {
+      const data: FetchedSearchResults = await fetchSearchResults(formattedSearchName.toLowerCase());
+      console.log(formattedSearchName);
+
+      if (data?.failure) {
+        return
+      }
+      setData(data.success || [])
+    }
+    fetchFilesAndLinks()
+  }, [params.searchName])
+
+  console.log("----data: ", data)
+
+  console.log(data.map(item => item.type))
+
+
+  
   return (
     <div>
-      <h1>Your Search: {decodeURIComponent(params.searchName)}</h1>
+      <h1>Your Search: {formattedSearchName}</h1>
       <div>
-        <SearchFilterMenu />
-        {mockResults.map((result, index) => (
-          <SearchResultBox
-            key={index}
-            title={result.title}
-            description={result.description}
-            tags={result.tags}
-          />
-        ))}
+        <SearchFilterMenu data={data}/>
+
+        {/* <ResourcesWithPagination data={data}/>   */}
       </div>
-      <Pagination total={10} />
     </div>
   );
 };

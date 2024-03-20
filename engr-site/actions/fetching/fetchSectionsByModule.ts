@@ -3,7 +3,7 @@ import { getModuleByNameAndId } from "@/database/data/modules";
 import dbConnect from "@/database/dbConnector";
 import { lowercaseAndReplaceSpace } from "@/utils/formatting";
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
-import { fetchedFormattedData } from "@/utils/types";
+import { FetchedFormattedData } from "@/utils/types";
 import { SectionData } from "@/database/data/sections";
 
 type fetchSectionByModuleProps = {
@@ -12,7 +12,7 @@ type fetchSectionByModuleProps = {
 
 export const fetchSectionsByModule = async ({
   id,
-}: fetchSectionByModuleProps): Promise<fetchedFormattedData> => {
+}: fetchSectionByModuleProps): Promise<FetchedFormattedData> => {
   console.log(id);
   try {
     const query = `

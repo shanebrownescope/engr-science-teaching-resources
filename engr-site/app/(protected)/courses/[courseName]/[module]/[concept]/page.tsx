@@ -4,7 +4,7 @@ import {
 } from "@/utils/formatting";
 import { fetchFilesByConceptId } from "@/actions/fetching/fetchFilesByConceptId";
 import Link from "next/link";
-import { fetchedFile, fetchedLink } from "@/utils/types";
+import { FetchedFile, FetchedLink } from "@/utils/types";
 import { fetchLinksByConceptId } from "@/actions/fetching/fetchLinksByConceptId";
 import { notFound } from "next/navigation";
 
@@ -39,11 +39,9 @@ const ConceptPage = async ({ params, searchParams }: ConceptPageProps) => {
 
   return (
     <div>
-      {filesResult?.success?.map((file: fetchedFile, idx: number) => (
+      {filesResult?.success?.map((file: FetchedFile, idx: number) => (
         <Link
-          href={`/courses/${params.courseName}/${params.module}/${
-            params.concept
-          }/${file.formattedFileName}?${new URLSearchParams({
+          href={`/resources/${file.formattedFileName}?${new URLSearchParams({
             id: file.fileId.toString(),
             type: "file",
           })} `}
@@ -92,11 +90,9 @@ const ConceptPage = async ({ params, searchParams }: ConceptPageProps) => {
         </Link>
       ))}
 
-      {linksResult?.success?.map((link: fetchedLink, idx: number) => (
+      {linksResult?.success?.map((link: FetchedLink, idx: number) => (
         <Link
-          href={`/courses/${params.courseName}/${params.module}/${
-            params.concept
-          }/${link.formattedLinkName}?${new URLSearchParams({
+          href={`/resources/${link.formattedLinkName}?${new URLSearchParams({
             id: link.linkId.toString(),
             type: "link",
           })} `}

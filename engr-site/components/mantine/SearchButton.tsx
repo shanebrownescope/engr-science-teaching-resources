@@ -9,6 +9,7 @@ import {
 import { IconSearch, IconArrowRight } from "@tabler/icons-react";
 import classes from "./SearchButton.module.css";
 import Link from "next/link";
+import { lowercaseAndReplaceSpace, lowercaseAndReplaceSpaceString } from "@/utils/formatting";
 
 export function SearchButton(props: TextInputProps) {
   const theme = useMantineTheme();
@@ -29,7 +30,7 @@ export function SearchButton(props: TextInputProps) {
       onChange={handleInputChange}
       leftSection={<IconSearch className="iconStyle" stroke={1.5} />}
       rightSection={
-        <Link href={`/search/${encodeURIComponent(inputValue)}`}>
+        <Link href={`/search/${lowercaseAndReplaceSpaceString(inputValue)}`}>
           <ActionIcon
             size={32}
             radius="xl"

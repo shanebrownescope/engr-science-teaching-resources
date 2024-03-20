@@ -2,7 +2,7 @@
 
 import dbConnect from "@/database/dbConnector";
 
-type fetchedLinksData = {
+type FetchedLinksData = {
   success?: TagsData[];
   failure?: string;
 };
@@ -18,7 +18,7 @@ type fetchTagsByLinkIdProps = {
 
 export const fetchTagsByLinkId = async ({
   id,
-}: fetchTagsByLinkIdProps): Promise<fetchedLinksData> => {
+}: fetchTagsByLinkIdProps): Promise<FetchedLinksData> => {
   const selectLinkTagsQuery = `
     SELECT * FROM LinkTags WHERE LinkId = ?`;
   const { results: linkTagsResult, error: linkTagsError } = await dbConnect(
