@@ -30,7 +30,7 @@ const CourseModules = async ({
           <Link
             href={`/courses/${params.courseName}/${
               item.formatted
-            }?${new URLsearchParams({
+            }?${new URLSearchParams({
               id: item.id,
             })}`}
             key={index}

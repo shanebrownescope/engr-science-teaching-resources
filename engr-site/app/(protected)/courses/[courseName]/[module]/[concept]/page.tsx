@@ -41,7 +41,7 @@ const ConceptPage = async ({ params, searchParams }: ConceptPageProps) => {
     <div>
       {filesResult?.success?.map((file: FetchedFile, idx: number) => (
         <Link
-          href={`/resources/${file.formattedFileName}?${new URLsearchParams({
+          href={`/resources/${file.formattedFileName}?${new URLSearchParams({
             id: file.fileId.toString(),
             type: "file",
           })} `}
@@ -92,7 +92,7 @@ const ConceptPage = async ({ params, searchParams }: ConceptPageProps) => {
 
       {linksResult?.success?.map((link: FetchedLink, idx: number) => (
         <Link
-          href={`/resources/${link.formattedLinkName}?${new URLsearchParams({
+          href={`/resources/${link.formattedLinkName}?${new URLSearchParams({
             id: link.linkId.toString(),
             type: "link",
           })} `}

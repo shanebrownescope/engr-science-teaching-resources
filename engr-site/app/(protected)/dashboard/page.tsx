@@ -18,7 +18,7 @@ const DashboardPage = () => {
   return (
     <div>
       <p> Admin page only </p>
-      {/* <Link href={`/dashboard/upload-resource?${new URLsearchParams({
+      {/* <Link href={`/dashboard/upload-resource?${new URLSearchParams({
         type: "file"
       })}`}> Upload resource </Link> */}
       {/* <FileUploadForm /> */}

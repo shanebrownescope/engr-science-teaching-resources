@@ -122,7 +122,7 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
                     <Link
                       href={`/courses/${params.courseName}/${params.module}/${
                         concept.formatted
-                      }?${new URLsearchParams({
+                      }?${new URLSearchParams({
                         id: concept.id.toString(),
                       })} `}
                     >

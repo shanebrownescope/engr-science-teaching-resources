@@ -22,7 +22,7 @@ export const SearchResultBox = ({
   return (
     <div className="resultBox">
       <Link
-        href={`/resources/${formattedName}?${new URLsearchParams({
+        href={`/resources/${formattedName}?${new URLSearchParams({
           id: id.toString(),
           type: type,
         })}`}
