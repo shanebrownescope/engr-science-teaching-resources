@@ -15,10 +15,18 @@ import { fetchCourses } from "@/actions/fetching/fetchCourses";
 import { FormSelectProps } from "@/utils/types";
 import { fetchModulesByCourseId } from "@/actions/fetching/fetchModulesByCourseId";
 import createSection from "@/actions/create/createSection";
+import { useRouter } from "next/navigation";
+import { useCurrentRole } from "@/hooks/useCurrentRole";
 
 type FormFields = z.infer<typeof CreateSectionSchema>;
 
 const Sections = () => {
+  const router = useRouter()
+  const role = useCurrentRole()
+  if (role != "admin") {
+    console.log("-- not admin");
+    router.push("/unauthorized");
+  }
   const [courseList, setCourseList] = useState<FormSelectProps[]>([]);
   const [success, setSuccess] = useState<string | undefined>("");
   const [moduleOptions, setModuleOptions] = useState<FormSelectProps[]>([]);

@@ -5,7 +5,7 @@ import { FormattedData, lowercaseAndReplaceSpace } from "@/utils/formatting";
 import { FetchedFormattedData } from "@/utils/types";
 
 type fetchConceptsBySectionIdProps = {
-  id: number;
+  id: number | string;
 };
 
 export const fetchConceptsBySectionId = async ({

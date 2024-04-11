@@ -5,7 +5,7 @@
  */
 export const publicRoutes = [
   "/",
-  "/ackownledgments"
+  "/acknowledgments"
 ];
 
 
@@ -18,10 +18,13 @@ export const publicRoutes = [
 export const authRoutes = [
   "/auth/login",
   "/auth/register",
+  "/auth/forgot-password",
+  // "/auth/reset-password/[token]",
+  "/auth/reset-password"
 ];
 
 /**
- ** An array of routes that are only accessable 
+ ** An array of routes that are only accessible 
  */
 
 /**

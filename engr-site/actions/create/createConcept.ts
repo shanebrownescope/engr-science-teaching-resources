@@ -5,6 +5,7 @@ import { getModuleByIdAndCourseId } from "@/database/data/modules"
 import {  getSectionByIdAndModuleId } from "@/database/data/sections"
 import dbConnect from "@/database/dbConnector"
 import { CreateConceptSchema } from "@/schemas"
+import { getCurrentUser } from "@/utils/authHelpers"
 import { capitalizeWords } from "@/utils/formatting"
 import z from "zod"
 
@@ -15,6 +16,12 @@ import z from "zod"
  * @returns {{ error?: string, success?: string }} - The response from the database
  */
 const createConcept = async (values: z.infer<typeof CreateConceptSchema>) => {
+  const user = await getCurrentUser()
+
+  if (user?.role && user.role !== "admin") {
+    return { error: "Not authenticated" }
+  }
+
   // Attempt to parse and validate the input data against the CreateConceptSchema
   const validatedFields = CreateConceptSchema.safeParse(values);
 

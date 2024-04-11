@@ -36,6 +36,13 @@ const mockdata = [
       { label: 'Concepts', link: '/dashboard/concepts' },
     ],
   },
+  { label: 'Registration Requests',
+    icon: IconNotes,
+    initiallyOpened: true,
+    links: [
+      { label: 'Pending Users', link: '/dashboard/pending-users' },
+    ]
+  },
 ];
 
 export function NavbarNested() {

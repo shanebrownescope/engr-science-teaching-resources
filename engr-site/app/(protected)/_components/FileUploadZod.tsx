@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  CreateConceptSchema
+  UploadFileSchema
 } from "@/schemas";
 import { Group, Box, Select } from "@mantine/core";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 import { FormError } from "@/components/FormError";
 import { FormSuccess } from "@/components/FormSuccess";
 
@@ -21,24 +21,19 @@ import { fetchModulesByCourseId } from "@/actions/fetching/fetchModulesByCourseI
 import createSection from "@/actions/create/createSection";
 import { fetchSectionsByModule } from "@/actions/fetching/fetchSectionsByModule";
 import createConcept from "@/actions/create/createConcept";
-import { useRouter } from "next/navigation";
-import { useCurrentRole } from "@/hooks/useCurrentRole";
+import { fetchConceptsBySectionId } from "@/actions/fetching/fetchConceptsBySectionId";
 
-type FormFields = z.infer<typeof CreateConceptSchema>;
+type FormFields = z.infer<typeof UploadFileSchema>;
 
-const Concepts = () => {
-  const router = useRouter()
-  const role = useCurrentRole()
-  if (role != "admin") {
-    console.log("-- not admin");
-    router.push("/unauthorized");
-  }
-  
-  const [courseList, setCourseList] = useState<FormSelectProps[]>([]);
+const FileUploadZod = () => {
+  const [file, setFile] = useState<File | undefined>(undefined);
+  const [fileUrl, setFileUrl] = useState<string | undefined>(undefined);
+  const [courseOptions, setCourseOptions] = useState<FormSelectProps[]>([]);
   const [success, setSuccess] = useState<string | undefined>("");
   const [moduleOptions, setModuleOptions] = useState<FormSelectProps[]>([]);
   const [sectionOptions, setSectionOptions] = useState<FormSelectProps[]>([]);
-  console.log(courseList);
+  const [conceptOptions, setConceptOptions] = useState<FormSelectProps[]>([]);
+  console.log(courseOptions);
 
   useEffect(() => {
     const fetchAllCourses = async () => {
@@ -51,7 +46,7 @@ const Concepts = () => {
             label: course.original,
           })
         );
-        setCourseList(formattedCourseList);
+        setCourseOptions(formattedCourseList);
       }
     };
 
@@ -73,19 +68,63 @@ const Concepts = () => {
       moduleId: "",
       sectionId: "",
     },
-    resolver: zodResolver(CreateConceptSchema), // Resolver for Zod schema validation
+    resolver: zodResolver(UploadFileSchema), // Resolver for Zod schema validation
   });
 
-  const watchedValue = watch("conceptName"); //
-  console.log(watchedValue);
 
-  const watchedValue2 = watch("courseId"); //
-  console.log(watchedValue2);
-  const watchedValue3 = watch("moduleId"); //
-  console.log(watchedValue3);
+  const watchedCourseId = watch("courseId");
+  console.log("--watched courseId: ",watchedCourseId);
 
-  const watchedValue4 = watch("sectionId"); //
-  console.log(watchedValue4);
+  const watchedCourseName= watch("courseName"); 
+  console.log("--watched courseName: ",watchedCourseName);
+
+
+  const watchedModuleId = watch("moduleId"); 
+  console.log("--watched moduleId: ",watchedModuleId);
+
+  const watchedModuleName = watch("moduleName"); 
+  console.log("--watched moduleName: ",watchedModuleName);
+
+  const watchedSectionId = watch("sectionId"); 
+  console.log("--watched sectionId: ",watchedSectionId);
+  const watchedSectionName = watch("sectionName");
+  console.log("--watched sectionName: ",watchedSectionName);
+
+
+  const watchedConceptId = watch("conceptId");
+  console.log("--watched conceptId: ",watchedConceptId);
+
+  const watchedConceptName = watch("conceptName"); 
+  console.log("--watched conceptName: ",watchedConceptName);
+  
+  const watchedFileName = watch("fileName");
+  console.log("--watched fileName: ",watchedFileName);
+
+  const watchedFileUrl = watch("fileUrl");
+  console.log("--watched file: ",watchedFileUrl);
+
+
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    //* in browser, get url
+    const selectedFile = e.target.files?.[0];
+    setFile(selectedFile);
+    console.log("==selectedFile: ", file);
+
+    if (fileUrl) {
+      URL.revokeObjectURL(fileUrl);
+    }
+
+    if (file) {
+      const url = URL.createObjectURL(file);
+      console.log("==url: ", url);
+      setFileUrl(url);
+      setValue("fileUrl", url);
+    } else {
+      setFileUrl(undefined);
+    }
+  };
+
 
   /**
    * Handles changes to the course select input. When a new course is selected,
@@ -95,9 +134,20 @@ const Concepts = () => {
    * @param {string} selectedCourseId The ID of the selected course.
    */
   const handleCourseChange = async (selectedCourseId: string) => {
+    const selectedCourse = courseOptions.find(course => course.value === selectedCourseId);
+    setValue('courseName', selectedCourse?.label as string);
+    console.log(courseOptions)
+
     setSectionOptions([]); // Clear sectionOptions
-    setValue('sectionId', ''); // Clear sectionId value
+    setConceptOptions([]); // Clear conceptOptions
     setValue('moduleId', ''); // Clear moduleId value
+    setValue('moduleName', ''); // Clear moduleName value
+    setValue('sectionId', ''); // Clear sectionId value
+    setValue('sectionName', ''); // Clear sectionName value
+    setValue('conceptId', ''); // Clear conceptId value
+    setValue('conceptName', ''); // Clear conceptName value
+    // const { value, label } = selectedCourseId.target.options[selectedCourseId.target.selectedIndex];
+    // console.log(value, label)
 
     const results = await fetchModulesByCourseId(selectedCourseId);
     if (results?.success) {
@@ -111,7 +161,15 @@ const Concepts = () => {
 
 
   const handleModuleChange = async (selectedModuleId: string) => {
+    const selectedModule = moduleOptions.find(module => module.value === selectedModuleId);
+    setValue('moduleName', selectedModule?.label as string);
+
+    setSectionOptions([]); // Clear sectionOptions
+    setConceptOptions([]); // Clear conceptOptions
     setValue('sectionId', ''); // Clear sectionId value
+    setValue('sectionName', ''); // Clear sectionName value
+    setValue('conceptId', ''); // Clear conceptId value
+    setValue('conceptName', ''); // Clear conceptName value
     
     const results = await fetchSectionsByModule({id: selectedModuleId});
     if (results?.success) {
@@ -122,6 +180,29 @@ const Concepts = () => {
       setSectionOptions(formattedSectionList);
     }
   };
+
+  const handleSectionChange = async (selectedSectionId: string) => {
+    const selectedSection = sectionOptions.find(section => section.value === selectedSectionId);
+    setValue('sectionName', selectedSection?.label as string);
+
+    setConceptOptions([]); // Clear conceptOptions
+    setValue('conceptId', ''); // Clear conceptId value
+    setValue('conceptName', ''); // Clear conceptName value
+    
+    const results = await fetchConceptsBySectionId({id: selectedSectionId});
+    if (results?.success) {
+      const formattedConceptList = results.success.map((concept: any) => ({
+        value: concept.id.toString(),
+        label: concept.original,
+      }));
+      setConceptOptions(formattedConceptList);
+    }
+  }
+
+  const handleConceptChange = async (selectedConceptId: string) => {
+    const selectedConcept = conceptOptions.find(concept => concept.value === selectedConceptId);
+    setValue('conceptName', selectedConcept?.label as string);
+  }
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     setError("root", { message: "" });
@@ -148,19 +229,34 @@ const Concepts = () => {
     <Box maw={340} mx="auto">
       <form className="flex-col gap-1" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex-col gap-p25">
-          <label> Section Name</label>
+          <label> Enter File Name</label>
           <Controller
             control={control}
-            name="conceptName"
+            name="fileName"
             render={({ field }) => (
               <input
                 {...field}
                 type="text"
-                placeholder="Enter section name"
+                placeholder="Enter file name"
                 disabled={isSubmitting}
               />
             )}
           />
+        </div>
+        {errors.conceptName && (
+          <p className="error">{errors.conceptName.message}</p>
+        )}
+
+        <div className="flex-col gap-p25">
+          <label> Select File</label>
+    
+          <input type="file" accept="pdf" onChange={handleFileChange} />
+  
+        
+          {fileUrl && file && 
+            <div>
+              <iframe src={fileUrl} />
+            </div>}
         </div>
         {errors.conceptName && (
           <p className="error">{errors.conceptName.message}</p>
@@ -174,13 +270,15 @@ const Concepts = () => {
             render={({ field }) => (
               <Select
                 {...field}
-                data={courseList} // course options for the SelectDropdown
+                data={courseOptions} // course options for the SelectDropdown
                 placeholder="Select an option"
                 disabled={isSubmitting}
                 onChange={(e) => {
+                  console.log(e)
                   if (e) {
-                    console.log(e);
+                    console.log(" here and is e: ",e);
                     field.onChange(e);
+
                     handleCourseChange(e);
                   }
                 }}
@@ -228,6 +326,38 @@ const Concepts = () => {
                 data={sectionOptions} // section options for the SelectDropdown
                 placeholder="Select an option"
                 disabled={isSubmitting}
+                onChange={(e) => {
+                  if (e) {
+                    console.log(e);
+                    field.onChange(e);
+                    handleSectionChange(e);
+                  }
+                }}
+              />
+            )}
+          />
+        </div>
+        {errors.sectionId && <p className="error">{errors.sectionId.message}</p>}
+
+        <div className="flex-co gap-p25">
+          <label> Enter Concept</label>
+          <Controller
+            control={control}
+            name="conceptId"
+            render={({ field }) => (
+              <Select
+                {...field}
+                key={JSON.stringify(conceptOptions)} // Add key prop to force re-render
+                data={conceptOptions} // section options for the SelectDropdown
+                placeholder="Select an option"
+                disabled={isSubmitting}
+                onChange={(e) => {
+                  if (e) {
+                    console.log(e);
+                    field.onChange(e);
+                    handleConceptChange(e);
+                  }
+                }}
               />
             )}
           />
@@ -246,4 +376,4 @@ const Concepts = () => {
   );
 };
 
-export default Concepts;
+export default FileUploadZod;
