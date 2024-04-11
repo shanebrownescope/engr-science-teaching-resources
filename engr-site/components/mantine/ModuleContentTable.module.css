@@ -20,6 +20,23 @@
   border-radius: rem(21px);
 }
 
+.linkStyle {
+  text-decoration: none !important;
+  color: inherit;
+}
+
 .tagsColumn {
   width: 25%;
+}
+
+.tag {
+  display: inline-block;
+  max-width: 200px;
+  margin-right: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid #ccc;
+  padding: 2px;
+  border-radius: 10px;
 }

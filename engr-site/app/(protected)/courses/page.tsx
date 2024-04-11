@@ -1,6 +1,7 @@
 import { fetchCourses } from "@/actions/fetching/fetchCourses";
 import Link from "next/link";
 import { FetchedFormattedData } from "@/utils/types";
+import { ModuleCard } from "@/components/mantine";
 
 const Courses = async () => {
   const courseData: FetchedFormattedData = await fetchCourses();
@@ -16,9 +17,11 @@ const Courses = async () => {
       <p>Courses</p>
 
       {courseData?.success?.map((item: any) => (
-        <p key={item.formatted}>
-          <Link href={`/courses/${item.formatted}`}>{item.original} </Link>
-        </p>
+        <ModuleCard
+          title={item.original}
+          description="description here"
+          href={`/courses/${item.formatted}`}
+        />
       ))}
 
       {courseData?.failure && <div>No courses</div>}

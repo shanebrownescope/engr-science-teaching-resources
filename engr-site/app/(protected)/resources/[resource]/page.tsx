@@ -18,6 +18,7 @@ import {
   FetchedLinksDataArray,
 } from "@/utils/types";
 import { notFound } from "next/navigation";
+import { Textarea, Button } from "@mantine/core";
 
 type FilePageProps = {
   params: { courseName: string; module: string; concept: string; file: string };
@@ -72,7 +73,6 @@ const ResourcePage = async ({ searchParams }: FilePageProps) => {
           )}
         </>
       )}
-
       <div>
         <h3>Similar resources </h3>
         <div style={{ display: "flex", gap: "1em" }}>
@@ -88,8 +88,13 @@ const ResourcePage = async ({ searchParams }: FilePageProps) => {
           ))}
         </div>
       </div>
-
       <h3>Comments</h3>
+      <div style={{ maxWidth: "600px" }}>
+        <Textarea autosize minRows={2} mb="md" />
+        <Button variant="filled" style={{ width: "100%" }}>
+          Post
+        </Button>{" "}
+      </div>
     </div>
   );
 };

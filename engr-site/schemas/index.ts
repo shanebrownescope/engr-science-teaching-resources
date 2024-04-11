@@ -64,3 +64,9 @@ export const CreateConceptSchema = z.object({
   moduleId: z.string().min(1, { message: "Module is required" }),
   sectionId: z.string().min(1, { message: "Section is required" }),
 });
+
+export const CommentSchema = z.object({
+  commentText: z.string().min(1, {
+    message: "Comment is required",
+  }),
+});

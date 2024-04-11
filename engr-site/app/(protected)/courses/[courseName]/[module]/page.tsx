@@ -183,38 +183,9 @@ const ModulePage = ({ params, searchParams }: ModulePageProps) => {
           value={selectedSegment}
           onChange={handleSegmentChange}
         />
-        <ModuleContentTable files={conceptFiles} links={conceptLinks} />
-
-        {/* <p> {sectionName} </p>
-        {sections?.success &&
-          sections.success.map((item, index) => (
-            <div key={index}> {item.original} </div>
-          ))}
-
-        {sectionDataResults?.map((section: sectionDataResults) => (
-          <div>
-            <p> {section.sectionName}</p>
-            <div>
-              {section.concepts?.map((concept: FormattedData) => {
-                return (
-                  <div>
-                    <Link
-                      href={`/courses/${params.courseName}/${params.module}/${
-                        concept.formatted
-                      }?${new URLSearchParams({
-                        id: concept.id.toString(),
-                      })} `}
-                    >
-                      {concept.original}
-                    </Link>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-
-        {sections?.failure && <div> No sections </div>} */}
+        <div style={{ marginTop: "20px" }}>
+          <ModuleContentTable files={conceptFiles} links={conceptLinks} />
+        </div>
       </div>
     </div>
   );
