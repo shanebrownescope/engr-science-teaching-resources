@@ -20,6 +20,11 @@ import { fetchSectionsByModule } from "@/actions/fetching/fetchSectionsByModule"
 import { FormattedData, capitalizeWords } from "@/utils/formatting";
 import { fetchConceptsBySectionId } from "@/actions/fetching/fetchConceptsBySectionId";
 import { trimCapitalizeFirstLetter } from "@/utils/helpers";
+import { getCurrentRole, getCurrentUser } from "@/utils/authHelpers";
+import { useCurrentRole } from "@/hooks/useCurrentRole";
+import { useRouter } from "next/navigation";
+import { FormError } from "@/components/FormError";
+
 
 //* Testing: file upload to s3 and db
 //* TestDb component: test db is working
@@ -34,89 +39,133 @@ type FileUploadProps = {
   coursesOptionsData: FormattedData[] | undefined;
 };
 
+type FormErrorsFileUpload = {
+  root?: string;
+  fileName?: string;
+  file?: string;
+  courseName?: string;
+  moduleName?: string;
+  sectionName?: string;
+  conceptName?: string;
+  conceptId?: string;
+};
+
 export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
+  const router = useRouter()
+  const role = useCurrentRole()
+  if (role != "admin") {
+    console.log("-- not admin");
+    router.push("/unauthorized");
+  }
   console.log("data: ", coursesOptionsData);
   //* state for form
   const [fileName, setFileName] = useState("");
   const [tags, setTags] = useState([""]);
-
   const [file, setFile] = useState<File | undefined>(undefined);
   const [fileUrl, setFileUrl] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
-  const [error, setError] = useState(null);
-
+  const [error, setError] = useState<string | null>(null);
   const [description, setDescription] = useState<string>("");
-  console.log(description);
-
   const [contributor, setContributor] = useState("");
-
   const [selectedCourseOption, setSelectedCourseOption] = useState<Options>({
     value: null,
     id: null,
     formatted: null,
   });
-  console.log(selectedCourseOption);
-
-  const handleCourseOptionSelect = (
-    value: string,
-    id: number,
-    formatted: string
-  ) => {
-    setSelectedCourseOption({ value: value, id: id, formatted: formatted });
-
-    fetchModulesByCourse(value).then((data) => {
-      console.log(data.success);
-      setModuleOptionsData(data.success);
-    });
-  };
-
   const [moduleOptionsData, setModuleOptionsData] = useState<any[]>();
   const [selectedModuleOption, setSelectedModuleOption] = useState<Options>({
     value: null,
     id: null,
     formatted: null,
   });
-  const handleModuleOptionSelect = (
-    value: string,
-    id: number,
-    formatted: string
-  ) => {
-    setSelectedModuleOption({ value: value, id: id, formatted: formatted });
-
-    fetchSectionsByModule({ id: id.toString() }).then((data) => {
-      console.log(data.success);
-      setSectionOptionsData(data.success);
-    });
-  };
-
-  console.log(moduleOptionsData);
-
   const [sectionOptionsData, setSectionOptionsData] = useState<any[]>();
   const [selectedSectionOption, setSelectedSectionOption] = useState<Options>({
     value: null,
     id: null,
     formatted: null,
   });
-  const handleSectionOptionSelect = (
-    value: string,
-    id: number,
-    formatted: string
-  ) => {
-    setSelectedSectionOption({ value: value, id: id, formatted: formatted });
-
-    fetchConceptsBySectionId({ id: id }).then((data: any) => {
-      console.log(data.success);
-      setConceptOptionData(data.success);
-    });
-  };
-
   const [conceptOptionsData, setConceptOptionData] = useState<any[]>();
   const [selectedConceptOption, setSelectedConceptOption] = useState<Options>({
     value: null,
     id: null,
     formatted: null,
   });
+
+  const [errors, setErrors] = useState<FormErrorsFileUpload>({
+    fileName: undefined,
+    file: undefined,
+    courseName: undefined,
+    moduleName: undefined,
+    sectionName:undefined,
+    conceptName:undefined,
+    conceptId: undefined,
+  });
+  const errorMessages: { [key: string]: string } = {
+    root: "Please fill out all required fields.",
+    fileName: 'File name is required.',
+    file: "File is required.",
+    courseId: 'Please select a course.',
+    moduleId: 'Please select a module.',
+    sectionId: 'Please select a section.',
+    conceptId: 'Please select a concept.',
+  };
+  console.log(selectedCourseOption);
+
+  
+  const handleCourseOptionSelect = async (
+    value: string,
+    id: number,
+    formatted: string
+  ) => {
+    setSelectedModuleOption({ value: null, id: null, formatted: null });
+    setSelectedSectionOption({ value: null, id: null, formatted: null });
+    setSectionOptionsData([]);
+    setSelectedConceptOption({ value: null, id: null, formatted: null });
+    setConceptOptionData([]);
+    
+
+    setSelectedCourseOption({ value: value, id: id, formatted: formatted });
+
+    const results = await fetchModulesByCourse(value);
+    setModuleOptionsData(results.success);
+  };
+
+  const handleModuleOptionSelect = async (
+    value: string,
+    id: number,
+    formatted: string
+  ) => {
+    setSelectedSectionOption({ value: null, id: null, formatted: null });
+    setSectionOptionsData([]);
+    setSelectedConceptOption({ value: null, id: null, formatted: null });
+    setConceptOptionData([]);
+
+    setSelectedModuleOption({ value: value, id: id, formatted: formatted });
+
+   
+    const results = await fetchSectionsByModule({ id: id.toString()  });
+    setSectionOptionsData(results.success);
+  };
+
+  console.log(moduleOptionsData);
+
+
+  const handleSectionOptionSelect = async (
+    value: string,
+    id: number,
+    formatted: string
+  ) => {
+    setSelectedConceptOption({ value: null, id: null, formatted: null });
+    setConceptOptionData([]);
+
+    setSelectedSectionOption({ value: value, id: id, formatted: formatted });
+
+    const results = await fetchConceptsBySectionId({ id: id });
+    setConceptOptionData(results.success);
+  };
+
+
   const handleConceptOptionSelect = (
     value: string,
     id: number,
@@ -165,18 +214,47 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     return hashHex;
   };
 
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setLoading(true);
+
     console.log({ tags, file });
+    setStatusMessage("validating input")
+
     try {
-      if (!file) {
-        setStatusMessage("no file selected");
-        setLoading(false);
-        console.error("error");
-        return;
+      console.error('Validation failed: Some fields are empty');
+      // Set custom error messages based on the failed validation conditions
+      if (!fileName || !file || !selectedCourseOption.value || !selectedModuleOption.value || !selectedSectionOption.value || !selectedConceptOption.value) {
+        // Handle validation failure
+        console.error('Validation failed: Some fields are empty');
+        // Set custom error messages based on the failed validation conditions
+        const errors = {
+          root: errorMessages.root,
+          fileName: !fileName ? errorMessages.fileName : undefined,
+          file: !file ? errorMessages.file : undefined,
+          courseName: !selectedCourseOption.value ? errorMessages.courseId : undefined,
+          moduleName: !selectedModuleOption.value ? errorMessages.moduleId : undefined,
+          sectionName: !selectedSectionOption.value ? errorMessages.sectionId : undefined,
+          conceptName: !selectedConceptOption.value ? errorMessages.conceptId : undefined,
+        };
+        setErrors(errors)
+        setStatusMessage("validation failed")
+        return
       }
+
+      setErrors({
+        fileName: undefined,
+        file: undefined,
+        courseName: undefined,
+        moduleName: undefined,
+        sectionName: undefined,
+        conceptName: undefined,
+        conceptId: undefined,
+      });
+      
 
       setStatusMessage("uploading file");
 
@@ -212,6 +290,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       if (signedURLResult?.failure) {
         setStatusMessage("Failed" + signedURLResult?.failure);
         setLoading(false);
+        setErrors({ ...errors, root: signedURLResult?.failure });
         throw new Error(signedURLResult.failure);
       }
 
@@ -240,6 +319,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           if (tagsResult?.failure) {
             setStatusMessage("Failed in tag insertion" + tagsResult.failure);
             setLoading(false);
+            setErrors({ ...errors, root: tagsResult?.failure });
             throw new Error(tagsResult.failure);
           }
 
@@ -254,6 +334,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       }
     } catch (error) {
       console.error("Error during file upload:", error);
+      setErrors({ ...errors, root: error as string });
       setStatusMessage("failed");
     } finally {
       setLoading(false);
@@ -314,13 +395,8 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             </button>
           </div>
         )}
+        {errors.file && <p className="error">{errors.file}</p>}
 
-        <button
-          type="submit"
-          // disable={fileUrl != undefined ? true : false}
-        >
-          Upload
-        </button>
 
         <h4> Enter file name </h4>
         <input
@@ -331,6 +407,8 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           value={fileName}
           onChange={(e) => setFileName(e.target.value)} 
         />
+        {errors.fileName && <p className="error">{errors.fileName}</p>}
+
 
         <h4> Select a course </h4>
         <SelectDropdown
@@ -338,6 +416,8 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           onOptionChange={handleCourseOptionSelect}
           selectedValue={selectedCourseOption.value}
         />
+        {errors.courseName && <p className="error">{errors.courseName}</p>}
+
 
         <h4> Select a module </h4>
         {
@@ -347,6 +427,8 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             selectedValue={selectedModuleOption.value}
           />
         }
+        {errors.moduleName && <p className="error">{errors.moduleName}</p>}
+
 
         <h4> Select a section </h4>
         <SelectDropdown
@@ -354,6 +436,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           onOptionChange={handleSectionOptionSelect}
           selectedValue={selectedSectionOption.value}
         />
+        {errors.sectionName && <p className="error">{errors.sectionName}</p>}
 
         <h4> Select a concept </h4>
         <SelectDropdown
@@ -361,6 +444,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           onOptionChange={handleConceptOptionSelect}
           selectedValue={selectedConceptOption.value}
         />
+        {errors.conceptName && <p className="error">{errors.conceptName}</p>}
 
         <h4> Add Description </h4>
         <input
@@ -378,6 +462,13 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           value={contributor}
           onChange={(e) => setContributor(e.target.value)}
         />
+        <button
+          type="submit"
+          // disable={fileUrl != undefined ? true : false}
+          >
+          Upload
+        </button>
+        {errors.root && <FormError message={errors.root} />}
       </form>
       <Tags
         tags={tags}

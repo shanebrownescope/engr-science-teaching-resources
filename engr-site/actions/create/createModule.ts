@@ -3,6 +3,7 @@
 import { getCourseById, getCourseByName } from "@/database/data/courses"
 import dbConnect from "@/database/dbConnector"
 import { CreateModuleSchema } from "@/schemas"
+import { getCurrentUser } from "@/utils/authHelpers"
 import { capitalizeWords } from "@/utils/formatting"
 import z from "zod"
 
@@ -13,6 +14,12 @@ import z from "zod"
  * @returns {{ error?: string, success?: string }} - The response from the database
  */
 const createModule = async (values: z.infer<typeof CreateModuleSchema>) => {
+  const user = await getCurrentUser()
+
+  if (user?.role && user.role !== "admin") {
+    return { error: "Not authenticated" }
+  }
+
   // Attempt to parse and validate the input data against the CreateModuleSchema
   const validatedFields = CreateModuleSchema.safeParse(values);
 

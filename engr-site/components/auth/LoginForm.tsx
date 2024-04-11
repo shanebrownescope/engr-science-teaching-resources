@@ -79,6 +79,8 @@ export const LoginForm = () => {
         <FormError message={error} />
         <FormSuccess message={success} />
 
+        <a href="/auth/forgot-password">Forgot password?</a>
+
         <button 
           disabled={isSubmitting}
           type="submit"

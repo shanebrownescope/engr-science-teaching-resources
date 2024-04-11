@@ -35,6 +35,23 @@ export const getUserById = async (id: string) => {
   }
 }
 
+export const getPendingUsers = async () => {
+  try {
+    const selectQuery = `
+      SELECT * FROM Users WHERE AccountStatus = 'pending'`;
+
+    const { results: users, error } = await dbConnect(selectQuery)
+
+    if (users[0].length > 0) {
+      return users[0]
+    }
+
+    return null
+  } catch (error) {
+    return null
+  }
+}
+
 
 export const fetchUserData = async () => {
   try {

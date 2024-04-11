@@ -9,10 +9,18 @@ import createCourse from "@/actions/create/createCourse";
 import { useState } from "react";
 import { FormError } from "@/components/FormError";
 import { FormSuccess } from "@/components/FormSuccess";
+import { useRouter } from "next/navigation";
+import { useCurrentRole } from "@/hooks/useCurrentRole";
 
 type FormFields = z.infer<typeof CreateCourseSchema>;
 
 const Courses = () => {
+  const router = useRouter()
+  const role = useCurrentRole()
+  if (role != "admin") {
+    console.log("-- not admin");
+    router.push("/unauthorized");
+  }
   const [success, setSuccess] = useState<string | undefined>("");
   const {
     register,

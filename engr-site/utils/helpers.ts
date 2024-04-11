@@ -204,3 +204,16 @@ export const processFilesAndLinks = (item: AllFilesAndLinksData) => {
     };
   }
 };
+
+
+export const validateUploadFileData =(file: FileData) => {
+  
+}
+
+
+export const transformObjectKeys = (object: any) => {
+  return Object.keys(object).reduce((acc: any, key: string) => {
+      acc[key.charAt(0).toLowerCase() + key.slice(1)] = object[key];
+      return acc;
+  }, {});
+}

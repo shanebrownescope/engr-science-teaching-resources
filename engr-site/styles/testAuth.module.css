@@ -20,6 +20,14 @@
     color: red;
 }
 
+.error {
+    color: red;
+}
+
+.textBlack {
+    color: black;
+}
+
 /** /authtest/login */
 .title {
     text-align: center;

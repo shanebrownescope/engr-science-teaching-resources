@@ -42,6 +42,10 @@ export const uploadLink = async ({ linkName, linkUrl, conceptId, description, co
     return { failure: "URL was altered during sanitization. Not storing in database"}
   }
 
+  if (!linkName || !linkUrl  || !conceptId || !uploadDate ) {
+    return { failure: "Missing required fields"}
+  }
+
   console.log(sanitizedUrl)
 
   console.log(linkName)

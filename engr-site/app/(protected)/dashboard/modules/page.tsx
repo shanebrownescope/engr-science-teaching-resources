@@ -12,10 +12,18 @@ import { FormSuccess } from "@/components/FormSuccess";
 import { fetchCourses } from "@/actions/fetching/fetchCourses";
 import { FormSelectProps } from "@/utils/types";
 import createModule from "@/actions/create/createModule";
+import { useRouter } from "next/navigation";
+import { useCurrentRole } from "@/hooks/useCurrentRole";
 
 type FormFields = z.infer<typeof CreateModuleSchema>;
 
 const Modules = () => {
+  const router = useRouter()
+  const role = useCurrentRole()
+  if (role != "admin") {
+    console.log("-- not admin");
+    router.push("/unauthorized");
+  }
   const [courseList, setCourseList] = useState<FormSelectProps[]>([]);
   const [success, setSuccess] = useState<string | undefined>("");
 

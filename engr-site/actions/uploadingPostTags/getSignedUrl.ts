@@ -65,6 +65,9 @@ export const getSignedURL = async ({ fileName, fileType, fileSize, checksum, cou
     return { failure: "File too large" }
   }
   
+  if (!fileName || !fileType || !fileSize || !checksum || !course || !module || !section || !concept || !conceptId || !uploadDate) {
+    return { failure: "Missing required fields" }
+  }
 
   //* encapsulates metadata used for generating a pre-signed URL
   const uniqueFileName = generateTimestampedKey(fileName)

@@ -117,3 +117,49 @@ export type FormSelectProps = {
   value: string;
   label: string;
 };
+
+export type UserData = {
+  UserId: number;
+  FirstName: string;
+  LastName: string;
+  Email: string;
+  Username: string;
+  AccountStatus: 'pending' | 'approved' | 'activated' | 'rejected';
+  Role: string;
+}
+
+
+export type FetchedUserData = {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  accountStatus: 'pending' | 'approved' | 'activated' | 'rejected';
+  role: string;
+};
+
+export type PasswordResetTokenData = {
+  PasswordResetTokenId: string;
+  Token: string;
+  UserId: string;
+  ExpiresAt: Date;
+}
+
+export type TransformedPasswordResetToken = {
+  passwordResetTokenId: string;
+  token: string;
+  userId: string;
+  expiresAt: Date;
+}
+
+export type AuthErrorType = "CredentialsSignin" | "AccountPending" | "AccountRejected";
+
+export class AuthError extends Error {
+  type: AuthErrorType;
+
+  constructor(type: AuthErrorType, message: string) {
+    super(message);
+    this.type = type;
+  }
+}

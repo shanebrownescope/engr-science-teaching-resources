@@ -4,11 +4,24 @@ SET foreign_key_checks = 1;
 
 CREATE TABLE Users (
   UserId INT NOT NULL AUTO_INCREMENT,
-  Name VARCHAR(255),
+  Name VARCHAR(50),
+  FirstName VARCHAR(100) NOT NULL,
+  LastName VARCHAR(100) NOT NULL;
   Email VARCHAR(255),
   Password VARCHAR(255),
   Role VARCHAR(255),
+  AccountStatus ENUM('pending', 'approved', 'activated', 'rejected') DEFAULT 'pending',
+  RegistrationTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (UserId)
+);
+
+CREATE TABLE PasswordResetTokens (
+  PasswordResetTokenId INT NOT NULL AUTO_INCREMENT,
+  UserId INT NOT NULL,
+  Token VARCHAR(255) UNIQUE NOT NULL,
+  ExpiresAt TIMESTAMP NOT NULL,
+  PRIMARY KEY (PasswordResetTokenId),
+  FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE
 );
 
 
@@ -19,21 +32,21 @@ CREATE TABLE Courses (
 );
 
 CREATE TABLE Modules (
-    ModuleId INT AUTO_INCREMENT,
-    ModuleName VARCHAR(255) NOT NULL,
-    CourseId INT,
-    S3Url VARCHAR(255), 
-    PRIMARY KEY (ModuleId),
-    FOREIGN KEY (CourseId) REFERENCES Courses(CourseId)
+  ModuleId INT AUTO_INCREMENT,
+  ModuleName VARCHAR(255) NOT NULL,
+  CourseId INT,
+  S3Url VARCHAR(255), 
+  PRIMARY KEY (ModuleId),
+  FOREIGN KEY (CourseId) REFERENCES Courses(CourseId)
 );
 
 CREATE TABLE Sections (
-    SectionId INT AUTO_INCREMENT,
-    SectionName VARCHAR(255) NOT NULL,
-    ModuleId INT,
-    S3Url VARCHAR(255), 
-    PRIMARY KEY (SectionId),
-    FOREIGN KEY (ModuleId) REFERENCES Modules(ModuleId)
+  SectionId INT AUTO_INCREMENT,
+  SectionName VARCHAR(255) NOT NULL,
+  ModuleId INT,
+  S3Url VARCHAR(255), 
+  PRIMARY KEY (SectionId),
+  FOREIGN KEY (ModuleId) REFERENCES Modules(ModuleId)
 );
 
 CREATE TABLE Concepts (
@@ -100,35 +113,99 @@ CREATE TABLE LinkTags (
   FOREIGN KEY (LinkId) REFERENCES Links(LinkId) ON DELETE CASCADE
 );
 
-CREATE TABLE Comments (
+CREATE TABLE FileComments (
   CommentId INT NOT NULL AUTO_INCREMENT,
-  PageType ENUM('file', 'link'),
-  PageId INT,
-  UserId INT,
-  ParentCommentId INT,
+  FileId INT NOT NULL,
+  UserId INT NOT NULL,
+  ParentCommentId INT DEFAULT NULL,
   CommentText TEXT NOT NULL,
-  CommentDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (CommentId),
   FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE,
-  FOREIGN KEY (FileId) REFERENCES Files(FileId) ON DELETE CASCADE,
-  FOREIGN KEY (ParentCommentId) REFERENCES Comments(CommentId)
+  FOREIGN KEY (ParentCommentId) REFERENCES FileComments(CommentId),
+  FOREIGN KEY (FileId) REFERENCES Files(FileId) ON DELETE CASCADE
 );
 
+CREATE TABLE LinkComments (
+  CommentId INT NOT NULL AUTO_INCREMENT,
+  LinkId INT NOT NULL,
+  UserId INT NOT NULL,
+  ParentCommentId INT DEFAULT NULL,
+  CommentText TEXT NOT NULL,
+  CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (CommentId),
+  FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE,
+  FOREIGN KEY (ParentCommentId) REFERENCES LinkComments(CommentId),
+  FOREIGN KEY (LinkId) REFERENCES Links(LinkId) ON DELETE CASCADE
+);
+
+
+INSERT INTO Comments (
+  ResourceId,
+  ResourceType,
+  UserId,
+  ParentCommentId,
+  CommentText,
+  CreatedDate
+) VALUES (
+  1, 
+  'file',
+  123,
+  NULL,
+  'This is the first comment on the main thread.',
+  CURRENT_TIMESTAMP
+);
+
+INSERT INTO Comments (
+  ResourceId,
+  ResourceType,
+  UserId,
+  ParentCommentId,
+  CommentText,
+  CreatedDate
+) VALUES (
+  1,
+  'file',
+  456,
+  1,
+  'This is a reply to the first comment.',
+  CURRENT_TIMESTAMP
+);
+
+INSERT INTO Comments (
+  ResourceId,
+  ResourceType,
+  UserId,
+  ParentCommentId,
+  CommentText,
+  CreatedDate
+) VALUES (
+  1,
+  'file',
+  456,
+  1,
+  'This is a reply to the first comment.',
+  CURRENT_TIMESTAMP
+);
+
+
+
+
 --* inserting comments
-INSERT INTO comments (page_type, page_id, comment_text, commenter_name, comment_date)
-VALUES ('file', 1, 'This is a great file!', 'John Doe', NOW());
+-- INSERT INTO comments (page_type, page_id, comment_text, commenter_name, comment_date)
+-- VALUES ('file', 1, 'This is a great file!', 'John Doe', NOW());
 
-INSERT INTO comments (page_type, page_id, comment_text, commenter_name, comment_date)
-VALUES ('link', 1, 'Awesome link!', 'Jane Smith', NOW());
+-- INSERT INTO comments (page_type, page_id, comment_text, commenter_name, comment_date)
+-- VALUES ('link', 1, 'Awesome link!', 'Jane Smith', NOW());
 
 
--- Inserting a top-level comment (not a response to another comment)
-INSERT INTO Comments (pdf_id, user_id, comment_text, comment_date)
-VALUES (123, 456, 'This is an interesting read.', NOW());
+-- -- Inserting a top-level comment (not a response to another comment)
+-- INSERT INTO Comments (pdf_id, user_id, comment_text, comment_date)
+-- VALUES (123, 456, 'This is an interesting read.', NOW());
 
--- Inserting a response to a comment (where parent_comment_id references the comment_id of the parent comment)
-INSERT INTO Comments (pdf_id, user_id, parent_comment_id, comment_text, comment_date)
-VALUES (123, 789, 1, 'I agree, the third section is particularly insightful.', NOW);
+-- -- Inserting a response to a comment (where parent_comment_id references the comment_id of the parent comment)
+-- INSERT INTO Comments (pdf_id, user_id, parent_comment_id, comment_text, comment_date)
+-- VALUES (123, 789, 1, 'I agree, the third section is particularly insightful.', NOW);
 
 --* selecting comments: 
 SELECT * FROM comments WHERE page_type = 'file' AND page_id = 1;

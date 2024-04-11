@@ -3,11 +3,11 @@ import { Pagination } from '@mantine/core';
 import { AllFilesAndLinksDataFormatted } from '@/utils/types';
 import { SearchResultBox } from '.';
 
-type ResourcesWithPaginationProps = {
+type ResourcesListPaginatedProps = {
   data: AllFilesAndLinksDataFormatted[]
 }
 
-const ResourcesWithPagination =({ data }: ResourcesWithPaginationProps) => {
+const ResourcesListPaginated =({ data }: ResourcesListPaginatedProps) => {
   // The number of items to display on each page
   const itemsPerPage = 6;
   // Total number of items in the data array
@@ -65,4 +65,4 @@ const ResourcesWithPagination =({ data }: ResourcesWithPaginationProps) => {
   );
 }
 
-export default ResourcesWithPagination;
+export default ResourcesListPaginated;

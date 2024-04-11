@@ -5,6 +5,7 @@ import { getModuleById, getModuleByIdAndCourseId } from "@/database/data/modules
 import { getSectionByNameAndModuleId } from "@/database/data/sections"
 import dbConnect from "@/database/dbConnector"
 import { CreateSectionSchema } from "@/schemas"
+import { getCurrentUser } from "@/utils/authHelpers"
 import { capitalizeAndReplaceDash, capitalizeWords } from "@/utils/formatting"
 import z from "zod"
 
@@ -15,6 +16,12 @@ import z from "zod"
  * @returns {{ error?: string, success?: string }} - The response from the database
  */
 const createSection = async (values: z.infer<typeof CreateSectionSchema>) => {
+  const user = await getCurrentUser()
+
+  if (user?.role && user.role !== "admin") {
+    return { error: "Not authenticated" }
+  }
+  
   // Attempt to parse and validate the input data against the CreateSectionSchema
   const validatedFields = CreateSectionSchema.safeParse(values);
 

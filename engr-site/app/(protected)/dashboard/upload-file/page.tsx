@@ -5,6 +5,8 @@ import { fetchCourses } from '@/actions/fetching/fetchCourses';
 import { FormattedData } from '@/utils/formatting';
 import { useCurrentRole } from '@/hooks/useCurrentRole';
 import { redirect } from "next/navigation";
+import FileUpload2 from '../../_components/FileUploadZod';
+
 
 const UploadFile = () => {
   const role = useCurrentRole();
@@ -27,7 +29,10 @@ const UploadFile = () => {
   }, []);
 
   return (
-    <div><FileUpload coursesOptionsData={coursesOptionsData} /></div>
+    <div>
+      <FileUpload coursesOptionsData={coursesOptionsData} />
+      {/* <FileUpload2  /> */}
+      </div>
   )
 }
 
