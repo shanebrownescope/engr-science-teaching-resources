@@ -1,9 +1,14 @@
 .header {
+  position: fixed;
+  top: 0;
+  width: 100%;
   height: rem(60px);
   padding-left: var(--mantine-spacing-md);
   padding-right: var(--mantine-spacing-md);
   border-bottom: rem(1px) solid
     light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  z-index: 1000;
+  background-color: white;
 }
 
 .link {
