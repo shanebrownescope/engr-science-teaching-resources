@@ -1,4 +1,4 @@
-import styles from '@/styles/testAuth.module.css'
+import styles from '@/styles/form.module.css'
 
 type FormErrorProps = {
     message?: string;

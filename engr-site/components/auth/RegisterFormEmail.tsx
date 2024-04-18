@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import styles from "@/styles/testAuth.module.css";
+import styles from "@/styles/form.module.css";
 import * as z from "zod";
 
 import { FormSuccess } from "../FormSuccess";
@@ -26,7 +26,6 @@ export const RegisterFormEmail = () => {
     register,
     handleSubmit,
     watch,
-    setValue,
     setError,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
@@ -88,7 +87,6 @@ export const RegisterFormEmail = () => {
         console.log("here2")
         setError("root", { message: confirmationResults.failure });
         return; // Stop further processing
-
       }
 
       console.log("Both approval request and registration confirmation email sent successfully");
@@ -103,77 +101,112 @@ export const RegisterFormEmail = () => {
   };
 
   return (
-    <div className={styles.cardFormWrapper}>
-      <label> Register Form </label>
-      <p className={styles.textBlack} >
-        Once you submit, you will be verified and sent an email once approved to
-        create an account
+    <div className={styles.formWrapper}>
+      <p className={styles.title}> Register </p>
+
+      <p className="sub-text mt-1 mb-2">
+        You will be verified by our team before you can login.
+        You'll receive an email when your account is approved then you will be able to login.
       </p>
-      <p className={styles.title}>Register form</p>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-        <label> First Name </label>
-        <input
-          placeholder="Enter first name"
-          type="text"
-          disabled={isSubmitting}
-          {...register("firstName")}
-        />
-        {errors.firstName && (
-          <p className={styles.error}> {errors.firstName.message} </p>
-        )}
 
-        <label> Last Name </label>
-        <input
-          placeholder="Enter last name"
-          type="text"
-          disabled={isSubmitting}
-          {...register("lastName")}
-        />
-        {errors.lastName && (
-          <p className={styles.error}> {errors.lastName.message} </p>
-        )}
+      <form 
+        className={styles.form}
+        onSubmit={handleSubmit(onSubmit)} 
+      >
+        <div className="flex-col">
+          <label> First Name </label>
+          <input
+            className={errors.firstName && "input-error"}
+            {...register("firstName")}
+            placeholder="Enter first name"
+            type="text"
+            disabled={isSubmitting}
 
-        <label> Email </label>
-        <input
-          {...register("email")}
-          type="email"
-          placeholder="Enter email"
-          disabled={isSubmitting}
-        />
-        {errors.email && (
-          <p className={styles.error}> {errors.email.message} </p>
-        )}
+          />
+          {errors.firstName && (
+            <p className={styles.error}> {errors.firstName.message} </p>
+          )}
+        </div>
 
-        <label> Username </label>
-        <input
-          {...register("username")}
-          type="text"
-          placeholder="Enter Username"
-          disabled={isSubmitting}
-        />
-        {errors.username && (
-          <p className={styles.error}> {errors.username.message} </p>
-        )}
+    
 
-        <label> Password </label>
-        <input 
-          placeholder="*****"
-          type="password"
-          disabled={isSubmitting}
-          {...register('password')}
-        /> 
-        { errors.password && <p className={styles.error} >{errors.password.message} </p>}
+        <div className="flex-col">
+          <label> Last Name </label>
+          <input
+            className={errors.lastName && "input-error"}
+            {...register("lastName")}
+            placeholder="Enter last name"
+            type="text"
+            disabled={isSubmitting}
+          />
+          {errors.lastName && (
+            <p className={styles.error}> {errors.lastName.message} </p>
+          )}
+        </div> 
+
+        <div className="flex-col"> 
+          <label> Email </label>
+          <input
+            className={errors.email && "input-error"}
+            {...register("email")}
+            type="email"
+            placeholder="Enter email"
+            disabled={isSubmitting}
+          />
+          {errors.email && (
+            <p className={styles.error}> {errors.email.message} </p>
+          )}
+        </div>
+
+        <div className="flex-col">
+          <label> Username </label>
+          <input
+            className={errors.username && "input-error"}
+            {...register("username")}
+            type="text"
+            placeholder="Enter Username"
+            disabled={isSubmitting}
+          />
+          {errors.username && (
+            <p className={styles.error}> {errors.username.message} </p>
+          )}
+        </div>
+      
+
+        <div className="flex-col">
+          <label> Password </label>
+          <input 
+            className={errors.lastName && "input-error"}
+            {...register('password')}
+            placeholder="*****"
+            type="password"
+            disabled={isSubmitting}
+          /> 
+          { errors.password && <p className={styles.error} >{errors.password.message} </p>}
+        </div>
+
 
         {errors.root && <FormError message={errors.root.message} />}
         {success &&<FormSuccess message={success} />}
 
-        <button disabled={isSubmitting} type="submit">
+        <button
+          className={styles.formButton}
+          type="submit" 
+          disabled={isSubmitting} 
+        >
           Register
         </button>
+          
 
-        <Link href="/auth/login" className={styles.toLoginBtn}>
-          Already have an account?
-        </Link>
+        <div className={styles.toLoginBtnWrapper}>
+          <p className="text-center sub-text"> Already have an account? {" "} 
+            <Link href="/auth/login" className={styles.toLoginBtn}>
+            Login
+            </Link> 
+          </p>
+        </div>
+    
+      
       </form>
     </div>
   );

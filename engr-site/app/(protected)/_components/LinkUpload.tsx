@@ -10,7 +10,7 @@ import { createTagPostLink } from "@/actions/uploadingPostTags/uploadTagsAction"
 
 // import styles from '@/styles/test.module.css'
 import Tags from "./Tags";
-import styles from "@/styles/test.module.css";
+// import styles from "@/styles/test.module.css";
 import { SelectDropdown } from "@/components/mantine";
 import { fetchModulesByCourse } from "@/actions/fetching/fetchModulesByCourse";
 import { fetchSectionsByModule } from "@/actions/fetching/fetchSectionsByModule";
@@ -21,6 +21,7 @@ import { sanitizeUrl, trimCapitalizeFirstLetter, validUrlPattern } from "@/utils
 import { useRouter } from "next/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { FormError } from "@/components/FormError";
+import styles from "@/styles/form.module.css";
 
 
 type Options = {
@@ -340,80 +341,111 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   
 
   return (
-    <div>
+    <div className={styles.formAdminWrapper}>
+      <p className={styles.formAdminTitle}> Link Upload </p>
+
       {/* <MantineProvider>  */}
-      <form onSubmit={handleSubmit}>
+      <form 
+        className={styles.form}
+        onSubmit={handleSubmit}
+      >
         {statusMessage && (
           <p className={styles.messageStyle}> {statusMessage} </p>
         )}
 
-        <p> Input linkName </p>
-        <input type="text" onChange={(e) => setLinkName(e.target.value)} />
-        {errors.linkName && <p className="error">{errors.linkName}</p>}
-
-        
-        <p> Input linkUrl </p>
-        <input 
-          type="text" 
-          onChange={handleLinkUrlChange} 
-          style={{borderColor: isValidUrl ? "green": "red"}}
-        />
-        {errors.linkUrl && <p className="error">{errors.linkUrl}</p>}
-
-        <h4> Select a course </h4>
-        <SelectDropdown
-          optionsList={coursesOptionsData}
-          onOptionChange={handleCourseOptionSelect}
-          selectedValue={selectedCourseOption.value}
-        />
-        {errors.courseName && <p className="error">{errors.courseName}</p>}
-
-
-        <h4> Select a module </h4>
-        {
-          <SelectDropdown
-            optionsList={moduleOptionsData}
-            onOptionChange={handleModuleOptionSelect}
-            selectedValue={selectedModuleOption.value}
+        <div className="flex-col"> 
+          <label> Input linkName </label>
+          <input 
+            className={errors.linkName && "input-error"}
+            value={linkName}
+            type="text" 
+            onChange={(e) => setLinkName(e.target.value)} 
           />
-        }
-        {errors.moduleName && <p className="error">{errors.moduleName}</p>}
+          {errors.linkName && <p className="error">{errors.linkName}</p>}
 
+        </div>
 
-        <h4> Select a section </h4>
-        <SelectDropdown
-          optionsList={sectionOptionsData}
-          onOptionChange={handleSectionOptionSelect}
-          selectedValue={selectedSectionOption.value}
+        <div className="flex-col"> 
+          <label> Input linkUrl </label>
+          <input 
+            className={errors.linkUrl && "input-error"}
+            type="text" 
+            onChange={handleLinkUrlChange} 
+            style={{borderColor: isValidUrl ? "green": "red"}}
+          />
+          {errors.linkUrl && <p className="error">{errors.linkUrl}</p>}
+        </div>
+
+        <div>
+          <label> Select a course </label>
+          <SelectDropdown
+            optionsList={coursesOptionsData}
+            onOptionChange={handleCourseOptionSelect}
+            selectedValue={selectedCourseOption.value}
+          />
+          {errors.courseName && <p className="error">{errors.courseName}</p>}
+        </div>
+
+        <div> 
+          <label> Select a module </label>
+          {
+            <SelectDropdown
+              optionsList={moduleOptionsData}
+              onOptionChange={handleModuleOptionSelect}
+              selectedValue={selectedModuleOption.value}
+            />
+          }
+          {errors.moduleName && <p className="error">{errors.moduleName}</p>}
+        </div>
+
+        <div> 
+          <label> Select a section </label>
+          <SelectDropdown
+            optionsList={sectionOptionsData}
+            onOptionChange={handleSectionOptionSelect}
+            selectedValue={selectedSectionOption.value}
+          />
+          {errors.sectionName && <p className="error">{errors.sectionName}</p>}
+        </div>
+
+        <div>
+          <label> Select a concept </label>
+          <SelectDropdown
+            optionsList={conceptOptionsData}
+            onOptionChange={handleConceptOptionSelect}
+            selectedValue={selectedConceptOption.value}
+          />
+          {errors.conceptName && <p className="error">{errors.conceptName}</p>}
+        </div>
+
+        <div className="flex-col">   
+          <label> Add Description </label>
+          <input
+            type="text"
+            name="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+
+        <div className="flex-col"> 
+          <label> Add contributor </label>
+          <input
+            type="text"
+            name="description"
+            value={contributor}
+            onChange={(e) => setContributor(e.target.value)}
+          />
+        </div>
+
+        <Tags
+          tags={tags}
+          handleAddTag={handleAddTag}
+          handleTagChange={handleTagChange}
         />
-        {errors.sectionName && <p className="error">{errors.sectionName}</p>}
 
-
-        <h4> Select a concept </h4>
-        <SelectDropdown
-          optionsList={conceptOptionsData}
-          onOptionChange={handleConceptOptionSelect}
-          selectedValue={selectedConceptOption.value}
-        />
-        {errors.conceptName && <p className="error">{errors.conceptName}</p>}
-
-
-        <h4> Add Description </h4>
-        <input
-          type="text"
-          name="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
-        <h4> Add contributor </h4>
-        <input
-          type="text"
-          name="description"
-          value={contributor}
-          onChange={(e) => setContributor(e.target.value)}
-        />
         <button
+          className={styles.formButton}
           type="submit"
           // disable={linkUrl != undefined ? true : false}
         >
@@ -422,11 +454,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         {errors.root && <FormError message={errors.root} />}
 
       </form>
-      <Tags
-        tags={tags}
-        handleAddTag={handleAddTag}
-        handleTagChange={handleTagChange}
-      />
+
 
       {/* <DropzoneButton /> */}
       {/* <ButtonProgress /> */}

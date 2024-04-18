@@ -23,6 +23,7 @@ import { fetchSectionsByModule } from "@/actions/fetching/fetchSectionsByModule"
 import createConcept from "@/actions/create/createConcept";
 import { useRouter } from "next/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
+import  styles from "@/styles/form.module.css";
 
 type FormFields = z.infer<typeof CreateConceptSchema>;
 
@@ -145,9 +146,10 @@ const Concepts = () => {
   };
 
   return (
-    <Box maw={340} mx="auto">
-      <form className="flex-col gap-1" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex-col gap-p25">
+    <div className={styles.formWrapper}>
+      <p className={styles.formAdminTitle}> Create Concept </p>
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex-col ">
           <label> Section Name</label>
           <Controller
             control={control}
@@ -160,13 +162,13 @@ const Concepts = () => {
                 disabled={isSubmitting}
               />
             )}
-          />
+            />
+          {errors.conceptName && (
+            <p className="error">{errors.conceptName.message}</p>
+          )}
         </div>
-        {errors.conceptName && (
-          <p className="error">{errors.conceptName.message}</p>
-        )}
 
-        <div className="flex-co gap-p25">
+        <div className="flex-col">
           <label> Enter Course</label>
           <Controller
             control={control}
@@ -187,8 +189,8 @@ const Concepts = () => {
               />
             )}
           />
+          {errors.courseId && <p className="error">{errors.courseId.message}</p>}
         </div>
-        {errors.courseId && <p className="error">{errors.courseId.message}</p>}
 
         <div className="flex-co gap-p25">
           <label> Enter Module</label>
@@ -212,8 +214,8 @@ const Concepts = () => {
               />
             )}
           />
+          {errors.moduleId && <p className="error">{errors.moduleId.message}</p>}
         </div>
-        {errors.moduleId && <p className="error">{errors.moduleId.message}</p>}
 
 
         <div className="flex-co gap-p25">
@@ -231,18 +233,22 @@ const Concepts = () => {
               />
             )}
           />
+          {errors.sectionId && <p className="error">{errors.sectionId.message}</p>}
         </div>
-        {errors.sectionId && <p className="error">{errors.sectionId.message}</p>}
 
-        <Group justify="flex-end" mt="md">
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Loading..." : "Create"}
-          </button>
-        </Group>
+       
+        <button 
+          className={styles.formButton}
+          type="submit"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Loading..." : "Create"}
+        </button>
+
         {errors.root && <FormError message={errors.root.message} />}
         {success && <FormSuccess message={success} />}
       </form>
-    </Box>
+    </div>
   );
 };
 

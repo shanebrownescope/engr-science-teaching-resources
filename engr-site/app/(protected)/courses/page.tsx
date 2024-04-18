@@ -18,6 +18,9 @@ const Courses = async () => {
       {courseData?.success?.map((item: any) => (
         <p key={item.formatted}>
           <Link href={`/courses/${item.formatted}`}>{item.original} </Link>
+          {/* {item.formatted == courseImagesArray.courseName && (
+            <img src={courseImagesArray.image} />
+          )} */}
         </p>
       ))}
 

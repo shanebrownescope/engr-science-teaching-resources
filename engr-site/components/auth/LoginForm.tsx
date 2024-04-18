@@ -1,96 +1,115 @@
 "use client";
-import styles from '@/styles/testAuth.module.css'
-import { loginAction } from '@/actions/auth/loginAction';
-import * as z from "zod"
+import styles from "@/styles/form.module.css";
+import { loginAction } from "@/actions/auth/loginAction";
+import * as z from "zod";
 
+import { FormSuccess } from "../FormSuccess";
+import { FormError } from "../FormError";
 
-import { FormSuccess } from '../FormSuccess';
-import { FormError } from '../FormError';
+import { LoginSchema } from "@/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { LoginSchema } from '@/schemas'
-import { useForm } from 'react-hook-form'
-import { useTransition, useState } from 'react';
+import { SubmitHandler, useForm } from "react-hook-form";
+import {  useState } from "react";
+
+type FormFields = z.infer<typeof LoginSchema>;
+
 
 export const LoginForm = () => {
-  const [error, setError] = useState<string | undefined>("")
-  const [success, setSuccess] = useState<string | undefined>("")
-  const [isPending, startTransition] = useTransition();
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<z.infer<typeof LoginSchema>>({
+  const [success, setSuccess] = useState<string | undefined>("");
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<FormFields>({
     defaultValues: {
-      email: '',
-      password: '',
-    }
+      email: "",
+      password: "",
+    },
+    resolver: zodResolver(LoginSchema), // Resolver for Zod schema validation
   });
 
-  /**
-   * Handle the login form submission
-   *
-   * @param {z.infer<typeof LoginSchema>} values - The form values
-   */
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+
+  const onSubmit: SubmitHandler<FormFields> = async(data) => {
     // Reset the error and success messages
-    setError("");
+    setError("root", { message: "" });
     setSuccess("");
 
-    // Make a transition to asyncronously log the user in
-    startTransition(() => {
-      /**
-       * Attempt to login the user
-       *
-       * @param {Object} data - The login result
-       */
-      loginAction(values)
-        .then((data) => {
-          /**
-           * If there was an error, set the error message
-           * Otherwise, set the success message
-           */
-          setError(data?.error || "");
-          setSuccess(data?.success || "");
-        })
-    })
-  }
+    try {
+      const validatedFields = LoginSchema.safeParse(data);
 
+      if (!validatedFields.success) {
+        setError("root", { message: "Fields are invalid" });
+        return;
+      }
+
+      const result = await loginAction(data)
+
+      if (result.error) {
+        setError("root", { message: result.error });
+      }
+
+      if (result.success) {
+        setSuccess(result.success);
+      }
+
+    } catch (error) {
+      setError("root", { message: "Error" });
+      console.log("-- error: ", error);
+    }
+  };
 
   return (
-    <div className={styles.cardFormWrapper}>
-      <p className={styles.title}>login form</p>
-      <form 
-        onSubmit={handleSubmit((onSubmit))}         
-        className={styles.form}
-      >
+    <div className={styles.formWrapper}>
+      <p className={styles.title}>Login</p>
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)} >
+        <div className="flex-col">
+          <label> Email </label>
+          <input
+            className={errors.email && "input-error"}
+            {...register("email")}
+            placeholder="Enter email"
+            type="email"
+            disabled={isSubmitting}
+          />
+          {errors.email && (
+            <p className={styles.error}> {errors.email.message} </p>
+          )}        
+        </div>
 
-        <label> Email </label>
-        <input 
-          placeholder="Enter email"
-          type="email"
-          disabled={isPending}
-          {...register('email')}
-        /> 
+        <div className="flex-col">
+          <label> Password </label>
+          <input
+            className={errors.password && "input-error"}
+            placeholder="*****"
+            type="password"
+            disabled={isSubmitting}
+            {...register("password")}
+          />
+          {errors.password && (
+            <p className={styles.error}> {errors.password.message} </p>
+          )}
+        </div>
 
-        <label> Password </label>
-        <input 
-          placeholder="*****"
-          type="password"
-          disabled={isPending}
-          {...register('password')}
-        /> 
-
-        <FormError message={error} />
+        <FormError message={errors.root?.message} />
         <FormSuccess message={success} />
 
-        <a href="/auth/forgot-password">Forgot password?</a>
+        <a 
+          className={styles.forgotLink} 
+          href="/auth/forgot-password"
+        >
+          Forgot password?
+        </a>
 
-        <button 
-          disabled={isSubmitting}
+        <button
+          className={styles.formButton}
           type="submit"
+          disabled={isSubmitting} 
         >
           Login
         </button>
-
-
       </form>
     </div>
-  )
-}
-
+  );
+};

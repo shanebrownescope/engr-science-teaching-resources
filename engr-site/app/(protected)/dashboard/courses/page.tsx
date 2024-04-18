@@ -11,6 +11,7 @@ import { FormError } from "@/components/FormError";
 import { FormSuccess } from "@/components/FormSuccess";
 import { useRouter } from "next/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
+import styles from "@/styles/form.module.css";
 
 type FormFields = z.infer<typeof CreateCourseSchema>;
 
@@ -55,29 +56,37 @@ const Courses = () => {
   };
 
   return (
-    <Box maw={340} mx="auto">
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div className={styles.formAdminWrapper}>
+      <p className={styles.formAdminTitle}> Create Course </p>
+      <form 
+        className={styles.form}
+        onSubmit={handleSubmit(onSubmit)}>
+
         <div className="flex-col">
           <label> Course Name</label>
           <input
+            className={errors.courseName && "input-error"}
             {...register("courseName")}
             type="text"
             placeholder="Enter course name"
             disabled={isSubmitting}
           />
+          {errors.courseName && (
+            <p className="error">{errors.courseName.message}</p>
+          )}
         </div>
-        {errors.courseName && (
-          <p className="error">{errors.courseName.message}</p>
-        )}
-        <Group justify="flex-end" mt="md">
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Loading..." : "Submit"}
-          </button>
-        </Group>
+      
+        <button 
+          className={styles.formButton}
+          type="submit" 
+          disabled={isSubmitting}>
+          {isSubmitting ? "Loading..." : "Create"}
+        </button>
+
         {errors.root && <FormError message={errors.root.message} />}
         {success && <FormSuccess message={success} />}
       </form>
-    </Box>
+    </div>
   );
 };
 

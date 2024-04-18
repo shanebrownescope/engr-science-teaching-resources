@@ -13,7 +13,7 @@ import Select from "react-select";
 
 // import styles from '@/styles/test.module.css'
 import Tags from "./Tags";
-import styles from "@/styles/test.module.css";
+// import styles from "@/styles/test.module.css";
 import { SelectDropdown } from "@/components/mantine";
 import { fetchModulesByCourse } from "@/actions/fetching/fetchModulesByCourse";
 import { fetchSectionsByModule } from "@/actions/fetching/fetchSectionsByModule";
@@ -24,6 +24,7 @@ import { getCurrentRole, getCurrentUser } from "@/utils/authHelpers";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { useRouter } from "next/navigation";
 import { FormError } from "@/components/FormError";
+import styles from "@/styles/form.module.css";
 
 
 //* Testing: file upload to s3 and db
@@ -372,97 +373,124 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   console.log(currentDateWithoutTime);
 
   return (
-    <div>
+    <div className={styles.formAdminWrapper}>
       {/* <MantineProvider>  */}
-      <form onSubmit={handleSubmit}>
+      <p className={styles.formAdminTitle}> Upload file </p>
+      
+      <form 
+        className={styles.form}
+        onSubmit={handleSubmit}
+      >
         {statusMessage && (
           <p className={styles.messageStyle}> {statusMessage} </p>
         )}
-        <p> Select file </p>
-        <input type="file" accept="pdf" onChange={handleFileChange} />
-        {fileUrl && file && (
-          <div>
-            <iframe src={fileUrl} />
 
-            <button
-              type="button"
-              onClick={() => {
-                setFile(undefined);
-                // setFileUrl(undefined);
-              }}
-            >
-              Remove
-            </button>
-          </div>
-        )}
+        <div> 
+          <label> Select file </label>
+          <input type="file" accept="pdf" onChange={handleFileChange} />
+          {fileUrl && file && (
+            <div>
+              <iframe src={fileUrl} />
+
+              <button
+                type="button"
+                onClick={() => {
+                  setFile(undefined);
+                  // setFileUrl(undefined);
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          )}
+        </div>
         {errors.file && <p className="error">{errors.file}</p>}
 
-
-        <h4> Enter file name </h4>
-        <input
-          type="text"
-          placeholder="Enter file name"
-          max={100}
-          name="fileName"
-          value={fileName}
-          onChange={(e) => setFileName(e.target.value)} 
-        />
-        {errors.fileName && <p className="error">{errors.fileName}</p>}
-
-
-        <h4> Select a course </h4>
-        <SelectDropdown
-          optionsList={coursesOptionsData}
-          onOptionChange={handleCourseOptionSelect}
-          selectedValue={selectedCourseOption.value}
-        />
-        {errors.courseName && <p className="error">{errors.courseName}</p>}
-
-
-        <h4> Select a module </h4>
-        {
-          <SelectDropdown
-            optionsList={moduleOptionsData}
-            onOptionChange={handleModuleOptionSelect}
-            selectedValue={selectedModuleOption.value}
+        <div className="flex-col">       
+          <label> Enter file name </label>
+          <input
+            className={errors.fileName && "input-error"}
+            type="text"
+            placeholder="Enter file name"
+            max={100}
+            name="fileName"
+            value={fileName}
+            onChange={(e) => setFileName(e.target.value)} 
           />
-        }
-        {errors.moduleName && <p className="error">{errors.moduleName}</p>}
+          {errors.fileName && <p className="error">{errors.fileName}</p>}
+        </div> 
 
+        <div>
+          <label> Select a course </label>
+          <SelectDropdown
+            optionsList={coursesOptionsData}
+            onOptionChange={handleCourseOptionSelect}
+            selectedValue={selectedCourseOption.value}
+          />
+          {errors.courseName && <p className="error">{errors.courseName}</p>}
+        </div>
+            
+        <div>
+          <label> Select a module </label>
+          {
+            <SelectDropdown
+              optionsList={moduleOptionsData}
+              onOptionChange={handleModuleOptionSelect}
+              selectedValue={selectedModuleOption.value}
+            />
+          }
+          {errors.moduleName && <p className="error">{errors.moduleName}</p>}
+        </div>
 
-        <h4> Select a section </h4>
-        <SelectDropdown
-          optionsList={sectionOptionsData}
-          onOptionChange={handleSectionOptionSelect}
-          selectedValue={selectedSectionOption.value}
+        <div>
+          <label> Select a section </label>
+          <SelectDropdown
+            optionsList={sectionOptionsData}
+            onOptionChange={handleSectionOptionSelect}
+            selectedValue={selectedSectionOption.value}
+          />
+          {errors.sectionName && <p className="error">{errors.sectionName}</p>}
+        </div>
+
+        <div> 
+          <label> Select a concept </label>
+          <SelectDropdown
+            optionsList={conceptOptionsData}
+            onOptionChange={handleConceptOptionSelect}
+            selectedValue={selectedConceptOption.value}
+          />
+          {errors.conceptName && <p className="error">{errors.conceptName}</p>}
+        </div>
+
+        <div className="flex-col"> 
+          <label> Add Description </label>
+          <input
+            type="text"
+            name="description"
+            value={description}
+            placeholder="Enter description"
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+
+        <div className="flex-col">
+          <label> Add contributor </label>
+          <input
+            type="text"
+            name="contributor"
+            value={contributor}
+            onChange={(e) => setContributor(e.target.value)}
+          />
+        </div>
+
+        <Tags
+          tags={tags}
+          handleAddTag={handleAddTag}
+          handleTagChange={handleTagChange}
         />
-        {errors.sectionName && <p className="error">{errors.sectionName}</p>}
 
-        <h4> Select a concept </h4>
-        <SelectDropdown
-          optionsList={conceptOptionsData}
-          onOptionChange={handleConceptOptionSelect}
-          selectedValue={selectedConceptOption.value}
-        />
-        {errors.conceptName && <p className="error">{errors.conceptName}</p>}
-
-        <h4> Add Description </h4>
-        <input
-          type="text"
-          name="description"
-          value={description}
-          placeholder="Enter description"
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
-        <h4> Add contributor </h4>
-        <input
-          type="text"
-          name="contributor"
-          value={contributor}
-          onChange={(e) => setContributor(e.target.value)}
-        />
         <button
+          className={styles.formButton}
           type="submit"
           // disable={fileUrl != undefined ? true : false}
           >
@@ -470,11 +498,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         </button>
         {errors.root && <FormError message={errors.root} />}
       </form>
-      <Tags
-        tags={tags}
-        handleAddTag={handleAddTag}
-        handleTagChange={handleTagChange}
-      />
 
       {/* <DropzoneButton /> */}
       {/* <ButtonProgress /> */}
