@@ -1,5 +1,5 @@
 "use client"
-import { Group, Code, ScrollArea, rem } from '@mantine/core';
+import { Group, Code, ScrollArea, rem, Burger, Button, Divider, Drawer, UnstyledButton, Center, Box, Collapse } from '@mantine/core';
 import {
   IconNotes,
   IconCalendarStats,
@@ -8,13 +8,15 @@ import {
   IconFileAnalytics,
   IconAdjustments,
   IconLock,
+  IconChevronDown,
 } from '@tabler/icons-react';
 // import { UserButton } from '../UserButton/UserButton';
 import { LinksGroup } from './NavbarLinksGroup';
 // import { Logo } from './Logo';
 import classes from './NavbarNested.module.css';
+import { useDisclosure } from '@mantine/hooks';
 
-const mockdata = [
+const mockdataDesktop = [
   { label: 'Dashboard', icon: IconGauge },
   {
     label: 'Upload resource',
@@ -45,19 +47,47 @@ const mockdata = [
   },
 ];
 
+
 export function NavbarNested() {
-  const links = mockdata.map((item) => <LinksGroup {...item} key={item.label} />);
+  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = 
+    useDisclosure(false);
+
+  const linksDesktop = mockdataDesktop.map((item) => <LinksGroup {...item} key={item.label} />);
+
 
   return (
-    <div className={classes.navbar}>
+    <div className={classes.sidebarContainer}> 
+      <Burger
+        opened={drawerOpened}
+        onClick={toggleDrawer}
+        hiddenFrom="sm"
+      />
 
-      <ScrollArea className={classes.links}>
-        <div className={classes.linksInner}>{links}</div>
-      </ScrollArea>
+      <Drawer
+        opened={drawerOpened}
+        onClose={closeDrawer}
+        size="100%"
+        padding="md"
+        title="Admin Menu"
+        hiddenFrom="sm"
+        zIndex={1000000}
+      >
+        <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
+          <Divider my="sm" />
 
-      {/* <div className={classes.footer}>
-        <UserButton />
-      </div> */}
+          {linksDesktop}
+
+        </ScrollArea>
+      </Drawer>
+
+
+      <div className={classes.desktopSidebar}>
+        <div className={classes.navbar}>
+          <ScrollArea className={classes.links}>
+            <div className={classes.linksInner}>{linksDesktop}</div>
+          </ScrollArea>
+        </div>
+      </div>
     </div>
   );
 }

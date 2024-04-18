@@ -14,12 +14,13 @@ import { FormSelectProps } from "@/utils/types";
 import createModule from "@/actions/create/createModule";
 import { useRouter } from "next/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
+import styles from "@/styles/form.module.css";
 
 type FormFields = z.infer<typeof CreateModuleSchema>;
 
 const Modules = () => {
-  const router = useRouter()
-  const role = useCurrentRole()
+  const router = useRouter();
+  const role = useCurrentRole();
   if (role != "admin") {
     console.log("-- not admin");
     router.push("/unauthorized");
@@ -90,15 +91,18 @@ const Modules = () => {
   };
 
   return (
-    <Box maw={340} mx="auto">
-      <form className="flex-col gap-1" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex-col gap-p25">
+    <div className={styles.formAdminWrapper}>
+      <p className={styles.formAdminTitle}> Create Module </p>
+
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex-col">
           <label> Module Name</label>
           <Controller
             control={control}
             name="moduleName"
             render={({ field }) => (
               <input
+                className={errors.moduleName && "input-error"}
                 {...field}
                 type="text"
                 placeholder="Enter module name"
@@ -106,12 +110,12 @@ const Modules = () => {
               />
             )}
           />
+          {errors.moduleName && (
+            <p className="error">{errors.moduleName.message}</p>
+          )}
         </div>
-        {errors.moduleName && (
-          <p className="error">{errors.moduleName.message}</p>
-        )}
 
-        <div className="flex-co gap-p25">
+        <div className="flex-col">
           <label> Enter Course for module</label>
           <Controller
             control={control}
@@ -125,18 +129,21 @@ const Modules = () => {
               />
             )}
           />
+          {errors.courseId && <p className="error">{errors.courseId.message}</p>}
         </div>
-        {errors.courseId && <p className="error">{errors.courseId.message}</p>}
 
-        <Group justify="flex-end" mt="md">
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Loading..." : "Create"}
-          </button>
-        </Group>
+        <button
+          className={styles.formButton}
+          type="submit"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Loading..." : "Create"}
+        </button>
+
         {errors.root && <FormError message={errors.root.message} />}
         {success && <FormSuccess message={success} />}
       </form>
-    </Box>
+    </div>
   );
 };
 

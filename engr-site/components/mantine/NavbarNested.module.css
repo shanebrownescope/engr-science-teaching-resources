@@ -1,4 +1,16 @@
+.sidebarContainer {
+  padding: var(--mantine-spacing-md);
+  border-right: rem(1px) solid
+  light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));  height: rem(800px);
+}
+
+.desktopSidebar {
+  display: none;
+}
+
 .navbar {
+  /* position: absolute;
+  top: 0; */
   background-color: light-dark(
     var(--mantine-color-white),
     var(--mantine-color-dark-6)
@@ -39,4 +51,18 @@
   margin-right: calc(var(--mantine-spacing-md) * -1);
   border-top: rem(1px) solid
     light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+
+@media (min-width: 768px) { 
+
+  .sidebarContainer {
+    padding: 0;
+    border-right: none;
+  }
+  .desktopSidebar {
+    display: block;
+  }
+
+  
 }

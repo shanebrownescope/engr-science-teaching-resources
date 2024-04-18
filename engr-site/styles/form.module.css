@@ -1,0 +1,115 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* height: 110%; */
+    background: linear-gradient(90deg, hsla(238, 100%, 71%, 1) 0%, hsla(295, 100%, 84%, 1) 100%);
+}
+
+
+
+
+.formSuccess {
+    padding: 0.25em;
+    border-radius: 5px;
+    background: #E5FFED;
+    color: #1f6234;
+    
+}
+
+.formError {
+    padding: 0.25em;
+    background: rgb(241, 191, 191);
+    color: red;
+}
+
+.error {
+    color: red;
+}
+
+.textBlack {
+    color: black;
+}
+
+
+.title,
+.formAdminTitle {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-block: 0.5em;
+    color: black;
+}
+
+.formAdminTitle {
+    font-weight: 500px;
+    text-align: start;
+}
+
+.formWrapper {
+    width: calc(100% - 10%);
+    padding: 1em;
+    border-radius: 0.5em;
+    background: white;
+    padding: 25px;
+    color: black;
+}
+
+.formAdminWrapper {
+    margin-top: 40px;
+    width: 400px;
+    height: max-content;
+    border-radius: 0.5em;
+    padding: 25px 25px 50px;
+
+    /* border: 1px solid #b7b6b6; */
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form label {
+    font-weight: 500;
+}
+
+.formButton {
+    padding-block: 10px;
+    border-radius: 5px;
+    background: black;
+    color: white;
+
+    text-transform: capitalize;
+    cursor: pointer;
+}
+
+
+/** /auth/login */
+.forgotLink {
+    font-size: 14px;
+}
+
+
+/** /auth/register */
+.toLoginBtnWrapper {
+    margin-top: 10px;
+}
+.toLoginBtn {
+    font-size: 14px;
+    text-decoration: none;
+    color: black;
+}
+
+.toLoginBtn:hover {
+    text-decoration: underline;
+}
+
+@media (min-width: 520px) {
+    .formWrapper {
+        width: 500px;
+    }
+    
+}

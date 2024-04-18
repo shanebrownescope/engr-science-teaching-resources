@@ -17,6 +17,7 @@ import { fetchModulesByCourseId } from "@/actions/fetching/fetchModulesByCourseI
 import createSection from "@/actions/create/createSection";
 import { useRouter } from "next/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
+import styles from "@/styles/form.module.css";
 
 type FormFields = z.infer<typeof CreateSectionSchema>;
 
@@ -110,15 +111,17 @@ const Sections = () => {
   };
 
   return (
-    <Box maw={340} mx="auto">
-      <form className="flex-col gap-1" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex-col gap-p25">
+    <div className={styles.formWrapper}>
+      <p className={styles.formAdminTitle}> Create Section </p>
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex-col">
           <label> Section Name</label>
           <Controller
             control={control}
             name="sectionName"
             render={({ field }) => (
               <input
+                className={errors.sectionName && "input-error"}
                 {...field}
                 type="text"
                 placeholder="Enter section name"
@@ -126,12 +129,12 @@ const Sections = () => {
               />
             )}
           />
+          {errors.sectionName && (
+            <p className="error">{errors.sectionName.message}</p>
+          )}
         </div>
-        {errors.sectionName && (
-          <p className="error">{errors.sectionName.message}</p>
-        )}
 
-        <div className="flex-co gap-p25">
+        <div className="flex-col">
           <label> Enter Course</label>
           <Controller
             control={control}
@@ -152,10 +155,10 @@ const Sections = () => {
               />
             )}
           />
+          {errors.courseId && <p className="error">{errors.courseId.message}</p>}
         </div>
-        {errors.courseId && <p className="error">{errors.courseId.message}</p>}
 
-        <div className="flex-co gap-p25">
+        <div className="flex-col">
           <label> Enter Module</label>
           <Controller
             control={control}
@@ -170,18 +173,22 @@ const Sections = () => {
               />
             )}
           />
+          {errors.moduleId && <p className="error">{errors.moduleId.message}</p>}
         </div>
-        {errors.moduleId && <p className="error">{errors.moduleId.message}</p>}
 
-        <Group justify="flex-end" mt="md">
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Loading..." : "Create"}
-          </button>
-        </Group>
+        
+        <button 
+          className={styles.formButton}
+          type="submit" 
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Loading..." : "Create"}
+        </button>
+
         {errors.root && <FormError message={errors.root.message} />}
         {success && <FormSuccess message={success} />}
       </form>
-    </Box>
+    </div>
   );
 };
 

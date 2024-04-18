@@ -14,7 +14,7 @@ export const uploadFileComment =  async(values: z.infer<typeof CommentSchema>, u
   const { commentText } = validatedFields.data;
 
   const uploadQuery = `
-    INSERT INTO CommentFiles (FileId, UserId, CommentText) VALUES (?, ?, ?)
+    INSERT INTO FileComments (FileId, UserId, CommentText) VALUES (?, ?, ?)
   `;
 
   const { results, error } = await dbConnect(uploadQuery, [fileId, userId, commentText]);
