@@ -1,7 +1,8 @@
 import { fetchCourses } from "@/actions/fetching/fetchCourses";
 import Link from "next/link";
 import { FetchedFormattedData } from "@/utils/types";
-import { ModuleCard } from "@/components/mantine";
+import { CourseCard } from "@/components/mantine";
+import "./page.css";
 
 const Courses = async () => {
   const courseData: FetchedFormattedData = await fetchCourses();
@@ -16,13 +17,15 @@ const Courses = async () => {
     <div>
       <p>Courses</p>
 
-      {courseData?.success?.map((item: any) => (
-        <ModuleCard
-          title={item.original}
-          description="description here"
-          href={`/courses/${item.formatted}`}
-        />
-      ))}
+      <div className="grid-container">
+        {courseData?.success?.map((item: any) => (
+          <CourseCard
+            title={item.original}
+            description="description here"
+            href={`/courses/${item.formatted}`}
+          />
+        ))}
+      </div>
 
       {courseData?.failure && <div>No courses</div>}
     </div>
