@@ -159,7 +159,13 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
                 </Link>
               </Table.Td>
               <Table.Td>{item.description}</Table.Td>
-              <Table.Td>{item.tags.join(", ")}</Table.Td>
+              <Table.Td>
+                {item.tags.map((tag, tagIndex) => (
+                  <span key={tagIndex} className={classes.tag}>
+                    {tag}
+                  </span>
+                ))}
+              </Table.Td>
             </Table.Tr>
           ))}
           {displayedData.length === 0 && (
