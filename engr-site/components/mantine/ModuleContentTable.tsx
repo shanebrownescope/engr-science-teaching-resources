@@ -22,9 +22,9 @@ import Link from "next/link";
 interface ModuleContent {
   originalName: string;
   formattedName: string;
-  description: string; // Assuming files and links both have descriptions now
-  tags: string[]; // Assuming the 'tags' field is an array of strings
-  id: number; // Assuming the 'id' field is a string
+  description: string;
+  tags: string[];
+  id: number;
 }
 
 interface ModuleContentTableProps {
@@ -32,21 +32,19 @@ interface ModuleContentTableProps {
   links: ModuleContent[];
 }
 
-interface RowData {
-  name: string;
-  creator: string;
-  dateUploaded: string;
-}
-
-interface ThProps {
+function Th({
+  children,
+  reversed,
+  sorted,
+  onSort,
+  width,
+}: {
   children: React.ReactNode;
   reversed: boolean;
   sorted: boolean;
-  onSort(): void;
+  onSort: () => void;
   width?: string;
-}
-
-function Th({ children, reversed, sorted, onSort, width }: ThProps) {
+}) {
   const Icon = sorted
     ? reversed
       ? IconChevronUp
@@ -68,32 +66,6 @@ function Th({ children, reversed, sorted, onSort, width }: ThProps) {
   );
 }
 
-// Combined filter and sort function for the new data structure
-function filterAndSortData(
-  data: ModuleContent[],
-  search: string,
-  sortBy: keyof ModuleContent | null,
-  reverseSortDirection: boolean
-): ModuleContent[] {
-  let filteredData = data.filter(
-    (item) =>
-      item.originalName.toLowerCase().includes(search.toLowerCase()) ||
-      item.description.toLowerCase().includes(search.toLowerCase()) ||
-      item.tags.join(", ").toLowerCase().includes(search.toLowerCase())
-  );
-
-  if (sortBy) {
-    filteredData.sort((a, b) => {
-      const aValue = a[sortBy],
-        bValue = b[sortBy];
-      const comparison = aValue.localeCompare(bValue);
-      return reverseSortDirection ? -comparison : comparison;
-    });
-  }
-
-  return filteredData;
-}
-
 export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<keyof ModuleContent | null>(null);
@@ -101,19 +73,32 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
   const [displayedData, setDisplayedData] = useState<ModuleContent[]>([]);
 
   useEffect(() => {
-    // Combine files and links into a single array and then filter and sort
     const combinedData = [...files, ...links];
-    const updatedData = filterAndSortData(
-      combinedData,
-      search,
-      sortBy,
-      reverseSortDirection
+    let filteredData = combinedData.filter(
+      (item) =>
+        item.originalName.toLowerCase().includes(search.toLowerCase()) ||
+        item.description.toLowerCase().includes(search.toLowerCase()) ||
+        item.tags.join(", ").toLowerCase().includes(search.toLowerCase())
     );
-    setDisplayedData(updatedData);
+
+    if (sortBy) {
+      filteredData.sort((a, b) => {
+        const aValue = String(a[sortBy]);
+        const bValue = String(b[sortBy]);
+        const comparison = aValue.localeCompare(bValue);
+        return reverseSortDirection ? -comparison : comparison;
+      });
+    }
+    setDisplayedData(filteredData);
   }, [files, links, search, sortBy, reverseSortDirection]);
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.currentTarget.value);
+  const handleSortChange = (sortField: keyof ModuleContent) => {
+    if (sortField === sortBy) {
+      setReverseSortDirection(!reverseSortDirection);
+    } else {
+      setSortBy(sortField);
+      setReverseSortDirection(false);
+    }
   };
 
   return (
@@ -128,16 +113,16 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
           />
         }
         value={search}
-        onChange={handleSearchChange}
+        onChange={(event) => setSearch(event.currentTarget.value)}
       />
       <Table horizontalSpacing="md" verticalSpacing="xs">
         <thead>
           <Table.Tr>
             <Th
               width="25%"
-              sorted={sortBy === "name"}
+              sorted={sortBy === "originalName"}
               reversed={reverseSortDirection}
-              onSort={() => setSortBy("name")}
+              onSort={() => handleSortChange("originalName")}
             >
               Name
             </Th>
@@ -145,11 +130,11 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
               width="50%"
               sorted={sortBy === "description"}
               reversed={reverseSortDirection}
-              onSort={() => setSortBy("description")}
+              onSort={() => handleSortChange("description")}
             >
               Description
             </Th>
-            <Table.Th className={`${classes.tagsColumn}`}>
+            <Table.Th className={classes.tagsColumn}>
               <Text fw={500} fz="sm">
                 Tags
               </Text>
@@ -159,24 +144,22 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
         <Table.Tbody>
           {displayedData.map((item, index) => (
             <Table.Tr key={index}>
-              <Link
-                href={`/resources/${item.formattedName}?${new URLSearchParams({
-                  id: item.id.toString(),
-                  type: "file",
-                })} `}
-                passHref
-              >
-                <p className={classes.linkStyle}>{item.originalName}</p>
-              </Link>
-
-              <Table.Td>{item.description}</Table.Td>
               <Table.Td>
-                {item.tags.map((tag, tagIndex) => (
-                  <span key={tagIndex} className={classes.tag}>
-                    {tag}
-                  </span>
-                ))}
+                {" "}
+                <Link
+                  href={`/resources/${item.formattedName}?${new URLSearchParams(
+                    {
+                      id: item.id.toString(),
+                      type: "file",
+                    }
+                  )} `}
+                  passHref
+                >
+                  <p className={classes.linkStyle}>{item.originalName}</p>
+                </Link>
               </Table.Td>
+              <Table.Td>{item.description}</Table.Td>
+              <Table.Td>{item.tags.join(", ")}</Table.Td>
             </Table.Tr>
           ))}
           {displayedData.length === 0 && (
