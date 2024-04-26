@@ -34,10 +34,10 @@ export const sendApprovalRequestToTeam = async (values: z.infer<typeof RegisterF
 
     // Insert the user into the database
     const insertQuery = `
-    INSERT INTO Users_v2 (name, email, password, role, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?)`
+      INSERT INTO Users_v2 (name, email, password, role, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?)`
     const admin = "admin"
     const instructor = "instructor"
-    const { results: insertedUser, error } = await dbConnect(insertQuery, [username, email, hashedPassword, admin, firstName, lastName])
+    const { results: insertedUser, error } = await dbConnect(insertQuery, [username, email, hashedPassword, instructor, firstName, lastName])
     
     console.log("insertedUser: ", insertedUser[0].insertId)
 

@@ -127,5 +127,7 @@ export const UploadFileSchema = z.object({
 });
 
 export const CommentSchema = z.object({
-  commentText: z.string().min(1, { message: "Comment length must be greater than 1" }),
-})
+  commentText: z.string().min(1, {
+    message: "Comment is required",
+  }),
+});

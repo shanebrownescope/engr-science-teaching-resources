@@ -1,3 +1,5 @@
+import { Textarea, Button } from "@mantine/core";
+
 import { fetchFileById } from "@/actions/fetching/files/fetchFileById";
 import { fetchSimilarFilesByTags } from "@/actions/fetching/files/fetchSimilarFilesByTags";
 
@@ -59,6 +61,12 @@ const ResourceFilePage = async ({
       </div>
 
       <h3>Comments</h3>
+      <div style={{ maxWidth: "600px" }}>
+      <Textarea autosize minRows={2} mb="md" />
+      <Button variant="filled" style={{ width: "100%" }}>
+        Post
+      </Button>{" "}
+      </div>
     </div>
   );
 };

@@ -1,5 +1,4 @@
-import { fetchModulesByCourse } from "@/actions/fetching/fetchModulesByCourse";
-import { FormattedData, capitalizeAndReplaceDash } from "@/utils/formatting";
+import {  capitalizeAndReplaceDash } from "@/utils/formatting";
 import { FetchedFormattedData } from "@/utils/types";
 import Link from "next/link";
 import { ModuleCard } from "@/components/mantine";
@@ -11,16 +10,16 @@ const CourseTopicsPage = async ({
   params: { courseName: string };
 }) => {
   const courseTopicName = capitalizeAndReplaceDash(params.courseName);
-  const modules: FetchedFormattedData = await fetchCourseTopicsByCourseName(courseTopicName);
+  const courseTopicList: FetchedFormattedData = await fetchCourseTopicsByCourseName(courseTopicName);
   console.log(params.courseName);
 
-  console.log("== success: ", modules.success);
+  console.log("== success: ", courseTopicList.success);
 
   return (
     <div>
       <p> {courseTopicName} </p>
 
-      {modules?.success?.map((item: any, index: number) => (
+      {courseTopicList?.success?.map((item: any, index: number) => (
         <div>
           <ModuleCard
             title={item.name}
@@ -42,7 +41,7 @@ const CourseTopicsPage = async ({
         </div>
       ))}
 
-      {modules?.failure && <p> No course topics </p>}
+      {courseTopicList?.failure && <p> No course topics </p>}
     </div>
   );
 };
