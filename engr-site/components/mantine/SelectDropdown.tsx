@@ -15,12 +15,12 @@ export const SelectDropdown = ({ optionsList, onOptionChange, selectedValue }: a
 
   const options = optionsList?.map((item: any) => (
     <Combobox.Option 
-      value={item.original} 
+      value={item.name} 
       key={item.id}
       data-id={item.id}
-      data-formatted-name={item.formatted}
+      data-formatted-name={item.url}
     >
-      {item.original}
+      {item.name}
     </Combobox.Option>
   ));
 

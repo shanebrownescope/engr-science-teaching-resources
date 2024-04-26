@@ -6,7 +6,7 @@ type SearchResultBoxProps = {
   type: string;
   id: number;
   title: string;
-  formattedName: string;
+  urlName: string;
   description: string;
   tags: string[];
 };
@@ -14,7 +14,7 @@ export const SearchResultBox = ({
   type,
   id,
   title,
-  formattedName,
+  urlName,
   description,
   tags,
 }: SearchResultBoxProps) => {
@@ -22,9 +22,8 @@ export const SearchResultBox = ({
   return (
     <div className="resultBox">
       <Link
-        href={`/resources/${formattedName}?${new URLSearchParams({
-          id: id.toString(),
-          type: type,
+        href={`/resources/${type}/${urlName}?${new URLSearchParams({
+          id: id.toString()
         })}`}
       >
         <h2 className="resultTitle">{title}</h2>

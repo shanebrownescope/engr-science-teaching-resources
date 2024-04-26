@@ -8,14 +8,16 @@ import { sendUserUpdateEmailProps } from "@/app/(protected)/dashboard/pending-us
 export const approveUser = async (userId: string) => {
   try {
     const updateQuery = `
-      UPDATE Users SET AccountStatus = 'approved' WHERE UserId = ${userId}`;
+      UPDATE Users_v2 SET accountStatus = 'approved' WHERE id = ${userId}`;
     //       UPDATE Users SET AccountStatus = 'pending' WHERE UserId = 55;
 
     const { results: updatedUser } = await dbConnect(
       updateQuery
     )
 
-    await revalidatePath('/pending-users')
+    await revalidatePath('/dashboard/pending-users')
+
+    console.log(updatedUser)
 
     return { success: "User approved" }
   } catch (error) {

@@ -1,13 +1,14 @@
-"use server"
+"use server";
 
-import { getCourseById } from "@/database/data/courses"
-import { getModuleByIdAndCourseId } from "@/database/data/modules"
-import {  getSectionByIdAndModuleId } from "@/database/data/sections"
-import dbConnect from "@/database/dbConnector"
-import { CreateConceptSchema } from "@/schemas"
-import { getCurrentUser } from "@/utils/authHelpers"
-import { capitalizeWords } from "@/utils/formatting"
-import z from "zod"
+import { getConceptByNameAndResourceTypeId } from "@/database/data/concepts";
+import { getCourseTopicByIdAndCourseId } from "@/database/data/courseTopics";
+import { getCourseById } from "@/database/data/courses";
+import { getResourceTypeByIdAndCourseTopicId } from "@/database/data/resourceTypes";
+import dbConnect from "@/database/dbConnector";
+import { CreateConceptSchema } from "@/schemas";
+import { getCurrentUser } from "@/utils/authHelpers";
+import { capitalizeWords } from "@/utils/formatting";
+import z from "zod";
 
 /**
  * Creates a new concept in the database.
@@ -16,10 +17,10 @@ import z from "zod"
  * @returns {{ error?: string, success?: string }} - The response from the database
  */
 const createConcept = async (values: z.infer<typeof CreateConceptSchema>) => {
-  const user = await getCurrentUser()
+  const user = await getCurrentUser();
 
   if (user?.role && user.role !== "admin") {
-    return { error: "Not authenticated" }
+    return { error: "Not authenticated" };
   }
 
   // Attempt to parse and validate the input data against the CreateConceptSchema
@@ -30,7 +31,7 @@ const createConcept = async (values: z.infer<typeof CreateConceptSchema>) => {
     return { error: "Invalid fields!" };
   }
 
-  const { conceptName, courseId, moduleId, sectionId  } = validatedFields.data;
+  const { conceptName, courseId, courseTopicId, resourceTypeId } = validatedFields.data;
 
   // Check if the course exists in the database
   const existingCourse = await getCourseById(courseId);
@@ -40,46 +41,43 @@ const createConcept = async (values: z.infer<typeof CreateConceptSchema>) => {
     return { error: "Course id not found" };
   }
 
-  // Check if the course module exists in the database
-  const existingModule = await getModuleByIdAndCourseId(moduleId, courseId);
+  // Check if the course topic exists in the database
+  const existingCourseTopic = await getCourseTopicByIdAndCourseId(courseTopicId, courseId);
 
-  // The module id is not valid, return an error
-  if (!existingModule) {
-    return { error: "Module id not found" };
+  // The courseTopic id is not valid, return an error
+  if (!existingCourseTopic) {
+    return { error: "courseTopic id not found" };
   }
 
-  // Check if the module section exists in the database
-  const existingSection = await getSectionByIdAndModuleId(sectionId, moduleId);
+  // Check if the courseTopic resourceType exists in the database
+  const existingResourceType = await getResourceTypeByIdAndCourseTopicId(resourceTypeId, courseTopicId);
 
-  // The section id is not valid, return an error
-  if (!existingSection) {
-    return { error: "Section id not found" };
+  // The resourceType id is not valid, return an error
+  if (!existingResourceType) {
+    return { error: "ResourceType id not found" };
   }
 
+  const formattedConceptName = capitalizeWords(conceptName);
 
-  const formattedConceptName = capitalizeWords(conceptName)
-  // ? Check if we want to check if concept name exists under that section
-  // Check if the section name already exists for that module
-  // const existingConcept = await getSectionByNameAndId(formattedConceptName, moduleId);
+  const existingConcept = await getConceptByNameAndResourceTypeId(
+    formattedConceptName, 
+    resourceTypeId
+  )
 
-  // // The section name is already in use for that module, return an error
-  // if (existingSection) {
-  //   console.log(existingSection)
-  //   return { error: "Section name already in use for that module" };
-  // }
+  if (existingConcept) {
+    return { error: "Concept already exists" };
+  }
 
+  const insertQuery = `INSERT INTO Concepts_v2 (conceptName, resourceTypeId) VALUES (?, ?)`;
+  const { results } = await dbConnect(insertQuery, [
+    formattedConceptName,
+    resourceTypeId,
+  ]);
 
-  const insertQuery = `INSERT INTO Concepts (ConceptName, SectionId) VALUES (?, ?)`;
-  const { results } = await dbConnect(insertQuery, [formattedConceptName, sectionId]);
-
-  console.log(results[0].insertId)
-
-
+  console.log(results[0].insertId);
 
   // The concept was created successfully, return success message
-  return { success: "New concept created" }
-  
+  return { success: "New concept created" };
 };
-
 
 export default createConcept;

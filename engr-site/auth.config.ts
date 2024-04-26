@@ -13,25 +13,37 @@ export default {
 
         if (validatedFields.success) {
           const { email, password } = validatedFields.data;
+          console.log(password)
 
           const user = await getUserByEmail(email);
 
+          console.log("here")
+
+          console.log(user)
+
           //* user registered with name, email, password
-          if (!user || !user.Password) return null;
+          if (!user || !user.password) return null;
 
           const passwordsMatch = await bcrypt.compare(
             password,
-            user.Password
+            user.password
           );
           
+          // console.log("here2, passwordsMatch: ", passwordsMatch)
+
+          console.log(password === user.password)
+
+          // console.log("here3, passwordsMatch: ", passwordsMatch)
+            
+          // if (passwordsMatch)
           if (passwordsMatch) {
             console.log("passwords match!")
             console.log({user})
 
             const User: any = {
-              id: user.UserId,
-              name: user.Name,
-              email: user.Email
+              id: user.id,
+              name: user.name,
+              email: user.email
             }
             // return user;
             return User

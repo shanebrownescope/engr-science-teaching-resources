@@ -86,6 +86,11 @@
     cursor: pointer;
 }
 
+.loading {
+    opacity: 0.6; /* Reduced opacity to indicate it's disabled */
+    cursor: not-allowed;
+}
+
 
 /** /auth/login */
 .forgotLink {

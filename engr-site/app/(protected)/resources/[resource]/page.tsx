@@ -1,10 +1,10 @@
 import {
   fetchFileById,
   FetchedFileData,
-} from "@/actions/fetching/fetchFileById";
-import { fetchLinkById } from "@/actions/fetching/fetchLinkById";
-import { fetchSimilarFilesByTags } from "@/actions/fetching/fetchSimilarFilesByTags";
-import { fetchSimilarLinksByTags } from "@/actions/fetching/fetchSimilarLinksByTags";
+} from "@/actions/fetching/files/fetchFileById";
+import { fetchLinkById } from "@/actions/fetching/links/fetchLinkById";
+import { fetchSimilarFilesByTags } from "@/actions/fetching/files/fetchSimilarFilesByTags";
+import { fetchSimilarLinksByTags } from "@/actions/fetching/links/fetchSimilarLinksByTags";
 
 import { DisplayFile } from "@/app/(protected)/_components/DisplayFile";
 import { DisplayLink } from "@/app/(protected)/_components/DisplayLink";

@@ -12,16 +12,16 @@ import { createTagPostLink } from "@/actions/uploadingPostTags/uploadTagsAction"
 import Tags from "./Tags";
 // import styles from "@/styles/test.module.css";
 import { SelectDropdown } from "@/components/mantine";
-import { fetchModulesByCourse } from "@/actions/fetching/fetchModulesByCourse";
-import { fetchSectionsByModule } from "@/actions/fetching/fetchSectionsByModule";
 import { FormattedData, capitalizeAndReplaceDash, capitalizeWords } from "@/utils/formatting";
-import { fetchConceptsBySectionId } from "@/actions/fetching/fetchConceptsBySectionId";
 import { uploadLink } from "@/actions/uploadingPostTags/uploadLink";
 import { sanitizeUrl, trimCapitalizeFirstLetter, validUrlPattern } from "@/utils/helpers";
 import { useRouter } from "next/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { FormError } from "@/components/FormError";
 import styles from "@/styles/form.module.css";
+import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseId";
+import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
+import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetchConceptsByResourceTypeId";
 
 
 type Options = {
@@ -39,8 +39,8 @@ type FormErrorsLinkUpload = {
   linkName?: string;
   linkUrl?: string;
   courseName?: string;
-  moduleName?: string;
-  sectionName?: string;
+  courseTopicName?: string;
+  resourceTypeName?: string;
   conceptName?: string;
   conceptId?: string;
 };
@@ -73,14 +73,14 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     id: null,
     formatted: null,
   });
-  const [moduleOptionsData, setModuleOptionsData] = useState<any[]>();
-  const [selectedModuleOption, setSelectedModuleOption] = useState<Options>({
+  const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>();
+  const [selectedCourseTopicOption, setSelectedCourseTopicOption] = useState<Options>({
     value: null,
     id: null,
     formatted: null,
   });
-  const [sectionOptionsData, setSectionOptionsData] = useState<any[]>();
-  const [selectedSectionOption, setSelectedSectionOption] = useState<Options>({
+  const [resourceTypeOptionsData, setResourceTypeOptionsData] = useState<any[]>();
+  const [selectedResourceTypeOption, setSelectedResourceTypeOption] = useState<Options>({
     value: null,
     id: null,
     formatted: null,
@@ -95,8 +95,8 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     linkName: undefined,
     linkUrl: undefined,
     courseName: undefined,
-    moduleName: undefined,
-    sectionName:undefined,
+    courseTopicName: undefined,
+    resourceTypeName:undefined,
     conceptName:undefined,
     conceptId: undefined,
   });
@@ -105,8 +105,8 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     linkName: 'Link name is required.',
     linkUrl: "Link Url is required.",
     courseId: 'Please select a course.',
-    moduleId: 'Please select a module.',
-    sectionId: 'Please select a section.',
+    courseTopicId: 'Please select a module.',
+    resourceTypeId: 'Please select a section.',
     conceptId: 'Please select a concept.',
   };
 
@@ -116,43 +116,45 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   console.log(selectedCourseOption);
 
   const handleCourseOptionSelect = async (
-    value: string,
+    name: string,
     id: number,
     formatted: string
   ) => {
-    setSelectedModuleOption({ value: null, id: null, formatted: null });
-    setSelectedSectionOption({ value: null, id: null, formatted: null });
-    setSectionOptionsData([]);
+    setSelectedCourseTopicOption({ value: null, id: null, formatted: null });
+    setSelectedResourceTypeOption({ value: null, id: null, formatted: null });
+    setResourceTypeOptionsData([]);
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
     
 
-    setSelectedCourseOption({ value: value, id: id, formatted: formatted });
+    setSelectedCourseOption({ value: name, id: id, formatted: formatted });
 
-    const results = await fetchModulesByCourse(value);
-    setModuleOptionsData(results.success);
+    const results = await fetchCourseTopicsByCourseId(id);
+
+    setCourseTopicOptionsData(results.success);
   };
 
-  const handleModuleOptionSelect = async (
+
+  const handleCourseTopicOptionSelect = async (
     value: string,
     id: number,
     formatted: string
   ) => {
-    setSelectedSectionOption({ value: null, id: null, formatted: null });
-    setSectionOptionsData([]);
+    setSelectedResourceTypeOption({ value: null, id: null, formatted: null });
+    setResourceTypeOptionsData([]);
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
 
-    setSelectedModuleOption({ value: value, id: id, formatted: formatted });
+    setSelectedCourseTopicOption({ value: value, id: id, formatted: formatted });
 
-    const results = await fetchSectionsByModule({ id: id.toString()  });
-    setSectionOptionsData(results.success);
+   
+    const results = await fetchResourceTypesByCourseTopicId(id);
+
+    setResourceTypeOptionsData(results.success);
   };
 
-  console.log(moduleOptionsData);
 
-
-  const handleSectionOptionSelect = async (
+  const handleResourceTypeOptionSelect = async (
     value: string,
     id: number,
     formatted: string
@@ -160,9 +162,11 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
 
-    setSelectedSectionOption({ value: value, id: id, formatted: formatted });
+    setSelectedResourceTypeOption({ value: value, id: id, formatted: formatted });
 
-    const results = await fetchConceptsBySectionId({ id: id });
+    const results = await fetchConceptsByResourceTypeId(id);
+
+    
     setConceptOptionData(results.success);
   };
 
@@ -211,7 +215,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     setLoading(true);
     console.log({ tags, linkName, linkUrl });
     try {
-      if (!linkName || !linkUrl || !selectedCourseOption.value || !selectedModuleOption.value || !selectedSectionOption.value || !selectedConceptOption.value) {
+      if (!linkName || !linkUrl || !selectedCourseOption.value || !selectedCourseTopicOption.value || !selectedResourceTypeOption.value || !selectedConceptOption.value) {
         // Handle validation failure
         console.error('Validation failed: Some fields are empty');
         // Set custom error messages based on the failed validation conditions
@@ -220,8 +224,8 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           linkName: !linkName ? errorMessages.linkName : undefined,
           linkUrl: !linkUrl ? errorMessages.linkUrl : undefined,
           courseName: !selectedCourseOption.value ? errorMessages.courseId : undefined,
-          moduleName: !selectedModuleOption.value ? errorMessages.moduleId : undefined,
-          sectionName: !selectedSectionOption.value ? errorMessages.sectionId : undefined,
+          courseTopicName: !selectedCourseTopicOption.value ? errorMessages.moduleId : undefined,
+          resourceTypeName: !selectedResourceTypeOption.value ? errorMessages.sectionId : undefined,
           conceptName: !selectedConceptOption.value ? errorMessages.conceptId : undefined,
         };
         setErrors(errors)
@@ -241,8 +245,8 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         linkName: undefined,
         linkUrl: undefined,
         courseName: undefined,
-        moduleName: undefined,
-        sectionName: undefined,
+        courseTopicName: undefined,
+        resourceTypeName: undefined,
         conceptName: undefined,
         conceptId: undefined,
       });
@@ -294,13 +298,12 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         const { linkId } = linkResult?.success;
         console.log("success in link: ", linkId);
 
+        // Filter out empty tags first, then format the remaining tags
         const trimmedTags = tags
-          .map((tag) => {
-            const capWords = capitalizeWords(tag.trim())
-            console.log("capWords: ", capWords)
-            return capWords
-          })
-          .filter((tag) => tag !== "");
+          .filter(tag => tag.trim() !== "") // Filter out empty tags
+          .map(tag => capitalizeWords(tag.trim())); // Format the remaining tags
+
+
 
         if (trimmedTags && trimmedTags.length > 0) {
           const tagsResult = await createTagPostLink(trimmedTags, linkId);
@@ -332,8 +335,8 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   console.log("link: ", linkName, linkUrl);
   console.log(
     selectedCourseOption.formatted,
-    selectedModuleOption.formatted,
-    selectedSectionOption.formatted
+    selectedCourseOption.formatted,
+    selectedResourceTypeOption.formatted
   );
 
   console.log("valid url: ", isValidUrl)
@@ -359,6 +362,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
             className={errors.linkName && "input-error"}
             value={linkName}
             type="text" 
+            disabled={loading}
             onChange={(e) => setLinkName(e.target.value)} 
           />
           {errors.linkName && <p className="error">{errors.linkName}</p>}
@@ -371,6 +375,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
             className={errors.linkUrl && "input-error"}
             type="text" 
             onChange={handleLinkUrlChange} 
+            disabled={loading}
             style={{borderColor: isValidUrl ? "green": "red"}}
           />
           {errors.linkUrl && <p className="error">{errors.linkUrl}</p>}
@@ -387,25 +392,25 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         </div>
 
         <div> 
-          <label> Select a module </label>
+          <label> Select a course topic </label>
           {
             <SelectDropdown
-              optionsList={moduleOptionsData}
-              onOptionChange={handleModuleOptionSelect}
-              selectedValue={selectedModuleOption.value}
+              optionsList={courseTopicOptionsData}
+              onOptionChange={handleCourseTopicOptionSelect}
+              selectedValue={selectedCourseTopicOption.value}
             />
           }
-          {errors.moduleName && <p className="error">{errors.moduleName}</p>}
+          {errors.courseTopicName && <p className="error">{errors.courseTopicName}</p>}
         </div>
 
         <div> 
-          <label> Select a section </label>
+          <label> Select a resource type </label>
           <SelectDropdown
-            optionsList={sectionOptionsData}
-            onOptionChange={handleSectionOptionSelect}
-            selectedValue={selectedSectionOption.value}
+            optionsList={resourceTypeOptionsData}
+            onOptionChange={handleResourceTypeOptionSelect}
+            selectedValue={selectedResourceTypeOption.value}
           />
-          {errors.sectionName && <p className="error">{errors.sectionName}</p>}
+          {errors.resourceTypeName && <p className="error">{errors.resourceTypeName}</p>}
         </div>
 
         <div>
@@ -424,6 +429,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
             type="text"
             name="description"
             value={description}
+            disabled={loading}
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
@@ -434,18 +440,21 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
             type="text"
             name="description"
             value={contributor}
+            disabled={loading}
             onChange={(e) => setContributor(e.target.value)}
           />
         </div>
 
         <Tags
           tags={tags}
+          loading={loading}
           handleAddTag={handleAddTag}
           handleTagChange={handleTagChange}
         />
 
         <button
           className={styles.formButton}
+          disabled={loading}
           type="submit"
           // disable={linkUrl != undefined ? true : false}
         >

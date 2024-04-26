@@ -52,7 +52,7 @@ export const uploadLink = async ({ linkName, linkUrl, conceptId, description, co
  
 
   const query = `
-    INSERT INTO Links (LinkName, LinkUrl, Description, UploadDate, Contributor, ConceptId, UploadedUserId) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    INSERT INTO Links_v2 (linkName, linkUrl, description, uploadDate, contributor, conceptId, uploadedUserId) VALUES (?, ?, ?, ?, ?, ?, ?)`;
   //* extracts url without query parameters
   console.log(uploadDate)
   const values = [linkName, sanitizedUrl, description, uploadDate, contributor, conceptId, user?.id]

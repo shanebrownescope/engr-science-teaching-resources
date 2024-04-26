@@ -3,6 +3,7 @@ import { _Object } from "@aws-sdk/client-s3";
 import {
   capitalizeAndReplaceDash,
   lowercaseAndReplaceSpace,
+  lowercaseAndReplaceSpaceString,
 } from "./formatting";
 
 import {
@@ -12,7 +13,6 @@ import {
   FetchedFile,
   FetchedLink,
 } from "./types";
-import { fetchTagsByLinkId } from "@/actions/fetching/fetchTagsByLinkId";
 
 /**
  *
@@ -60,19 +60,29 @@ export const getNameFromKey = async (Contents: _Object[] | undefined) => {
  */
 
 export const processFile = async (file: FileData): Promise<FetchedFile> => {
-  const tags = file.TagNames?.some((tag: string | null) => tag === null)
-    ? []
-    : file.TagNames;
+  console.log("tagNames: " ,file.tagNames)
+  let tags: any;
 
-  const retrievedDate = new Date(file.UploadDate);
+  // Convert [null] to an empty array if the first element is null
+  if (file.tagNames?.length === 1 && file.tagNames[0] === null) {
+    tags = [];
+  } else {
+    tags = file.tagNames;
+  }
+
+  // const tags = file.tagNames?.some((tag: string | null) => tag === null)
+  //   ? []
+  //   : file.tagNames;
+
+  const retrievedDate = new Date(file.uploadDate);
   const formattedDate = retrievedDate.toLocaleDateString("en-US", {
     month: "short",
     day: "2-digit",
     year: "numeric",
   });
 
-  const fileNameSplit1 = file.FileName.substring(
-    file.FileName.indexOf("_") + 1
+  const fileNameSplit1 = file.fileName.substring(
+    file.fileName.indexOf("_") + 1
   );
   const formattedFileName = fileNameSplit1.substring(
     0,
@@ -80,22 +90,22 @@ export const processFile = async (file: FileData): Promise<FetchedFile> => {
   );
   console.log(formattedFileName);
 
+  
+
   const originalFileName = capitalizeAndReplaceDash(formattedFileName);
   console.log(originalFileName);
 
-  console.log(file.Contributor);
-  console.log(file.TagNames);
+  console.log(file.contributor);
+  console.log(file.tagNames);
+
+  const urlName = lowercaseAndReplaceSpaceString(formattedFileName);
 
   return {
-    fileId: file.FileId,
-    originalFileName: originalFileName,
-    formattedFileName: formattedFileName,
-    s3Url: file.S3Url!,
-    description: file.Description,
+    ...file,
+    type: "file",
+    fileName: originalFileName,
+    urlName: urlName,
     uploadDate: formattedDate,
-    contributor: file.Contributor,
-    conceptId: file.ConceptId,
-    uploadedUserId: file.UploadedUserId,
     tags: tags,
   };
 };
@@ -106,10 +116,15 @@ export const processFile = async (file: FileData): Promise<FetchedFile> => {
  */
 
 export const processLink = async (link: LinkData): Promise<FetchedLink> => {
-  const tags = link.TagNames?.some((tag: string | null) => tag === null)
-    ? []
-    : link.TagNames;
-  const retrievedDate = new Date(link.UploadDate);
+  let tags: any;
+  // Convert [null] to an empty array if the first element is null
+  if (link.tagNames?.length === 1 && link.tagNames[0] === null) {
+    tags = [];
+  } else {
+    tags = link.tagNames;
+  }
+
+  const retrievedDate = new Date(link.uploadDate);
   const formattedDate = retrievedDate.toLocaleDateString("en-US", {
     month: "short",
     day: "2-digit",
@@ -117,22 +132,17 @@ export const processLink = async (link: LinkData): Promise<FetchedLink> => {
   });
   console.log(formattedDate);
 
-  const formattedLinkName = link.LinkName.toLowerCase().replace(/ /g, "-");
+  const urlName = link.linkName.toLowerCase().replace(/ /g, "-");
 
-  console.log(link.Contributor);
+  console.log(link.contributor);
 
-  console.log(link.Description);
+  console.log(link.description);
 
   return {
-    linkId: link.LinkId,
-    originalLinkName: link.LinkName,
-    formattedLinkName: formattedLinkName,
-    linkUrl: link.LinkUrl!,
-    description: link.Description,
+    ...link,
+    type: "link",
+    urlName: urlName,
     uploadDate: formattedDate,
-    contributor: link.Contributor,
-    conceptId: link.ConceptId,
-    uploadedUserId: link.UploadedUserId,
     tags: tags,
   };
 };
@@ -170,11 +180,11 @@ export const trimCapitalizeFirstLetter = (text: string) => {
 export const processFilesAndLinks = (item: AllFilesAndLinksData) => {
   // Convert the concatenated tags string to an array
   // Split the 'Tags' string into an array by commas and remove whitespace from each tag with trim()
-  const tags = item.Tags ? item.Tags.split(",").map((tag) => tag.trim()) : [];
+  const tags = item.tags ? item.tags.split(",").map((tag) => tag.trim()) : [];
   console.log(tags);
 
-  if (item.Type === "file") {
-    const fileNameSplit1 = item.Name.substring(item.Name.indexOf("_") + 1);
+  if (item.type === "file") {
+    const fileNameSplit1 = item.name.substring(item.name.indexOf("_") + 1);
     const formattedFileName = fileNameSplit1.substring(
       0,
       fileNameSplit1.indexOf(".pdf")
@@ -182,24 +192,22 @@ export const processFilesAndLinks = (item: AllFilesAndLinksData) => {
 
     const originalFileName = capitalizeAndReplaceDash(formattedFileName);
 
+    const urlName = lowercaseAndReplaceSpaceString(formattedFileName);
+
     return {
-      type: item.Type,
-      id: item.Id,
+      ...item,
       originalName: originalFileName,
-      formattedName: formattedFileName,
-      description: item.Description,
-      uploadDate: new Date(item.UploadDate),
+      urlName: urlName,
+      uploadDate: new Date(item.uploadDate),
       tags: tags,
     };
-  } else if (item.Type === "link") {
-    const formattedLinkName = item.Name.toLowerCase().replace(/ /g, "-");
+  } else if (item.type === "link") {
+    const urlName = item.name.toLowerCase().replace(/ /g, "-");
     return {
-      type: item.Type,
-      id: item.Id,
-      originalName: item.Name,
-      formattedName: formattedLinkName,
-      description: item.Description,
-      uploadDate: new Date(item.UploadDate),
+      ...item,
+      originalName: item.name,
+      urlName: urlName,
+      uploadDate: new Date(item.uploadDate),
       tags: tags,
     };
   }

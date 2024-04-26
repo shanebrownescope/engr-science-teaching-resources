@@ -3,14 +3,14 @@
  */
 
 export type FormattedData = {
-  id: number;
-  original: string | undefined;
-  formatted: string | undefined;
+  id: number | string;
+  name: string;
+  url: string;
 };
 
 //* Ref: fetchCourses.ts
 export const lowercaseAndReplaceSpace = (
-  id: number,
+  id: number | string,
   input: string
 ): FormattedData => {
   console.log(input, id);
@@ -21,8 +21,8 @@ export const lowercaseAndReplaceSpace = (
   console.log(formattedValue);
   const final = {
     id: id,
-    original: fieldValue,
-    formatted: formattedValue,
+    name: fieldValue,
+    url: formattedValue,
   };
   // console.log(final)
   return final;

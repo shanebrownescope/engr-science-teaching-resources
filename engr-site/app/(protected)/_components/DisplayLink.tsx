@@ -16,10 +16,10 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
         width: "50%",
       }}
     >
-      <h2> {link.originalLinkName} </h2>
+      <h2> {link.linkName} </h2>
       {link.description}
       <p> {link.uploadDate} </p>
-      <a href={link.linkUrl}> {link.originalLinkName} </a>
+      <a href={link.linkUrl}> {link.linkName} </a>
       <p> {link.contributor}</p>
       <div style={{ display: "flex", gap: "1em" }}>
         {link.tags?.map(

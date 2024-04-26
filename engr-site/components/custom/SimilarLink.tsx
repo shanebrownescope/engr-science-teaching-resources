@@ -7,7 +7,7 @@ type SimilarLinkProps = {
 const SimilarLink = ({ link }: SimilarLinkProps) => {
   return (
     <div style={{ padding: "2em", border: "1px solid black", width: "200px" }}>
-      <p> {link.originalLinkName} </p>
+      <p> {link.linkName} </p>
       <div style={{ display: "flex", gap: "1em" }}>
         {link.tags?.map((tag: string, idx: number) => (
           <p

@@ -3,28 +3,21 @@ import { useState, ChangeEvent } from "react";
 
 import { getSignedURL } from "@/actions/uploadingPostTags/getSignedUrl";
 import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
-import { UploadFileAndTagsSchema } from "@/schemas";
 
-// import { createTagPost, getSignedURL } from "@/config/action";
-// import { DropzoneButton, ButtonProgress } from "../../components/mantine";
-// import { MantineProvider, TagsInput } from "@mantine/core";
-
-import Select from "react-select";
 
 // import styles from '@/styles/test.module.css'
 import Tags from "./Tags";
 // import styles from "@/styles/test.module.css";
-import { SelectDropdown } from "@/components/mantine";
-import { fetchModulesByCourse } from "@/actions/fetching/fetchModulesByCourse";
-import { fetchSectionsByModule } from "@/actions/fetching/fetchSectionsByModule";
+import { ButtonProgress, SelectDropdown } from "@/components/mantine";
 import { FormattedData, capitalizeWords } from "@/utils/formatting";
-import { fetchConceptsBySectionId } from "@/actions/fetching/fetchConceptsBySectionId";
 import { trimCapitalizeFirstLetter } from "@/utils/helpers";
-import { getCurrentRole, getCurrentUser } from "@/utils/authHelpers";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { useRouter } from "next/navigation";
 import { FormError } from "@/components/FormError";
 import styles from "@/styles/form.module.css";
+import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseId";
+import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
+import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetchConceptsByResourceTypeId";
 
 
 //* Testing: file upload to s3 and db
@@ -45,8 +38,8 @@ type FormErrorsFileUpload = {
   fileName?: string;
   file?: string;
   courseName?: string;
-  moduleName?: string;
-  sectionName?: string;
+  courseTopicName?: string;
+  resourceTypeName?: string;
   conceptName?: string;
   conceptId?: string;
 };
@@ -74,14 +67,14 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     id: null,
     formatted: null,
   });
-  const [moduleOptionsData, setModuleOptionsData] = useState<any[]>();
-  const [selectedModuleOption, setSelectedModuleOption] = useState<Options>({
+  const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>();
+  const [selectedCourseTopicOption, setSelectedCourseTopicOption] = useState<Options>({
     value: null,
     id: null,
     formatted: null,
   });
-  const [sectionOptionsData, setSectionOptionsData] = useState<any[]>();
-  const [selectedSectionOption, setSelectedSectionOption] = useState<Options>({
+  const [resourceTypeOptionsData, setResourceTypeOptionsData] = useState<any[]>();
+  const [selectedResourceTypeOption, setSelectedResourceTypeOption] = useState<Options>({
     value: null,
     id: null,
     formatted: null,
@@ -97,8 +90,8 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     fileName: undefined,
     file: undefined,
     courseName: undefined,
-    moduleName: undefined,
-    sectionName:undefined,
+    courseTopicName: undefined,
+    resourceTypeName:undefined,
     conceptName:undefined,
     conceptId: undefined,
   });
@@ -107,52 +100,53 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     fileName: 'File name is required.',
     file: "File is required.",
     courseId: 'Please select a course.',
-    moduleId: 'Please select a module.',
-    sectionId: 'Please select a section.',
+    courseTopicId: 'Please select a module.',
+    resourceTypeId: 'Please select a section.',
     conceptId: 'Please select a concept.',
   };
   console.log(selectedCourseOption);
 
   
   const handleCourseOptionSelect = async (
-    value: string,
+    name: string,
     id: number,
     formatted: string
   ) => {
-    setSelectedModuleOption({ value: null, id: null, formatted: null });
-    setSelectedSectionOption({ value: null, id: null, formatted: null });
-    setSectionOptionsData([]);
+    setSelectedCourseTopicOption({ value: null, id: null, formatted: null });
+    setSelectedResourceTypeOption({ value: null, id: null, formatted: null });
+    setResourceTypeOptionsData([]);
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
     
 
-    setSelectedCourseOption({ value: value, id: id, formatted: formatted });
+    setSelectedCourseOption({ value: name, id: id, formatted: formatted });
 
-    const results = await fetchModulesByCourse(value);
-    setModuleOptionsData(results.success);
+    const results = await fetchCourseTopicsByCourseId(id);
+
+    setCourseTopicOptionsData(results.success);
   };
 
-  const handleModuleOptionSelect = async (
+  const handleCourseTopicOptionSelect = async (
     value: string,
     id: number,
     formatted: string
   ) => {
-    setSelectedSectionOption({ value: null, id: null, formatted: null });
-    setSectionOptionsData([]);
+    setSelectedResourceTypeOption({ value: null, id: null, formatted: null });
+    setResourceTypeOptionsData([]);
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
 
-    setSelectedModuleOption({ value: value, id: id, formatted: formatted });
+    setSelectedCourseTopicOption({ value: value, id: id, formatted: formatted });
 
    
-    const results = await fetchSectionsByModule({ id: id.toString()  });
-    setSectionOptionsData(results.success);
+    const results = await fetchResourceTypesByCourseTopicId(id);
+
+    setResourceTypeOptionsData(results.success);
   };
 
-  console.log(moduleOptionsData);
 
 
-  const handleSectionOptionSelect = async (
+  const handleResourceTypeOptionSelect = async (
     value: string,
     id: number,
     formatted: string
@@ -160,9 +154,11 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
 
-    setSelectedSectionOption({ value: value, id: id, formatted: formatted });
+    setSelectedResourceTypeOption({ value: value, id: id, formatted: formatted });
 
-    const results = await fetchConceptsBySectionId({ id: id });
+    const results = await fetchConceptsByResourceTypeId(id);
+
+    
     setConceptOptionData(results.success);
   };
 
@@ -219,57 +215,55 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("-- how many")
+
 
     setLoading(true);
 
     console.log({ tags, file });
     setStatusMessage("validating input")
 
+    if (!fileName || !file || !selectedCourseOption.value || !selectedCourseTopicOption.value || !selectedResourceTypeOption.value || !selectedConceptOption.value) {
+      const errors = {
+        root: errorMessages.root,
+        fileName: !fileName ? errorMessages.fileName : undefined,
+        file: !file ? errorMessages.file : undefined,
+        courseName: !selectedCourseOption.value ? errorMessages.courseId : undefined,
+        courseTopic: !selectedCourseTopicOption.value ? errorMessages.moduleId : undefined,
+        resourceTypeName: !selectedResourceTypeOption.value ? errorMessages.sectionId : undefined,
+        conceptName: !selectedConceptOption.value ? errorMessages.conceptId : undefined,
+      };
+      setErrors(errors)
+
+      setStatusMessage("validation failed")
+      setLoading(false)
+      return;
+    }
+
+    setErrors({
+      fileName: undefined,
+      file: undefined,
+      courseName: undefined,
+      courseTopicName: undefined,
+      resourceTypeName: undefined,
+      conceptName: undefined,
+      conceptId: undefined,
+    });
+
+    const date = new Date();
+    const currentDateWithoutTime = date.toISOString().slice(0, 10);
+    console.log(currentDateWithoutTime);
+
+    const formattedDescription = trimCapitalizeFirstLetter(description)
+    const formattedContributor = trimCapitalizeFirstLetter(contributor)
+    console.log(formattedDescription)
+    console.log(formattedContributor)
+    console.log("-- how many times")
+
     try {
-      console.error('Validation failed: Some fields are empty');
-      // Set custom error messages based on the failed validation conditions
-      if (!fileName || !file || !selectedCourseOption.value || !selectedModuleOption.value || !selectedSectionOption.value || !selectedConceptOption.value) {
-        // Handle validation failure
-        console.error('Validation failed: Some fields are empty');
-        // Set custom error messages based on the failed validation conditions
-        const errors = {
-          root: errorMessages.root,
-          fileName: !fileName ? errorMessages.fileName : undefined,
-          file: !file ? errorMessages.file : undefined,
-          courseName: !selectedCourseOption.value ? errorMessages.courseId : undefined,
-          moduleName: !selectedModuleOption.value ? errorMessages.moduleId : undefined,
-          sectionName: !selectedSectionOption.value ? errorMessages.sectionId : undefined,
-          conceptName: !selectedConceptOption.value ? errorMessages.conceptId : undefined,
-        };
-        setErrors(errors)
-        setStatusMessage("validation failed")
-        return
-      }
-
-      setErrors({
-        fileName: undefined,
-        file: undefined,
-        courseName: undefined,
-        moduleName: undefined,
-        sectionName: undefined,
-        conceptName: undefined,
-        conceptId: undefined,
-      });
-      
-
       setStatusMessage("uploading file");
 
-      const date = new Date();
-      const currentDateWithoutTime = date.toISOString().slice(0, 10);
-      console.log(currentDateWithoutTime);
-
-      const formattedDescription = trimCapitalizeFirstLetter(description)
-      const formattedContributor = trimCapitalizeFirstLetter(contributor)
-      console.log(formattedDescription)
-      console.log(formattedContributor)
-
-      
-
+      console.log("-- how many times will this show")
 
       const checksum = await computeSHA256(file);
       const signedURLResult = await getSignedURL({
@@ -278,8 +272,8 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         fileSize: file!.size,
         checksum: checksum,
         course: selectedCourseOption.formatted!,
-        module: selectedModuleOption.formatted!,
-        section: selectedSectionOption.formatted!,
+        courseTopic: selectedCourseTopicOption.formatted!,
+        resourceType: selectedResourceTypeOption.formatted!,
         concept: selectedConceptOption.formatted!,
         conceptId: selectedConceptOption.id!,
         description: formattedDescription.length > 0 ? formattedDescription : null,
@@ -290,7 +284,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
       if (signedURLResult?.failure) {
         setStatusMessage("Failed" + signedURLResult?.failure);
-        setLoading(false);
         setErrors({ ...errors, root: signedURLResult?.failure });
         throw new Error(signedURLResult.failure);
       }
@@ -310,16 +303,20 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           },
         });
 
+        // Filter out empty tags first, then format the remaining tags
         const trimmedTags = tags
-          .map((tag) => capitalizeWords(tag.trim()))
-          .filter((tag) => tag !== "");
+          .filter(tag => tag.trim() !== "") // Filter out empty tags
+          .map(tag => capitalizeWords(tag.trim())); // Format the remaining tags
+
+
+        console.log(" -- trimmed tags: ", trimmedTags)
+
 
         if (trimmedTags && trimmedTags.length > 0) {
           const tagsResult = await createTagPostFile(trimmedTags, fileId);
 
           if (tagsResult?.failure) {
             setStatusMessage("Failed in tag insertion" + tagsResult.failure);
-            setLoading(false);
             setErrors({ ...errors, root: tagsResult?.failure });
             throw new Error(tagsResult.failure);
           }
@@ -364,13 +361,12 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   console.log("file name: ", file && file.name);
   console.log(
     selectedCourseOption.formatted,
-    selectedModuleOption.formatted,
-    selectedSectionOption.formatted
+    selectedCourseTopicOption.formatted,
+    selectedResourceTypeOption.formatted
   );
 
-  const date = new Date();
-  const currentDateWithoutTime = date.toDateString();
-  console.log(currentDateWithoutTime);
+  console.log("get file: ", file);
+  console.log("get file url: ", fileUrl);
 
   return (
     <div className={styles.formAdminWrapper}>
@@ -387,7 +383,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
         <div> 
           <label> Select file </label>
-          <input type="file" accept="pdf" onChange={handleFileChange} />
+          <input type="file" accept="pdf"  disabled={loading} onChange={handleFileChange} />
           {fileUrl && file && (
             <div>
               <iframe src={fileUrl} />
@@ -396,7 +392,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
                 type="button"
                 onClick={() => {
                   setFile(undefined);
-                  // setFileUrl(undefined);
+                  setFileUrl(undefined);
                 }}
               >
                 Remove
@@ -415,6 +411,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             max={100}
             name="fileName"
             value={fileName}
+            disabled={loading}
             onChange={(e) => setFileName(e.target.value)} 
           />
           {errors.fileName && <p className="error">{errors.fileName}</p>}
@@ -431,25 +428,25 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         </div>
             
         <div>
-          <label> Select a module </label>
+          <label> Select a course topic </label>
           {
             <SelectDropdown
-              optionsList={moduleOptionsData}
-              onOptionChange={handleModuleOptionSelect}
-              selectedValue={selectedModuleOption.value}
+              optionsList={courseTopicOptionsData}
+              onOptionChange={handleCourseTopicOptionSelect}
+              selectedValue={selectedCourseTopicOption.value}
             />
           }
-          {errors.moduleName && <p className="error">{errors.moduleName}</p>}
+          {errors.courseTopicName && <p className="error">{errors.courseName}</p>}
         </div>
 
         <div>
-          <label> Select a section </label>
+          <label> Select a resource type </label>
           <SelectDropdown
-            optionsList={sectionOptionsData}
-            onOptionChange={handleSectionOptionSelect}
-            selectedValue={selectedSectionOption.value}
+            optionsList={resourceTypeOptionsData}
+            onOptionChange={handleResourceTypeOptionSelect}
+            selectedValue={selectedResourceTypeOption.value}
           />
-          {errors.sectionName && <p className="error">{errors.sectionName}</p>}
+          {errors.resourceTypeName && <p className="error">{errors.resourceTypeName}</p>}
         </div>
 
         <div> 
@@ -469,6 +466,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             name="description"
             value={description}
             placeholder="Enter description"
+            disabled={loading}
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
@@ -479,23 +477,27 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             type="text"
             name="contributor"
             value={contributor}
+            disabled={true}
             onChange={(e) => setContributor(e.target.value)}
           />
         </div>
 
         <Tags
           tags={tags}
+          loading={loading}
           handleAddTag={handleAddTag}
           handleTagChange={handleTagChange}
         />
 
+
         <button
-          className={styles.formButton}
+          className={`${styles.formButton}`}
           type="submit"
-          // disable={fileUrl != undefined ? true : false}
+          disabled={loading}
           >
-          Upload
+          {loading ? "Uploading..." : "Upload"}
         </button>
+
         {errors.root && <FormError message={errors.root} />}
       </form>
 

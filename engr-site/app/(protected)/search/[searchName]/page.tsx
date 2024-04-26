@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react"; // Ensure React is imported
 import { SearchResultBox, SearchFilterMenu } from "@/components/custom";
 import { Pagination } from "@mantine/core";
-import { fetchSearchResults } from "@/actions/fetching/fetchSearchResults";
+import { fetchSearchResults } from "@/actions/fetching/search/fetchSearchResults";
 import {
   AllFilesAndLinksDataFormatted,
   FetchedSearchResults,
@@ -69,7 +69,6 @@ const SearchResults = ({ params }: { params: { searchName: string } }) => {
       <h1>Your Search: {formattedSearchName}</h1>
       <div>
         <SearchFilterMenu data={data} />
-
       </div>
     </div>
   );

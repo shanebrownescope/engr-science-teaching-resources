@@ -2,11 +2,12 @@
 
 type TagsProps  = {
   tags: string[];
+  loading: boolean
   handleAddTag: () => void;
   handleTagChange: (index: number, value: string) => void;
 }
 
-const Tags = ({tags, handleAddTag, handleTagChange}: TagsProps) => {
+const Tags = ({tags, loading, handleAddTag, handleTagChange}: TagsProps) => {
 
   return (
     <div>
@@ -15,12 +16,13 @@ const Tags = ({tags, handleAddTag, handleTagChange}: TagsProps) => {
       <div key={index}>
         <input
           type="text"
+          disabled={loading}
           value={tag}
           onChange={(e) => handleTagChange(index, e.target.value)}
         />
       </div>
     ))}
-    <button onClick={handleAddTag}>Add Tag</button>
+    <button type="button" disabled={loading} onClick={handleAddTag}>Add Tag</button>
   </div>
   )
 }

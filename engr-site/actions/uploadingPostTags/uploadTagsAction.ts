@@ -6,7 +6,7 @@ import { getCurrentUser } from "@/utils/authHelpers";
 //* REF: () => createTagPost ln: 117
 const getTagId = async(tagName: string) => {
   const query = `
-    SELECT TagId FROM Tags WHERE TagName = ?`
+    SELECT * FROM Tags_v2 WHERE tagName = ?`
   const { results: selectResults, error } = await dbConnect(query, [tagName]);
 
   if (error) {
@@ -16,18 +16,18 @@ const getTagId = async(tagName: string) => {
   if (selectResults[0].length > 0) {
     //* Tag exists, return the existing TagId
     console.log("tag exists", selectResults[0][0])
-    return { tagId: selectResults[0][0].TagId };
+    return { tagId: selectResults[0][0].id };
 
   } else {
     //* Tag doesn't exist, insert it and return the new TagId
     const queryInsert = `
-      INSERT INTO Tags (TagName) VALUES (?)`
+      INSERT INTO Tags_v2 (tagName) VALUES (?)`
     const { results: insertResult, error: insertError } = await dbConnect(queryInsert, [tagName]);
     
     if (insertError) {
       return {failure: "error inserting tag name in Tag"}
     }
-    console.log("tag doesn't exists")
+    console.log("tag doesn't exists, insertedId", insertResult[0].insertId)
     return { tagId: insertResult[0].insertId };
   }
 }
@@ -44,7 +44,7 @@ export const createTagPostFile = async (tags: string[], fileId: number) => {
   //* check if fileId is created in db
   if (fileId) {
     const queryFileExists = `
-      SELECT * FROM Files WHERE FileId = ? AND UploadedUserId = ?`
+      SELECT * FROM Files_v2 WHERE id = ? AND uploadedUserId = ?`
     const valuesFileExists = [fileId, user?.id]
     try {
       const { results: fileExistsResults, error } = await dbConnect(queryFileExists, valuesFileExists)
@@ -52,8 +52,10 @@ export const createTagPostFile = async (tags: string[], fileId: number) => {
       if (error) {
         return { failure: "error in checking file is in Files"}
       }
+      console.log("fileId: ", fileId)
+      console.log("fileExistsResults[0][0].id: ", fileExistsResults[0][0].id)
 
-      if (fileExistsResults[0][0].FileId != fileId) {
+      if (fileExistsResults[0][0].id != fileId) {
         console.error("Media not found")
         return { failure: "Media not found createTagPost"}
       }
@@ -65,14 +67,17 @@ export const createTagPostFile = async (tags: string[], fileId: number) => {
         if (tagResponse.failure) {
           return { failure: "failed in getTagId() " }
         }
+
+        console.log("found or created tagId: ", tagResponse.tagId)
   
         const tagId = tagResponse.tagId 
       
         // Linking tags to the file
         const queryInsert = `
-          INSERT INTO FileTags (FileId, TagId) VALUES (?, ?)`
+          INSERT INTO FileTags_v2 (fileId, tagId) VALUES (?, ?)`
         const valuesInsert = [fileId, tagId]
-        await dbConnect(queryInsert, valuesInsert);
+        const { results: fileTagsResult, error: insertError } = await dbConnect(queryInsert, valuesInsert);
+        console.log("fileTagsResult: ", fileTagsResult[0].insertId)
       }
       return { success: "Tags and FileTags inserted successful"}
       
@@ -96,7 +101,7 @@ export const createTagPostLink = async (tags: string[], linkId: number) => {
   //* check if fileId is created in db
   if (linkId) {
     const queryLinkExists = `
-      SELECT * FROM Links WHERE LinkId = ? AND UploadedUserId = ?`
+      SELECT * FROM Links_v2 WHERE id = ? AND uploadedUserId = ?`
     const valuesFileExists = [linkId, user?.id]
     try {
       const { results: linkExistsResults, error } = await dbConnect(queryLinkExists, valuesFileExists)
@@ -105,7 +110,7 @@ export const createTagPostLink = async (tags: string[], linkId: number) => {
         return { failure: "error in checking file is in Files"}
       }
 
-      if (linkExistsResults[0][0].LinkId != linkId) {
+      if (linkExistsResults[0][0].id != linkId) {
         console.error("Link not found")
         return { failure: "Link not found createTagPostLink"}
       }
@@ -122,7 +127,7 @@ export const createTagPostLink = async (tags: string[], linkId: number) => {
       
         // Linking tags to the file
         const queryInsert = `
-          INSERT INTO LinkTags (LinkId, TagId) VALUES (?, ?)`
+          INSERT INTO LinkTags_v2 (linkId, tagId) VALUES (?, ?)`
         const valuesInsert = [linkId, tagId]
         await dbConnect(queryInsert, valuesInsert);
       }

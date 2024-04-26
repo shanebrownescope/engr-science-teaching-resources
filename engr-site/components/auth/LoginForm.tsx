@@ -46,6 +46,8 @@ export const LoginForm = () => {
 
       const result = await loginAction(data)
 
+      console.log(result)
+
       if (result.error) {
         setError("root", { message: result.error });
       }

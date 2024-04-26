@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache"
 export const rejectUser = async (userId: string) => {
   try {
     const updateQuery = `
-      UPDATE Users SET AccountStatus = 'rejected' WHERE UserId = ${userId}`;
+      UPDATE Users_v2 SET accountStatus = 'rejected' WHERE id = ${userId}`;
     //       UPDATE Users SET AccountStatus = 'pending' WHERE UserId = 55;
 
 
@@ -16,7 +16,7 @@ export const rejectUser = async (userId: string) => {
       updateQuery
     )
 
-    await revalidatePath('/pending-users')
+    await revalidatePath('/dashboard/pending-users')
 
     return { success: "User approved" }
   } catch (error) {

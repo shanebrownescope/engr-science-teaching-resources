@@ -33,8 +33,8 @@ const mockdataDesktop = [
     initiallyOpened: true,
     links: [
       { label: 'Courses', link: '/dashboard/courses' },
-      { label: 'Modules', link: '/dashboard/modules' },
-      { label: 'Sections', link: '/dashboard/sections' },
+      { label: 'Course Topics', link: '/dashboard/course-topics' },
+      { label: 'Resource Types', link: '/dashboard/resource-types' },
       { label: 'Concepts', link: '/dashboard/concepts' },
     ],
   },

@@ -75,8 +75,8 @@ export const CreateCourseSchema = z.object({
     .max(100, { message: "Course name must not exceed 100 characters" }),
 });
 
-export const CreateModuleSchema = z.object({
-  moduleName: z
+export const CreateCourseTopicsSchema = z.object({
+  courseTopicName: z
     .string()
     .trim()
     .min(2, { message: "Module name must contain at least 2 characters" })
@@ -84,14 +84,14 @@ export const CreateModuleSchema = z.object({
   courseId: z.string().min(1, { message: "Course is required" }),
 });
 
-export const CreateSectionSchema = z.object({
-  sectionName: z
+export const CreateResourceTypeSchema = z.object({
+  resourceTypeName: z
     .string()
     .trim()
     .min(2, { message: "Section name must contain at least 2 characters" })
     .max(100, { message: "Section name must not exceed 100 characters" }),
   courseId: z.string().min(1, { message: "Course is required" }),
-  moduleId: z.string().min(1, { message: "Module is required" }),
+  courseTopicId: z.string().min(1, { message: "Course topic is required" }),
 });
 
 export const CreateConceptSchema = z.object({
@@ -101,8 +101,8 @@ export const CreateConceptSchema = z.object({
     .min(2, { message: "Concept name must contain at least 2 characters" })
     .max(100, { message: "Concept name must not exceed 100 characters" }),
   courseId: z.string().min(1, { message: "Course is required" }),
-  moduleId: z.string().min(1, { message: "Module is required" }),
-  sectionId: z.string().min(1, { message: "Section is required" }),
+  courseTopicId: z.string().min(1, { message: "Course topic is required" }),
+  resourceTypeId: z.string().min(1, { message: "Resource type is required" }),
 });
 
 export const UploadFileSchema = z.object({

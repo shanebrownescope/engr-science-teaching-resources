@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Pagination } from '@mantine/core';
 import { PendingUserDetails } from '@/components/custom/PendingUserDetails';
-import { FetchedUserData } from '@/utils/types';
+import { FetchedUserData, UserData } from '@/utils/types';
 import { HandleUserActionProps, sendUserUpdateEmailProps } from '@/app/(protected)/dashboard/pending-users/page';
 
 type PendingUserListPaginatedProps = {
@@ -47,17 +47,17 @@ const PendingUserListPaginated =({ data, handleApprove, handleReject }: PendingU
     <>
       {/* Render currentPageItems */}
       <div>
-        {currentPageItems.map((item: FetchedUserData) => (
+        {currentPageItems.map((item: UserData) => (
           // Render individual file/link item here
-          <div key={item.userId}>
+          <div key={item.id}>
             <PendingUserDetails
               firstName={item.firstName}
               lastName={item.lastName}
               email={item.email}
               username={item.username}
               status={item.accountStatus}
-              handleApprove={() => handleApprove({ userId: item.userId, email: item.email, firstName: item.firstName, lastName: item.lastName })}
-              handleReject={() => handleReject(({ userId: item.userId, email: item.email, firstName: item.firstName, lastName: item.lastName }))}
+              handleApprove={() => handleApprove({ userId: item.id, email: item.email, firstName: item.firstName, lastName: item.lastName })}
+              handleReject={() => handleReject(({ userId: item.id, email: item.email, firstName: item.firstName, lastName: item.lastName }))}
 
               
             />  

@@ -1,4 +1,4 @@
-import { fetchCourses } from "@/actions/fetching/fetchCourses";
+import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import { searchParams } from "@/utils/types";
 import Link from "next/link";
 import { FileUpload } from "@/app/(protected)/_components/FileUpload";

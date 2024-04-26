@@ -34,16 +34,16 @@ export const resetPasswordAction = async (
     return { failure: "Invalid token!" };
   }
 
-  const transformedToken: TransformedPasswordResetToken = transformObjectKeys(existingToken);
 
-  const isExpired = new Date(transformedToken.expiresAt) < new Date();
+  const isExpired = new Date(existingToken.expiresAt) < new Date();
 
   if (isExpired) {
     return { failure: "Token expired!" };
   }
 
-  const existingUser: UserData = await getUserById(transformedToken.userId);
+  const existingUser: UserData = await getUserById(existingToken.userId);
   console.log("existingUser: ", existingUser)
+  
   if (!existingUser) {
     return { failure: "User does not exist!" };
   }  
@@ -52,24 +52,24 @@ export const resetPasswordAction = async (
   console.log("hashedPassword: ", hashedPassword)
 
   const updateQuery = `
-    UPDATE Users
-    SET Password = ?
-    WHERE UserId = ?`;
+    UPDATE Users_v2
+    SET password = ?
+    WHERE id = ?`;
 
-  const { results, error } = await dbConnect(updateQuery, [hashedPassword, existingUser.UserId]);
+  const { results, error } = await dbConnect(updateQuery, [hashedPassword, existingUser.id]);
 
   if (error) {
     return { failure: "Failed to update password!" };
   }
 
   const deleteQuery = `
-    DELETE FROM PasswordResetTokens
-    WHERE UserId = ? AND PasswordResetTokenId = ?`;
+    DELETE FROM PasswordResetTokens_v2
+    WHERE userId = ? AND id = ?`;
 
-  console.log("transformedToken.passwordResetTokenId: ", transformedToken.passwordResetTokenId)
-  await dbConnect(deleteQuery, [existingUser.UserId, transformedToken.passwordResetTokenId]);
+  console.log("existingToken.id: ", existingToken.id)
+  await dbConnect(deleteQuery, [existingUser.id, existingToken.id]);
 
-  await sendUpdatePasswordEmail(existingUser.Email, existingUser.FirstName, existingUser.LastName);
+  await sendUpdatePasswordEmail(existingUser.email, existingUser.firstName, existingUser.lastName);
 
   return { success: "Password updated!" };
 };
