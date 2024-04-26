@@ -93,14 +93,13 @@ export function HeaderMegaMenu() {
   ));
 
   return (
-    // <Box pb={120}>
     <Box>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
           <MantineLogo size={30} />
 
           <Group h="100%" gap={0} visibleFrom="sm">
-            <Link href="/search" className={classes.link}>
+            <Link href="/home" className={classes.link}>
               Home
             </Link>
             <HoverCard
@@ -127,7 +126,7 @@ export function HeaderMegaMenu() {
               <HoverCard.Dropdown style={{ overflow: "hidden" }}>
                 <Group justify="space-between" px="md">
                   <Text fw={500}>Courses</Text>
-                  <Anchor href="#" fz="xs">
+                  <Anchor href="/courses" fz="xs">
                     View all
                   </Anchor>
                 </Group>
