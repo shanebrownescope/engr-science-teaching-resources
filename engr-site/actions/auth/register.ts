@@ -34,10 +34,10 @@ export const sendApprovalRequestToTeam = async (values: z.infer<typeof RegisterF
 
     // Insert the user into the database
     const insertQuery = `
-    INSERT INTO Users (Name, Email, Password, Role, FirstName, LastName) VALUES (?, ?, ?, ?, ?, ?)`
+    INSERT INTO Users_v2 (name, email, password, role, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?)`
     const admin = "admin"
     const instructor = "instructor"
-    const { results: insertedUser, error } = await dbConnect(insertQuery, [username, email, hashedPassword, instructor, firstName, lastName])
+    const { results: insertedUser, error } = await dbConnect(insertQuery, [username, email, hashedPassword, admin, firstName, lastName])
     
     console.log("insertedUser: ", insertedUser[0].insertId)
 
@@ -76,24 +76,24 @@ export const sendApprovalRequestToTeam = async (values: z.infer<typeof RegisterF
 
   
 // Function to send email to user confirming registration and notifying about approval
-export const sendUserRegistrationConfirmation = async ({ userEmail }: { userEmail: string }) => {
+export const sendUserRegistrationConfirmation = async (email: string, firstName: string, lastName: string) => {
   try {
     // Validate the input data using Zod
-    const validatedEmail = z.string().email().safeParse(userEmail);
+    const validatedEmail = z.string().email().safeParse(email);
     if (!validatedEmail.success) {
       return { failure: "Invalid email address", error: validatedEmail.error };
     }
 
 
     const userConfirmationEmailContent = `
-      <p>Dear User,</p>
+      <p>Dear ${firstName} ${lastName},</p>
       <p>Thank you for your interest in joining our platform. Your account registration is received, and it is pending approval from the admin team. You will receive another email once your account is approved.</p>
       <p>Best regards,<br/>Your Team</p>
     `;
 
     const mailOptions = {
       from: process.env.NODEMAILER_EMAIL,
-      to: userEmail,
+      to: email,
       subject: `Account Registration Confirmation`,
       html: userConfirmationEmailContent,
     }

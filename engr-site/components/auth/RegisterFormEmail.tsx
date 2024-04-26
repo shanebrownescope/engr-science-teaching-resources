@@ -7,13 +7,16 @@ import * as z from "zod";
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";
 
-import { registerAction } from "@/actions/auth/registerAction";
+import { registerAction } from "@/actions/auth/registerActionOld";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useTransition, useState } from "react";
 import { RegisterFormEmailSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { sendApprovalRequestToTeam, sendUserRegistrationConfirmation } from "@/actions/auth/register";
+import {
+  sendApprovalRequestToTeam,
+  sendUserRegistrationConfirmation,
+} from "@/actions/auth/register";
 type FormFields = z.infer<typeof RegisterFormEmailSchema>;
 
 // ?: add dropdown for role (admin, instructor, student) for admin dashboard maybe
@@ -34,7 +37,7 @@ export const RegisterFormEmail = () => {
       firstName: "",
       lastName: "",
       username: "",
-      password: '',
+      password: "",
     },
     resolver: zodResolver(RegisterFormEmailSchema), // Resolver for Zod schema validation
   });
@@ -54,9 +57,6 @@ export const RegisterFormEmail = () => {
   const watchedPassword = watch("password");
   console.log("-- watchedPassword: ", watchedPassword);
 
-
-
-
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     setError("root", { message: "" });
     setSuccess("");
@@ -72,28 +72,35 @@ export const RegisterFormEmail = () => {
         return;
       }
 
-      const { email } = validatedFields.data;
+      const { email, firstName, lastName } = validatedFields.data;
 
-      const approvalResults = await sendApprovalRequestToTeam(validatedFields.data)
-      console.log(approvalResults)
+      const approvalResults = await sendApprovalRequestToTeam(
+        validatedFields.data
+      );
+      console.log(approvalResults);
       if (approvalResults.failure) {
-        console.log("here1")
+        console.log("here1");
         setError("root", { message: approvalResults.failure });
         return; // Stop further processing
       }
 
-      const confirmationResults = await sendUserRegistrationConfirmation({userEmail: email})
+      const confirmationResults = await sendUserRegistrationConfirmation(
+        email,
+        firstName,
+        lastName
+      );
       if (confirmationResults.failure) {
-        console.log("here2")
+        console.log("here2");
         setError("root", { message: confirmationResults.failure });
         return; // Stop further processing
       }
 
-      console.log("Both approval request and registration confirmation email sent successfully");
-      setSuccess("Success! Check your email for confirmation and an approval request will be sent.");
-  
-
-      
+      console.log(
+        "Both approval request and registration confirmation email sent successfully"
+      );
+      setSuccess(
+        "Success! Check your email for confirmation and an approval request will be sent."
+      );
     } catch (error) {
       setError("root", { message: "Error" });
       console.log(error);
@@ -105,14 +112,11 @@ export const RegisterFormEmail = () => {
       <p className={styles.title}> Register </p>
 
       <p className="sub-text mt-1 mb-2">
-        You will be verified by our team before you can login.
-        You'll receive an email when your account is approved then you will be able to login.
+        You will be verified by our team before you can login. You'll receive an
+        email when your account is approved then you will be able to login.
       </p>
 
-      <form 
-        className={styles.form}
-        onSubmit={handleSubmit(onSubmit)} 
-      >
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <div className="flex-col">
           <label> First Name </label>
           <input
@@ -121,14 +125,11 @@ export const RegisterFormEmail = () => {
             placeholder="Enter first name"
             type="text"
             disabled={isSubmitting}
-
           />
           {errors.firstName && (
             <p className={styles.error}> {errors.firstName.message} </p>
           )}
         </div>
-
-    
 
         <div className="flex-col">
           <label> Last Name </label>
@@ -142,9 +143,9 @@ export const RegisterFormEmail = () => {
           {errors.lastName && (
             <p className={styles.error}> {errors.lastName.message} </p>
           )}
-        </div> 
+        </div>
 
-        <div className="flex-col"> 
+        <div className="flex-col">
           <label> Email </label>
           <input
             className={errors.email && "input-error"}
@@ -171,42 +172,41 @@ export const RegisterFormEmail = () => {
             <p className={styles.error}> {errors.username.message} </p>
           )}
         </div>
-      
 
         <div className="flex-col">
           <label> Password </label>
-          <input 
+          <input
             className={errors.lastName && "input-error"}
-            {...register('password')}
+            {...register("password")}
             placeholder="*****"
             type="password"
             disabled={isSubmitting}
-          /> 
-          { errors.password && <p className={styles.error} >{errors.password.message} </p>}
+          />
+          {errors.password && (
+            <p className={styles.error}>{errors.password.message} </p>
+          )}
         </div>
 
-
         {errors.root && <FormError message={errors.root.message} />}
-        {success &&<FormSuccess message={success} />}
+        {success && <FormSuccess message={success} />}
 
         <button
           className={styles.formButton}
-          type="submit" 
-          disabled={isSubmitting} 
+          type="submit"
+          disabled={isSubmitting}
         >
           Register
         </button>
-          
 
         <div className={styles.toLoginBtnWrapper}>
-          <p className="text-center sub-text"> Already have an account? {" "} 
+          <p className="text-center sub-text">
+            {" "}
+            Already have an account?{" "}
             <Link href="/auth/login" className={styles.toLoginBtn}>
-            Login
-            </Link> 
+              Login
+            </Link>
           </p>
         </div>
-    
-      
       </form>
     </div>
   );

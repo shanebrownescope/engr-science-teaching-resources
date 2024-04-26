@@ -11,18 +11,17 @@ export const fetchPendingUsers = async () => {
       // `;
       const results: UserData[] = await getPendingUsers()
 
+      console.log("--results: ", results)
+
       if (!results) {
         return { failure: "No pending users" };
       }
 
-      const formattedUsers: FetchedUserData[] = results.map((user: UserData) => {
-        return transformObjectKeys(user)
-      })
 
-      console.log("pending formattedUsers: ", formattedUsers)
+      console.log("pending users: ", results)
       // const results = dbConnect(selectQuery)
 
-      return { success: formattedUsers };
+      return { success: results };
 
 
     } catch (error) {

@@ -41,7 +41,7 @@ const createCourse = async (values: z.infer<typeof CreateCourseSchema>) => {
 
 
 
-  const insertQuery = `INSERT INTO Courses (CourseName) VALUES (?)`;
+  const insertQuery = `INSERT INTO Courses_v2 (courseName) VALUES (?)`;
   const formattedCourseName = capitalizeWords(courseName);
   const { results }  = await dbConnect(insertQuery, [formattedCourseName]);
 

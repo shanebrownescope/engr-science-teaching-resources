@@ -8,53 +8,55 @@ export type FetchedFormattedData = {
 };
 
 export type FetchedFile = {
-  fileId: number;
-  originalFileName: string;
-  formattedFileName: string;
+  id: number;
+  type: string;
+  fileName: string;
+  urlName: string;
   s3Url: string;
   description: string | undefined;
   uploadDate: string;
   contributor: string | undefined;
   conceptId: number;
   uploadedUserId: number;
-  tags: string[] | undefined;
+  tags: string[];
 };
 
 export type FileData = {
-  FileId: number;
-  FileName: string;
-  S3Url: string | undefined;
-  Description: string | undefined;
-  UploadDate: Date;
-  Contributor: string | undefined;
-  ConceptId: number;
-  UploadedUserId: number;
-  TagNames?: string[];
+  id: number;
+  fileName: string;
+  s3Url: string;
+  description: string | undefined;
+  uploadDate: Date;
+  contributor: string | undefined;
+  conceptId: number;
+  uploadedUserId: number;
+  tagNames: string[];
 };
 
 export type LinkData = {
-  LinkId: number;
-  LinkName: string;
-  LinkUrl: string | undefined;
-  Description: string | undefined;
-  UploadDate: Date;
-  Contributor: string | undefined;
-  ConceptId: number;
-  UploadedUserId: number;
-  TagNames?: string[];
+  id: number;
+  linkName: string;
+  linkUrl: string;
+  description: string | undefined;
+  uploadDate: Date;
+  contributor: string | undefined;
+  conceptId: number;
+  uploadedUserId: number;
+  tagNames: string[];
 };
 
 export type FetchedLink = {
-  linkId: number;
-  originalLinkName: string;
-  formattedLinkName: string;
+  id: number;
+  type: string;
+  linkName: string;
+  urlName: string;
   linkUrl: string;
   description: string | undefined;
   uploadDate: string;
   contributor: string | undefined;
   conceptId: number;
   uploadedUserId: number;
-  tags: string[] | undefined;
+  tags: string[];
 };
 
 export type searchParams = {
@@ -87,17 +89,17 @@ export type FetchedSearchResults = {
 };
 
 export type AllFilesAndLinksData = {
-  Id: number;
-  Name: string;
-  Type: string;
-  Description: string;
-  UploadDate: Date;
-  Tags: string | null;
+  id: number;
+  name: string;
+  type: string;
+  description: string;
+  uploadDate: Date;
+  tags: string | null;
 };
 export type AllFilesAndLinksDataFormatted = {
   id: number;
   originalName: string;
-  formattedName: string;
+  urlName: string;
   description: string;
   uploadDate: Date;
   type: string;
@@ -119,13 +121,13 @@ export type FormSelectProps = {
 };
 
 export type UserData = {
-  UserId: number;
-  FirstName: string;
-  LastName: string;
-  Email: string;
-  Username: string;
-  AccountStatus: 'pending' | 'approved' | 'activated' | 'rejected';
-  Role: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  accountStatus: 'pending' | 'approved' | 'activated' | 'rejected';
+  role: 'admin' | 'instructor' | 'student';
 }
 
 
@@ -136,14 +138,14 @@ export type FetchedUserData = {
   email: string;
   username: string;
   accountStatus: 'pending' | 'approved' | 'activated' | 'rejected';
-  role: string;
+  role: 'admin' | 'instructor' | 'student';
 };
 
 export type PasswordResetTokenData = {
-  PasswordResetTokenId: string;
-  Token: string;
-  UserId: string;
-  ExpiresAt: Date;
+  id: string;
+  token: string;
+  userId: string;
+  expiresAt: Date;
 }
 
 export type TransformedPasswordResetToken = {
@@ -151,15 +153,4 @@ export type TransformedPasswordResetToken = {
   token: string;
   userId: string;
   expiresAt: Date;
-}
-
-export type AuthErrorType = "CredentialsSignin" | "AccountPending" | "AccountRejected";
-
-export class AuthError extends Error {
-  type: AuthErrorType;
-
-  constructor(type: AuthErrorType, message: string) {
-    super(message);
-    this.type = type;
-  }
 }

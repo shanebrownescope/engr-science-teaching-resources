@@ -1,4 +1,4 @@
-import { fetchCourses } from "@/actions/fetching/fetchCourses";
+import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import Link from "next/link";
 import { FetchedFormattedData } from "@/utils/types";
 
@@ -16,8 +16,8 @@ const Courses = async () => {
       <p>Courses</p>
 
       {courseData?.success?.map((item: any) => (
-        <p key={item.formatted}>
-          <Link href={`/courses/${item.formatted}`}>{item.original} </Link>
+        <p key={item.url}>
+          <Link href={`/courses/${item.url}`}>{item.name} </Link>
           {/* {item.formatted == courseImagesArray.courseName && (
             <img src={courseImagesArray.image} />
           )} */}

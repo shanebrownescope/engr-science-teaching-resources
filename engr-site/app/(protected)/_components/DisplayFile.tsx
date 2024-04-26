@@ -18,7 +18,7 @@ export const DisplayFile = ({ file }: DisplayFileProps) => {
         width: "50%",
       }}
     >
-      <h2> {file.originalFileName} </h2>
+      <h2> {file.fileName} </h2>
       {file.description}
       <p> {file.uploadDate} </p>
       <iframe src={file.s3Url} />

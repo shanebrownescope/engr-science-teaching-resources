@@ -48,7 +48,7 @@ const ResourcesListPaginated =({ data }: ResourcesListPaginatedProps) => {
               type={item.type}
               id={item.id}
               title={item.originalName}
-              formattedName={item.formattedName}
+              urlName={item.urlName}
               description={item.description}
               tags={item.tags}
           />  

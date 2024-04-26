@@ -27,9 +27,7 @@ export const sendResetPassword = async(values: z.infer<typeof ForgetPasswordSche
     return { failure: "Email not found!" };
   }
 
-  const transformedUser: FetchedUserData = transformObjectKeys(existingUser)
-
-  const resetToken = await generateResetToken(transformedUser)
+  const resetToken = await generateResetToken(existingUser)
 
   if (!resetToken) {
     return { failure: "Failed to generate reset token!" };
@@ -37,7 +35,7 @@ export const sendResetPassword = async(values: z.infer<typeof ForgetPasswordSche
 
   console.log("-- resetToken: ", resetToken)
 
-  const sendEmailResult = await sendPasswordResetEmail({ user: transformedUser, resetToken })
+  const sendEmailResult = await sendPasswordResetEmail({ user: existingUser, resetToken })
   
   if (sendEmailResult.failure) {
     return { failure: "Failed to send password reset email: " + sendEmailResult.failure }
@@ -46,7 +44,7 @@ export const sendResetPassword = async(values: z.infer<typeof ForgetPasswordSche
   return { success: "Password reset email sent!" };
 }
 
-const generateResetToken = async (user: FetchedUserData) => {
+const generateResetToken = async (user: UserData) => {
   // Generate a secure, unique token
   let resetToken = crypto.randomBytes(32).toString('hex');
   const expires = new Date(new Date().getTime() + 3600 * 1000);
@@ -55,8 +53,8 @@ const generateResetToken = async (user: FetchedUserData) => {
   // Check if the generated token already exists in the database
   const existingTokenQuery = `
     SELECT 1
-    FROM PasswordResetTokens
-    WHERE Token = ?`;
+    FROM PasswordResetTokens_v2
+    WHERE token = ?`;
 
 
   const { results : existingTokenResult } = await dbConnect(existingTokenQuery, [resetToken]);
@@ -74,11 +72,11 @@ const generateResetToken = async (user: FetchedUserData) => {
 
   // Store the token and expiration time in the PasswordResetToken table
   const insertQuery = `
-    INSERT INTO PasswordResetTokens 
-    (UserId, Token, ExpiresAt) 
+    INSERT INTO PasswordResetTokens_v2
+    (userId, token, expiresAt) 
     VALUES (?, ?, ?)`;
 
-  const { results, error } = await dbConnect(insertQuery, [user.userId, resetToken, expires]); 
+  const { results, error } = await dbConnect(insertQuery, [user.id, resetToken, expires]); 
 
   if (error) {
     return null;
@@ -90,7 +88,7 @@ const generateResetToken = async (user: FetchedUserData) => {
 
 
 
-const sendPasswordResetEmail = async ({ user, resetToken }: { user: FetchedUserData, resetToken: string })  => {
+const sendPasswordResetEmail = async ({ user, resetToken }: { user: UserData, resetToken: string })  => {
   // const resetLink = `${process.env.SITE_URL}/auth/new-password/${resetToken}`
   const resetLink = `${process.env.SITE_URL}/auth/reset-password?token=${resetToken}`
   try {

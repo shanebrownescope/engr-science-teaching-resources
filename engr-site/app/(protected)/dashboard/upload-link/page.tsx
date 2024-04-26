@@ -1,10 +1,10 @@
-"use client"
-import { useState, useEffect} from 'react'
-import { fetchCourses } from '@/actions/fetching/fetchCourses';
-import { FormattedData } from '@/utils/formatting';
-import { useCurrentRole } from '@/hooks/useCurrentRole';
+"use client";
+import { useState, useEffect } from "react";
+import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
+import { FormattedData } from "@/utils/formatting";
+import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { redirect } from "next/navigation";
-import { LinkUpload } from '../../_components/LinkUpload';
+import { LinkUpload } from "../../_components/LinkUpload";
 
 const UploadLink = () => {
   const role = useCurrentRole();
@@ -13,7 +13,8 @@ const UploadLink = () => {
     redirect("/unauthorized");
   }
 
-  const [coursesOptionsData, setCoursesOptionsData] = useState<FormattedData[]>();
+  const [coursesOptionsData, setCoursesOptionsData] =
+    useState<FormattedData[]>();
   useEffect(() => {
     const fetchAllCourses = async () => {
       const coursesOptionsData = await fetchCourses();
@@ -22,13 +23,15 @@ const UploadLink = () => {
         setCoursesOptionsData(coursesOptionsData.success);
       }
     };
-    
+
     fetchAllCourses();
   }, []);
 
   return (
-    <div><LinkUpload coursesOptionsData={coursesOptionsData} /></div>
-  )
-}
+    <div>
+      <LinkUpload coursesOptionsData={coursesOptionsData} />
+    </div>
+  );
+};
 
 export default UploadLink;

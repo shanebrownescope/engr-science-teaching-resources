@@ -1,13 +1,9 @@
 //* home page when users first log in
 
-import { fetchSearchResults } from "@/actions/fetching/fetchSearchResults"
+import { fetchSearchResults } from "@/actions/fetching/search/fetchSearchResults";
 
-const Home = async() => { 
+const Home = async () => {
+  return <div>Home</div>;
+};
 
-
-  return (
-    <div>Home</div>
-  )
-}
-
-export default Home
+export default Home;

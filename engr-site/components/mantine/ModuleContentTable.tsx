@@ -20,8 +20,9 @@ import classes from "./ModuleContentTable.module.css";
 import Link from "next/link";
 
 interface ModuleContent {
+  type: string;
   originalName: string;
-  formattedName: string;
+  urlName: string;
   description: string; // Assuming files and links both have descriptions now
   tags: string[]; // Assuming the 'tags' field is an array of strings
   id: number; // Assuming the 'id' field is a string
@@ -160,9 +161,8 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
           {displayedData.map((item, index) => (
             <Table.Tr key={index}>
               <Link
-                href={`/resources/${item.formattedName}?${new URLSearchParams({
-                  id: item.id.toString(),
-                  type: "file",
+                href={`/resources/${item.type}/${item.urlName}?${new URLSearchParams({
+                  id: item.id.toString()
                 })} `}
                 passHref
               >

@@ -66,7 +66,7 @@ export const {
       }
       
       //* adds role to token
-      token.role = existingUser.Role
+      token.role = existingUser.role
 
       return token;
     },
