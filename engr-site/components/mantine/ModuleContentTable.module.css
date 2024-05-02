@@ -23,3 +23,10 @@
 .tagsColumn {
   width: 25%;
 }
+
+.descriptionColumn {
+  width: 40%;
+}
+.dateColumn {
+  width: 10%;
+}

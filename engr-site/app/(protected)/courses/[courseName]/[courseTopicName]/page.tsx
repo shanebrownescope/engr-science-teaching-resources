@@ -1,21 +1,18 @@
-"use client";
-import { fetchFilesByConceptId } from "@/actions/fetching/files/fetchFilesByConceptId";
-import { fetchLinksByConceptId } from "@/actions/fetching/links/fetchLinksByConceptId";
-import React, { useState, useEffect } from "react";
-import {
-  FormattedData,
-  capitalizeAndReplaceDash,
-} from "@/utils/formatting";
-import { FetchedFormattedData } from "@/utils/types";
-import { notFound } from "next/navigation";
+'use client';
+import { fetchFilesByConceptId } from '@/actions/fetching/files/fetchFilesByConceptId';
+import { fetchLinksByConceptId } from '@/actions/fetching/links/fetchLinksByConceptId';
+import React, { useState, useEffect } from 'react';
+import { FormattedData, capitalizeAndReplaceDash } from '@/utils/formatting';
+import { FetchedFormattedData } from '@/utils/types';
+import { notFound } from 'next/navigation';
 import {
   SegmentedControlInput,
   ModuleContentTable,
   ConceptBar,
-} from "@/components/mantine";
-import "./page.css";
-import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
-import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetchConceptsByResourceTypeId";
+} from '@/components/mantine';
+import './page.css';
+import { fetchResourceTypesByCourseTopicId } from '@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId';
+import { fetchConceptsByResourceTypeId } from '@/actions/fetching/concepts/fetchConceptsByResourceTypeId';
 
 type ResourceTypePageProps = {
   params: { courseTopicName: string; courseName: string };
@@ -28,26 +25,26 @@ type ResourceTypeDataResults = {
 };
 
 const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
-  const [selectedSegment, setSelectedSegment] = useState("Problems");
+  const [selectedSegment, setSelectedSegment] = useState('Problems');
   const [resourceType, setResourceType] = useState<FetchedFormattedData>(); // Initialize sections state
   const [resourceTypeDataResults, setResourceTypeDataResults] =
     useState<ResourceTypeDataResults[]>(); // Store fetched section data
   const [isLoading, setIsLoading] = useState(false); // Track loading state
-  const [selectedConcept, setSelectedConcept] = useState("");
-  const [selectedConceptId, setSelectedConceptId] = useState("");
+  const [selectedConcept, setSelectedConcept] = useState('');
+  const [selectedConceptId, setSelectedConceptId] = useState('');
   const [conceptFiles, setConceptFiles] = useState<any[]>([]);
   const [conceptLinks, setConceptLinks] = useState<any[]>([]);
 
   const handleSegmentChange = (value: any) => {
-    console.log("Segment changed to", value);
+    console.log('Segment changed to', value);
     setSelectedSegment(value);
   };
 
-  console.log("selected segment: ", selectedSegment);
+  console.log('selected segment: ', selectedSegment);
 
   const id = searchParams.id; // Ensure this is consistent with your data structure
   const courseTopicName = capitalizeAndReplaceDash(params.courseTopicName);
-  console.log("courseTopicName: ", courseTopicName);
+  console.log('courseTopicName: ', courseTopicName);
   const searchParamId = searchParams.id;
 
   // Fetch resourceType data
@@ -65,7 +62,7 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
           setResourceType(fetchedData);
         }
       } catch (error) {
-        console.error("Failed to fetch sections", error);
+        console.error('Failed to fetch sections', error);
       } finally {
         setIsLoading(false); // End loading regardless of outcome
       }
@@ -73,10 +70,10 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
 
     fetchData();
   }, [id]);
-  console.log("resourceType: ", resourceType);
-  console.log("resourceTypeDataResults: ", resourceTypeDataResults);
-  console.log("selectedSegment: ", selectedSegment);
-  console.log("selectedConcept: ", selectedConcept);
+  console.log('resourceType: ', resourceType);
+  console.log('resourceTypeDataResults: ', resourceTypeDataResults);
+  console.log('selectedSegment: ', selectedSegment);
+  console.log('selectedConcept: ', selectedConcept);
   // Fetch data for each resource type
   useEffect(() => {
     const fetchAllResourceTypeData = async () => {
@@ -84,24 +81,27 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
         setIsLoading(true); // Start loading
         try {
           resourceType.success.forEach((resourceType: FormattedData) => {
-            console.log("resourceType map item: ", resourceType);
-          })
+            console.log('resourceType map item: ', resourceType);
+          });
 
-          const promises = resourceType.success.map((resourceType: FormattedData) =>       
-            fetchConceptsByResourceTypeId(resourceType.id).then(
-              (results: FetchedFormattedData) => ({
-                resourceTypeName: resourceType.name,
-                concepts: results.success || [],
-              })
-            )
+          const promises = resourceType.success.map(
+            (resourceType: FormattedData) =>
+              fetchConceptsByResourceTypeId(resourceType.id).then(
+                (results: FetchedFormattedData) => ({
+                  resourceTypeName: resourceType.name,
+                  concepts: results.success || [],
+                })
+              )
           );
 
-          const results: ResourceTypeDataResults[] = await Promise.all(promises);
+          const results: ResourceTypeDataResults[] = await Promise.all(
+            promises
+          );
           if (results.length > 0) {
             setResourceTypeDataResults(results);
           }
         } catch (error) {
-          console.error("Failed to fetch section details", error);
+          console.error('Failed to fetch section details', error);
         } finally {
           setIsLoading(false); // End loading regardless of outcome
         }
@@ -110,18 +110,19 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
 
     fetchAllResourceTypeData();
   }, [resourceType]); // Re-fetch whenever 'resourceType' changes
-  console.log(" == resourceTypeDataResults: ", resourceTypeDataResults);
+  console.log(' == resourceTypeDataResults: ', resourceTypeDataResults);
 
   // Update selectedConcept when resourceTypeDataResults or selectedSegment changes
   useEffect(() => {
     if (!resourceTypeDataResults || !selectedSegment) return;
-    setSelectedConceptId("");
-    setSelectedConcept("");
+    setSelectedConceptId('');
+    setSelectedConcept('');
     setConceptFiles([]);
     setConceptLinks([]);
 
     const currentResourceType = resourceTypeDataResults?.find(
-      (resourceType: ResourceTypeDataResults ) => resourceType.resourceTypeName === selectedSegment
+      (resourceType: ResourceTypeDataResults) =>
+        resourceType.resourceTypeName === selectedSegment
     );
     // Set the first concept of the current section as the selectedConcept
     if (currentResourceType && currentResourceType.concepts.length > 0) {
@@ -150,9 +151,10 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
                 type: file.type,
                 originalName: file.fileName,
                 urlName: file.urlName,
-                description: file.description || "",
+                description: file.description || '',
                 tags: file.tags || [],
                 id: file.id,
+                dateAdded: file.uploadDate,
               }))
             : []
         );
@@ -163,14 +165,15 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
                 type: link.type,
                 originalName: link.linkName,
                 urlName: link.urlName,
-                description: link.description || "",
+                description: link.description || '',
                 tags: link.tags || [],
                 id: link.id,
+                dateAdded: link.uploadDate,
               }))
             : []
         );
       } catch (error) {
-        console.error("Failed to fetch concept data", error);
+        console.error('Failed to fetch concept data', error);
       } finally {
         setIsLoading(false);
       }
@@ -179,20 +182,21 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
     fetchConceptData();
   }, [selectedConceptId]); // Re-fetch whenever the selected concept changes
 
-  console.log("conceptFiles: ", conceptFiles);
-  console.log("conceptLinks: ", conceptLinks);
+  console.log('conceptFiles: ', conceptFiles);
+  console.log('conceptLinks: ', conceptLinks);
 
   if (!searchParamId) {
     return notFound();
   }
 
   const currentResourceType = resourceTypeDataResults?.find(
-    (resourceType: ResourceTypeDataResults ) => resourceType.resourceTypeName === selectedSegment
+    (resourceType: ResourceTypeDataResults) =>
+      resourceType.resourceTypeName === selectedSegment
   );
 
   return (
     <div>
-      <div className="concept-bar-container">
+      <div className='concept-bar-container'>
         <ConceptBar
           concepts={
             currentResourceType?.concepts.map((concept: FormattedData) => ({
@@ -206,17 +210,16 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
           onConceptIdChange={setSelectedConceptId}
         />
       </div>
-      <div className="main-content">
+      <div className='main-content'>
         <SegmentedControlInput
           data={resourceType?.success || []}
           value={selectedSegment}
           onChange={handleSegmentChange}
         />
-        
-        <div style={{ marginTop: "20px" }}>
+
+        <div style={{ marginTop: '20px' }}>
           <ModuleContentTable files={conceptFiles} links={conceptLinks} />
         </div>
-        
       </div>
     </div>
   );

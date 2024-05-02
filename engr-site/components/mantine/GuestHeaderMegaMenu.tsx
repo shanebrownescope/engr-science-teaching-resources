@@ -16,9 +16,9 @@ import {
   ScrollArea,
   rem,
   useMantineTheme,
-} from "@mantine/core";
-import { MantineLogo } from "@mantinex/mantine-logo";
-import { useDisclosure } from "@mantine/hooks";
+} from '@mantine/core';
+import { MantineLogo } from '@mantinex/mantine-logo';
+import { useDisclosure } from '@mantine/hooks';
 import {
   IconNotification,
   IconCode,
@@ -31,9 +31,9 @@ import {
   IconArrowsMove,
   IconBarbell,
   IconBolt,
-} from "@tabler/icons-react";
-import classes from "./GuestHeaderMegaMenu.module.css";
-import Link from "next/link";
+} from '@tabler/icons-react';
+import classes from './GuestHeaderMegaMenu.module.css';
+import Link from 'next/link';
 
 export function GuestHeaderMegaMenu() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
@@ -44,34 +44,31 @@ export function GuestHeaderMegaMenu() {
   return (
     <Box pb={120}>
       <header className={classes.header}>
-        <Group justify="space-between" h="100%">
-          <MantineLogo size={30} />
+        <Group justify='space-between' h='100%'>
+          <h2>E-SCoPe</h2>
 
-          <Group h="100%" gap={0} visibleFrom="sm">
-            <a href="#" className={classes.link}>
+          <Group h='100%' gap={0} visibleFrom='sm'>
+            <a href='#' className={classes.link}>
               Home
             </a>
-            <a href="#" className={classes.link}>
+            <a href='#' className={classes.link}>
               Learn
-            </a>
-            <a href="#" className={classes.link}>
-              Academy
             </a>
           </Group>
 
-          <Group visibleFrom="sm">
-            <Link href={"/auth/login"}>
-              <Button variant="default">Log in</Button>
+          <Group visibleFrom='sm'>
+            <Link href={'/auth/login'}>
+              <Button variant='default'>Log in</Button>
             </Link>
-            <Link href={"/auth/register"}>
-              <Button variant="default">Sign up</Button>
+            <Link href={'/auth/register'}>
+              <Button variant='default'>Sign up</Button>
             </Link>
           </Group>
 
           <Burger
             opened={drawerOpened}
             onClick={toggleDrawer}
-            hiddenFrom="sm"
+            hiddenFrom='sm'
           />
         </Group>
       </header>
@@ -79,21 +76,21 @@ export function GuestHeaderMegaMenu() {
       <Drawer
         opened={drawerOpened}
         onClose={closeDrawer}
-        size="100%"
-        padding="md"
-        title="Navigation"
-        hiddenFrom="sm"
+        size='100%'
+        padding='md'
+        title='Navigation'
+        hiddenFrom='sm'
         zIndex={1000000}
       >
-        <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
-          <Divider my="sm" />
+        <ScrollArea h={`calc(100vh - ${rem(80)})`} mx='-md'>
+          <Divider my='sm' />
 
-          <a href="#" className={classes.link}>
+          <a href='#' className={classes.link}>
             Home
           </a>
           <UnstyledButton className={classes.link} onClick={toggleLinks}>
             <Center inline>
-              <Box component="span" mr={5}>
+              <Box component='span' mr={5}>
                 Features
               </Box>
               <IconChevronDown
@@ -102,17 +99,17 @@ export function GuestHeaderMegaMenu() {
               />
             </Center>
           </UnstyledButton>
-          <a href="#" className={classes.link}>
+          <a href='#' className={classes.link}>
             Learn
           </a>
-          <a href="#" className={classes.link}>
+          <a href='#' className={classes.link}>
             Academy
           </a>
 
-          <Divider my="sm" />
+          <Divider my='sm' />
 
-          <Group justify="center" grow pb="xl" px="md">
-            <Button variant="default">Log in</Button>
+          <Group justify='center' grow pb='xl' px='md'>
+            <Button variant='default'>Log in</Button>
             <Button>Sign up</Button>
           </Group>
         </ScrollArea>

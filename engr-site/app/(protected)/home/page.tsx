@@ -1,26 +1,24 @@
 //* home page when users first log in
-"use client";
-import "@mantine/core/styles.css";
-import { SearchButton } from "@/components/mantine";
-import Link from "next/link";
-import "./page.css";
+'use client';
+import '@mantine/core/styles.css';
+import { SearchButton } from '@/components/mantine';
+import Link from 'next/link';
+import './page.css';
 
 const Home = () => {
   return (
     <div>
       <div
-        className="banner"
+        className='banner'
         style={{
-          width: "100%",
-          height: "400px",
           backgroundImage: 'url("/banner.jpg")',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
         }}
-      ></div>
+      >
+        <div className='banner-text'>Welcome to Our E-SCoPe!</div>
+      </div>
 
-      <div className="searchButtonContainer">
-        <div className="shorterWidth">
+      <div className='searchButtonContainer'>
+        <div className='shorterWidth'>
           <SearchButton />
           <p>
             The site has engineering teaching resources for several courses and
@@ -38,7 +36,6 @@ const Home = () => {
         </div>
       </div>
     </div>
-  )
-}
-export default Home
-  
+  );
+};
+export default Home;
