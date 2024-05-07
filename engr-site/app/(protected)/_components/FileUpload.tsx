@@ -477,7 +477,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             type="text"
             name="contributor"
             value={contributor}
-            disabled={true}
+            disabled={loading}
             onChange={(e) => setContributor(e.target.value)}
           />
         </div>

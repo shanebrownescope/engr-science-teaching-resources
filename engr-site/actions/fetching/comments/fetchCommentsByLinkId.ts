@@ -1,27 +1,28 @@
 "use server"
 
 import { getFileById } from "@/database/data/files";
+import { getLinkById } from "@/database/data/links";
 import dbConnect from "@/database/dbConnector";
 import { formatTimeAgo } from "@/utils/formatting";
-import { CommentFileData, FetchedCommentFileData } from "@/utils/types";
+import { CommentLinkData, FetchedCommentLinkData } from "@/utils/types";
 
 
 
-export const fetchCommentsByFileId = async (id: string): Promise<FetchedCommentFileData | null> => {
+export const fetchCommentsByLinkId = async (id: string): Promise<FetchedCommentLinkData | null> => {
   try {
-    const existingFile = getFileById(id);
+    const existingLink = getLinkById(id);
 
-    if (!existingFile) {
-      console.error("File not found");
-      return { failure: "File not found" };
+    if (!existingLink) {
+      console.error("link not found");
+      return { failure: "link not found" };
     }
 
 
     const selectQuery = `
-      SELECT fc.id, fc.fileId, fc.userId, fc.commentText, fc.uploadDate, u.name
-      FROM FileComments_v2 AS fc 
-      JOIN Users_v2 AS u ON fc.userId = u.id
-      WHERE fc.fileId = ?`;
+      SELECT lc.id, lc.linkId, lc.userId, lc.commentText, lc.uploadDate, u.name
+      FROM LinkComments_v2 AS lc 
+      JOIN Users_v2 AS u ON lc.userId = u.id
+      WHERE lc.linkId = ?`;
 
     const { results: comments, error } = await dbConnect(selectQuery, [id]);
 
@@ -40,7 +41,7 @@ export const fetchCommentsByFileId = async (id: string): Promise<FetchedCommentF
 
     console.log("date: ", comments[0][0].uploadDate);
     
-    const commentsTransformed = comments[0].map((comment: CommentFileData) => {
+    const commentsTransformed = comments[0].map((comment: CommentLinkData) => {
       const timeAgoDate = formatTimeAgo(comment.uploadDate.toString());
       return {
         ...comment,

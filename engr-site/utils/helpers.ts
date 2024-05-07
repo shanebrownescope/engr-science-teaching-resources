@@ -92,7 +92,8 @@ export const processFile = async (file: FileData): Promise<FetchedFile> => {
 
   
 
-  const originalFileName = capitalizeAndReplaceDash(formattedFileName);
+  // const originalFileName = capitalizeAndReplaceDash(formattedFileName);
+  const originalFileName = formattedFileName.replace(/-/g, " ");
   console.log(originalFileName);
 
   console.log(file.contributor);
@@ -188,15 +189,15 @@ export const processFilesAndLinks = (item: AllFilesAndLinksData) => {
     const formattedFileName = fileNameSplit1.substring(
       0,
       fileNameSplit1.indexOf(".pdf")
-    );
+    ).replace(/-/g, " ");
 
-    const originalFileName = capitalizeAndReplaceDash(formattedFileName);
+    // const originalFileName = capitalizeAndReplaceDash(formattedFileName);
 
     const urlName = lowercaseAndReplaceSpaceString(formattedFileName);
 
     return {
       ...item,
-      originalName: originalFileName,
+      originalName: formattedFileName,
       urlName: urlName,
       uploadDate: new Date(item.uploadDate),
       tags: tags,

@@ -33,10 +33,6 @@ export const loginAction = async (values: z.infer<typeof LoginSchema>) => {
       switch (error.type) {
         case "CredentialsSignin":
           return { error: "Invalid credentials!" }
-        // case "AccountPending":
-        //   return { error: 'Your account is pending approval. Please wait for approval.' };
-        // case "AccountRejected":
-        //   return { error: 'Your account has been rejected. Please contact support for assistance.' };
         default: 
           return { error: "Something went wrong!" }
       }

@@ -11,8 +11,6 @@ import { FormSuccess } from "@/components/FormSuccess";
 
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import { FormSelectProps } from "@/utils/types";
-import { fetchModulesByCourseId } from "@/actions/fetching/fetchModulesByCourseId";
-import { fetchSectionsByModule } from "@/actions/fetching/fetchSectionsByModule";
 import createConcept from "@/actions/create/createConcept";
 import { useRouter } from "next/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
