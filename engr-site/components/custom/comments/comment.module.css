@@ -1,0 +1,23 @@
+/* @import '@/styles/rootVariables.css'; */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5em;
+  max-width: var(--comment-container-width);
+}
+
+.author {
+  font-size: var(--comment-author);
+  font-weight: 600;
+}
+
+.uploadDate {
+  font-size: var(--comment-upload-date);
+  vertical-align: center;
+  color: #535353;
+}
+
+.comment {
+  font-size: var(--comment-text);
+}

@@ -5,13 +5,13 @@ import dbConnect from "@/database/dbConnector";
 import { CommentSchema } from "@/schemas";
 import z from "zod"
 
-type uploadFileCommentProps = {
+type uploadLinkCommentProps = {
   values: z.infer<typeof CommentSchema>;
   userId: string;
-  fileId: string;
+  linkId: string;
 }
 
-export const uploadFileComment =  async({ values, userId, fileId }: uploadFileCommentProps) => {
+export const uploadLinkComment =  async({ values, userId, linkId }: uploadLinkCommentProps) => {
   try {
     const existingUser = await getUserById(userId);
 
@@ -31,9 +31,9 @@ export const uploadFileComment =  async({ values, userId, fileId }: uploadFileCo
     console.log("uploadDate: ", uploadDate);
   
     const uploadQuery = `
-      INSERT INTO FileComments_v2 (fileId, userId, commentText, uploadDate) VALUES (?, ?, ?, ?)`;
+      INSERT INTO LinkComments_v2 (linkId, userId, commentText, uploadDate) VALUES (?, ?, ?, ?)`;
   
-    const { results, error } = await dbConnect(uploadQuery, [fileId, userId, commentText, uploadDate]);
+    const { results, error } = await dbConnect(uploadQuery, [linkId, userId, commentText, uploadDate]);
   
     if (error) {
       console.error("An error occurred while fetching data:", error);

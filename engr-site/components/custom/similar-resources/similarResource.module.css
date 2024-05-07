@@ -1,0 +1,37 @@
+/** similarResources */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+
+/** ref: SimilarItem */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  border: 1px solid var(--grey-border-color);
+  border-radius: 5px;
+  padding: 1em;
+
+  .name {
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.tagsContainer {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  .tag {
+    font-size: 14px;
+    background: #2c2c2c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 500px;
+    text-transform: capitalize;
+  }
+}

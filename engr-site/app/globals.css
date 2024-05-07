@@ -1,7 +1,62 @@
+
+/* @link https://utopia.fyi/type/calculator?c=320,14,1.25,1440,16,1.333,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+
+:root {
+  /* Step -2: 8.96px → 9.0045px */
+  --display--2: clamp(0.56rem, 0.5592rem + 0.004vi, 0.5628rem);
+  /* Step -1: 11.2px → 12.003px */
+  --display--1: clamp(0.7rem, 0.6857rem + 0.0717vi, 0.7502rem);
+  /* Step 0: 14px → 16px */
+  --display-0: clamp(0.875rem, 0.8393rem + 0.1786vi, 1rem);
+  /* Step 1: 17.5px → 21.328px */
+  --display-1: clamp(1.0938rem, 1.0254rem + 0.3418vi, 1.333rem);
+  /* Step 2: 21.875px → 28.4302px */
+  --display-2: clamp(1.3672rem, 1.2501rem + 0.5853vi, 1.7769rem);
+  /* Step 3: 27.3438px → 37.8975px */
+  --display-3: clamp(1.709rem, 1.5205rem + 0.9423vi, 2.3686rem);
+  /* Step 4: 34.1797px → 50.5174px */
+  --display-4: clamp(2.1362rem, 1.8445rem + 1.4587vi, 3.1573rem);
+  /* Step 5: 42.7246px → 67.3396px */
+  --display-5: clamp(2.6703rem, 2.2307rem + 2.1978vi, 4.2087rem);
+  /* Step 6: 53.4058px → 89.7637px */
+  --display-6: clamp(3.3379rem, 2.6886rem + 3.2462vi, 5.6102rem);
+
+  --comment-author: 13px;
+  --comment-upload-date: 12px;
+  --comment-text: 14px;
+
+  --comment-container-width: 600px;
+
+  --grey-border-color: #afa9a9;
+}
+
+
+
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+body {
+  font-size: 16px;
+}
+
+.light-border {
+  border: 1px solid var(--grey-border-color);
+}
+
+
+
+.md-container {
+  max-width: 1020px;
+  margin-inline: auto;
+  padding: 2em;
+}
+
+.comment-container {
+  max-width: var(--comment-container-width);
 }
 
 .required-symbol {
@@ -46,6 +101,10 @@
 .flex-col {
   display: flex; 
   flex-direction: column; 
+}
+
+.align-baseline {
+  align-items: baseline;
 }
 
 .gap-p25 {

@@ -263,10 +263,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       console.log(formattedContributor)
 
 
-      setLinkName((link) => link.trim());
-      const formattedLinkName = capitalizeAndReplaceDash(linkName)
-      console.log(formattedLinkName)
-    
+      setLinkName((link) => link.trim());    
 
       setLinkUrl((link) => link.trim());
       const sanitizedUrl = sanitizeUrl(linkUrl)
@@ -276,7 +273,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       }
 
       const linkResult = await uploadLink({
-        linkName: formattedLinkName,
+        linkName: linkName,
         linkUrl: sanitizedUrl,
         conceptId: selectedConceptOption.id!,
         description: formattedDescription.length > 0 ? formattedDescription : null,
@@ -438,7 +435,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           <label> Add contributor </label>
           <input
             type="text"
-            name="description"
+            name="contributor"
             value={contributor}
             disabled={loading}
             onChange={(e) => setContributor(e.target.value)}

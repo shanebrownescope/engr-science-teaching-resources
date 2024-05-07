@@ -8,8 +8,8 @@ import { fetchSimilarLinksByTags } from "@/actions/fetching/links/fetchSimilarLi
 
 import { DisplayFile } from "@/app/(protected)/_components/DisplayFile";
 import { DisplayLink } from "@/app/(protected)/_components/DisplayLink";
-import SimilarDoc from "@/components/custom/SimilarDoc";
-import SimilarLink from "@/components/custom/SimilarLink";
+import SimilarDoc from "@/components/custom/similar-resources/SimilarDoc";
+import SimilarLink from "@/components/custom/similar-resources/SimilarLink";
 import {
   FetchedFile,
   FetchedFilesDataArray,
