@@ -1,4 +1,4 @@
-.document-container {
+.documentContainer {
   position: relative;
   width: fit-content; /* Adjust based on your needs */
 }
@@ -19,7 +19,7 @@
   padding: 10px; /* Adjust based on your needs */
 }
 
-.image-title {
+.imageTitle {
   margin: 0; /* Removes default paragraph margins */
   /* Additional styling for the title text */
 }
