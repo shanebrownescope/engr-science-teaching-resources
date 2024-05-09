@@ -1,5 +1,4 @@
-import React from "react";
-import "./SimilarDocument.css"; // Assuming styles are defined in this CSS file
+import styles from "@/styles/custom/SimilarDocument.module.css";
 
 export const SimilarDocument = ({}) => {
   const imageUrl =
@@ -7,10 +6,10 @@ export const SimilarDocument = ({}) => {
   const title = "Document Title";
 
   return (
-    <div className="document-container">
+    <div className={styles.documentContainer}>
       <img src={imageUrl} alt={title} className="document-image" />
-      <div className="overlay">
-        <p className="image-title">{"hello"}</p>
+      <div className={styles.overlay}>
+        <p className={styles.imageTitle}>{"hello"}</p>
       </div>
     </div>
   );
