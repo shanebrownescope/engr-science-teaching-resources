@@ -1,5 +1,6 @@
 import React from "react";
-import "./SearchResultBox.css"; // Make sure this path matches the location of your CSS file
+
+import styles from "./SearchResultBox.module.css"; // Make sure this path matches the location of your CSS file
 import Link from "next/link";
 
 type SearchResultBoxProps = {
@@ -20,17 +21,17 @@ export const SearchResultBox = ({
 }: SearchResultBoxProps) => {
   console.log(tags);
   return (
-    <div className="resultBox">
+    <div className={styles.resultBox}>
       <Link
         href={`/resources/${type}/${urlName}?${new URLSearchParams({
           id: id.toString()
         })}`}
       >
-        <h2 className="resultTitle">{title}</h2>
-        <p className="resultDescription">{description}</p>
-        <div className="tagsContainer">
+        <h2 className={styles.resultTitle}>{title}</h2>
+        <p className={styles.resultDescription}>{description}</p>
+        <div className={styles.tagsContainer}>
           {tags.map((tag: string, index: number) => (
-            <span key={index} className={`tag ${tag.toLowerCase()}`}>
+            <span key={index} className={`${styles.tag} ${styles.tag.toLowerCase()}`}>
               {tag}
             </span>
           ))}
