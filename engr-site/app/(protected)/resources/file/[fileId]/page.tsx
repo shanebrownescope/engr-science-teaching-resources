@@ -1,16 +1,17 @@
-import { Textarea, Button } from '@mantine/core';
+import { Textarea, Button } from "@mantine/core";
 
-import { fetchFileById } from '@/actions/fetching/files/fetchFileById';
-import { fetchSimilarFilesByTags } from '@/actions/fetching/files/fetchSimilarFilesByTags';
+import { fetchFileById } from "@/actions/fetching/files/fetchFileById";
+import { fetchSimilarFilesByTags } from "@/actions/fetching/files/fetchSimilarFilesByTags";
 
-import { DisplayFile } from '@/app/(protected)/_components/DisplayFile';
-import SimilarDoc from '@/components/custom/SimilarDoc';
+import { DisplayFile } from "@/app/(protected)/_components/DisplayFile";
+import SimilarDoc from "@/components/custom/SimilarDoc";
 import {
   FetchedFile,
   FetchedFilesDataArray,
   FetchedLinksDataArray,
-} from '@/utils/types';
-import './page.css';
+} from "@/utils/types";
+import Link from "next/link";
+import "./page.css";
 
 type searchParams = {
   id: string;
@@ -48,29 +49,38 @@ const ResourceFilePage = async ({
 
   return (
     <div>
-      <div className='content'>
+      <div className="content">
         {result?.success && (
           <DisplayFile file={result.success as FetchedFile} />
         )}
       </div>
 
-      <div style={{ paddingTop: '50px', paddingLeft: '30px' }}>
-        <h3>Similar resources</h3>
-        <div className='similarResourcesContainer'>
+      <div style={{ paddingTop: "50px", paddingLeft: "30px" }}>
+        <h3 style={{ fontSize: "25px" }}>Similar resources</h3>
+        <div className="similarResourcesContainer">
           {similarItems?.success?.map((item, idx) => (
             <div key={idx}>
-              <SimilarDoc file={item as FetchedFile} />
+              <Link
+                href={`/resources/${item.type}/${
+                  item.urlName
+                }?${new URLSearchParams({ id: item.id.toString() })}`}
+                passHref
+              >
+                <SimilarDoc file={item as FetchedFile} />
+              </Link>
             </div>
           ))}
         </div>
       </div>
 
-      <h3 style={{ paddingTop: '50px', paddingLeft: '30px' }}>Comments</h3>
-      <div style={{ maxWidth: '600px', paddingLeft: '30px' }}>
-        <Textarea autosize minRows={2} mb='md' />
-        <Button variant='filled' style={{ width: '100%' }}>
+      <h3 style={{ paddingTop: "50px", paddingLeft: "30px", fontSize: "25px" }}>
+        Comments
+      </h3>
+      <div style={{ maxWidth: "600px", paddingLeft: "30px" }}>
+        <Textarea autosize minRows={2} mb="md" />
+        <Button variant="filled" style={{ width: "100%" }}>
           Post
-        </Button>{' '}
+        </Button>{" "}
       </div>
     </div>
   );

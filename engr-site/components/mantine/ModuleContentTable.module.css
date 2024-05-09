@@ -30,3 +30,7 @@
 .dateColumn {
   width: 10%;
 }
+
+.scrollAreaContainer {
+  padding-right: 40px;
+}

@@ -1,5 +1,5 @@
-'use client';
-import { useState, useEffect } from 'react';
+"use client";
+import { useState, useEffect } from "react";
 import {
   Table,
   ScrollArea,
@@ -9,15 +9,15 @@ import {
   Center,
   TextInput,
   rem,
-} from '@mantine/core';
+} from "@mantine/core";
 import {
   IconSelector,
   IconChevronDown,
   IconChevronUp,
   IconSearch,
-} from '@tabler/icons-react';
-import classes from './ModuleContentTable.module.css';
-import Link from 'next/link';
+} from "@tabler/icons-react";
+import classes from "./ModuleContentTable.module.css";
+import Link from "next/link";
 
 interface ModuleContent {
   type: string;
@@ -55,8 +55,8 @@ function Th({
   return (
     <Table.Th className={classes.th} style={{ width }}>
       <UnstyledButton onClick={onSort} className={classes.control}>
-        <Group justify='space-between'>
-          <Text fw={500} fz='sm'>
+        <Group justify="space-between">
+          <Text fw={500} fz="sm">
             {children}
           </Text>
           <Center className={classes.icon}>
@@ -69,7 +69,7 @@ function Th({
 }
 
 export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<keyof ModuleContent | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const [displayedData, setDisplayedData] = useState<ModuleContent[]>([]);
@@ -80,14 +80,18 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
       (item) =>
         item.originalName.toLowerCase().includes(search.toLowerCase()) ||
         item.description.toLowerCase().includes(search.toLowerCase()) ||
-        item.tags.join(', ').toLowerCase().includes(search.toLowerCase())
+        item.tags.join(", ").toLowerCase().includes(search.toLowerCase())
     );
 
     if (sortBy) {
       filteredData.sort((a, b) => {
-        const aValue = String(a[sortBy]);
-        const bValue = String(b[sortBy]);
-        const comparison = aValue.localeCompare(bValue);
+        let aValue = a[sortBy];
+        let bValue = b[sortBy];
+        if (sortBy === "dateAdded") {
+          aValue = new Date(aValue);
+          bValue = new Date(bValue);
+        }
+        const comparison = aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
         return reverseSortDirection ? -comparison : comparison;
       });
     }
@@ -104,10 +108,10 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
   };
 
   return (
-    <ScrollArea>
+    <ScrollArea className={classes.scrollAreaContainer}>
       <TextInput
-        placeholder='Search by name, description, or tags'
-        mb='md'
+        placeholder="Search by name, description, or tags"
+        mb="md"
         leftSection={
           <IconSearch
             style={{ width: rem(16), height: rem(16) }}
@@ -117,45 +121,44 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
         value={search}
         onChange={(event) => setSearch(event.currentTarget.value)}
       />
-      <Table horizontalSpacing='md' verticalSpacing='xs'>
+      <Table horizontalSpacing="md" verticalSpacing="xs">
         <thead>
           <Table.Tr>
             <Th
-              width='25%'
-              sorted={sortBy === 'originalName'}
+              width="25%"
+              sorted={sortBy === "originalName"}
               reversed={reverseSortDirection}
-              onSort={() => handleSortChange('originalName')}
+              onSort={() => handleSortChange("originalName")}
             >
               Name
             </Th>
             <Table.Th className={classes.descriptionColumn}>
-              <Text fw={500} fz='sm'>
+              <Text fw={500} fz="sm">
                 Description
               </Text>
             </Table.Th>
             <Table.Th className={classes.tagsColumn}>
-              <Text fw={500} fz='sm'>
+              <Text fw={500} fz="sm">
                 Tags
               </Text>
             </Table.Th>
-            <Table.Th className={classes.dateColumn}>
-              <Text fw={500} fz='sm'>
-                Date Added
-              </Text>
-            </Table.Th>
+            <Th
+              sorted={sortBy === "dateAdded"}
+              reversed={reverseSortDirection}
+              onSort={() => handleSortChange("dateAdded")}
+            >
+              Date Added
+            </Th>
           </Table.Tr>
         </thead>
         <Table.Tbody>
           {displayedData.map((item, index) => (
             <Table.Tr key={index}>
               <Table.Td>
-                {' '}
                 <Link
                   href={`/resources/${item.type}/${
                     item.urlName
-                  }?${new URLSearchParams({
-                    id: item.id.toString(),
-                  })} `}
+                  }?${new URLSearchParams({ id: item.id.toString() })}`}
                   passHref
                 >
                   <p className={classes.linkStyle}>{item.originalName}</p>
@@ -174,7 +177,7 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
           ))}
           {displayedData.length === 0 && (
             <Table.Tr>
-              <Table.Td colSpan={3} style={{ textAlign: 'center' }}>
+              <Table.Td colSpan={4} style={{ textAlign: "center" }}>
                 No content found
               </Table.Td>
             </Table.Tr>

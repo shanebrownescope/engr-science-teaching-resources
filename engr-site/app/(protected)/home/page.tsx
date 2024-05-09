@@ -1,24 +1,24 @@
 //* home page when users first log in
-'use client';
-import '@mantine/core/styles.css';
-import { SearchButton } from '@/components/mantine';
-import Link from 'next/link';
-import './page.css';
+"use client";
+import "@mantine/core/styles.css";
+import { SearchButton } from "@/components/mantine";
+import Link from "next/link";
+import "./page.css";
 
 const Home = () => {
   return (
     <div>
       <div
-        className='banner'
+        className="banner"
         style={{
           backgroundImage: 'url("/banner.jpg")',
         }}
       >
-        <div className='banner-text'>Welcome to Our E-SCoPe!</div>
+        <div className="banner-text">Welcome to Our E-SCoPe!</div>
       </div>
 
-      <div className='searchButtonContainer'>
-        <div className='shorterWidth'>
+      <div className="searchButtonContainer">
+        <div className="shorterWidth">
           <SearchButton />
           <p>
             The site has engineering teaching resources for several courses and
@@ -34,6 +34,27 @@ const Home = () => {
             provided with all of the resources for the given topic.
           </p>
         </div>
+      </div>
+
+      <div className="class-section">
+        <Link href="/courses/statics" passHref>
+          <div className="class-button">
+            <img src="/statics.png" alt="Statics" />
+            <p>Statics</p>
+          </div>
+        </Link>
+        <Link href="/courses/dynamics" passHref>
+          <div className="class-button">
+            <img src="/dynamics.png" alt="Dynamics" />
+            <p>Dynamics</p>
+          </div>
+        </Link>
+        <Link href="/courses/strengths-of-materials" passHref>
+          <div className="class-button">
+            <img src="/strengthsOfMaterials.png" alt="Strengths of Materials" />
+            <p>Strengths of Materials</p>
+          </div>
+        </Link>
       </div>
     </div>
   );

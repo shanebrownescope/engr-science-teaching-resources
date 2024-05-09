@@ -1,8 +1,9 @@
-import {  capitalizeAndReplaceDash } from "@/utils/formatting";
+import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { FetchedFormattedData } from "@/utils/types";
 import Link from "next/link";
 import { ModuleCard } from "@/components/mantine";
 import { fetchCourseTopicsByCourseName } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseName";
+import "./page.css";
 
 const CourseTopicsPage = async ({
   params,
@@ -10,34 +11,27 @@ const CourseTopicsPage = async ({
   params: { courseName: string };
 }) => {
   const courseTopicName = capitalizeAndReplaceDash(params.courseName);
-  const courseTopicList: FetchedFormattedData = await fetchCourseTopicsByCourseName(courseTopicName);
+  const courseTopicList: FetchedFormattedData =
+    await fetchCourseTopicsByCourseName(courseTopicName);
   console.log(params.courseName);
 
   console.log("== success: ", courseTopicList.success);
 
   return (
     <div>
-      <p> {courseTopicName} </p>
+      <p className="course-topic-name">{courseTopicName}</p>
 
       {courseTopicList?.success?.map((item: any, index: number) => (
         <div>
           <ModuleCard
             title={item.name}
             description="description here"
-            href={`/courses/${params.courseName}/${item.url}`}
-          />
-
-          <Link
             href={`/courses/${params.courseName}/${
               item.url
             }?${new URLSearchParams({
               id: item.id,
             })}`}
-            key={index}
-          >
-            {" "}
-            {item.name}{" "}
-          </Link>
+          />
         </div>
       ))}
 

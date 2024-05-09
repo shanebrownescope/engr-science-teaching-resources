@@ -1,6 +1,6 @@
 .card {
   background-color: var(--mantine-color-body);
-  width: 500px; /* Set the width of the card */
+  width: 50%;
   margin: 0 auto; /* Center the card horizontally */
 }
 

@@ -16,7 +16,9 @@ const Courses = async () => {
 
   return (
     <div>
-      <p>Courses</p>
+      <p style={{ fontSize: "25px", textAlign: "center", padding: "30px" }}>
+        Courses
+      </p>
 
       <div className="grid-container">
         {courseData?.success?.map((item: FormattedData) => (
