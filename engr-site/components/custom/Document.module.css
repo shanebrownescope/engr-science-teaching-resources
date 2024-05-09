@@ -1,4 +1,4 @@
-.file-container {
+.fileContainer {
   width: 300px; /* Increased size */
   border: 1px solid #ccc;
   position: relative;
@@ -7,7 +7,7 @@
   margin: 0 auto; /* Center in its container */
 }
 
-.file-name {
+.fileName {
   position: absolute;
   top: 0;
   left: 0;
@@ -17,7 +17,7 @@
   font-size: 18px; /* Larger text */
 }
 
-.image-container {
+.imageContainer {
   position: relative;
   padding: 20px; /* Increased padding for larger border effect */
 }
@@ -42,14 +42,14 @@
   font-size: 20px; /* Larger text */
 }
 
-.file-description {
+.fileDescription {
   margin-top: 10px; /* Space between the image and the description */
   text-align: center; /* Center the description text */
   color: #333; /* Dark color for text */
   font-size: 16px; /* Adjust size as needed */
 }
 
-.tags-container {
+.tagsContainer {
   display: flex;
   justify-content: center; /* Center tags horizontally */
   flex-wrap: wrap; /* Allow tags to wrap if many */
@@ -57,7 +57,7 @@
   margin-top: 10px; /* Space between the description and tags */
 }
 
-.tag-button {
+.tagButton {
   background-color: #007bff; /* Example button color */
   color: white; /* Text color */
   border: none; /* Remove default border */

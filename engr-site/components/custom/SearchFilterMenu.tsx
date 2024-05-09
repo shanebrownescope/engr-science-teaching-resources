@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MultiSelect, Select } from "@mantine/core";
 import { YearSlider } from "../mantine";
-import "./SearchFilterMenu.css";
+import styles from "@/styles/custom/SearchFilterMenu.module.css";
 import { AllFilesAndLinksDataFormatted } from "@/utils/types";
 import ResourcesListPaginated from "./ResourcesListPaginated";
 
@@ -39,7 +39,7 @@ export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
 
   return (
     <div>
-      <div className="filterMenu">
+      <div className={styles.filterMenu}>
         <Select
           label="Sort by"
           placeholder="Pick value"
@@ -52,7 +52,7 @@ export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
           placeholder="Pick value"
           data={["Science", "Math", "History", "Literature"]}
         />
-        <div className="yearSliderContainer">
+        <div className={styles.yearSliderContainer}>
           <YearSlider />
         </div>
       </div>

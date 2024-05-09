@@ -1,5 +1,5 @@
 import React from "react";
-import "./Document.css"; // Make sure to create this CSS file in the same directory
+import styles from "./Document.module.css"; // Make sure to create this CSS file in the same directory
 
 export const Document = () => {
   const imageUrl =
@@ -9,18 +9,18 @@ export const Document = () => {
   const tags = ["Tag 1", "Tag 2", "Tag 3"];
 
   return (
-    <div className="file-container">
-      <div className="file-name">{title}</div>
-      <div className="image-container">
-        <img src={imageUrl} alt="File Thumbnail" className="thumbnail" />
-        <div className="overlay">
+    <div className={styles.fileContainer}>
+      <div className={styles.fileName}>{title}</div>
+      <div className={styles.imageContainer}>
+        <img src={imageUrl} alt="File Thumbnail" className={styles.thumbnail} />
+        <div className={styles.overlay}>
           <span>File Preview</span>
         </div>
       </div>
-      <div className="file-description">{description}</div>
-      <div className="tags-container">
+      <div className={styles.fileDescription}>{description}</div>
+      <div className={styles.tagsContainer}>
         {tags.map((tag, index) => (
-          <button key={index} className="tag-button">
+          <button key={index} className={styles.tagButton}>
             {tag}
           </button>
         ))}
