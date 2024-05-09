@@ -1,8 +1,7 @@
 import { fetchPendingUsers } from "@/actions/fetching/users/fetchPendingUsers";
 import { approveUser, sendUserApprovalEmail } from "@/actions/update/approveUser";
 import { rejectUser, sendUserRejectionEmail } from "@/actions/update/rejectUser";
-import PendingUsersClientComponent from "@/components/custom/PendingUsersClientComponent";
-import PendingUserListPaginated from "@/components/custom/PendingUsersListPaginated";
+import PendingUserListPaginated from "@/components/custom/PendingUser/PendingUsersListPaginated";
 
 export type HandleUserActionProps = {
   userId: string;
@@ -44,7 +43,7 @@ const PendingUsersPage = async () => {
           handleReject={handleReject}
         />
       )}
-      {/* {pendingUsers?.success && <PendingUsersClientComponent data={pendingUsers?.success}/>} */}
+
       {pendingUsers?.failure && <p>No pending users</p>}
     </div>
   );

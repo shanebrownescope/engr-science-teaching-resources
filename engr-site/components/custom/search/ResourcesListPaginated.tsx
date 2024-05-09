@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Pagination } from '@mantine/core';
-import { AllFilesAndLinksDataFormatted } from '@/utils/types';
-import { SearchResultBox } from '.';
+import React, { useState } from "react";
+import { Pagination } from "@mantine/core";
+import { AllFilesAndLinksDataFormatted } from "@/utils/types";
+import { SearchResultBox } from "..";
 
 type ResourcesListPaginatedProps = {
-  data: AllFilesAndLinksDataFormatted[]
-}
+  data: AllFilesAndLinksDataFormatted[];
+};
 
-const ResourcesListPaginated =({ data }: ResourcesListPaginatedProps) => {
+const ResourcesListPaginated = ({ data }: ResourcesListPaginatedProps) => {
   // The number of items to display on each page
   const itemsPerPage = 6;
   // Total number of items in the data array
@@ -51,7 +51,7 @@ const ResourcesListPaginated =({ data }: ResourcesListPaginatedProps) => {
               urlName={item.urlName}
               description={item.description}
               tags={item.tags}
-          />  
+            />
           </div>
         ))}
       </div>
@@ -63,6 +63,6 @@ const ResourcesListPaginated =({ data }: ResourcesListPaginatedProps) => {
       />
     </>
   );
-}
+};
 
 export default ResourcesListPaginated;

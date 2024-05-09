@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Pagination } from '@mantine/core';
-import { PendingUserDetails } from '@/components/custom/PendingUserDetails';
+import { PendingUserDetails } from '@/components/custom/PendingUser/PendingUserDetails';
 import { FetchedUserData, UserData } from '@/utils/types';
 import { HandleUserActionProps, sendUserUpdateEmailProps } from '@/app/(protected)/dashboard/pending-users/page';
 

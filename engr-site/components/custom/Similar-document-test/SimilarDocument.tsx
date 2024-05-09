@@ -1,4 +1,4 @@
-import styles from "@/styles/custom/SimilarDocument.module.css";
+import styles from "@/components/custom/Similar-document-test/SImilarDocument.module.css";
 
 export const SimilarDocument = ({}) => {
   const imageUrl =
