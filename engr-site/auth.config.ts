@@ -13,13 +13,10 @@ export default {
 
         if (validatedFields.success) {
           const { email, password } = validatedFields.data;
-          // console.log(password)
+
 
           const user = await getUserByEmail(email);
 
-          // console.log("here")
-
-          // console.log(user)
 
           //* user registered with name, email, password
           if (!user || !user.password) return null;
@@ -28,17 +25,9 @@ export default {
             password,
             user.password
           );
-          
-          // console.log("here2, passwordsMatch: ", passwordsMatch)
+        
 
-          console.log(password === user.password)
-
-          // console.log("here3, passwordsMatch: ", passwordsMatch)
-            
-          // if (passwordsMatch)
           if (passwordsMatch) {
-            console.log("passwords match!")
-            // console.log({user})
 
             const User: any = {
               id: user.id,

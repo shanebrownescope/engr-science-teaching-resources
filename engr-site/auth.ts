@@ -39,7 +39,6 @@ export const {
       //* adds id and role to session from token
 
       //* console.log token and session
-      // console.log({ sessionToken: token, session })
       if (token.sub && session.user) {
         session.user.id = token.sub
       }
