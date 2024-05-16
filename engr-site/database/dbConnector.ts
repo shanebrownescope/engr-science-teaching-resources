@@ -14,7 +14,6 @@ async function dbConnect(query: string, values?: any[]): Promise<any> {
     // console.log("-----: ", results)
     return { results }
   } catch (error) {
-    console.error("Error in dbConnect:", error);
     return { error }
   }
 }

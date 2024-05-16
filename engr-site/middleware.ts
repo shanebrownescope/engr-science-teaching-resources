@@ -1,8 +1,6 @@
 import NextAuth from "next-auth"
 import authConfig from "@/auth.config"
 
-// export { auth as middleware } from "@/auth"
-
 const { auth } = NextAuth(authConfig)
 // const { auth } from "@/auth"
 
@@ -12,7 +10,6 @@ import {
   authRoutes,
   publicRoutes,
 } from "@/routes"
-// import { auth } from "@/auth";
 
 
 export default auth((req) => {
@@ -42,7 +39,6 @@ export default auth((req) => {
   //* redirect to homepage if user not logged in 
   //* and on route that requires user to be logged in
   if (!isLoggedIn && !isPublicRoute) {
-    console.log("not right: ", Response.redirect(new URL("/auth/login", nextUrl)))
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
 
@@ -64,4 +60,7 @@ export default auth((req) => {
 //* uses regular expression, invokes middleware every time when routes are used
 export const config = {
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  // matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+
 }
+
