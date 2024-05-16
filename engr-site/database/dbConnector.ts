@@ -9,6 +9,7 @@ const db = mysql.createPool({
 })
 
 async function dbConnect(query: string, values?: any[]): Promise<any> {
+  console.log("-- dbConnect values: ", process.env.HOST, process.env.DB_USER, process.env.DB_PASSWORD, process.env.DB_NAME )
   try {
     const results = await db.query(query, values)
     // console.log("-----: ", results)
