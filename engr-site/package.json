@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@auth/typeorm-adapter": "^1.3.0",
+    "@auth/typeorm-adapter": "^1.7.0",
     "@aws-sdk/client-s3": "^3.468.0",
     "@aws-sdk/s3-request-presigner": "^3.468.0",
     "@hookform/resolvers": "^3.3.4",

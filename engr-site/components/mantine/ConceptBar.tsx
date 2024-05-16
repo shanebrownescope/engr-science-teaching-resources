@@ -4,12 +4,20 @@ import { useState, useEffect } from "react";
 import { Group } from "@mantine/core";
 import classes from "./ConceptBar.module.css";
 
+
+type ConceptBarProps = {
+  concepts: any[];
+  selectedConcept: string;
+  onConceptChange: (concept: string) => void;
+  onConceptIdChange: (conceptId: string) => void;
+};
+
 export function ConceptBar({
   concepts,
   selectedConcept,
   onConceptChange,
   onConceptIdChange,
-}) {
+}: ConceptBarProps) {
   const [active, setActive] = useState(selectedConcept);
 
   // Update the active state based on the selectedConcept prop

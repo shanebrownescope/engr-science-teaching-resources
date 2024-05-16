@@ -1,6 +1,6 @@
 import React from "react";
 
-import styles from "./SearchResultBox.module.css"; // Make sure this path matches the location of your CSS file
+import styles from "@/components/custom/search/SearchResultBox.module.css";
 import Link from "next/link";
 
 type SearchResultBoxProps = {

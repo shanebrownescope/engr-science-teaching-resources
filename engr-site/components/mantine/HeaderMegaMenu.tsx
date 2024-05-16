@@ -110,7 +110,7 @@ export function HeaderMegaMenu() {
               withinPortal
             >
               <HoverCard.Target>
-                <a href="#" className={classes.link}>
+                <a href="/courses" className={classes.link}>
                   <Center inline>
                     <Box component="span" mr={5}>
                       Courses
@@ -172,7 +172,7 @@ export function HeaderMegaMenu() {
         <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
           <Divider my="sm" />
 
-          <a href="#" className={classes.link}>
+          <a href="/" className={classes.link}>
             Home
           </a>
           <UnstyledButton className={classes.link} onClick={toggleLinks}>

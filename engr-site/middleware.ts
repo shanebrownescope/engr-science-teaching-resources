@@ -1,7 +1,10 @@
 import NextAuth from "next-auth"
 import authConfig from "@/auth.config"
 
-const { auth } = NextAuth(authConfig)
+// export { auth as middleware } from "@/auth"
+
+// const { auth } = NextAuth(authConfig)
+// const { auth } from "@/auth"
 
 import {
   DEFAULT_LOGIN_REDIRECT, 
@@ -9,11 +12,12 @@ import {
   authRoutes,
   publicRoutes,
 } from "@/routes"
+import { auth } from "@/auth";
 
 
 export default auth((req) => {
   const { nextUrl } = req;
-  // console.log("== nextUrl: ", nextUrl)
+  
   const isLoggedIn = !!req.auth //* !! turns to boolean
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
@@ -23,7 +27,7 @@ export default auth((req) => {
   //* /api/auth/providers
   //* anyone can access this
   if (isApiAuthRoute) {
-    return null;
+    return;
   }
 
   //* ex. /admin
@@ -32,7 +36,7 @@ export default auth((req) => {
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
-    return null;
+    return;
   }
 
   //* redirect to homepage if user not logged in 
@@ -48,7 +52,7 @@ export default auth((req) => {
   // }
 
   //* do nothing, user on public route so everything is fine
-  return null;
+  return;
 });
 
 
@@ -56,8 +60,8 @@ export default auth((req) => {
 
 // Optionally, don't invoke Middleware on some paths
 //* every single route expect next static files and next images are going to invoke middleware
-//* Inokes middleware everywhere, so we decide in middleware what to do with those routes
-//* uses regular expression, invokes middleware everytime when routes are used
+//* Invokes middleware everywhere, so we decide in middleware what to do with those routes
+//* uses regular expression, invokes middleware every time when routes are used
 export const config = {
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 }

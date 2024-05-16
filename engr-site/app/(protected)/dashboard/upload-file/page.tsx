@@ -1,13 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { FileUpload } from "../../_components/FileUpload";
+
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import { FormattedData } from "@/utils/formatting";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { redirect } from "next/navigation";
-import FileUpload2 from "../../_components/FileUploadZod";
-import { FileUploadForm } from "../../_components/FileUploadForm";
-import { FormFieldProps, FormSelectProps } from "@/utils/types";
+import { FileUpload } from "../../_components/FileUpload";
 
 const UploadFile = () => {
   const role = useCurrentRole();
@@ -41,8 +39,7 @@ const UploadFile = () => {
   return (
     <div>
       <FileUpload coursesOptionsData={coursesOptionsData} />
-      {/* <FileUploadUseForm coursesOptionsData={coursesOptionsData} /> */}
-      {/* <FileUpload2  /> */}
+
     </div>
   );
 };

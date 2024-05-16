@@ -3,7 +3,7 @@ import Link from "next/link";
 import styles from "./navbar.module.css";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { formattedData } from "@/utils/formatting";
+import { FormattedData } from "@/utils/formatting";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 
 export const Navbar = () => {
@@ -81,9 +81,9 @@ export const Navbar = () => {
           </div> */}
 
           <div className={styles.courseList}>
-            {courseList?.map((item: formattedData) => (
-              <Link key={item.formatted} href={`/courses/${item.formatted}`}>
-                {item.original}
+            {courseList?.map((item: FormattedData) => (
+              <Link key={item.id} href={`/courses/${item.url}`}>
+                {item.name}
               </Link>
             ))}
           </div>

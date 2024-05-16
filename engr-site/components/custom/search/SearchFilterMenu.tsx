@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { MultiSelect, Select } from "@mantine/core";
-import { YearSlider } from "../mantine";
-import styles from "@/styles/custom/SearchFilterMenu.module.css";
+import { ComboboxItem, MultiSelect, Select } from "@mantine/core";
+import { YearSlider } from "../../mantine";
+import styles from "@/components/custom/search/SearchFilterMenu.module.css";
 import { AllFilesAndLinksDataFormatted } from "@/utils/types";
 import ResourcesListPaginated from "./ResourcesListPaginated";
 
@@ -10,10 +10,10 @@ type SearchFilterMenuProps = {
 };
 export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
   // State to keep track of sorting option
-  const [sortBy, setSortBy] = useState("");
+  const [sortBy, setSortBy] = useState<string | null>("");
 
   // Function to handle sorting change
-  const handleSortChange = (value: string) => {
+  const handleSortChange = (value: string | null) => {
     setSortBy(value);
   };
 

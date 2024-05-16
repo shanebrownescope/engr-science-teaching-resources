@@ -3,7 +3,14 @@ import { Card, Image, Text, Group, Button } from "@mantine/core";
 import classes from "./ModuleCard.module.css";
 import Link from "next/link";
 
-export function ModuleCard({ title, description, href }) {
+type ModuleCardProps = {
+  title: string;
+  description: string;
+  href: string;
+};
+
+
+export function ModuleCard({ title, description, href }: ModuleCardProps) {
   return (
     <Card withBorder padding="lg" className={classes.card}>
       <Group justify="space-between" mt="xl">
