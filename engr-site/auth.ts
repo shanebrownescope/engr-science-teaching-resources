@@ -1,18 +1,12 @@
 import NextAuth, { type DefaultSession } from "next-auth"
 
-import { TypeORMAdapter } from "@auth/typeorm-adapter"
 import authConfig from "@/auth.config"
 import { getUserById } from "./database/data/user"
 // import { ConnectionOptions } from "typeorm"
+import { TypeORMAdapter } from '@auth/typeorm-adapter';
+import { JWT } from "next-auth/jwt"
 
-// const CONNECTION: ConnectionOptions = {
-//   type: "mysql",
-//   host: process.env.HOST,
-//   port: 3306,
-//   username: process.env.DB_USER,
-//   password: process.env.DB_PASSWORD,
-//   database: process.env.DB_NAME,
-// }
+
 type ExtendedUser = DefaultSession["user"] & {
   role: "admin" | "instructor"
 }
@@ -23,7 +17,6 @@ declare module "next-auth" {
   }
 }
 
-import { JWT } from "next-auth/jwt"
 
 declare module "next-auth/jwt" {
   interface JWT {
@@ -71,8 +64,7 @@ export const {
       return token;
     },
   },
-  // adapter: TypeORMAdapter(`${process.env.CONNECT_STRING}`),
-  // adapter: TypeORMAdapter(CONNECTION),
+  // adapter: TypeORMAdapter(process.env.AUTH_TYPEORM_CONNECTION!),
   session: { strategy: "jwt" },
   ...authConfig,
 

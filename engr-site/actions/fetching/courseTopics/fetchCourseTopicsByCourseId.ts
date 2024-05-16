@@ -11,7 +11,7 @@ export const fetchCourseTopicsByCourseId = async (
 ): Promise<FetchedFormattedData> => {
   console.log(courseId);
   try {
-    const course = await getCourseById(courseId);
+    const course = await getCourseById(courseId as string);
     console.log(course?.id);
 
     if (!course?.id) {
