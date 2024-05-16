@@ -71,7 +71,7 @@ export const {
       return token;
     },
   },
-  adapter: TypeORMAdapter(`${process.env.CONNECT_STRING}`),
+  // adapter: TypeORMAdapter(`${process.env.CONNECT_STRING}`),
   // adapter: TypeORMAdapter(CONNECTION),
   session: { strategy: "jwt" },
   ...authConfig,
