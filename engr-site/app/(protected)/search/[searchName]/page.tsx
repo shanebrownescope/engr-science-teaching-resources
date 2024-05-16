@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react"; // Ensure React is imported
-import { SearchResultBox, SearchFilterMenu } from "@/components/custom";
+
+
 import { Pagination } from "@mantine/core";
 import { fetchSearchResults } from "@/actions/fetching/search/fetchSearchResults";
 import {
@@ -9,6 +10,7 @@ import {
   FetchedSearchResults,
 } from "@/utils/types";
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
+import { SearchFilterMenu } from "@/components/custom/search/SearchFilterMenu";
 
 // Mock data for demonstration
 const mockResults = [
