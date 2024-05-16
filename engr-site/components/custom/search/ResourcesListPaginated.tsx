@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Pagination } from "@mantine/core";
 import { AllFilesAndLinksDataFormatted } from "@/utils/types";
-import { SearchResultBox } from "..";
+import { SearchResultBox } from "@/components/custom/search/SearchResultBox";
 
 type ResourcesListPaginatedProps = {
   data: AllFilesAndLinksDataFormatted[];
