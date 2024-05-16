@@ -3,7 +3,7 @@ import authConfig from "@/auth.config"
 
 // export { auth as middleware } from "@/auth"
 
-// const { auth } = NextAuth(authConfig)
+const { auth } = NextAuth(authConfig)
 // const { auth } from "@/auth"
 
 import {
@@ -12,7 +12,7 @@ import {
   authRoutes,
   publicRoutes,
 } from "@/routes"
-import { auth } from "@/auth";
+// import { auth } from "@/auth";
 
 
 export default auth((req) => {
