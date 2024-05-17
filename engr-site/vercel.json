@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/**/*.ts": {
-      "runtime": "nodejs@20.13.1"
-    }
-  }
-}
