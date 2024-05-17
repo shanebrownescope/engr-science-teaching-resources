@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/**/*.js": {
+    "api/**/*.ts": {
       "runtime": "nodejs@20.13.1"
     }
   }
