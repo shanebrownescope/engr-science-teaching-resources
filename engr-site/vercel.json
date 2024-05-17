@@ -1,5 +1,7 @@
 {
   "functions": {
-    "runtime": "nodejs"
+    "api/**/*.js": {
+      "runtime": "nodejs"
+    }
   }
 }
