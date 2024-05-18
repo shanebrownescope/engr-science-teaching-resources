@@ -6,6 +6,7 @@ import { getUserById } from "./database/data/user"
 import { TypeORMAdapter } from '@auth/typeorm-adapter';
 import { JWT } from "next-auth/jwt"
 
+// import { TypeORMLegacyAdapter } from "@next-auth/typeorm-legacy-adapter"
 
 type ExtendedUser = DefaultSession["user"] & {
   role: "admin" | "instructor"
