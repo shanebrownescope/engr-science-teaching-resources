@@ -7,7 +7,6 @@ import * as z from "zod";
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";
 
-import { registerAction } from "@/actions/auth/registerActionOld";
 
 import { useForm } from "react-hook-form";
 import { useTransition, useState } from "react";

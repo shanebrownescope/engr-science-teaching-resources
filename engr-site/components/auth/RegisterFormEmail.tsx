@@ -7,10 +7,8 @@ import * as z from "zod";
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";
 
-import { registerAction } from "@/actions/auth/registerActionOld";
-
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useTransition, useState } from "react";
+import {  useState } from "react";
 import { RegisterFormEmailSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
