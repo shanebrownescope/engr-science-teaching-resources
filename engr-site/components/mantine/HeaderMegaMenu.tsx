@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   HoverCard,
   Group,
@@ -17,9 +17,9 @@ import {
   ScrollArea,
   rem,
   useMantineTheme,
-} from '@mantine/core';
-import { MantineLogo } from '@mantinex/mantine-logo';
-import { useDisclosure } from '@mantine/hooks';
+} from "@mantine/core";
+import { MantineLogo } from "@mantinex/mantine-logo";
+import { useDisclosure } from "@mantine/hooks";
 import {
   IconNotification,
   IconCode,
@@ -32,34 +32,34 @@ import {
   IconArrowsMove,
   IconBarbell,
   IconBolt,
-} from '@tabler/icons-react';
-import classes from './HeaderMegaMenu.module.css';
-import Link from 'next/link';
+} from "@tabler/icons-react";
+import classes from "./HeaderMegaMenu.module.css";
+import Link from "next/link";
 
 const mockdata = [
   {
     icon: IconAtom,
-    title: 'Statics',
-    description: 'Description goes here',
-    path: '/courses/statics',
+    title: "Statics",
+    description: "Description goes here",
+    path: "/courses/statics",
   },
   {
     icon: IconArrowsMove,
-    title: 'Dynamics',
-    description: 'Description goes here',
-    path: '/courses/dynamics',
+    title: "Dynamics",
+    description: "Description goes here",
+    path: "/courses/dynamics",
   },
   {
     icon: IconBarbell,
-    title: 'Strengths of Materials',
-    description: 'Description goes here',
-    path: '/courses/strengths-of-materials',
+    title: "Strengths of Materials",
+    description: "Description goes here",
+    path: "/courses/strengths-of-materials",
   },
   {
     icon: IconBolt,
-    title: 'Circuits & Electrical Fundamentals',
-    description: 'Description goes here',
-    path: '/courses/circuits-electrical-fundamentals',
+    title: "Circuits & Electrical Fundamentals",
+    description: "Description goes here",
+    path: "/courses/circuits-electrical-fundamentals",
   },
 ];
 
@@ -72,18 +72,18 @@ export function HeaderMegaMenu() {
   const links = mockdata.map((item) => (
     <Link href={`${item.path}`} key={item.path} passHref>
       <UnstyledButton className={classes.subLink}>
-        <Group wrap='nowrap' align='flex-start'>
-          <ThemeIcon size={34} variant='default' radius='md'>
+        <Group wrap="nowrap" align="flex-start">
+          <ThemeIcon size={34} variant="default" radius="md">
             <item.icon
               style={{ width: rem(22), height: rem(22) }}
-              color={theme.colors.blue[6]}
+              color={theme.colors.dark[8]}
             />
           </ThemeIcon>
           <div>
-            <Text size='sm' fw={500}>
+            <Text size="sm" fw={500}>
               {item.title}
             </Text>
-            <Text size='xs' c='dimmed'>
+            <Text size="xs" c="dimmed">
               {item.description}
             </Text>
           </div>
@@ -95,64 +95,61 @@ export function HeaderMegaMenu() {
   return (
     <Box>
       <header className={classes.header}>
-        <Group justify='space-between' h='100%'>
+        <Group justify="space-between" h="100%">
           <h2>E-SCoPe</h2>
 
-          <Group h='100%' gap={0} visibleFrom='sm'>
-            <Link href='/home' className={classes.link}>
+          <Group h="100%" gap={0} visibleFrom="sm">
+            <Link href="/home" className={classes.link}>
               Home
             </Link>
             <HoverCard
               width={600}
-              position='bottom'
-              radius='md'
-              shadow='md'
+              position="bottom"
+              radius="md"
+              shadow="md"
               withinPortal
             >
               <HoverCard.Target>
-                <a href='#' className={classes.link}>
+                <a href="#" className={classes.link}>
                   <Center inline>
-                    <Box component='span' mr={5}>
+                    <Box component="span" mr={5}>
                       Courses
                     </Box>
                     <IconChevronDown
                       style={{ width: rem(16), height: rem(16) }}
-                      color={theme.colors.blue[6]}
+                      color={theme.colors.dark[8]}
                     />
                   </Center>
                 </a>
               </HoverCard.Target>
 
-              <HoverCard.Dropdown style={{ overflow: 'hidden' }}>
-                <Group justify='space-between' px='md'>
+              <HoverCard.Dropdown style={{ overflow: "hidden" }}>
+                <Group justify="space-between" px="md">
                   <Text fw={500}>Courses</Text>
-                  <Anchor href='/courses' fz='xs'>
+                  <Anchor href="/courses" fz="xs">
                     View all
                   </Anchor>
                 </Group>
 
-                <Divider my='sm' />
+                <Divider my="sm" />
 
                 <SimpleGrid cols={2} spacing={0}>
                   {links}
                 </SimpleGrid>
               </HoverCard.Dropdown>
             </HoverCard>
-            <a href='#' className={classes.link}>
-              Learn
-            </a>
           </Group>
 
-          <Group visibleFrom='sm'>
-            <Link href={'/profile'}>
-              <Button variant='default'>Profile</Button>
+          <Group visibleFrom="sm">
+            <Link href={"/profile"}>
+              <Button variant="default">Profile</Button>
             </Link>
           </Group>
 
           <Burger
             opened={drawerOpened}
             onClick={toggleDrawer}
-            hiddenFrom='sm'
+            hiddenFrom="sm"
           />
         </Group>
       </header>
@@ -160,41 +157,41 @@ export function HeaderMegaMenu() {
       <Drawer
         opened={drawerOpened}
         onClose={closeDrawer}
-        size='100%'
-        padding='md'
-        title='Navigation'
-        hiddenFrom='sm'
+        size="100%"
+        padding="md"
+        title="Navigation"
+        hiddenFrom="sm"
         zIndex={1000000}
       >
-        <ScrollArea h={`calc(100vh - ${rem(80)})`} mx='-md'>
-          <Divider my='sm' />
+        <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
+          <Divider my="sm" />
 
-          <a href='#' className={classes.link}>
+          <a href="#" className={classes.link}>
             Home
           </a>
           <UnstyledButton className={classes.link} onClick={toggleLinks}>
             <Center inline>
-              <Box component='span' mr={5}>
+              <Box component="span" mr={5}>
                 Features
               </Box>
               <IconChevronDown
                 style={{ width: rem(16), height: rem(16) }}
-                color={theme.colors.blue[6]}
+                color={theme.colors.dark[8]}
               />
             </Center>
           </UnstyledButton>
           <Collapse in={linksOpened}>{links}</Collapse>
-          <a href='#' className={classes.link}>
+          <a href="#" className={classes.link}>
             Learn
           </a>
-          <a href='#' className={classes.link}>
+          <a href="#" className={classes.link}>
             Academy
           </a>
 
-          <Divider my='sm' />
+          <Divider my="sm" />
 
-          <Group justify='center' grow pb='xl' px='md'>
-            <Button variant='default'>Log in</Button>
+          <Group justify="center" grow pb="xl" px="md">
+            <Button variant="default">Log in</Button>
             <Button>Sign up</Button>
           </Group>
         </ScrollArea>

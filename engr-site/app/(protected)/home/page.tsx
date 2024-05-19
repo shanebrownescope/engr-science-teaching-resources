@@ -40,19 +40,19 @@ const Home = () => {
         <Link href="/courses/statics" passHref>
           <div className="class-button">
             <img src="/statics.png" alt="Statics" />
-            <p>Statics</p>
+            <p className="class-text">Statics</p>
           </div>
         </Link>
         <Link href="/courses/dynamics" passHref>
           <div className="class-button">
             <img src="/dynamics.png" alt="Dynamics" />
-            <p>Dynamics</p>
+            <p className="class-text">Dynamics</p>
           </div>
         </Link>
         <Link href="/courses/strengths-of-materials" passHref>
           <div className="class-button">
             <img src="/strengthsOfMaterials.png" alt="Strengths of Materials" />
-            <p>Strengths of Materials</p>
+            <p className="class-text">Strengths of Materials</p>
           </div>
         </Link>
       </div>

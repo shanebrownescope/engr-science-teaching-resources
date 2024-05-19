@@ -15,3 +15,7 @@ export { SelectDropdown } from "./SelectDropdown";
 export { ConceptBar } from "./ConceptBar";
 export { NavbarNested } from "./NavbarNested";
 export { CourseCard } from "./CourseCard";
+export { HeroText } from "./HeroText";
+export { GetInTouchSimple } from "./GetInTouchSimple.tsx";
+export { EmailBanner } from "./EmailBanner";
+export { FeaturesCards } from "./FeaturesCards";

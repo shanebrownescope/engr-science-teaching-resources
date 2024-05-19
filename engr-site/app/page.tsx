@@ -1,6 +1,13 @@
 "use client";
 import React from "react";
-import { GuestHeaderMegaMenu, HeroBullets } from "@/components/mantine";
+import {
+  GuestHeaderMegaMenu,
+  HeroBullets,
+  HeroText,
+  GetInTouchSimple,
+  EmailBanner,
+  FeaturesCards,
+} from "@/components/mantine";
 import "@mantine/core/styles.css";
 import { createTheme, MantineProvider } from "@mantine/core";
 
@@ -13,6 +20,10 @@ export default function Home() {
     <MantineProvider>
       <GuestHeaderMegaMenu />
       <HeroBullets />
+      <FeaturesCards />
+      {/* <HeroText /> */}
+      <GetInTouchSimple />
+      <EmailBanner />
     </MantineProvider>
   );
 }
