@@ -1,6 +1,13 @@
+import requireAuth from "@/actions/auth/requireAuth";
 import { fetchPendingUsers } from "@/actions/fetching/users/fetchPendingUsers";
-import { approveUser, sendUserApprovalEmail } from "@/actions/update/approveUser";
-import { rejectUser, sendUserRejectionEmail } from "@/actions/update/rejectUser";
+import {
+  approveUser,
+  sendUserApprovalEmail,
+} from "@/actions/update/approveUser";
+import {
+  rejectUser,
+  sendUserRejectionEmail,
+} from "@/actions/update/rejectUser";
 import PendingUserListPaginated from "@/components/custom/PendingUser/PendingUsersListPaginated";
 
 export type HandleUserActionProps = {
@@ -8,30 +15,42 @@ export type HandleUserActionProps = {
   email: string;
   firstName: string;
   lastName: string;
-}
+};
 
 export type sendUserUpdateEmailProps = {
   email: string;
   firstName: string;
   lastName: string;
-}
+};
 const PendingUsersPage = async () => {
+  await requireAuth();
+
   const pendingUsers = await fetchPendingUsers();
   console.log("pendingUsers: ", pendingUsers.success);
 
-  const handleApprove = async ({ userId, email, firstName, lastName }: HandleUserActionProps) => {
+  const handleApprove = async ({
+    userId,
+    email,
+    firstName,
+    lastName,
+  }: HandleUserActionProps) => {
     "use server";
     console.log("approving user: ", userId);
     await approveUser(userId);
-    await sendUserApprovalEmail({email, firstName, lastName})
+    await sendUserApprovalEmail({ email, firstName, lastName });
   };
 
-  const handleReject = async ({ userId, email, firstName, lastName }: HandleUserActionProps) => {
+  const handleReject = async ({
+    userId,
+    email,
+    firstName,
+    lastName,
+  }: HandleUserActionProps) => {
     "use server";
     console.log("rejecting user: ", userId);
     await rejectUser(userId);
 
-    await sendUserRejectionEmail({email, firstName, lastName});
+    await sendUserRejectionEmail({ email, firstName, lastName });
   };
 
   return (

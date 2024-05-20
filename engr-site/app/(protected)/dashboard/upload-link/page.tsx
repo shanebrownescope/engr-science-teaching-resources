@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import { FormattedData } from "@/utils/formatting";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { LinkUpload } from "../../_components/LinkUpload";
 
 const UploadLink = () => {
@@ -11,6 +11,7 @@ const UploadLink = () => {
   if (role != "admin") {
     console.log("-- not admin");
     redirect("/unauthorized");
+    // notFound()
   }
 
   const [coursesOptionsData, setCoursesOptionsData] =

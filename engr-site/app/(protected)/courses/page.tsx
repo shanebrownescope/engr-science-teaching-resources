@@ -4,8 +4,11 @@ import { CourseCard } from "@/components/mantine";
 import "./page.css";
 import { FormattedData } from "@/utils/formatting";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
+import requireAuth from "@/actions/auth/requireAuth";
 
 const Courses = async () => {
+  const authResult = await requireAuth();
+
   const courseData: FetchedFormattedData = await fetchCourses();
 
   if (courseData?.failure) {

@@ -16,10 +16,13 @@ import { useCurrentRole } from "@/hooks/useCurrentRole";
 import styles from "@/styles/form.module.css";
 import createCourseTopic from "@/actions/create/createCourseTopic";
 import { FormattedData } from "@/utils/formatting";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 type FormFields = z.infer<typeof CreateCourseTopicsSchema>;
 
 const CourseTopics = () => {
+  useRequireAuth();
+
   const router = useRouter();
   const role = useCurrentRole();
   if (role != "admin") {

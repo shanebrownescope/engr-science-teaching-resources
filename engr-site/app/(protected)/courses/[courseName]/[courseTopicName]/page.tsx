@@ -16,6 +16,7 @@ import {
 import "./page.css";
 import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
 import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetchConceptsByResourceTypeId";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 type ResourceTypePageProps = {
   params: { courseTopicName: string; courseName: string };
@@ -28,6 +29,9 @@ type ResourceTypeDataResults = {
 };
 
 const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
+
+  useRequireAuth();
+
   const [selectedSegment, setSelectedSegment] = useState("Problems");
   const [resourceType, setResourceType] = useState<FetchedFormattedData>(); // Initialize sections state
   const [resourceTypeDataResults, setResourceTypeDataResults] =

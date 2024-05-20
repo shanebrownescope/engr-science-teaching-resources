@@ -12,6 +12,7 @@ import { getCurrentUser } from "@/utils/authHelpers";
 import { uploadFileComment } from "@/actions/comments/uploadFileComment";
 import { revalidatePath } from "next/cache";
 import SimilarResourcesData from "@/components/custom/similar-resources/SimilarResourcesData";
+import requireAuth from "@/actions/auth/requireAuth";
 
 type searchParams = {
   id: string;
@@ -24,6 +25,8 @@ const ResourceFilePage = async ({
   params: { fileName: string };
   searchParams: searchParams;
 }) => {
+  await requireAuth();
+
   const { fileName } = params;
   const { id } = searchParams;
 
@@ -66,7 +69,10 @@ const ResourceFilePage = async ({
         <DisplayFile file={fileData.success as FetchedFile} />
       )}
 
-      <SimilarResourcesData similarResources={similarFiles?.success} type="file" />
+      <SimilarResourcesData
+        similarResources={similarFiles?.success}
+        type="file"
+      />
 
       <CommentForm handleFormSubmit={handleFormSubmit} />
       <CommentFileThread commentThread={commentThread?.success} />

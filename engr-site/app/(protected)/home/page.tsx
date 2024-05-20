@@ -1,11 +1,14 @@
 //* home page when users first log in
-"use client";
+// "use client";
 import "@mantine/core/styles.css";
 import { SearchButton } from "@/components/mantine";
 import Link from "next/link";
 import "./page.css";
+import requireAuth from "@/actions/auth/requireAuth";
 
-const Home = () => {
+const Home = async () => {
+  await requireAuth();
+
   return (
     <div>
       <div
@@ -38,7 +41,6 @@ const Home = () => {
         </div>
       </div>
     </div>
-  )
-}
-export default Home
-  
+  );
+};
+export default Home;

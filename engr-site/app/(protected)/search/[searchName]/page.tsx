@@ -11,6 +11,7 @@ import {
 } from "@/utils/types";
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { SearchFilterMenu } from "@/components/custom/search/SearchFilterMenu";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 // Mock data for demonstration
 const mockResults = [
@@ -42,6 +43,9 @@ const mockResults = [
 ];
 
 const SearchResults = ({ params }: { params: { searchName: string } }) => {
+
+  useRequireAuth();
+
   const formattedSearchName = capitalizeAndReplaceDash(
     params.searchName.toLowerCase().replace(/-/g, " ")
   );

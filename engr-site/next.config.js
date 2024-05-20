@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+/** @type {import('next').NextConfig} */
 
-module.exports = nextConfig
+
+const nextConfig = {
+    // experimental: {
+    //   runtime: "nodejs" // or 'nodejs' or 'edge'
+    // }
+};
+
+module.exports = nextConfig;

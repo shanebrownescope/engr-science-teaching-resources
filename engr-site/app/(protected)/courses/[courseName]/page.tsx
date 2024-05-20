@@ -1,16 +1,19 @@
-import {  capitalizeAndReplaceDash } from "@/utils/formatting";
+import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { FetchedFormattedData } from "@/utils/types";
 import Link from "next/link";
 import { ModuleCard } from "@/components/mantine";
 import { fetchCourseTopicsByCourseName } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseName";
+import requireAuth from "@/actions/auth/requireAuth";
 
 const CourseTopicsPage = async ({
   params,
 }: {
   params: { courseName: string };
 }) => {
+  const authResult = await requireAuth();
   const courseTopicName = capitalizeAndReplaceDash(params.courseName);
-  const courseTopicList: FetchedFormattedData = await fetchCourseTopicsByCourseName(courseTopicName);
+  const courseTopicList: FetchedFormattedData =
+    await fetchCourseTopicsByCourseName(courseTopicName);
   console.log(params.courseName);
 
   console.log("== success: ", courseTopicList.success);
