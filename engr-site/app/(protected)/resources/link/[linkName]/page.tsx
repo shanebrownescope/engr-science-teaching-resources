@@ -3,9 +3,7 @@ import { fetchLinkById } from "@/actions/fetching/links/fetchLinkById";
 import { fetchSimilarLinksByTags } from "@/actions/fetching/links/fetchSimilarLinksByTags";
 
 import { DisplayLink } from "@/app/(protected)/_components/DisplayLink";
-import {
-  FetchedLink,
-} from "@/utils/types";
+import { FetchedLink } from "@/utils/types";
 import { notFound } from "next/navigation";
 import { getCurrentUser } from "@/utils/authHelpers";
 import { fetchCommentsByLinkId } from "@/actions/fetching/comments/fetchCommentsByLinkId";
@@ -14,6 +12,7 @@ import { revalidatePath } from "next/cache";
 import CommentForm from "@/components/custom/comments/form/CommentForm";
 import CommentLinkThread from "@/components/custom/comments/thread/CommentLinkThread";
 import SimilarResourcesData from "@/components/custom/similar-resources/SimilarResourcesData";
+import requireAuth from "@/actions/auth/requireAuth";
 
 type searchParams = {
   id: string;
@@ -27,6 +26,8 @@ const ResourceLinkPage = async ({
   params: { linkName: string };
   searchParams: searchParams;
 }) => {
+  await requireAuth();
+
   const { linkName } = params;
   const { id } = searchParams;
 
@@ -69,7 +70,10 @@ const ResourceLinkPage = async ({
         <DisplayLink link={linkData.success as FetchedLink} />
       )}
 
-      <SimilarResourcesData similarResources={similarLinks?.success} type="link" />
+      <SimilarResourcesData
+        similarResources={similarLinks?.success}
+        type="link"
+      />
 
       <CommentForm handleFormSubmit={handleFormSubmit} />
       <CommentLinkThread commentThread={commentThread?.success} />

@@ -17,10 +17,13 @@ import styles from "@/styles/form.module.css";
 import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseId";
 import createResourceType from "@/actions/create/createResourceType";
 import { FormattedData } from "@/utils/formatting";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 type FormFields = z.infer<typeof CreateResourceTypeSchema>;
 
 const ResourceTypes = () => {
+  useRequireAuth();
+
   const router = useRouter();
   const role = useCurrentRole();
   if (role != "admin") {

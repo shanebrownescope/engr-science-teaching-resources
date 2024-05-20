@@ -4,15 +4,20 @@ import { useState, useEffect } from "react";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import { FormattedData } from "@/utils/formatting";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { FileUpload } from "../../_components/FileUpload";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const UploadFile = () => {
   const role = useCurrentRole();
   if (role != "admin") {
     console.log("-- not admin");
     redirect("/unauthorized");
+    // notFound()
+
   }
+
+
 
   const [coursesOptionsData, setCoursesOptionsData] =
     useState<any[]>();

@@ -44,21 +44,21 @@ export const LoginForm = () => {
         return;
       }
 
-      const result = await loginAction(data)
+      const result: any = await loginAction(data)
 
       console.log(result)
 
-      if (result.error) {
+      if (result && result.error) {
         setError("root", { message: result.error });
       }
 
-      if (result.success) {
+      if (result && result.success) {
         setSuccess(result.success);
       }
 
     } catch (error) {
       setError("root", { message: "Error" });
-      console.log("-- error: ", error);
+      console.log("-- error: ", errors);
     }
   };
 

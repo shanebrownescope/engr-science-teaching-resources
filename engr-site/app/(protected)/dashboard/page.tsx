@@ -1,5 +1,5 @@
 "use client";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 
 const DashboardPage = () => {
@@ -7,6 +7,7 @@ const DashboardPage = () => {
   if (role != "admin") {
     console.log("-- not admin");
     redirect("/unauthorized");
+    // redirect("/unauthorized");
   }
 
   return (

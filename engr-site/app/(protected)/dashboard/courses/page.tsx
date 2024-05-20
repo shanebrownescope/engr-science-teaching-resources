@@ -12,10 +12,12 @@ import { FormSuccess } from "@/components/FormSuccess";
 import { useRouter } from "next/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import styles from "@/styles/form.module.css";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 type FormFields = z.infer<typeof CreateCourseSchema>;
 
 const Courses = () => {
+  useRequireAuth();
   const router = useRouter()
   const role = useCurrentRole()
   if (role != "admin") {

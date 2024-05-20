@@ -18,10 +18,14 @@ import styles from "@/styles/form.module.css";
 import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseId";
 import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
 import { FormattedData } from "@/utils/formatting";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 type FormFields = z.infer<typeof CreateConceptSchema>;
 
 const Concepts = () => {
+  useRequireAuth();
+
+  
   const router = useRouter();
   const role = useCurrentRole();
   if (role != "admin") {

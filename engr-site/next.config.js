@@ -3,10 +3,9 @@
 
 
 const nextConfig = {
-    experimental: {
-      runtime: "nodejs" // or 'nodejs' or 'edge'
-    }
-  };
-  
-  module.exports = nextConfig;
-  
+    // experimental: {
+    //   runtime: "nodejs" // or 'nodejs' or 'edge'
+    // }
+};
+
+module.exports = nextConfig;
