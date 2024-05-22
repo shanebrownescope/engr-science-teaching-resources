@@ -1,20 +1,26 @@
 "use client";
 import { useState, ChangeEvent } from "react";
 
-
 import { createTagPostLink } from "@/actions/uploadingPostTags/uploadTagsAction";
 
 // import { createTagPost, getSignedURL } from "@/config/action";
 // import { DropzoneButton, ButtonProgress } from "../../components/mantine";
-// import { MantineProvider, TagsInput } from "@mantine/core";
 
 // import styles from '@/styles/test.module.css'
 import Tags from "./Tags";
 // import styles from "@/styles/test.module.css";
 import { SelectDropdown } from "@/components/mantine";
-import { FormattedData, capitalizeAndReplaceDash, capitalizeWords } from "@/utils/formatting";
+import {
+  FormattedData,
+  capitalizeAndReplaceDash,
+  capitalizeWords,
+} from "@/utils/formatting";
 import { uploadLink } from "@/actions/uploadingPostTags/uploadLink";
-import { sanitizeUrl, trimCapitalizeFirstLetter, validUrlPattern } from "@/utils/helpers";
+import {
+  sanitizeUrl,
+  trimCapitalizeFirstLetter,
+  validUrlPattern,
+} from "@/utils/helpers";
 import { useRouter } from "next/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { FormError } from "@/components/FormError";
@@ -22,7 +28,6 @@ import styles from "@/styles/form.module.css";
 import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseId";
 import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
 import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetchConceptsByResourceTypeId";
-
 
 type Options = {
   value: string | null;
@@ -47,8 +52,8 @@ type FormErrorsLinkUpload = {
 
 export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   console.log("data: ", coursesOptionsData);
-  const router = useRouter()
-  const role = useCurrentRole()
+  const router = useRouter();
+  const role = useCurrentRole();
   if (role != "admin") {
     console.log("-- not admin");
     router.push("/unauthorized");
@@ -74,17 +79,20 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     formatted: null,
   });
   const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>();
-  const [selectedCourseTopicOption, setSelectedCourseTopicOption] = useState<Options>({
-    value: null,
-    id: null,
-    formatted: null,
-  });
-  const [resourceTypeOptionsData, setResourceTypeOptionsData] = useState<any[]>();
-  const [selectedResourceTypeOption, setSelectedResourceTypeOption] = useState<Options>({
-    value: null,
-    id: null,
-    formatted: null,
-  });
+  const [selectedCourseTopicOption, setSelectedCourseTopicOption] =
+    useState<Options>({
+      value: null,
+      id: null,
+      formatted: null,
+    });
+  const [resourceTypeOptionsData, setResourceTypeOptionsData] =
+    useState<any[]>();
+  const [selectedResourceTypeOption, setSelectedResourceTypeOption] =
+    useState<Options>({
+      value: null,
+      id: null,
+      formatted: null,
+    });
   const [conceptOptionsData, setConceptOptionData] = useState<any[]>();
   const [selectedConceptOption, setSelectedConceptOption] = useState<Options>({
     value: null,
@@ -96,22 +104,19 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     linkUrl: undefined,
     courseName: undefined,
     courseTopicName: undefined,
-    resourceTypeName:undefined,
-    conceptName:undefined,
+    resourceTypeName: undefined,
+    conceptName: undefined,
     conceptId: undefined,
   });
   const errorMessages: { [key: string]: string } = {
     root: "Please fill out all required fields.",
-    linkName: 'Link name is required.',
+    linkName: "Link name is required.",
     linkUrl: "Link Url is required.",
-    courseId: 'Please select a course.',
-    courseTopicId: 'Please select a module.',
-    resourceTypeId: 'Please select a section.',
-    conceptId: 'Please select a concept.',
+    courseId: "Please select a course.",
+    courseTopicId: "Please select a module.",
+    resourceTypeId: "Please select a section.",
+    conceptId: "Please select a concept.",
   };
-
-
-
 
   console.log(selectedCourseOption);
 
@@ -125,7 +130,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     setResourceTypeOptionsData([]);
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
-    
 
     setSelectedCourseOption({ value: name, id: id, formatted: formatted });
 
@@ -133,7 +137,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
     setCourseTopicOptionsData(results.success);
   };
-
 
   const handleCourseTopicOptionSelect = async (
     value: string,
@@ -145,14 +148,16 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
 
-    setSelectedCourseTopicOption({ value: value, id: id, formatted: formatted });
+    setSelectedCourseTopicOption({
+      value: value,
+      id: id,
+      formatted: formatted,
+    });
 
-   
     const results = await fetchResourceTypesByCourseTopicId(id);
 
     setResourceTypeOptionsData(results.success);
   };
-
 
   const handleResourceTypeOptionSelect = async (
     value: string,
@@ -162,14 +167,16 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
 
-    setSelectedResourceTypeOption({ value: value, id: id, formatted: formatted });
+    setSelectedResourceTypeOption({
+      value: value,
+      id: id,
+      formatted: formatted,
+    });
 
     const results = await fetchConceptsByResourceTypeId(id);
 
-    
     setConceptOptionData(results.success);
   };
-
 
   const handleConceptOptionSelect = (
     value: string,
@@ -197,17 +204,15 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   };
   console.log("== tags: ", tags);
 
-
   const handleLinkUrlChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputUrl = e.target.value
-    setLinkUrl(inputUrl)
-    
-    const pattern = validUrlPattern
-    console.log("-testing: ", pattern.test(inputUrl))
+    const inputUrl = e.target.value;
+    setLinkUrl(inputUrl);
 
-    setIsValidUrl(pattern.test(inputUrl))
-  }
+    const pattern = validUrlPattern;
+    console.log("-testing: ", pattern.test(inputUrl));
 
+    setIsValidUrl(pattern.test(inputUrl));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -215,30 +220,45 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     setLoading(true);
     console.log({ tags, linkName, linkUrl });
     try {
-      if (!linkName || !linkUrl || !selectedCourseOption.value || !selectedCourseTopicOption.value || !selectedResourceTypeOption.value || !selectedConceptOption.value) {
+      if (
+        !linkName ||
+        !linkUrl ||
+        !selectedCourseOption.value ||
+        !selectedCourseTopicOption.value ||
+        !selectedResourceTypeOption.value ||
+        !selectedConceptOption.value
+      ) {
         // Handle validation failure
-        console.error('Validation failed: Some fields are empty');
+        console.error("Validation failed: Some fields are empty");
         // Set custom error messages based on the failed validation conditions
         const errors = {
           root: errorMessages.root,
           linkName: !linkName ? errorMessages.linkName : undefined,
           linkUrl: !linkUrl ? errorMessages.linkUrl : undefined,
-          courseName: !selectedCourseOption.value ? errorMessages.courseId : undefined,
-          courseTopicName: !selectedCourseTopicOption.value ? errorMessages.moduleId : undefined,
-          resourceTypeName: !selectedResourceTypeOption.value ? errorMessages.sectionId : undefined,
-          conceptName: !selectedConceptOption.value ? errorMessages.conceptId : undefined,
+          courseName: !selectedCourseOption.value
+            ? errorMessages.courseId
+            : undefined,
+          courseTopicName: !selectedCourseTopicOption.value
+            ? errorMessages.moduleId
+            : undefined,
+          resourceTypeName: !selectedResourceTypeOption.value
+            ? errorMessages.sectionId
+            : undefined,
+          conceptName: !selectedConceptOption.value
+            ? errorMessages.conceptId
+            : undefined,
         };
-        setErrors(errors)
-        setStatusMessage("validation failed")
-        return
+        setErrors(errors);
+        setStatusMessage("validation failed");
+        return;
       }
 
       //* checking if url matches url pattern
-      const pattern = validUrlPattern
+      const pattern = validUrlPattern;
       if (!pattern.test(linkUrl)) {
-        setStatusMessage("Invalid url")
-        setErrors({...errors, linkUrl: errors.linkUrl})
-        return
+        setStatusMessage("Invalid url");
+        setErrors({ ...errors, linkUrl: errors.linkUrl });
+        return;
       }
 
       setErrors({
@@ -257,30 +277,36 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       const currentDateWithoutTime = date.toISOString().slice(0, 10);
       console.log(currentDateWithoutTime);
 
-      const formattedDescription = trimCapitalizeFirstLetter(description)
-      const formattedContributor = trimCapitalizeFirstLetter(contributor)
-      console.log(formattedDescription)
-      console.log(formattedContributor)
-
+      const formattedDescription = trimCapitalizeFirstLetter(description);
+      const formattedContributor = trimCapitalizeFirstLetter(contributor);
+      console.log(formattedDescription);
+      console.log(formattedContributor);
 
       setLinkName((link) => link.trim());
-      const formattedLinkName = capitalizeAndReplaceDash(linkName)
-      console.log(formattedLinkName)
-    
+      const formattedLinkName = capitalizeAndReplaceDash(linkName);
+      console.log(formattedLinkName);
 
       setLinkUrl((link) => link.trim());
-      const sanitizedUrl = sanitizeUrl(linkUrl)
-      if (sanitizedUrl !== linkUrl || sanitizedUrl.includes('<') || sanitizedUrl.includes('>')) {
-        setStatusMessage("URL was altered during sanitization. Not storing in database")
-        return
+      const sanitizedUrl = sanitizeUrl(linkUrl);
+      if (
+        sanitizedUrl !== linkUrl ||
+        sanitizedUrl.includes("<") ||
+        sanitizedUrl.includes(">")
+      ) {
+        setStatusMessage(
+          "URL was altered during sanitization. Not storing in database"
+        );
+        return;
       }
 
       const linkResult = await uploadLink({
         linkName: formattedLinkName,
         linkUrl: sanitizedUrl,
         conceptId: selectedConceptOption.id!,
-        description: formattedDescription.length > 0 ? formattedDescription : null,
-        contributor: formattedContributor.length > 0 ? formattedContributor : "Anonymous",
+        description:
+          formattedDescription.length > 0 ? formattedDescription : null,
+        contributor:
+          formattedContributor.length > 0 ? formattedContributor : "Anonymous",
         uploadDate: currentDateWithoutTime!,
       });
       // const signedURLResult = await getSignedURL()
@@ -300,10 +326,8 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
         // Filter out empty tags first, then format the remaining tags
         const trimmedTags = tags
-          .filter(tag => tag.trim() !== "") // Filter out empty tags
-          .map(tag => capitalizeWords(tag.trim())); // Format the remaining tags
-
-
+          .filter((tag) => tag.trim() !== "") // Filter out empty tags
+          .map((tag) => capitalizeWords(tag.trim())); // Format the remaining tags
 
         if (trimmedTags && trimmedTags.length > 0) {
           const tagsResult = await createTagPostLink(trimmedTags, linkId);
@@ -339,44 +363,37 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     selectedResourceTypeOption.formatted
   );
 
-  console.log("valid url: ", isValidUrl)
-
-  
+  console.log("valid url: ", isValidUrl);
 
   return (
     <div className={styles.formAdminWrapper}>
       <p className={styles.formAdminTitle}> Link Upload </p>
 
-      {/* <MantineProvider>  */}
-      <form 
-        className={styles.form}
-        onSubmit={handleSubmit}
-      >
+      <form className={styles.form} onSubmit={handleSubmit}>
         {statusMessage && (
           <p className={styles.messageStyle}> {statusMessage} </p>
         )}
 
-        <div className="flex-col"> 
+        <div className="flex-col">
           <label> Input linkName </label>
-          <input 
+          <input
             className={errors.linkName && "input-error"}
             value={linkName}
-            type="text" 
+            type="text"
             disabled={loading}
-            onChange={(e) => setLinkName(e.target.value)} 
+            onChange={(e) => setLinkName(e.target.value)}
           />
           {errors.linkName && <p className="error">{errors.linkName}</p>}
-
         </div>
 
-        <div className="flex-col"> 
+        <div className="flex-col">
           <label> Input linkUrl </label>
-          <input 
+          <input
             className={errors.linkUrl && "input-error"}
-            type="text" 
-            onChange={handleLinkUrlChange} 
+            type="text"
+            onChange={handleLinkUrlChange}
             disabled={loading}
-            style={{borderColor: isValidUrl ? "green": "red"}}
+            style={{ borderColor: isValidUrl ? "green" : "red" }}
           />
           {errors.linkUrl && <p className="error">{errors.linkUrl}</p>}
         </div>
@@ -391,7 +408,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           {errors.courseName && <p className="error">{errors.courseName}</p>}
         </div>
 
-        <div> 
+        <div>
           <label> Select a course topic </label>
           {
             <SelectDropdown
@@ -400,17 +417,21 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
               selectedValue={selectedCourseTopicOption.value}
             />
           }
-          {errors.courseTopicName && <p className="error">{errors.courseTopicName}</p>}
+          {errors.courseTopicName && (
+            <p className="error">{errors.courseTopicName}</p>
+          )}
         </div>
 
-        <div> 
+        <div>
           <label> Select a resource type </label>
           <SelectDropdown
             optionsList={resourceTypeOptionsData}
             onOptionChange={handleResourceTypeOptionSelect}
             selectedValue={selectedResourceTypeOption.value}
           />
-          {errors.resourceTypeName && <p className="error">{errors.resourceTypeName}</p>}
+          {errors.resourceTypeName && (
+            <p className="error">{errors.resourceTypeName}</p>
+          )}
         </div>
 
         <div>
@@ -423,7 +444,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           {errors.conceptName && <p className="error">{errors.conceptName}</p>}
         </div>
 
-        <div className="flex-col">   
+        <div className="flex-col">
           <label> Add Description </label>
           <input
             type="text"
@@ -434,7 +455,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           />
         </div>
 
-        <div className="flex-col"> 
+        <div className="flex-col">
           <label> Add contributor </label>
           <input
             type="text"
@@ -461,9 +482,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           Upload
         </button>
         {errors.root && <FormError message={errors.root} />}
-
       </form>
-
 
       {/* <DropzoneButton /> */}
       {/* <ButtonProgress /> */}
@@ -474,7 +493,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       /> */}
       {/* {error && <div> {error} </div>} */}
       {/* {testDbResult && <div> {testDbResult} </div>} */}
-      {/* </MantineProvider> */}
     </div>
   );
 };

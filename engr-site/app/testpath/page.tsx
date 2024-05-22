@@ -6,7 +6,6 @@ import { createTagPost } from "@/actions/uploadingPostTags/uploadTagsAction";
 
 // import { createTagPost, getSignedURL } from "@/config/action";
 import { DropzoneButton, ButtonProgress } from "../../components/mantine";
-import { MantineProvider, TagsInput } from "@mantine/core";
 
 import Select from "react-select";
 
@@ -205,7 +204,6 @@ const TestPath = () => {
 
   return (
     <div>
-      {/* <MantineProvider>  */}
       <form onSubmit={handleSubmit}>
         {statusMessage && (
           <p className={styles.messageStyle}> {statusMessage} </p>
@@ -277,7 +275,6 @@ const TestPath = () => {
       /> */}
       {/* {error && <div> {error} </div>} */}
       {/* {testDbResult && <div> {testDbResult} </div>} */}
-      {/* </MantineProvider> */}
     </div>
   );
 };

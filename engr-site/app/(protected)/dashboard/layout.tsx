@@ -1,5 +1,4 @@
 import { NavbarNested } from "@/components/mantine";
-import { MantineProvider } from "@mantine/core";
 
 type ProtectedLayoutProps = {
   children: React.ReactNode;
@@ -8,10 +7,8 @@ type ProtectedLayoutProps = {
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return (
     <div className="flex">
-
-        <NavbarNested />
-        {children}
-
+      <NavbarNested />
+      {children}
     </div>
   );
 };

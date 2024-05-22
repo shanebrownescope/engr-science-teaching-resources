@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import "@mantine/core/styles.css";
-import { createTheme, MantineProvider } from "@mantine/core";
 import { HeaderMegaMenu, Comment } from "../../../../components/mantine";
 import { SimilarDocument, Document } from "../../../../components/custom";
 import { useParams } from "next/navigation";
@@ -11,7 +10,7 @@ export default function Lecture() {
   const params = useParams<{ lecturename: string }>();
 
   return (
-    <MantineProvider>
+    <div>
       <HeaderMegaMenu />
       <h1>Lecture: {params.lecturename}</h1>
       <Document />
@@ -36,6 +35,6 @@ export default function Lecture() {
         <Comment />
         <Comment />
       </div>
-    </MantineProvider>
+    </div>
   );
 }
