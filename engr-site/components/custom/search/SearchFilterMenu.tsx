@@ -24,14 +24,14 @@ export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
       .slice()
       .sort(
         (a, b) =>
-          new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime()
+          new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime(),
       );
   } else if (sortBy === "Oldest") {
     sortedData = data
       .slice()
       .sort(
         (a, b) =>
-          new Date(a.uploadDate).getTime() - new Date(b.uploadDate).getTime()
+          new Date(a.uploadDate).getTime() - new Date(b.uploadDate).getTime(),
       );
   }
 

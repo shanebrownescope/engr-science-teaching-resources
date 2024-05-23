@@ -2,10 +2,8 @@
 // import { useState, ChangeEvent, useEffect } from "react";
 // import { useForm, SubmitHandler, Controller } from "react-hook-form";
 
-
 // import { getSignedURL } from "@/actions/uploadingPostTags/getSignedUrl";
 // import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
-
 
 // import Tags from "./Tags";
 // import { SelectDropdown } from "@/components/mantine";
@@ -23,7 +21,6 @@
 // import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
 // import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetchConceptsByResourceTypeId";
 // import { Select } from "@mantine/core";
-
 
 // //* Testing: file upload to s3 and db
 // //* TestDb component: test db is working
@@ -52,7 +49,6 @@
 //   contributors: string;
 // }
 
-
 // export const FileUploadUseForm = ({ coursesOptionsData }: FileUploadProps) => {
 //   const router = useRouter()
 //   const role = useCurrentRole()
@@ -61,9 +57,6 @@
 //     router.push("/unauthorized");
 //   }
 //   console.log("data: ", coursesOptionsData);
-
-
-
 
 //   const {
 //     control,
@@ -81,7 +74,7 @@
 //       conceptId: "",
 //       description: "",
 //       contributors: "",
-//     }, 
+//     },
 //   });
 
 //   const [loading, setLoading] = useState(false);
@@ -102,10 +95,9 @@
 //   const [selectedConceptLabel, setSelectedConceptLabel] = useState("");
 
 //   const handleCourseChange = async (selectedCourseId: string) => {
-//     setValue("courseTopicId", ""); 
-//     setValue("resourceTypeId", ""); 
+//     setValue("courseTopicId", "");
+//     setValue("resourceTypeId", "");
 //     setValue("conceptId", "")
-
 
 //     const results = await fetchCourseTopicsByCourseId(selectedCourseId);
 //     if (results?.success) {
@@ -118,7 +110,7 @@
 //   };
 
 //   const handleCourseTopicChange = async (selectedCourseTopicId: string) => {
-//     setValue("resourceTypeId", ""); 
+//     setValue("resourceTypeId", "");
 //     setValue("conceptId", "")
 
 //     const results = await fetchResourceTypesByCourseTopicId(
@@ -149,10 +141,6 @@
 //     }
 //   };
 
-
-
-
-
 //   const [errors, setErrors] = useState<FormErrorsFileUpload>({
 //     fileName: undefined,
 //     file: undefined,
@@ -171,9 +159,6 @@
 //     resourceTypeId: 'Please select a section.',
 //     conceptId: 'Please select a concept.',
 //   };
-
-  
-
 
 //   const handleAddTag = () => {
 //     if (tags.length < 5) {
@@ -215,8 +200,6 @@
 //     return hashHex;
 //   };
 
-
-
 //   const onSubmit: SubmitHandler<FormFields> = async (data) => {
 //     const { fileName, courseId, courseTopicId, resourceTypeId, conceptId, description, contributors } = data;
 
@@ -254,7 +237,6 @@
 //         resourceTypeId: undefined,
 //         conceptId: undefined,
 //       });
-      
 
 //       setStatusMessage("uploading file");
 
@@ -266,9 +248,6 @@
 //       const formattedContributor = trimCapitalizeFirstLetter(contributors)
 //       console.log(formattedDescription)
 //       console.log(formattedContributor)
-
-      
-
 
 //       const checksum = await computeSHA256(file);
 //       const signedURLResult = await getSignedURL({
@@ -360,11 +339,9 @@
 //     }
 //   };
 
-
 //   console.log("file name: ", file && file.name);
 
 //   console.log("fileUrl: ", fileUrl);
-
 
 //   const date = new Date();
 //   const currentDateWithoutTime = date.toDateString();
@@ -374,8 +351,8 @@
 //     <div className={styles.formAdminWrapper}>
 //       {/* <MantineProvider>  */}
 //       <p className={styles.formAdminTitle}> Upload file </p>
-      
-//       <form 
+
+//       <form
 //         className={styles.form}
 //         onSubmit={handleSubmit(onSubmit)}
 //       >
@@ -383,7 +360,7 @@
 //           <p className={styles.messageStyle}> {statusMessage} </p>
 //         )}
 
-//         <div> 
+//         <div>
 //           <label> Select file </label>
 //           <input type="file" accept="pdf" onChange={handleFileChange} />
 //           {fileUrl && file && (
@@ -401,13 +378,13 @@
 //               </button>
 //             </div>
 //           )}
-        
+
 //         </div>
 //         {errors.file && <p className="error">{errors.file}</p>}
 
-//         <div className="flex-col">       
+//         <div className="flex-col">
 //           <label> Enter file name </label>
-//           <Controller 
+//           <Controller
 //             control={control}
 //             name="fileName"
 //             render={({ field }) => (
@@ -423,7 +400,7 @@
 //           />
 
 //           {errors.fileName && <p className="error">{errors.fileName}</p>}
-//         </div> 
+//         </div>
 
 //         <div className="flex-co gap-p25">
 //           <label> Select course</label>
@@ -450,7 +427,6 @@
 //           />
 //           {errors.resourceTypeId && <p className="error">{errors.resourceTypeId}</p>}
 //         </div>
-
 
 //         <div className="flex-co gap-p25">
 //           <label> Select course topic</label>
@@ -521,11 +497,7 @@
 //           {errors.conceptId && <p className="error">{errors.conceptId}</p>}
 //         </div>
 
-
-            
-      
-
-//         <div className="flex-col"> 
+//         <div className="flex-col">
 //           <label> Add Description </label>
 //           <Controller
 //             control={control}
@@ -554,7 +526,7 @@
 //               />
 //             )}
 //           />
-          
+
 //         </div>
 
 //         <Tags

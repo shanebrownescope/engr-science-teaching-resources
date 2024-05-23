@@ -10,18 +10,20 @@ type CommentLinkThreadProps = {
 };
 
 const CommentLinkThread = ({ commentThread }: CommentLinkThreadProps) => {
-  const [viewCount ,setViewCount] = useState(6)
+  const [viewCount, setViewCount] = useState(6);
 
   const handleViewMore = () => {
-    setViewCount(prev => prev + 6)
-  }
+    setViewCount((prev) => prev + 6);
+  };
 
   if (commentThread?.length === 0) {
     return <div>No comments</div>;
   }
   return (
     <div>
-      {commentThread?.slice(0, viewCount).map((comment) => (
+      {commentThread
+        ?.slice(0, viewCount)
+        .map((comment) => (
           <Comment
             key={comment.id}
             authorId={comment.userId}
@@ -29,11 +31,11 @@ const CommentLinkThread = ({ commentThread }: CommentLinkThreadProps) => {
             commentText={comment.commentText}
             uploadDate={comment.uploadDate as string}
           />
-      ))}
+        ))}
 
       {commentThread && viewCount < commentThread?.length && (
         <Button onClick={handleViewMore}> View more </Button>
-      )}    
+      )}
     </div>
   );
 };

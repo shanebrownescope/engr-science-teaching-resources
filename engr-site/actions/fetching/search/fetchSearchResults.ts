@@ -111,7 +111,7 @@ const fetchQuery = `
  * @returns {Promise<FetchedSearchResults>} An object containing the fetched search results or an error message
  */
 export const fetchSearchResults = async (
-  searchQuery: string
+  searchQuery: string,
 ): Promise<FetchedSearchResults> => {
   try {
     // searchQuery is used multiple times in the query
@@ -132,7 +132,7 @@ export const fetchSearchResults = async (
       const formattedData: AllFilesAndLinksDataFormatted[] = results[0].map(
         (item: AllFilesAndLinksData) => {
           return processFilesAndLinks(item);
-        }
+        },
       );
 
       return { success: formattedData, failure: undefined };

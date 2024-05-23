@@ -18,8 +18,8 @@ type FormFields = z.infer<typeof CreateCourseSchema>;
 
 const Courses = () => {
   useRequireAuth();
-  const router = useRouter()
-  const role = useCurrentRole()
+  const router = useRouter();
+  const role = useCurrentRole();
   if (role != "admin") {
     console.log("-- not admin");
     router.push("/unauthorized");
@@ -60,10 +60,7 @@ const Courses = () => {
   return (
     <div className={styles.formAdminWrapper}>
       <p className={styles.formAdminTitle}> Create Course </p>
-      <form 
-        className={styles.form}
-        onSubmit={handleSubmit(onSubmit)}>
-
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <div className="flex-col">
           <label> Course Name</label>
           <input
@@ -77,11 +74,12 @@ const Courses = () => {
             <p className="error">{errors.courseName.message}</p>
           )}
         </div>
-      
-        <button 
+
+        <button
           className={styles.formButton}
-          type="submit" 
-          disabled={isSubmitting}>
+          type="submit"
+          disabled={isSubmitting}
+        >
           {isSubmitting ? "Loading..." : "Create"}
         </button>
 

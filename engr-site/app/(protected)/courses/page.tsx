@@ -12,11 +12,10 @@ const Courses = async () => {
 
   const courseData: FetchedFormattedData = await fetchCourses();
 
-
   console.log("--courseData: ", courseData);
 
   return (
-    <SectionLayout> 
+    <SectionLayout>
       <h2>Courses</h2>
 
       <div className="grid-container">

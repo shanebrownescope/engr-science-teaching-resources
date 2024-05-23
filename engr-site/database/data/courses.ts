@@ -1,63 +1,64 @@
 import dbConnect from "@/database/dbConnector";
 
 export type CourseData = {
-  id: string,
-  courseName: string,
-}
+  id: string;
+  courseName: string;
+};
 
-export const getCourseByName = async (name: string): Promise<CourseData | null> => {
-  console.log(name)
+export const getCourseByName = async (
+  name: string,
+): Promise<CourseData | null> => {
+  console.log(name);
   try {
     const selectQuery = `
-      SELECT * FROM Courses_v2 WHERE courseName LIKE ?`
+      SELECT * FROM Courses_v2 WHERE courseName LIKE ?`;
 
-    const { results, error } = await dbConnect(selectQuery, [name])
+    const { results, error } = await dbConnect(selectQuery, [name]);
 
-    console.log(results)
+    console.log(results);
 
     if (results[0].length > 0) {
-      return results[0][0]
+      return results[0][0];
     }
 
-    return null
+    return null;
   } catch (error) {
-    return null
+    return null;
   }
-}
-
+};
 
 export const getCourseById = async (id: string): Promise<CourseData | null> => {
   try {
     const selectQuery = `
-      SELECT * FROM Courses_v2 WHERE id = ?`
+      SELECT * FROM Courses_v2 WHERE id = ?`;
 
-    const { results: course, error } = await dbConnect(selectQuery, [id])
+    const { results: course, error } = await dbConnect(selectQuery, [id]);
 
     if (course[0].length > 0) {
-      return course[0][0]
+      return course[0][0];
     }
 
-    return null
+    return null;
   } catch (error) {
-    return null
+    return null;
   }
-}
+};
 
-export const getAllCourses = async(): Promise<CourseData[] | null> => {
+export const getAllCourses = async (): Promise<CourseData[] | null> => {
   try {
     const selectQuery = `
-      SELECT * FROM Courses_v2`
+      SELECT * FROM Courses_v2`;
 
-    const { results, error } = await dbConnect(selectQuery)
+    const { results, error } = await dbConnect(selectQuery);
 
-    console.log(results[0])
+    console.log(results[0]);
 
     if (results[0].length > 0) {
-      return results[0]
+      return results[0];
     }
 
-    return null
+    return null;
   } catch (error) {
-    return null
+    return null;
   }
-}
+};

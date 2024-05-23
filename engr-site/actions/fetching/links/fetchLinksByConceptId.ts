@@ -43,7 +43,7 @@ export const fetchLinksByConceptId = async ({
         results[0].map(async (link: LinkData) => {
           const processedFile = await processLink(link);
           return processedFile;
-        })
+        }),
       );
 
       return { success: formattedData };

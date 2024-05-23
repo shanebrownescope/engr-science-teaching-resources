@@ -1,9 +1,9 @@
-"use server"
+"use server";
 
 import { sendUserUpdateEmailProps } from "@/app/(protected)/dashboard/pending-users/page";
-import dbConnect from "@/database/dbConnector"
+import dbConnect from "@/database/dbConnector";
 import { transporter } from "@/utils/email";
-import { revalidatePath } from "next/cache"
+import { revalidatePath } from "next/cache";
 
 /**
  * Updates the account status of a user to 'rejected'
@@ -16,17 +16,15 @@ export const rejectUser = async (userId: string) => {
     const updateQuery = `
       UPDATE Users_v2 SET accountStatus = 'rejected' WHERE id = ${userId}`;
 
-    const { results: updatedUser } = await dbConnect(
-      updateQuery
-    )
+    const { results: updatedUser } = await dbConnect(updateQuery);
 
-    await revalidatePath('/dashboard/pending-users')
+    await revalidatePath("/dashboard/pending-users");
 
-    return { success: "User rejected" }
+    return { success: "User rejected" };
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 /**
  * Sends an email to a user notifying them that their account has been rejected.
@@ -37,7 +35,11 @@ export const rejectUser = async (userId: string) => {
  * @param {string} user.lastName - The user's last name
  * @returns {Promise<{success: string, messageId: string} | {failure: string, error: Error}>} - A promise that resolves to an object with the status of the operation and the message ID if successful
  */
-export const sendUserRejectionEmail = async ({ email, firstName, lastName }: sendUserUpdateEmailProps) => {
+export const sendUserRejectionEmail = async ({
+  email,
+  firstName,
+  lastName,
+}: sendUserUpdateEmailProps) => {
   try {
     const userRejectionEmailContent = `
       <p>Dear ${firstName} ${lastName},</p>
@@ -56,9 +58,7 @@ export const sendUserRejectionEmail = async ({ email, firstName, lastName }: sen
     const info = await transporter.sendMail(mailOptions);
 
     return { success: "Rejection email sent", messageId: info.messageId };
-
   } catch (error) {
-    return { failure: "Failed to send email" ,error: error };
+    return { failure: "Failed to send email", error: error };
   }
-}
-
+};

@@ -20,7 +20,7 @@ export function ButtonProgress() {
         setLoaded(true);
         return 0;
       }),
-    20
+    20,
   );
 
   return (
@@ -36,8 +36,8 @@ export function ButtonProgress() {
         {progress !== 0
           ? "Uploading files"
           : loaded
-          ? "Files uploaded"
-          : "Upload files"}
+            ? "Files uploaded"
+            : "Upload files"}
       </div>
       {progress !== 0 && (
         <Progress

@@ -1,23 +1,27 @@
-"use server"
+"use server";
 
 import { getUserById } from "@/database/data/user";
 import dbConnect from "@/database/dbConnector";
 import { CommentSchema } from "@/schemas";
-import z from "zod"
+import z from "zod";
 
 type UploadLinkCommentProps = {
   values: z.infer<typeof CommentSchema>;
   userId: string;
   linkId: string;
-}
+};
 
 /**
  * Server action to upload a link comment to the database.
- * 
+ *
  * @param {UploadLinkCommentProps} props - The properties of the comment.
  * @returns {Promise<{ failure?: string, success?: boolean }>} - The result of the operation.
  */
-export const uploadLinkComment =  async({ values, userId, linkId }: UploadLinkCommentProps) => {
+export const uploadLinkComment = async ({
+  values,
+  userId,
+  linkId,
+}: UploadLinkCommentProps) => {
   try {
     const existingUser = await getUserById(userId);
     if (!existingUser) {
@@ -37,7 +41,12 @@ export const uploadLinkComment =  async({ values, userId, linkId }: UploadLinkCo
     const uploadQuery = `
       INSERT INTO LinkComments_v2 (linkId, userId, commentText, uploadDate) VALUES (?, ?, ?, ?)`;
 
-    const { results, error } = await dbConnect(uploadQuery, [linkId, userId, commentText, uploadDate]);
+    const { results, error } = await dbConnect(uploadQuery, [
+      linkId,
+      userId,
+      commentText,
+      uploadDate,
+    ]);
     if (error) {
       return {
         failure: "Internal server error, error uploading comment to db",
@@ -47,10 +56,9 @@ export const uploadLinkComment =  async({ values, userId, linkId }: UploadLinkCo
     if (results[0].insertId) {
       return { success: true };
     }
-
   } catch (error) {
     return {
       failure: "Internal server error, error uploading comment",
-    }
+    };
   }
-}
+};

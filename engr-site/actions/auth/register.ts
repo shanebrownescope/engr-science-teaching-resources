@@ -15,7 +15,7 @@ import dbConnect from "@/database/dbConnector";
  * @returns An object with the status of the operation (success, error, or failure) and the message ID if successful
  */
 export const sendApprovalRequestToTeam = async (
-  values: z.infer<typeof RegisterFormEmailSchema>
+  values: z.infer<typeof RegisterFormEmailSchema>,
 ) => {
   try {
     const validatedFields = RegisterFormEmailSchema.safeParse(values);
@@ -89,7 +89,7 @@ export const sendApprovalRequestToTeam = async (
 export const sendUserRegistrationConfirmation = async (
   email: string,
   firstName: string,
-  lastName: string
+  lastName: string,
 ) => {
   try {
     // Validate the email

@@ -9,7 +9,6 @@ type CourseCardProps = {
   href: string;
 };
 
-
 export function CourseCard({ title, description, href }: CourseCardProps) {
   return (
     <Card withBorder padding="lg" className={classes.card}>
@@ -19,11 +18,13 @@ export function CourseCard({ title, description, href }: CourseCardProps) {
         </Text>
       </Group>
       <Text mt="sm" mb="md" c="dimmed" fz="xs">
-        {description} 
+        {description}
       </Text>
       <Link href={href} passHref legacyBehavior>
         {/* TODO: Fix Button componen */}
-        <Button component="a" className="button--primary">View</Button>
+        <Button component="a" className="button--primary">
+          View
+        </Button>
       </Link>
     </Card>
   );

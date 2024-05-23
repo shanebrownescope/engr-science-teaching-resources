@@ -41,7 +41,7 @@ const createConcept = async (values: z.infer<typeof CreateConceptSchema>) => {
 
     const existingCourseTopic = await getCourseTopicByIdAndCourseId(
       courseTopicId,
-      courseId
+      courseId,
     );
 
     if (!existingCourseTopic) {
@@ -50,7 +50,7 @@ const createConcept = async (values: z.infer<typeof CreateConceptSchema>) => {
 
     const existingResourceType = await getResourceTypeByIdAndCourseTopicId(
       resourceTypeId,
-      courseTopicId
+      courseTopicId,
     );
 
     if (!existingResourceType) {
@@ -61,7 +61,7 @@ const createConcept = async (values: z.infer<typeof CreateConceptSchema>) => {
 
     const existingConcept = await getConceptByNameAndResourceTypeId(
       formattedConceptName,
-      resourceTypeId
+      resourceTypeId,
     );
 
     if (existingConcept) {

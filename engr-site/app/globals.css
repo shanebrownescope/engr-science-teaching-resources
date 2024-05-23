@@ -1,4 +1,3 @@
-
 /* @link https://utopia.fyi/type/calculator?c=320,14,1.25,1440,16,1.333,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 
 :root {
@@ -30,9 +29,6 @@
   --grey-border-color: #afa9a9;
 }
 
-
-
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -47,8 +43,6 @@ body {
   border: 1px solid var(--grey-border-color);
 }
 
-
-
 .md-container {
   max-width: 1020px;
   margin-inline: auto;
@@ -60,7 +54,7 @@ body {
 }
 
 .required-symbol {
-  color: #FF0000;
+  color: #ff0000;
 }
 
 .sub-text {
@@ -84,11 +78,9 @@ body {
   margin-top: 3em;
 }
 
-
 .mb-2 {
   margin-bottom: 1em;
 }
-
 
 .mb-3 {
   margin-bottom: 3em;
@@ -99,8 +91,8 @@ body {
 }
 
 .flex-col {
-  display: flex; 
-  flex-direction: column; 
+  display: flex;
+  flex-direction: column;
 }
 
 .align-baseline {
@@ -108,12 +100,12 @@ body {
 }
 
 .gap-p25 {
-  gap: .25em;
+  gap: 0.25em;
 }
 
 .gap-1 {
   gap: 1em;
-} 
+}
 
 .gap-2 {
   gap: 2em;
@@ -127,12 +119,12 @@ label {
   color: black;
 }
 
-input[type=text], 
-input[type=email],
-input[type=password] {
+input[type="text"],
+input[type="email"],
+input[type="password"] {
   color: black;
   background: white;
-  border: #D2D2D2 1px solid;
+  border: #d2d2d2 1px solid;
   border-radius: 5px;
   font-size: 16px;
   padding: 5px 10px;
@@ -140,19 +132,20 @@ input[type=password] {
 
 button[type="submit"]:disabled {
   opacity: 0.6; /* Reduced opacity to indicate it's disabled */
-  cursor: not-allowed; 
+  cursor: not-allowed;
 }
 
 input:focus {
-  border-color: #00A6DD; /* Change border color when input is focused */
-  outline: none;  /* Remove default browser outline */
+  border-color: #00a6dd; /* Change border color when input is focused */
+  outline: none; /* Remove default browser outline */
 }
 
 input.input-error {
-  border-color: #E03944;
+  border-color: #e03944;
 }
 
-a, a:visited {
+a,
+a:visited {
   color: blue;
   text-decoration: none;
 }
@@ -160,7 +153,6 @@ a, a:visited {
 button {
   border: none;
 }
-
 
 .site-logo {
   font-weight: bold;
@@ -174,7 +166,6 @@ button {
   color: white !important;
   text-decoration: none;
 }
-
 
 .section-container {
   display: flex;

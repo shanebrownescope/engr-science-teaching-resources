@@ -18,7 +18,6 @@ export const fetchSimilarFilesByTags = async ({
   fileId,
   tags,
 }: fetchSimilarFilesByTagsProps): Promise<FetchedFilesDataArray> => {
-
   const tagsString = tags?.map((tag) => `'${tag}'`).join(",");
   console.log(tagsString);
 
@@ -49,7 +48,7 @@ export const fetchSimilarFilesByTags = async ({
         filesResult[0].map(async (file: FileData) => {
           const processedFile = await processFile(file);
           return processedFile;
-        })
+        }),
       );
 
       return { success: formattedData };

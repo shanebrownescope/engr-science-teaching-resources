@@ -79,7 +79,7 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
       (item) =>
         item.originalName.toLowerCase().includes(search.toLowerCase()) ||
         item.description.toLowerCase().includes(search.toLowerCase()) ||
-        item.tags.join(", ").toLowerCase().includes(search.toLowerCase())
+        item.tags.join(", ").toLowerCase().includes(search.toLowerCase()),
     );
 
     if (sortBy) {
@@ -148,13 +148,15 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
               <Table.Td>
                 {" "}
                 <Link
-                href={`/resources/${item.type}/${item.urlName}?${new URLSearchParams({
-                  id: item.id.toString()
-                })} `}
-                passHref
-              >
-                <p className={classes.linkStyle}>{item.originalName}</p>
-              </Link>
+                  href={`/resources/${item.type}/${item.urlName}?${new URLSearchParams(
+                    {
+                      id: item.id.toString(),
+                    },
+                  )} `}
+                  passHref
+                >
+                  <p className={classes.linkStyle}>{item.originalName}</p>
+                </Link>
               </Table.Td>
               <Table.Td>{item.description}</Table.Td>
               <Table.Td>

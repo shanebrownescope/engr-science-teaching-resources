@@ -3,11 +3,5 @@ export default async function ResourceLayout({
 }: {
   children: React.ReactNode;
 }) {
-
-
-  return (
-  
-    <div className="md-container"> {children} </div>
-
-  );
+  return <div className="md-container"> {children} </div>;
 }

@@ -57,7 +57,7 @@ const ResourceLinkPage = async ({
       revalidatePath(
         `/resources/link/${linkName}?${new URLSearchParams({
           id: id,
-        })}`
+        })}`,
       );
     } catch (error) {
       console.error(error);

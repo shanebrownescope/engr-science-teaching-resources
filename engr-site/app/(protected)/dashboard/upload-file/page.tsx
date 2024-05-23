@@ -14,13 +14,9 @@ const UploadFile = () => {
     console.log("-- not admin");
     redirect("/unauthorized");
     // notFound()
-
   }
 
-
-
-  const [coursesOptionsData, setCoursesOptionsData] =
-    useState<any[]>();
+  const [coursesOptionsData, setCoursesOptionsData] = useState<any[]>();
   useEffect(() => {
     const fetchAllCourses = async () => {
       const coursesOptionsData = await fetchCourses();
@@ -44,7 +40,6 @@ const UploadFile = () => {
   return (
     <div>
       <FileUpload coursesOptionsData={coursesOptionsData} />
-
     </div>
   );
 };

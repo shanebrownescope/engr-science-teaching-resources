@@ -1,9 +1,9 @@
-"use server"
+"use server";
 
-import { getPendingUsers } from "@/database/data/user"
-import { UserData } from "@/utils/types"
+import { getPendingUsers } from "@/database/data/user";
+import { UserData } from "@/utils/types";
 
-export type FetchPendingUsersData = 
+export type FetchPendingUsersData =
   | { success: UserData[] }
   | { failure: string };
 
@@ -13,17 +13,16 @@ export type FetchPendingUsersData =
  */
 export const fetchPendingUsers = async (): Promise<FetchPendingUsersData> => {
   try {
-    const results: UserData[] = await getPendingUsers()
+    const results: UserData[] = await getPendingUsers();
 
     if (!results || results.length === 0) {
       return { failure: "No pending users" };
     }
 
     return { success: results };
-
   } catch (error) {
     return {
       failure: "Internal server error, error retrieving modules from db",
     };
   }
-}
+};

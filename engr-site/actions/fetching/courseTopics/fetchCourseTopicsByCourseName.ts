@@ -13,18 +13,17 @@ import { CourseTopicData } from "@/database/data/courseTopics";
  * containing the fetched course topics or an error message
  */
 export const fetchCourseTopicsByCourseName = async (
-  courseName: string
+  courseName: string,
 ): Promise<FetchedFormattedData> => {
-  
   try {
     const course = await getCourseByName(courseName);
-    
+
     console.log(course?.id);
 
     if (!course?.id) {
-      return { 
-        failure: "failed to get course Id", 
-        success: undefined 
+      return {
+        failure: "failed to get course Id",
+        success: undefined,
       };
     }
 
@@ -35,9 +34,9 @@ export const fetchCourseTopicsByCourseName = async (
 
     if (results[0].length > 0) {
       const formattedData = results[0].map((item: CourseTopicData) =>
-        lowercaseAndReplaceSpace(item.id, item.courseTopicName)
+        lowercaseAndReplaceSpace(item.id, item.courseTopicName),
       );
-            
+
       return { success: formattedData, failure: undefined };
     }
 

@@ -1,0 +1,14 @@
+# Build output directories
+.next
+
+# TypeScript environment declaration
+next-env.d.ts
+
+# Dependency directories
+node_modules
+
+# Lock files
+package-lock.json
+
+# Public directory (often contains static assets)
+public

@@ -1,13 +1,10 @@
-import styles from '@/styles/form.module.css'
+import styles from "@/styles/form.module.css";
 
 type FormErrorProps = {
-    message?: string;
-}
+  message?: string;
+};
 
-export const FormError = ({
-  message
-}: FormErrorProps) => {
-
+export const FormError = ({ message }: FormErrorProps) => {
   if (!message) {
     return null;
   }
@@ -16,5 +13,5 @@ export const FormError = ({
     <div className={styles.formError}>
       <p> {message} </p>
     </div>
-  )
-}
+  );
+};

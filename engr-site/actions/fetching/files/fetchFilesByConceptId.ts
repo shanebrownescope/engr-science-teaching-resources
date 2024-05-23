@@ -40,7 +40,7 @@ export const fetchFilesByConceptId = async ({
         results[0].map(async (file: FileData) => {
           const processedFile = await processFile(file);
           return processedFile;
-        })
+        }),
       );
 
       return { success: formattedData };

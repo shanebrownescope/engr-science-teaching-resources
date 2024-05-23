@@ -1,8 +1,7 @@
-import { fetchCourses } from '@/actions/fetching/courses/fetchCourses';
-import { FormattedData } from '@/utils/formatting';
-import { FetchedFormattedData } from '@/utils/types';
-import { useState, useEffect } from 'react';
-
+import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
+import { FormattedData } from "@/utils/formatting";
+import { FetchedFormattedData } from "@/utils/types";
+import { useState, useEffect } from "react";
 
 const useFetchCourses = (limit?: number) => {
   const [data, setData] = useState<FormattedData[] | null>(null);
@@ -20,7 +19,7 @@ const useFetchCourses = (limit?: number) => {
           setError(response.failure);
         }
       } catch (err) {
-        setError('An unexpected error occurred');
+        setError("An unexpected error occurred");
       } finally {
         setLoading(false);
       }

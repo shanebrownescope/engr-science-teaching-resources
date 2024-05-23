@@ -1,19 +1,19 @@
-"use server"
+"use server";
 
 import { getUserById } from "@/database/data/user";
 import dbConnect from "@/database/dbConnector";
 import { CommentSchema } from "@/schemas";
-import z from "zod"
+import z from "zod";
 
 type UploadFileCommentProps = {
   values: z.infer<typeof CommentSchema>;
   userId: string;
   fileId: string;
-}
+};
 
 /**
  * Server action to upload a file comment to the database.
- * 
+ *
  * @param {UploadFileCommentProps} props - The properties of the comment.
  * @returns {Promise<{ failure?: string, success?: boolean }>} - The result of the operation.
  */
@@ -21,7 +21,10 @@ export const uploadFileComment = async ({
   values,
   userId,
   fileId,
-}: UploadFileCommentProps): Promise<{ failure?: string, success?: boolean }> => {
+}: UploadFileCommentProps): Promise<{
+  failure?: string;
+  success?: boolean;
+}> => {
   try {
     const existingUser = await getUserById(userId);
 
@@ -61,7 +64,6 @@ export const uploadFileComment = async ({
     if (results[0].insertId) {
       return { success: true };
     }
-
   } catch (error) {
     return {
       failure: "Internal server error, error uploading comment",

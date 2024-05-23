@@ -20,9 +20,9 @@ const requireAuth = async () => {
 
   if (!isLoggedIn) {
     redirect("/auth/login");
-  } 
+  }
 
-  return
+  return;
 };
 
 export default requireAuth;

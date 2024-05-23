@@ -10,10 +10,9 @@ import { LoginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { SubmitHandler, useForm } from "react-hook-form";
-import {  useState } from "react";
+import { useState } from "react";
 
 type FormFields = z.infer<typeof LoginSchema>;
-
 
 /**
  * Renders a login form component.
@@ -35,8 +34,7 @@ export const LoginForm = () => {
     resolver: zodResolver(LoginSchema), // Resolver for Zod schema validation
   });
 
-
-  const onSubmit: SubmitHandler<FormFields> = async(data) => {
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
     // Reset the error and success messages
     setError("root", { message: "" });
     setSuccess("");
@@ -49,9 +47,9 @@ export const LoginForm = () => {
         return;
       }
 
-      const result: any = await loginAction(data)
+      const result: any = await loginAction(data);
 
-      console.log(result)
+      console.log(result);
 
       if (result && result.error) {
         setError("root", { message: result.error });
@@ -60,7 +58,6 @@ export const LoginForm = () => {
       if (result && result.success) {
         setSuccess(result.success);
       }
-
     } catch (error) {
       setError("root", { message: "Error" });
       console.log("-- error: ", errors);
@@ -70,7 +67,7 @@ export const LoginForm = () => {
   return (
     <div className={styles.formWrapper}>
       <p className={styles.title}>Login</p>
-      <form className={styles.form} onSubmit={handleSubmit(onSubmit)} >
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <div className="flex-col">
           <label> Email </label>
           <input
@@ -82,7 +79,7 @@ export const LoginForm = () => {
           />
           {errors.email && (
             <p className={styles.error}> {errors.email.message} </p>
-          )}        
+          )}
         </div>
 
         <div className="flex-col">
@@ -102,17 +99,14 @@ export const LoginForm = () => {
         <FormError message={errors.root?.message} />
         <FormSuccess message={success} />
 
-        <a 
-          className={styles.forgotLink} 
-          href="/auth/forgot-password"
-        >
+        <a className={styles.forgotLink} href="/auth/forgot-password">
           Forgot password?
         </a>
 
         <button
           className={styles.formButton}
           type="submit"
-          disabled={isSubmitting} 
+          disabled={isSubmitting}
         >
           Login
         </button>

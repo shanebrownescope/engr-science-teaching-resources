@@ -8,10 +8,8 @@ type ProtectedLayoutProps = {
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return (
     <div className="flex">
-
-        <NavbarNested />
-        {children}
-
+      <NavbarNested />
+      {children}
     </div>
   );
 };

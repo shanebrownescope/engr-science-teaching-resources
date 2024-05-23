@@ -24,14 +24,17 @@ export const SearchResultBox = ({
     <div className={styles.resultBox}>
       <Link
         href={`/resources/${type}/${urlName}?${new URLSearchParams({
-          id: id.toString()
+          id: id.toString(),
         })}`}
       >
         <h2 className={styles.resultTitle}>{title}</h2>
         <p className={styles.resultDescription}>{description}</p>
         <div className={styles.tagsContainer}>
           {tags.map((tag: string, index: number) => (
-            <span key={index} className={`${styles.tag} ${styles.tag.toLowerCase()}`}>
+            <span
+              key={index}
+              className={`${styles.tag} ${styles.tag.toLowerCase()}`}
+            >
               {tag}
             </span>
           ))}

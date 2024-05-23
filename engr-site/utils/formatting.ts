@@ -11,7 +11,7 @@ export type FormattedData = {
 //* Ref: fetchCourses.ts
 export const lowercaseAndReplaceSpace = (
   id: number | string,
-  input: string
+  input: string,
 ): FormattedData => {
   console.log(input, id);
 
@@ -28,19 +28,14 @@ export const lowercaseAndReplaceSpace = (
   return final;
 };
 
-export const lowercaseAndReplaceSpaceString = (
-  input: string
-): string => {
-
+export const lowercaseAndReplaceSpaceString = (input: string): string => {
   const fieldValue = input;
   const lowerCase = fieldValue.toLowerCase();
-  const formattedValue = lowerCase.replace(/ /g, '-');
-  console.log(formattedValue)
-  
-  return formattedValue
+  const formattedValue = lowerCase.replace(/ /g, "-");
+  console.log(formattedValue);
+
+  return formattedValue;
 };
-
-
 
 export const capitalizeAndReplaceDash = (name: string): string => {
   console.log(name);
@@ -51,9 +46,9 @@ export const capitalizeAndReplaceDash = (name: string): string => {
 };
 
 export const capitalizeWords = (input: string): string => {
-  console.log(input)
-  const exceptions = new Set(["and", "an", "a", "the", "for", "of"]); 
-  
+  console.log(input);
+  const exceptions = new Set(["and", "an", "a", "the", "for", "of"]);
+
   //* split string into array of words
   const splitWordIntoArray = input.toLowerCase().split(" ");
 
@@ -68,16 +63,14 @@ export const capitalizeWords = (input: string): string => {
   return formattedWord.join(" ");
 };
 
-
 export const formatTimeAgo = (uploadDate: string) => {
   const currentTime = new Date();
   console.log("currentTime", currentTime);
   const createdAt: Date = new Date(uploadDate);
   console.log("createdAt", createdAt);
 
-
   const timeDifference = currentTime.getTime() - createdAt.getTime();
-  console.log("timeDiff",timeDifference);
+  console.log("timeDiff", timeDifference);
   const secondsDifference = Math.floor(timeDifference / 1000);
   const minutesDifference = Math.floor(secondsDifference / 60);
   const hoursDifference = Math.floor(minutesDifference / 60);
@@ -86,16 +79,16 @@ export const formatTimeAgo = (uploadDate: string) => {
   const yearsDifference = Math.floor(monthsDifference / 12);
 
   if (yearsDifference > 0) {
-    return `${yearsDifference} year${yearsDifference > 1 ? 's' : ''} ago`;
+    return `${yearsDifference} year${yearsDifference > 1 ? "s" : ""} ago`;
   } else if (monthsDifference > 0) {
-    return `${monthsDifference} month${monthsDifference > 1 ? 's' : ''} ago`;
+    return `${monthsDifference} month${monthsDifference > 1 ? "s" : ""} ago`;
   } else if (daysDifference > 0) {
-    return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
+    return `${daysDifference} day${daysDifference > 1 ? "s" : ""} ago`;
   } else if (hoursDifference > 0) {
-    return `${hoursDifference} hour${hoursDifference > 1 ? 's' : ''} ago`;
+    return `${hoursDifference} hour${hoursDifference > 1 ? "s" : ""} ago`;
   } else if (minutesDifference > 0) {
-    return `${minutesDifference} minute${minutesDifference > 1 ? 's' : ''} ago`;
+    return `${minutesDifference} minute${minutesDifference > 1 ? "s" : ""} ago`;
   } else {
-    return `${secondsDifference} second${secondsDifference > 1 ? 's' : ''} ago`;
+    return `${secondsDifference} second${secondsDifference > 1 ? "s" : ""} ago`;
   }
-}
+};

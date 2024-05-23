@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write \"app/**/*.{js,jsx,ts,tsx,css,scss,md}\" \"actions/**/*.{js,jsx,ts,tsx,css,scss,md}\" \"components/**/*.{js,jsx,ts,tsx,css,scss,md}\" \"database/**/*.{js,jsx,ts,tsx,css,scss,md}\" \"hooks/**/*.{js,jsx,ts,tsx,css,scss,md}\" \"schemas/**/*.{js,jsx,ts,tsx,css,scss,md}\" \"styles/**/*.{js,jsx,ts,tsx,css,scss,md}\" \"utils/**/*.{js,jsx,ts,tsx,css,scss,md}\" \"auth.ts\" \"auth.config.ts\" \"routes.ts\" \"next.config.js\" \"package.json\" \"postcss.config.cjs\" \"prettier.config.ts\" \"README.md\" \"tailwind.config.js\" \"tsconfig.json\""
   },
   "dependencies": {
     "@auth/typeorm-adapter": "^1.7.0",
@@ -41,6 +42,7 @@
     "@types/react": "18.2.48",
     "@types/react-dom": "^18",
     "postcss-preset-mantine": "^1.12.3",
+    "prettier": "^3.2.5",
     "typescript": "^5"
   }
 }

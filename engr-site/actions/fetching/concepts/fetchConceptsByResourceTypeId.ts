@@ -4,14 +4,15 @@ import dbConnect from "@/database/dbConnector";
 import { FormattedData, lowercaseAndReplaceSpace } from "@/utils/formatting";
 import { FetchedFormattedData } from "@/utils/types";
 
-
 /**
  * Fetches concepts by resource type id from the database
  * @param id The id of the resource type
  * @returns A promise that resolves to a FetchedFormattedData object
  * containing the fetched concepts or an error message
  */
-export const fetchConceptsByResourceTypeId = async (id: string | number): Promise<FetchedFormattedData> => {
+export const fetchConceptsByResourceTypeId = async (
+  id: string | number,
+): Promise<FetchedFormattedData> => {
   try {
     const selectQuery = `
       SELECT * FROM Concepts_v2 WHERE resourceTypeId = ?`;
@@ -23,10 +24,9 @@ export const fetchConceptsByResourceTypeId = async (id: string | number): Promis
     }
 
     if (results[0].length > 0) {
-
       const formattedConceptData: FormattedData[] = results[0].map(
         (concept: ConceptData) =>
-          lowercaseAndReplaceSpace(concept.id, concept.conceptName)
+          lowercaseAndReplaceSpace(concept.id, concept.conceptName),
       );
       return { success: formattedConceptData, failure: undefined };
     }

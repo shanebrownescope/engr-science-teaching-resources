@@ -1,19 +1,35 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react';
-import { Pagination } from '@mantine/core';
-import { PendingUserDetails } from '@/components/custom/PendingUser/PendingUserDetails';
-import { FetchedUserData, UserData } from '@/utils/types';
-import { HandleUserActionProps, sendUserUpdateEmailProps } from '@/app/(protected)/dashboard/pending-users/page';
+import React, { useState } from "react";
+import { Pagination } from "@mantine/core";
+import { PendingUserDetails } from "@/components/custom/PendingUser/PendingUserDetails";
+import { FetchedUserData, UserData } from "@/utils/types";
+import {
+  HandleUserActionProps,
+  sendUserUpdateEmailProps,
+} from "@/app/(protected)/dashboard/pending-users/page";
 
 type PendingUserListPaginatedProps = {
   data: any;
-  handleApprove: ( { userId, email, firstName, lastName }: HandleUserActionProps) => void;
-  handleReject: ( { userId, email, firstName, lastName }: HandleUserActionProps) => void;
-}
+  handleApprove: ({
+    userId,
+    email,
+    firstName,
+    lastName,
+  }: HandleUserActionProps) => void;
+  handleReject: ({
+    userId,
+    email,
+    firstName,
+    lastName,
+  }: HandleUserActionProps) => void;
+};
 
-
-const PendingUserListPaginated =({ data, handleApprove, handleReject }: PendingUserListPaginatedProps) => {
+const PendingUserListPaginated = ({
+  data,
+  handleApprove,
+  handleReject,
+}: PendingUserListPaginatedProps) => {
   // The number of items to display on each page
   const itemsPerPage = 6;
   // Total number of items in the data array
@@ -56,11 +72,23 @@ const PendingUserListPaginated =({ data, handleApprove, handleReject }: PendingU
               email={item.email}
               username={item.username}
               status={item.accountStatus}
-              handleApprove={() => handleApprove({ userId: item.id, email: item.email, firstName: item.firstName, lastName: item.lastName })}
-              handleReject={() => handleReject(({ userId: item.id, email: item.email, firstName: item.firstName, lastName: item.lastName }))}
-
-              
-            />  
+              handleApprove={() =>
+                handleApprove({
+                  userId: item.id,
+                  email: item.email,
+                  firstName: item.firstName,
+                  lastName: item.lastName,
+                })
+              }
+              handleReject={() =>
+                handleReject({
+                  userId: item.id,
+                  email: item.email,
+                  firstName: item.firstName,
+                  lastName: item.lastName,
+                })
+              }
+            />
           </div>
         ))}
       </div>
@@ -72,6 +100,6 @@ const PendingUserListPaginated =({ data, handleApprove, handleReject }: PendingU
       />
     </>
   );
-}
+};
 
 export default PendingUserListPaginated;

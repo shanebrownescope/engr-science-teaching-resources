@@ -1,7 +1,5 @@
 import { _Object } from "@aws-sdk/client-s3";
-import {
-  lowercaseAndReplaceSpaceString,
-} from "./formatting";
+import { lowercaseAndReplaceSpaceString } from "./formatting";
 
 import {
   AllFilesAndLinksData,
@@ -57,7 +55,7 @@ export const getNameFromKey = async (Contents: _Object[] | undefined) => {
  */
 
 export const processFile = async (file: FileData): Promise<FetchedFile> => {
-  console.log("tagNames: " ,file.tagNames)
+  console.log("tagNames: ", file.tagNames);
   let tags: any;
 
   // Convert [null] to an empty array if the first element is null
@@ -79,15 +77,13 @@ export const processFile = async (file: FileData): Promise<FetchedFile> => {
   });
 
   const fileNameSplit1 = file.fileName.substring(
-    file.fileName.indexOf("_") + 1
+    file.fileName.indexOf("_") + 1,
   );
   const formattedFileName = fileNameSplit1.substring(
     0,
-    fileNameSplit1.indexOf(".pdf")
+    fileNameSplit1.indexOf(".pdf"),
   );
   console.log(formattedFileName);
-
-  
 
   // const originalFileName = capitalizeAndReplaceDash(formattedFileName);
   const originalFileName = formattedFileName.replace(/-/g, " ");
@@ -152,7 +148,7 @@ export const validUrlPattern = new RegExp(
     "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
     "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
     "(\\#[-a-z\\d_]*)?$",
-  "i" // fragment locator
+  "i", // fragment locator
 );
 
 export const validateAndSanitizeURL = (url: string) => {
@@ -183,10 +179,9 @@ export const processFilesAndLinks = (item: AllFilesAndLinksData) => {
 
   if (item.type === "file") {
     const fileNameSplit1 = item.name.substring(item.name.indexOf("_") + 1);
-    const formattedFileName = fileNameSplit1.substring(
-      0,
-      fileNameSplit1.indexOf(".pdf")
-    ).replace(/-/g, " ");
+    const formattedFileName = fileNameSplit1
+      .substring(0, fileNameSplit1.indexOf(".pdf"))
+      .replace(/-/g, " ");
 
     // const originalFileName = capitalizeAndReplaceDash(formattedFileName);
 
@@ -211,15 +206,11 @@ export const processFilesAndLinks = (item: AllFilesAndLinksData) => {
   }
 };
 
-
-export const validateUploadFileData =(file: FileData) => {
-  
-}
-
+export const validateUploadFileData = (file: FileData) => {};
 
 export const transformObjectKeys = (object: any) => {
   return Object.keys(object).reduce((acc: any, key: string) => {
-      acc[key.charAt(0).toLowerCase() + key.slice(1)] = object[key];
-      return acc;
+    acc[key.charAt(0).toLowerCase() + key.slice(1)] = object[key];
+    return acc;
   }, {});
-}
+};

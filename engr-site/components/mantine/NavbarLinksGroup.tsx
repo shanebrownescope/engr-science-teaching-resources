@@ -1,12 +1,18 @@
-"use client"
+"use client";
 
-import { useState } from 'react';
-import { Group, Box, Collapse, ThemeIcon, Text, UnstyledButton, rem } from '@mantine/core';
-import { IconCalendarStats, IconChevronRight } from '@tabler/icons-react';
-import classes from './NavbarLinksGroup.module.css';
-import { usePathname } from 'next/navigation';
-
-
+import { useState } from "react";
+import {
+  Group,
+  Box,
+  Collapse,
+  ThemeIcon,
+  Text,
+  UnstyledButton,
+  rem,
+} from "@mantine/core";
+import { IconCalendarStats, IconChevronRight } from "@tabler/icons-react";
+import classes from "./NavbarLinksGroup.module.css";
+import { usePathname } from "next/navigation";
 
 interface LinksGroupProps {
   icon: React.FC<any>;
@@ -15,14 +21,19 @@ interface LinksGroupProps {
   links?: { label: string; link: string }[];
 }
 
-export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksGroupProps) {
+export function LinksGroup({
+  icon: Icon,
+  label,
+  initiallyOpened,
+  links,
+}: LinksGroupProps) {
   const pathname = usePathname();
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
   const items = (hasLinks ? links : []).map((link) => (
-    <Text<'a'>
+    <Text<"a">
       component="a"
-      className={`${classes.link} ${pathname === link.link ? classes.active : ''}`}
+      className={`${classes.link} ${pathname === link.link ? classes.active : ""}`}
       href={link.link}
       key={link.label}
     >
@@ -32,9 +43,12 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
 
   return (
     <>
-      <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control}>
+      <UnstyledButton
+        onClick={() => setOpened((o) => !o)}
+        className={classes.control}
+      >
         <Group justify="space-between" gap={0}>
-          <Box style={{ display: 'flex', alignItems: 'center' }}>
+          <Box style={{ display: "flex", alignItems: "center" }}>
             <ThemeIcon variant="light" size={30}>
               <Icon style={{ width: rem(18), height: rem(18) }} />
             </ThemeIcon>
@@ -47,7 +61,7 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
               style={{
                 width: rem(16),
                 height: rem(16),
-                transform: opened ? 'rotate(-90deg)' : 'none',
+                transform: opened ? "rotate(-90deg)" : "none",
               }}
             />
           )}

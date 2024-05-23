@@ -27,7 +27,6 @@ const PendingUsersPage = async () => {
 
   const pendingUsers = await fetchPendingUsers();
 
-
   const handleApprove = async ({
     userId,
     email,
@@ -55,7 +54,7 @@ const PendingUsersPage = async () => {
 
   return (
     <div>
-      {'success' in pendingUsers &&  (
+      {"success" in pendingUsers && (
         <PendingUserListPaginated
           data={pendingUsers.success}
           handleApprove={handleApprove}
@@ -63,7 +62,7 @@ const PendingUsersPage = async () => {
         />
       )}
 
-      {'failure' in pendingUsers && <p>No pending users</p>}
+      {"failure" in pendingUsers && <p>No pending users</p>}
     </div>
   );
 };

@@ -45,7 +45,7 @@ export const fetchSimilarLinksByTags = async ({
         linksResult[0].map(async (link: LinkData) => {
           const processedLink = await processLink(link);
           return processedLink;
-        })
+        }),
       );
 
       return { success: formattedData };

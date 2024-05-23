@@ -9,7 +9,6 @@ type ModuleCardProps = {
   href: string;
 };
 
-
 export function ModuleCard({ title, description, href }: ModuleCardProps) {
   return (
     <Card withBorder padding="lg" className={classes.card}>
@@ -22,7 +21,9 @@ export function ModuleCard({ title, description, href }: ModuleCardProps) {
         {description} {/* Use the description prop */}
       </Text>
       <Link href={href} passHref legacyBehavior>
-        <Button component="a" className="button--primary">View all</Button>
+        <Button component="a" className="button--primary">
+          View all
+        </Button>
       </Link>
     </Card>
   );

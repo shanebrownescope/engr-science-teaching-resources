@@ -7,7 +7,7 @@ type ProtectedLayoutProps = {
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return (
     <div>
-      <MantineProvider> 
+      <MantineProvider>
         <HeaderMegaMenu />
         {children}
       </MantineProvider>

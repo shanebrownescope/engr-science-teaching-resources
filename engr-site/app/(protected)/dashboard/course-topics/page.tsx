@@ -42,7 +42,7 @@ const CourseTopics = () => {
           (course: FormattedData) => ({
             value: course.id.toString(),
             label: course.name,
-          })
+          }),
         );
         setCourseList(formattedCourseList);
       }
