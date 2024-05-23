@@ -17,67 +17,69 @@ import z from "zod";
  * @returns {{ error?: string, success?: string }} - The response from the database
  */
 const createConcept = async (values: z.infer<typeof CreateConceptSchema>) => {
-  const user = await getCurrentUser();
+  try {
+    const user = await getCurrentUser();
 
-  if (user?.role && user.role !== "admin") {
-    return { error: "Not authenticated" };
+    if (user?.role && user.role !== "admin") {
+      return { error: "Not authenticated" };
+    }
+
+    const validatedFields = CreateConceptSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+      return { error: "Invalid fields!" };
+    }
+
+    const { conceptName, courseId, courseTopicId, resourceTypeId } =
+      validatedFields.data;
+
+    const existingCourse = await getCourseById(courseId);
+
+    if (!existingCourse) {
+      return { error: "Course id not found" };
+    }
+
+    const existingCourseTopic = await getCourseTopicByIdAndCourseId(
+      courseTopicId,
+      courseId
+    );
+
+    if (!existingCourseTopic) {
+      return { error: "courseTopic id not found" };
+    }
+
+    const existingResourceType = await getResourceTypeByIdAndCourseTopicId(
+      resourceTypeId,
+      courseTopicId
+    );
+
+    if (!existingResourceType) {
+      return { error: "ResourceType id not found" };
+    }
+
+    const formattedConceptName = capitalizeWords(conceptName);
+
+    const existingConcept = await getConceptByNameAndResourceTypeId(
+      formattedConceptName,
+      resourceTypeId
+    );
+
+    if (existingConcept) {
+      return { error: "Concept already exists" };
+    }
+
+    const insertQuery = `INSERT INTO Concepts_v2 (conceptName, resourceTypeId) VALUES (?, ?)`;
+    const { results } = await dbConnect(insertQuery, [
+      formattedConceptName,
+      resourceTypeId,
+    ]);
+
+    console.log(results[0].insertId);
+
+    return { success: "New concept created" };
+  } catch (error) {
+    return { error: "Internal server error" };
   }
-
-  // Attempt to parse and validate the input data against the CreateConceptSchema
-  const validatedFields = CreateConceptSchema.safeParse(values);
-
-  // The data is not valid, return an error
-  if (!validatedFields.success) {
-    return { error: "Invalid fields!" };
-  }
-
-  const { conceptName, courseId, courseTopicId, resourceTypeId } = validatedFields.data;
-
-  // Check if the course exists in the database
-  const existingCourse = await getCourseById(courseId);
-
-  // The course id is not valid, return an error
-  if (!existingCourse) {
-    return { error: "Course id not found" };
-  }
-
-  // Check if the course topic exists in the database
-  const existingCourseTopic = await getCourseTopicByIdAndCourseId(courseTopicId, courseId);
-
-  // The courseTopic id is not valid, return an error
-  if (!existingCourseTopic) {
-    return { error: "courseTopic id not found" };
-  }
-
-  // Check if the courseTopic resourceType exists in the database
-  const existingResourceType = await getResourceTypeByIdAndCourseTopicId(resourceTypeId, courseTopicId);
-
-  // The resourceType id is not valid, return an error
-  if (!existingResourceType) {
-    return { error: "ResourceType id not found" };
-  }
-
-  const formattedConceptName = capitalizeWords(conceptName);
-
-  const existingConcept = await getConceptByNameAndResourceTypeId(
-    formattedConceptName, 
-    resourceTypeId
-  )
-
-  if (existingConcept) {
-    return { error: "Concept already exists" };
-  }
-
-  const insertQuery = `INSERT INTO Concepts_v2 (conceptName, resourceTypeId) VALUES (?, ?)`;
-  const { results } = await dbConnect(insertQuery, [
-    formattedConceptName,
-    resourceTypeId,
-  ]);
-
-  console.log(results[0].insertId);
-
-  // The concept was created successfully, return success message
-  return { success: "New concept created" };
 };
 
 export default createConcept;

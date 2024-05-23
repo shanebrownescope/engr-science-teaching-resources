@@ -4,30 +4,23 @@ import { getPendingUsers } from "@/database/data/user"
 import { transformObjectKeys } from "@/utils/helpers"
 import { FetchedUserData, UserData } from "@/utils/types"
 
-export const fetchPendingUsers = async () => {
-    try {
-      // const selectQuery = `
-      //   SELECT * FROM Users WHERE AccountStatus = 'pending';
-      // `;
-      const results: UserData[] = await getPendingUsers()
+/**
+ * Fetches all pending users from the database
+ * @returns {Promise<{success: UserData[]} | {failure: string}>} - A promise that resolves to an object containing the fetched users or an error message
+ */
+export const fetchPendingUsers = async (): Promise<{success: UserData[]} | {failure: string}> => {
+  try {
+    const results: UserData[] = await getPendingUsers()
 
-      console.log("--results: ", results)
-
-      if (!results) {
-        return { failure: "No pending users" };
-      }
-
-
-      console.log("pending users: ", results)
-      // const results = dbConnect(selectQuery)
-
-      return { success: results };
-
-
-    } catch (error) {
-      console.error("An error occurred while fetching data:", error);
-      return {
-        failure: "Internal server error, error retrieving modules from db",
-      };
+    if (!results) {
+      return { failure: "No pending users" };
     }
+
+    return { success: results };
+
+  } catch (error) {
+    return {
+      failure: "Internal server error, error retrieving modules from db",
+    };
+  }
 }

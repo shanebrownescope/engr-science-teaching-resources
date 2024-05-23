@@ -21,9 +21,9 @@ export function CourseCard({ title, description, href }: CourseCardProps) {
       <Text mt="sm" mb="md" c="dimmed" fz="xs">
         {description} 
       </Text>
-      <Link href={href} passHref>
+      <Link href={href} passHref legacyBehavior>
         {/* TODO: Fix Button componen */}
-        <Button component="a">View all</Button>
+        <Button component="a" className="button--primary">View</Button>
       </Link>
     </Card>
   );

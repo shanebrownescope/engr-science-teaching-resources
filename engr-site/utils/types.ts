@@ -1,4 +1,3 @@
-import { TagsData } from "@/actions/fetching/fetchTagsByFileId";
 import { FormattedData } from "./formatting";
 import { FieldError, UseFormRegister } from "react-hook-form";
 

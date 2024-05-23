@@ -7,9 +7,17 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 import { AuthError } from "next-auth"
 
 
+/**
+ * Server action to handle user login.
+ * 
+ * Attempts to sign in the user using the `signIn` function from the `@/auth` module.
+*
+ * @param {z.infer<typeof LoginSchema>} values - The input values for the login action.
+ * @returns {Promise<{ success?: string, error?: string }>} - The result of the login action.
+ * 
+*/
 
 export const loginAction = async (values: z.infer<typeof LoginSchema>) => {
-  console.log(values)
   //* attempts to parse and validate the input data against the LoginSchema
   const validatedFields = LoginSchema.safeParse(values)
 
@@ -29,7 +37,6 @@ export const loginAction = async (values: z.infer<typeof LoginSchema>) => {
     return { success: "User logged in!"}
   } catch (error) {
     if (error instanceof AuthError) {
-
       switch (error.type) {
         case "CredentialsSignin":
           return { error: "Invalid credentials!" }

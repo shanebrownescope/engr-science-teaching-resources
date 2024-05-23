@@ -5,21 +5,19 @@ import "./page.css";
 import { FormattedData } from "@/utils/formatting";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import requireAuth from "@/actions/auth/requireAuth";
+import SectionLayout from "@/components/custom/sectionLayout/SectionLayout";
 
 const Courses = async () => {
   const authResult = await requireAuth();
 
   const courseData: FetchedFormattedData = await fetchCourses();
 
-  if (courseData?.failure) {
-    console.log("bad stuff");
-  }
 
   console.log("--courseData: ", courseData);
 
   return (
-    <div>
-      <p>Courses</p>
+    <SectionLayout> 
+      <h2>Courses</h2>
 
       <div className="grid-container">
         {courseData?.success?.map((item: FormattedData) => (
@@ -32,7 +30,7 @@ const Courses = async () => {
       </div>
 
       {courseData?.failure && <div>No courses</div>}
-    </div>
+    </SectionLayout>
   );
 };
 

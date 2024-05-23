@@ -9,15 +9,18 @@ type fetchSimilarFilesByTagsProps = {
   tags?: string[];
 };
 
+/**
+ * Fetches similar files from the database based on given tags
+ * @param {fetchSimilarFilesByTagsProps} props - An object containing the fileId and tags to fetch similar files by
+ * @returns {Promise<FetchedFilesDataArray>} An object containing the fetched files or an error message
+ */
 export const fetchSimilarFilesByTags = async ({
   fileId,
   tags,
 }: fetchSimilarFilesByTagsProps): Promise<FetchedFilesDataArray> => {
-  console.log(tags);
+
   const tagsString = tags?.map((tag) => `'${tag}'`).join(",");
   console.log(tagsString);
-
-  console.log(JSON.stringify(tags).replace("[", "").replace("]", ""));
 
   try {
     const selectQuery = `
@@ -38,7 +41,6 @@ export const fetchSimilarFilesByTags = async ({
     ]);
 
     if (error) {
-      console.error("Error retrieving data from the database:", error);
       return { failure: "Internal server error" };
     }
 
@@ -52,14 +54,9 @@ export const fetchSimilarFilesByTags = async ({
 
       return { success: formattedData };
     } else {
-      return { success: undefined };
+      return { success: undefined }; // No similar files found
     }
-
-    return {
-      failure: "Internal server error, error retrieving modules from db",
-    };
   } catch (error) {
-    console.error("An error occurred while fetching data:", error);
     return {
       failure: "Internal server error, error retrieving modules from db",
     };

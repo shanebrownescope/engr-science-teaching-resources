@@ -7,6 +7,11 @@
 import { useSession } from "next-auth/react";
 
 
+/**
+ * Custom hook to get the current user's role from the session data.
+ *
+ * @return {string | undefined} The user's role, or undefined if the session data is not available.
+ */
 export const useCurrentRole = () => {
   const session = useSession()
 

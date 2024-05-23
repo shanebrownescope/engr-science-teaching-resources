@@ -10,10 +10,16 @@ type fetchFilesByConceptIdProps = {
   id: string;
 };
 
+/**
+ * Asynchronously fetches files from the database by conceptId
+ * @param {fetchFilesByConceptIdProps} props - An object containing the conceptId of the files to fetch
+ * @returns {Promise<FetchedFilesDataArray>} An object containing the fetched files or an error message
+ */
 export const fetchFilesByConceptId = async ({
   id,
 }: fetchFilesByConceptIdProps): Promise<FetchedFilesDataArray> => {
   try {
+    // SQL query to select files and associated tags from the database
     const selectQuery = `
       SELECT f.id, f.fileName, f.s3Url, f.description, f.uploadDate, f.contributor,
         JSON_ARRAYAGG(t.tagName) AS tagNames
@@ -25,11 +31,7 @@ export const fetchFilesByConceptId = async ({
 
     const { results, error } = await dbConnect(selectQuery, [id]);
 
-    console.log("--- results ",results[0] && results[0][0]);
-    console.log("- - type of tagNames: ", results[0] && typeof(results[0][0]?.tagNames));
-
     if (error) {
-      console.error("Error retrieving data from the database:", error);
       return { failure: "Internal server error" };
     }
 
@@ -46,7 +48,6 @@ export const fetchFilesByConceptId = async ({
       return { success: undefined };
     }
   } catch (error) {
-    console.error("An error occurred while fetching data:", error);
     return {
       failure: "Internal server error, error retrieving modules from db",
     };

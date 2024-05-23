@@ -160,3 +160,35 @@ a, a:visited {
 button {
   border: none;
 }
+
+
+.site-logo {
+  font-weight: bold;
+}
+
+.vertical-middle {
+  vertical-align: middle;
+}
+
+.button--primary {
+  color: white !important;
+  text-decoration: none;
+}
+
+
+.section-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-inline: auto;
+  padding: 5%;
+  /* width: 100%; */
+  max-width: 1280px;
+  gap: 1em;
+}
+
+label,
+.label {
+  font-weight: bold;
+  color: #6c757d;
+}

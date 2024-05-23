@@ -13,6 +13,11 @@ type FetchedLinkData = {
   failure?: string;
 };
 
+/**
+ * Fetches a link from the database by its id
+ * @param {fetchLinkByIdProps} props - An object containing the id of the link to fetch
+ * @returns {Promise<FetchedLinkData>} An object containing the fetched link or an error message
+ */
 export const fetchLinkById = async ({
   id,
 }: fetchLinkByIdProps): Promise<FetchedLinkData> => {
@@ -29,18 +34,13 @@ export const fetchLinkById = async ({
     const { results: linkResult, error } = await dbConnect(selectQuery, [id]);
 
     if (error) {
-      console.error("Error retrieving data from the database:", error);
       return { failure: "Internal server error" };
     }
-
-    console.log(linkResult[0]);
 
     if (linkResult[0].length > 0) {
       const link: LinkData = linkResult[0][0];
 
       const processedLink: FetchedLink = await processLink(link);
-      console.log(processedLink);
-
       return { success: processedLink };
     }
 
@@ -48,7 +48,6 @@ export const fetchLinkById = async ({
       failure: "Internal server error, error retrieving modules from db",
     };
   } catch (error) {
-    console.error("An error occurred while fetching data:", error);
     return {
       failure: "Internal server error, error retrieving modules from db",
     };

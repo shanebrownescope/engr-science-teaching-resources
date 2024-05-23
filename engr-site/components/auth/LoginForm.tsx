@@ -15,6 +15,11 @@ import {  useState } from "react";
 type FormFields = z.infer<typeof LoginSchema>;
 
 
+/**
+ * Renders a login form component.
+ *
+ * @return {JSX.Element} The login form component.
+ */
 export const LoginForm = () => {
   const [success, setSuccess] = useState<string | undefined>("");
   const {

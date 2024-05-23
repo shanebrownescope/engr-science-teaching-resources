@@ -12,6 +12,11 @@ import styles from "@/styles/form.module.css";
 
 type FormFields = z.infer<typeof ForgetPasswordSchema>;
 
+/**
+ * Renders a form for resetting a user's password.
+ *
+ * @return {JSX.Element} The JSX element representing the form.
+*/
 const ForgotPasswordForm = () => {
   const [success, setSuccess] = useState<string | undefined>("");
   const {

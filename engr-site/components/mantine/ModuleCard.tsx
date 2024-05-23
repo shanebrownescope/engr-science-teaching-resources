@@ -21,8 +21,8 @@ export function ModuleCard({ title, description, href }: ModuleCardProps) {
       <Text mt="sm" mb="md" c="dimmed" fz="xs">
         {description} {/* Use the description prop */}
       </Text>
-      <Link href={href} passHref>
-        <Button component="a">View all</Button>
+      <Link href={href} passHref legacyBehavior>
+        <Button component="a" className="button--primary">View all</Button>
       </Link>
     </Card>
   );

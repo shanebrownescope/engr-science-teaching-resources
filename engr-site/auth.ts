@@ -3,8 +3,6 @@ import NextAuth, { type DefaultSession } from "next-auth"
 
 import authConfig from "@/auth.config"
 import { getUserById } from "./database/data/user"
-// import { ConnectionOptions } from "typeorm"
-import { TypeORMAdapter } from '@auth/typeorm-adapter';
 import { JWT } from "next-auth/jwt"
 
 
@@ -36,6 +34,13 @@ export const {
   signOut,
 } = NextAuth({
   callbacks: {
+    /**
+     * Updates the session object with the user's ID and role from the token.
+     *
+     * @param {Object} session - The session object.
+     * @param {Object} token - The token object.
+     * @return {Promise<Object>} The updated session object.
+    */
     async session({ session, token }) {
       //* adds id and role to session from token
 
@@ -49,6 +54,14 @@ export const {
       }
       return session;
     },
+
+    /**
+     * Asynchronously adds the user's role to the JWT token if the token has a subject.
+      *
+      * @param {Object} token - The JWT token to add the user's role to.
+      * @param {string} token.sub - The subject of the JWT token.
+      * @return {Promise<Object>} The JWT token with the user's role added.
+    */
     async jwt({ token }) {
       if (!token.sub) return token;
 
