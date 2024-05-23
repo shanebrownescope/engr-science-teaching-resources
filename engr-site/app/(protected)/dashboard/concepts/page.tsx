@@ -25,7 +25,6 @@ type FormFields = z.infer<typeof CreateConceptSchema>;
 const Concepts = () => {
   useRequireAuth();
 
-  
   const router = useRouter();
   const role = useCurrentRole();
   if (role != "admin") {
@@ -52,7 +51,7 @@ const Concepts = () => {
           (course: FormattedData) => ({
             value: course.id.toString(),
             label: course.name,
-          })
+          }),
         );
         setCourseList(formattedCourseList);
       }
@@ -104,10 +103,12 @@ const Concepts = () => {
 
     const results = await fetchCourseTopicsByCourseId(selectedCourseId);
     if (results?.success) {
-      const formattedCourseTopicList = results.success.map((topic: FormattedData) => ({
-        value: topic.id.toString(),
-        label: topic.name,
-      }));
+      const formattedCourseTopicList = results.success.map(
+        (topic: FormattedData) => ({
+          value: topic.id.toString(),
+          label: topic.name,
+        }),
+      );
       setCourseTopicOptions(formattedCourseTopicList);
     }
   };
@@ -116,13 +117,15 @@ const Concepts = () => {
     setValue("resourceTypeId", ""); // Clear sectionId value
 
     const results = await fetchResourceTypesByCourseTopicId(
-      selectedCourseTopicId
+      selectedCourseTopicId,
     );
     if (results?.success) {
-      const formattedResourceTypeList = results.success.map((section: FormattedData) => ({
-        value: section.id.toString(),
-        label: section.name,
-      }));
+      const formattedResourceTypeList = results.success.map(
+        (section: FormattedData) => ({
+          value: section.id.toString(),
+          label: section.name,
+        }),
+      );
       setResourceTypeOptions(formattedResourceTypeList);
     }
   };

@@ -44,19 +44,23 @@ export const RegisterFormEmailSchema = z.object({
 });
 
 export const ForgetPasswordSchema = z.object({
-  email: z.string().email({
-    message: "Email is required"
-  }).trim(),
-})
-
-export const ResetPasswordSchema = z.object({
-  password: z.string().min(8, { message: "Minimum 8 character required" }), // Adjust the minimum password length as needed
-  confirmPassword: z.string()
-}).refine(data => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"]
+  email: z
+    .string()
+    .email({
+      message: "Email is required",
+    })
+    .trim(),
 });
 
+export const ResetPasswordSchema = z
+  .object({
+    password: z.string().min(8, { message: "Minimum 8 character required" }), // Adjust the minimum password length as needed
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 export const UploadFileAndTagsSchema = z.object({
   name: z.string().trim(),

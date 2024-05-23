@@ -1,11 +1,10 @@
-"use server"
-import { PutObjectCommand } from "@aws-sdk/client-s3"
+"use server";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import s3 from "@/utils/s3Client";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dbConnect from "@/database/dbConnector";
 import { getCurrentUser } from "@/utils/authHelpers";
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
-
 
 /**
  * Adds '.pdf' extension to the given file name if it's not already present.
@@ -14,11 +13,11 @@ import { capitalizeAndReplaceDash } from "@/utils/formatting";
  * @return {string} The file name with '.pdf' extension added if it was not already present.
  */
 const addPdfExtension = (fileName: string) => {
-  if (!fileName.endsWith('.pdf')) {
-    fileName += '.pdf';
+  if (!fileName.endsWith(".pdf")) {
+    fileName += ".pdf";
   }
   return fileName;
-}
+};
 
 /**
  * Generates a timestamped key for a file by appending a timestamp and replacing
@@ -32,7 +31,7 @@ const generateTimestampedKey = (originalFilename: string) => {
   const nameWithExtension = addPdfExtension(originalFilename);
 
   // Replace any spaces in the filename with dashes
-  const filenameWithDashes = nameWithExtension.replace(/ /g, '-');
+  const filenameWithDashes = nameWithExtension.replace(/ /g, "-");
 
   // Generate the timestamp in ISO 8601 format
   const timestamp = new Date().toISOString();
@@ -41,12 +40,9 @@ const generateTimestampedKey = (originalFilename: string) => {
   return `${timestamp}_${filenameWithDashes}`;
 };
 
-const acceptedTypes = [
-  "application/pdf",
-]
-const maxFileSize = 1024 * 1024 * 10 //* 10MB
-let TESTUSERID = 26
-
+const acceptedTypes = ["application/pdf"];
+const maxFileSize = 1024 * 1024 * 10; //* 10MB
+let TESTUSERID = 26;
 
 type GetSignedURLProps = {
   fileName: string;
@@ -56,16 +52,16 @@ type GetSignedURLProps = {
   course: string;
   courseTopic: string;
   resourceType: string;
-  concept: string,
-  conceptId: number,
-  description: string | null,
-  contributor: string,
-  uploadDate: string
+  concept: string;
+  conceptId: number;
+  description: string | null;
+  contributor: string;
+  uploadDate: string;
 };
 
 /**
  * Generates a pre-signed URL for uploading a file to S3.
- * 
+ *
  * @param {Object} props - The properties of the file to be uploaded.
  * @param {string} props.fileName - The original filename of the file.
  * @param {string} props.fileType - The MIME type of the file.
@@ -82,35 +78,59 @@ type GetSignedURLProps = {
  * @returns {Object} - An object containing the pre-signed URL and the ID of the inserted file.
  * @throws {Object} - An object containing an error message if there was an error inserting the file.
  */
-export const getSignedURL = async ({ fileName, fileType, fileSize, checksum, course, courseTopic, resourceType, concept, conceptId, description, contributor, uploadDate }: GetSignedURLProps) => {
-  const user = await getCurrentUser()
+export const getSignedURL = async ({
+  fileName,
+  fileType,
+  fileSize,
+  checksum,
+  course,
+  courseTopic,
+  resourceType,
+  concept,
+  conceptId,
+  description,
+  contributor,
+  uploadDate,
+}: GetSignedURLProps) => {
+  const user = await getCurrentUser();
 
   // If the user is not logged in, or is not an admin, return an error
   if (user?.role && user.role !== "admin") {
-    return { failure: "Not authenticated" }
+    return { failure: "Not authenticated" };
   }
-  
+
   // Check if the file type is accepted
   if (!acceptedTypes.includes(fileType)) {
-    console.log("expected file type", acceptedTypes[0], "got", fileType)
-    return { failure: "Invalid file type" }
-  } 
-  
+    console.log("expected file type", acceptedTypes[0], "got", fileType);
+    return { failure: "Invalid file type" };
+  }
+
   // Check if the file size is too large
   if (fileSize > maxFileSize) {
-    return { failure: "File too large" }
+    return { failure: "File too large" };
   }
-  
+
   // Check if all required fields are present
-  if (!fileName || !fileType || !fileSize || !checksum || !course || !courseTopic || !resourceType || !concept || !conceptId || !uploadDate) {
-    return { failure: "Missing required fields" }
+  if (
+    !fileName ||
+    !fileType ||
+    !fileSize ||
+    !checksum ||
+    !course ||
+    !courseTopic ||
+    !resourceType ||
+    !concept ||
+    !conceptId ||
+    !uploadDate
+  ) {
+    return { failure: "Missing required fields" };
   }
 
   // Generate the unique file name
-  const uniqueFileName = generateTimestampedKey(fileName)
+  const uniqueFileName = generateTimestampedKey(fileName);
 
   // Generate the file location in S3
-  const fileLocation =  `courses/${course}/courseTopic/${courseTopic}/resourceType/${resourceType}/${uniqueFileName}`
+  const fileLocation = `courses/${course}/courseTopic/${courseTopic}/resourceType/${resourceType}/${uniqueFileName}`;
 
   // Create a PutObjectCommand to upload the file to S3
   const putObjectCommand = new PutObjectCommand({
@@ -118,8 +138,8 @@ export const getSignedURL = async ({ fileName, fileType, fileSize, checksum, cou
     Key: fileLocation,
     ContentType: fileType,
     ContentLength: fileSize,
-    ChecksumSHA256: checksum
-  })
+    ChecksumSHA256: checksum,
+  });
 
   // Generate a pre-signed URL to upload the file
   const signedURL = await getSignedUrl(s3, putObjectCommand, {
@@ -129,22 +149,29 @@ export const getSignedURL = async ({ fileName, fileType, fileSize, checksum, cou
   // Insert the file metadata into the database
   const query = `
     INSERT INTO Files_v2 (fileName, s3Url, description, uploadDate, contributor, conceptId, uploadedUserId) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-  const values = [uniqueFileName, signedURL.split("?")[0], description, uploadDate, contributor, conceptId, user?.id]
+  const values = [
+    uniqueFileName,
+    signedURL.split("?")[0],
+    description,
+    uploadDate,
+    contributor,
+    conceptId,
+    user?.id,
+  ];
 
   try {
-    const { results, error } = await dbConnect(query, values)
+    const { results, error } = await dbConnect(query, values);
     if (error) {
-      return {failure: "error in inserting data in Files"}
+      return { failure: "error in inserting data in Files" };
     }
 
-    const [ fileResult ] = results
+    const [fileResult] = results;
 
-    const fileId = fileResult.insertId
+    const fileId = fileResult.insertId;
     if (fileId) {
-      return { success: { url: signedURL, fileId: fileId } }
+      return { success: { url: signedURL, fileId: fileId } };
     }
-
   } catch (error) {
-    return {failure: "Internal server error"}
+    return { failure: "Internal server error" };
   }
-}
+};

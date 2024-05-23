@@ -1,6 +1,5 @@
-"use client"
-import { usePathname } from 'next/navigation';
-
+"use client";
+import { usePathname } from "next/navigation";
 
 /**
  * Returns the current pathname from the Next.js router.
@@ -10,4 +9,4 @@ import { usePathname } from 'next/navigation';
 export const useGetPathname = () => {
   const pathname = usePathname();
   return pathname;
-}
+};

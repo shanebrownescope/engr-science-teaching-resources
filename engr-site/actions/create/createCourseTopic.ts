@@ -14,7 +14,7 @@ import z from "zod";
  * @returns {{ error?: string, success?: string }} - The response from the database
  */
 const createCourseTopic = async (
-  values: z.infer<typeof CreateCourseTopicsSchema>
+  values: z.infer<typeof CreateCourseTopicsSchema>,
 ) => {
   try {
     const user = await getCurrentUser();

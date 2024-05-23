@@ -4,7 +4,6 @@ import { FormattedData, lowercaseAndReplaceSpace } from "@/utils/formatting";
 import { CourseData } from "@/database/data/courses";
 import { FetchedFormattedData } from "@/utils/types";
 
-
 type FetchCoursesProps = {
   limit?: number;
 };
@@ -16,7 +15,7 @@ type FetchCoursesProps = {
  * @return {Promise<FetchedFormattedData>} A promise that resolves to a FetchedFormattedData object containing the fetched courses or an error message.
  */
 export const fetchCourses = async (
-  limit?: number
+  limit?: number,
 ): Promise<FetchedFormattedData> => {
   try {
     let query = `SELECT * FROM Courses_v2`;
@@ -29,7 +28,8 @@ export const fetchCourses = async (
 
     if (results[0].length > 0) {
       const formattedCourseData: FormattedData[] = results[0].map(
-        (item: CourseData) => lowercaseAndReplaceSpace(item.id, item.courseName)
+        (item: CourseData) =>
+          lowercaseAndReplaceSpace(item.id, item.courseName),
       );
 
       return { success: formattedCourseData, failure: undefined };

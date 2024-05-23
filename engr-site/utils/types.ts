@@ -125,10 +125,9 @@ export type UserData = {
   lastName: string;
   email: string;
   username: string;
-  accountStatus: 'pending' | 'approved' | 'activated' | 'rejected';
-  role: 'admin' | 'instructor' | 'student';
-}
-
+  accountStatus: "pending" | "approved" | "activated" | "rejected";
+  role: "admin" | "instructor" | "student";
+};
 
 export type FetchedUserData = {
   userId: string;
@@ -136,8 +135,8 @@ export type FetchedUserData = {
   lastName: string;
   email: string;
   username: string;
-  accountStatus: 'pending' | 'approved' | 'activated' | 'rejected';
-  role: 'admin' | 'instructor' | 'student';
+  accountStatus: "pending" | "approved" | "activated" | "rejected";
+  role: "admin" | "instructor" | "student";
 };
 
 export type PasswordResetTokenData = {
@@ -145,14 +144,14 @@ export type PasswordResetTokenData = {
   token: string;
   userId: string;
   expiresAt: Date;
-}
+};
 
 export type TransformedPasswordResetToken = {
   passwordResetTokenId: string;
   token: string;
   userId: string;
   expiresAt: Date;
-}
+};
 
 export type CommentFileData = {
   id: number;
@@ -162,7 +161,7 @@ export type CommentFileData = {
   commentText: string;
   uploadDate: string | Date;
   name: string;
-}
+};
 
 export type CommentLinkData = {
   id: number;
@@ -172,7 +171,7 @@ export type CommentLinkData = {
   commentText: string;
   uploadDate: string | Date;
   name: string;
-}
+};
 
 export type FetchedCommentFileData = {
   success?: CommentFileData[];

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { Group } from "@mantine/core";
 import classes from "./ConceptBar.module.css";
 
-
 type ConceptBarProps = {
   concepts: any[];
   selectedConcept: string;

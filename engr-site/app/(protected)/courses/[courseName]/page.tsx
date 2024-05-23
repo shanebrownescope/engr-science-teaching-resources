@@ -20,21 +20,23 @@ const CourseTopicsPage = async ({
   console.log("== success: ", courseTopicList.success);
 
   return (
-    <SectionLayout> 
+    <SectionLayout>
       <h2> {courseTopicName} </h2>
 
       <label className="label-primary"> Course topics </label>
 
       {courseTopicList?.success?.map((item: any, index: number) => (
-          <div>
-            <ModuleCard
-              title={item.name}
-              description="description here"
-              href={`/courses/${params.courseName}/${item.url}?${new URLSearchParams({
+        <div>
+          <ModuleCard
+            title={item.name}
+            description="description here"
+            href={`/courses/${params.courseName}/${item.url}?${new URLSearchParams(
+              {
                 id: item.id,
-              }).toString()}`}
-            />
-          </div>
+              },
+            ).toString()}`}
+          />
+        </div>
       ))}
 
       {courseTopicList?.failure && <p> No course topics </p>}

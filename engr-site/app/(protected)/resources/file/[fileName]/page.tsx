@@ -56,7 +56,7 @@ const ResourceFilePage = async ({
       revalidatePath(
         `/resources/file/${fileName}?${new URLSearchParams({
           id: id,
-        })}`
+        })}`,
       );
     } catch (error) {
       console.error(error);

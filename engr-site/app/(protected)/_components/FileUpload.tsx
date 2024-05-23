@@ -4,7 +4,6 @@ import { useState, ChangeEvent } from "react";
 import { getSignedURL } from "@/actions/uploadingPostTags/getSignedUrl";
 import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
 
-
 // import styles from '@/styles/test.module.css'
 import Tags from "./Tags";
 // import styles from "@/styles/test.module.css";
@@ -18,7 +17,6 @@ import styles from "@/styles/form.module.css";
 import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseId";
 import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
 import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetchConceptsByResourceTypeId";
-
 
 //* Testing: file upload to s3 and db
 //* TestDb component: test db is working
@@ -45,8 +43,8 @@ type FormErrorsFileUpload = {
 };
 
 export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
-  const router = useRouter()
-  const role = useCurrentRole()
+  const router = useRouter();
+  const role = useCurrentRole();
   if (role != "admin") {
     console.log("-- not admin");
     router.push("/unauthorized");
@@ -68,17 +66,20 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     formatted: null,
   });
   const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>();
-  const [selectedCourseTopicOption, setSelectedCourseTopicOption] = useState<Options>({
-    value: null,
-    id: null,
-    formatted: null,
-  });
-  const [resourceTypeOptionsData, setResourceTypeOptionsData] = useState<any[]>();
-  const [selectedResourceTypeOption, setSelectedResourceTypeOption] = useState<Options>({
-    value: null,
-    id: null,
-    formatted: null,
-  });
+  const [selectedCourseTopicOption, setSelectedCourseTopicOption] =
+    useState<Options>({
+      value: null,
+      id: null,
+      formatted: null,
+    });
+  const [resourceTypeOptionsData, setResourceTypeOptionsData] =
+    useState<any[]>();
+  const [selectedResourceTypeOption, setSelectedResourceTypeOption] =
+    useState<Options>({
+      value: null,
+      id: null,
+      formatted: null,
+    });
   const [conceptOptionsData, setConceptOptionData] = useState<any[]>();
   const [selectedConceptOption, setSelectedConceptOption] = useState<Options>({
     value: null,
@@ -91,33 +92,31 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     file: undefined,
     courseName: undefined,
     courseTopicName: undefined,
-    resourceTypeName:undefined,
-    conceptName:undefined,
+    resourceTypeName: undefined,
+    conceptName: undefined,
     conceptId: undefined,
   });
   const errorMessages: { [key: string]: string } = {
     root: "Please fill out all required fields.",
-    fileName: 'File name is required.',
+    fileName: "File name is required.",
     file: "File is required.",
-    courseId: 'Please select a course.',
-    courseTopicId: 'Please select a module.',
-    resourceTypeId: 'Please select a section.',
-    conceptId: 'Please select a concept.',
+    courseId: "Please select a course.",
+    courseTopicId: "Please select a module.",
+    resourceTypeId: "Please select a section.",
+    conceptId: "Please select a concept.",
   };
   console.log(selectedCourseOption);
 
-  
   const handleCourseOptionSelect = async (
     name: string,
     id: number,
-    formatted: string
+    formatted: string,
   ) => {
     setSelectedCourseTopicOption({ value: null, id: null, formatted: null });
     setSelectedResourceTypeOption({ value: null, id: null, formatted: null });
     setResourceTypeOptionsData([]);
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
-    
 
     setSelectedCourseOption({ value: name, id: id, formatted: formatted });
 
@@ -129,44 +128,47 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   const handleCourseTopicOptionSelect = async (
     value: string,
     id: number,
-    formatted: string
+    formatted: string,
   ) => {
     setSelectedResourceTypeOption({ value: null, id: null, formatted: null });
     setResourceTypeOptionsData([]);
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
 
-    setSelectedCourseTopicOption({ value: value, id: id, formatted: formatted });
+    setSelectedCourseTopicOption({
+      value: value,
+      id: id,
+      formatted: formatted,
+    });
 
-   
     const results = await fetchResourceTypesByCourseTopicId(id);
 
     setResourceTypeOptionsData(results.success);
   };
 
-
-
   const handleResourceTypeOptionSelect = async (
     value: string,
     id: number,
-    formatted: string
+    formatted: string,
   ) => {
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
 
-    setSelectedResourceTypeOption({ value: value, id: id, formatted: formatted });
+    setSelectedResourceTypeOption({
+      value: value,
+      id: id,
+      formatted: formatted,
+    });
 
     const results = await fetchConceptsByResourceTypeId(id);
 
-    
     setConceptOptionData(results.success);
   };
-
 
   const handleConceptOptionSelect = (
     value: string,
     id: number,
-    formatted: string
+    formatted: string,
   ) => {
     setSelectedConceptOption({ value: value, id: id, formatted: formatted });
   };
@@ -211,32 +213,44 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     return hashHex;
   };
 
-
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("-- how many")
-
+    console.log("-- how many");
 
     setLoading(true);
 
     console.log({ tags, file });
-    setStatusMessage("validating input")
+    setStatusMessage("validating input");
 
-    if (!fileName || !file || !selectedCourseOption.value || !selectedCourseTopicOption.value || !selectedResourceTypeOption.value || !selectedConceptOption.value) {
+    if (
+      !fileName ||
+      !file ||
+      !selectedCourseOption.value ||
+      !selectedCourseTopicOption.value ||
+      !selectedResourceTypeOption.value ||
+      !selectedConceptOption.value
+    ) {
       const errors = {
         root: errorMessages.root,
         fileName: !fileName ? errorMessages.fileName : undefined,
         file: !file ? errorMessages.file : undefined,
-        courseName: !selectedCourseOption.value ? errorMessages.courseId : undefined,
-        courseTopic: !selectedCourseTopicOption.value ? errorMessages.moduleId : undefined,
-        resourceTypeName: !selectedResourceTypeOption.value ? errorMessages.sectionId : undefined,
-        conceptName: !selectedConceptOption.value ? errorMessages.conceptId : undefined,
+        courseName: !selectedCourseOption.value
+          ? errorMessages.courseId
+          : undefined,
+        courseTopic: !selectedCourseTopicOption.value
+          ? errorMessages.moduleId
+          : undefined,
+        resourceTypeName: !selectedResourceTypeOption.value
+          ? errorMessages.sectionId
+          : undefined,
+        conceptName: !selectedConceptOption.value
+          ? errorMessages.conceptId
+          : undefined,
       };
-      setErrors(errors)
+      setErrors(errors);
 
-      setStatusMessage("validation failed")
-      setLoading(false)
+      setStatusMessage("validation failed");
+      setLoading(false);
       return;
     }
 
@@ -254,16 +268,16 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     const currentDateWithoutTime = date.toISOString().slice(0, 10);
     console.log(currentDateWithoutTime);
 
-    const formattedDescription = trimCapitalizeFirstLetter(description)
-    const formattedContributor = trimCapitalizeFirstLetter(contributor)
-    console.log(formattedDescription)
-    console.log(formattedContributor)
-    console.log("-- how many times")
+    const formattedDescription = trimCapitalizeFirstLetter(description);
+    const formattedContributor = trimCapitalizeFirstLetter(contributor);
+    console.log(formattedDescription);
+    console.log(formattedContributor);
+    console.log("-- how many times");
 
     try {
       setStatusMessage("uploading file");
 
-      console.log("-- how many times will this show")
+      console.log("-- how many times will this show");
 
       const checksum = await computeSHA256(file);
       const signedURLResult = await getSignedURL({
@@ -276,8 +290,10 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         resourceType: selectedResourceTypeOption.formatted!,
         concept: selectedConceptOption.formatted!,
         conceptId: selectedConceptOption.id!,
-        description: formattedDescription.length > 0 ? formattedDescription : null,
-        contributor: formattedContributor.length > 0 ? formattedContributor : "Anonymous",
+        description:
+          formattedDescription.length > 0 ? formattedDescription : null,
+        contributor:
+          formattedContributor.length > 0 ? formattedContributor : "Anonymous",
         uploadDate: currentDateWithoutTime!,
       });
       // const signedURLResult = await getSignedURL()
@@ -305,12 +321,10 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
         // Filter out empty tags first, then format the remaining tags
         const trimmedTags = tags
-          .filter(tag => tag.trim() !== "") // Filter out empty tags
-          .map(tag => capitalizeWords(tag.trim())); // Format the remaining tags
+          .filter((tag) => tag.trim() !== "") // Filter out empty tags
+          .map((tag) => capitalizeWords(tag.trim())); // Format the remaining tags
 
-
-        console.log(" -- trimmed tags: ", trimmedTags)
-
+        console.log(" -- trimmed tags: ", trimmedTags);
 
         if (trimmedTags && trimmedTags.length > 0) {
           const tagsResult = await createTagPostFile(trimmedTags, fileId);
@@ -362,7 +376,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   console.log(
     selectedCourseOption.formatted,
     selectedCourseTopicOption.formatted,
-    selectedResourceTypeOption.formatted
+    selectedResourceTypeOption.formatted,
   );
 
   console.log("get file: ", file);
@@ -372,18 +386,20 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     <div className={styles.formAdminWrapper}>
       {/* <MantineProvider>  */}
       <p className={styles.formAdminTitle}> Upload file </p>
-      
-      <form 
-        className={styles.form}
-        onSubmit={handleSubmit}
-      >
+
+      <form className={styles.form} onSubmit={handleSubmit}>
         {statusMessage && (
           <p className={styles.messageStyle}> {statusMessage} </p>
         )}
 
-        <div> 
+        <div>
           <label> Select file </label>
-          <input type="file" accept="pdf"  disabled={loading} onChange={handleFileChange} />
+          <input
+            type="file"
+            accept="pdf"
+            disabled={loading}
+            onChange={handleFileChange}
+          />
           {fileUrl && file && (
             <div>
               <iframe src={fileUrl} />
@@ -402,7 +418,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         </div>
         {errors.file && <p className="error">{errors.file}</p>}
 
-        <div className="flex-col">       
+        <div className="flex-col">
           <label> Enter file name </label>
           <input
             className={errors.fileName && "input-error"}
@@ -412,10 +428,10 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             name="fileName"
             value={fileName}
             disabled={loading}
-            onChange={(e) => setFileName(e.target.value)} 
+            onChange={(e) => setFileName(e.target.value)}
           />
           {errors.fileName && <p className="error">{errors.fileName}</p>}
-        </div> 
+        </div>
 
         <div>
           <label> Select a course </label>
@@ -426,7 +442,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           />
           {errors.courseName && <p className="error">{errors.courseName}</p>}
         </div>
-            
+
         <div>
           <label> Select a course topic </label>
           {
@@ -436,7 +452,9 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
               selectedValue={selectedCourseTopicOption.value}
             />
           }
-          {errors.courseTopicName && <p className="error">{errors.courseName}</p>}
+          {errors.courseTopicName && (
+            <p className="error">{errors.courseName}</p>
+          )}
         </div>
 
         <div>
@@ -446,10 +464,12 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             onOptionChange={handleResourceTypeOptionSelect}
             selectedValue={selectedResourceTypeOption.value}
           />
-          {errors.resourceTypeName && <p className="error">{errors.resourceTypeName}</p>}
+          {errors.resourceTypeName && (
+            <p className="error">{errors.resourceTypeName}</p>
+          )}
         </div>
 
-        <div> 
+        <div>
           <label> Select a concept </label>
           <SelectDropdown
             optionsList={conceptOptionsData}
@@ -459,7 +479,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           {errors.conceptName && <p className="error">{errors.conceptName}</p>}
         </div>
 
-        <div className="flex-col"> 
+        <div className="flex-col">
           <label> Add Description </label>
           <input
             type="text"
@@ -489,12 +509,11 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           handleTagChange={handleTagChange}
         />
 
-
         <button
           className={`${styles.formButton}`}
           type="submit"
           disabled={loading}
-          >
+        >
           {loading ? "Uploading..." : "Upload"}
         </button>
 

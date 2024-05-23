@@ -2,10 +2,7 @@
 import { fetchFilesByConceptId } from "@/actions/fetching/files/fetchFilesByConceptId";
 import { fetchLinksByConceptId } from "@/actions/fetching/links/fetchLinksByConceptId";
 import React, { useState, useEffect } from "react";
-import {
-  FormattedData,
-  capitalizeAndReplaceDash,
-} from "@/utils/formatting";
+import { FormattedData, capitalizeAndReplaceDash } from "@/utils/formatting";
 import { FetchedFormattedData } from "@/utils/types";
 import { notFound } from "next/navigation";
 import {
@@ -29,7 +26,6 @@ type ResourceTypeDataResults = {
 };
 
 const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
-
   useRequireAuth();
 
   const [selectedSegment, setSelectedSegment] = useState("Problems");
@@ -62,7 +58,7 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
 
       try {
         const fetchedData = await fetchResourceTypesByCourseTopicId(
-          id as string
+          id as string,
         );
 
         if (fetchedData.success) {
@@ -89,18 +85,20 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
         try {
           resourceType.success.forEach((resourceType: FormattedData) => {
             console.log("resourceType map item: ", resourceType);
-          })
+          });
 
-          const promises = resourceType.success.map((resourceType: FormattedData) =>       
-            fetchConceptsByResourceTypeId(resourceType.id).then(
-              (results: FetchedFormattedData) => ({
-                resourceTypeName: resourceType.name,
-                concepts: results.success || [],
-              })
-            )
+          const promises = resourceType.success.map(
+            (resourceType: FormattedData) =>
+              fetchConceptsByResourceTypeId(resourceType.id).then(
+                (results: FetchedFormattedData) => ({
+                  resourceTypeName: resourceType.name,
+                  concepts: results.success || [],
+                }),
+              ),
           );
 
-          const results: ResourceTypeDataResults[] = await Promise.all(promises);
+          const results: ResourceTypeDataResults[] =
+            await Promise.all(promises);
           if (results.length > 0) {
             setResourceTypeDataResults(results);
           }
@@ -125,7 +123,8 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
     setConceptLinks([]);
 
     const currentResourceType = resourceTypeDataResults?.find(
-      (resourceType: ResourceTypeDataResults ) => resourceType.resourceTypeName === selectedSegment
+      (resourceType: ResourceTypeDataResults) =>
+        resourceType.resourceTypeName === selectedSegment,
     );
     // Set the first concept of the current section as the selectedConcept
     if (currentResourceType && currentResourceType.concepts.length > 0) {
@@ -158,7 +157,7 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
                 tags: file.tags || [],
                 id: file.id,
               }))
-            : []
+            : [],
         );
 
         setConceptLinks(
@@ -171,7 +170,7 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
                 tags: link.tags || [],
                 id: link.id,
               }))
-            : []
+            : [],
         );
       } catch (error) {
         console.error("Failed to fetch concept data", error);
@@ -191,7 +190,8 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
   }
 
   const currentResourceType = resourceTypeDataResults?.find(
-    (resourceType: ResourceTypeDataResults ) => resourceType.resourceTypeName === selectedSegment
+    (resourceType: ResourceTypeDataResults) =>
+      resourceType.resourceTypeName === selectedSegment,
   );
 
   return (
@@ -216,11 +216,10 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
           value={selectedSegment}
           onChange={handleSegmentChange}
         />
-        
+
         <div style={{ marginTop: "20px" }}>
           <ModuleContentTable files={conceptFiles} links={conceptLinks} />
         </div>
-        
       </div>
     </div>
   );

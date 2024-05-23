@@ -45,18 +45,16 @@ const CommentForm = ({ handleFormSubmit }: CommentFormProps) => {
     <div className="comment-container">
       <h3>Comments</h3>
       <div>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Textarea
             {...register("commentText", { required: true })}
             placeholder="Enter your comment..."
             minRows={2}
             mb="md"
           />
-          <Button 
-            type="submit" 
-            variant="filled" 
+          <Button
+            type="submit"
+            variant="filled"
             style={{ width: "100%" }}
             disabled={isSubmitting || commentText.length === 0}
           >

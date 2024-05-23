@@ -50,11 +50,10 @@ export function HeaderMegaMenu() {
   const newData = data?.map((item, idx) => ({
     icon: icons[idx] ? icons[idx] : IconBook,
     title: item.name,
-    url: item.url
-  }))
+    url: item.url,
+  }));
 
-
-const FinalCourseLinks = newData?.map((item, idx) => ( 
+  const FinalCourseLinks = newData?.map((item, idx) => (
     <Link href={`/courses/${item.url}`} key={item.url} passHref>
       <UnstyledButton className={classes.subLink}>
         <Group wrap="nowrap" align="center">
@@ -65,7 +64,7 @@ const FinalCourseLinks = newData?.map((item, idx) => (
             />
           </ThemeIcon>
           <div>
-            <Text size="sm" fw={500} >
+            <Text size="sm" fw={500}>
               {item.title}
             </Text>
             {/* <Text size="xs" c="dimmed">
@@ -75,8 +74,7 @@ const FinalCourseLinks = newData?.map((item, idx) => (
         </Group>
       </UnstyledButton>
     </Link>
-))
-
+  ));
 
   return (
     <Box>

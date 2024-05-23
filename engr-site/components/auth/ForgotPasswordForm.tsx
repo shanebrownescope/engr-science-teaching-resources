@@ -16,7 +16,7 @@ type FormFields = z.infer<typeof ForgetPasswordSchema>;
  * Renders a form for resetting a user's password.
  *
  * @return {JSX.Element} The JSX element representing the form.
-*/
+ */
 const ForgotPasswordForm = () => {
   const [success, setSuccess] = useState<string | undefined>("");
   const {
@@ -68,31 +68,29 @@ const ForgotPasswordForm = () => {
           />
           {errors.email && (
             <p className={styles.error}> {errors.email.message} </p>
-          )}        
+          )}
         </div>
 
         {errors.root && <FormError message={errors.root.message} />}
         {success && <FormSuccess message={success} />}
 
-        <button 
+        <button
           className={styles.formButton}
-          type="submit" 
+          type="submit"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Loading..." : "Send reset email"}
         </button>
 
         <div className={styles.toLoginBtnWrapper}>
-          <p className="text-center sub-text"> Back to {" "}
-            <a 
-              className={styles.toLoginBtn}
-              href="/auth/login"
-            >
+          <p className="text-center sub-text">
+            {" "}
+            Back to{" "}
+            <a className={styles.toLoginBtn} href="/auth/login">
               Login
             </a>
           </p>
         </div>
-        
       </form>
     </div>
   );

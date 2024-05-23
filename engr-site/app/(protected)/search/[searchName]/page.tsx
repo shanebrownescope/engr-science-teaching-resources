@@ -2,7 +2,6 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react"; // Ensure React is imported
 
-
 import { Pagination } from "@mantine/core";
 import { fetchSearchResults } from "@/actions/fetching/search/fetchSearchResults";
 import {
@@ -43,18 +42,17 @@ const mockResults = [
 ];
 
 const SearchResults = ({ params }: { params: { searchName: string } }) => {
-
   useRequireAuth();
 
   const formattedSearchName = capitalizeAndReplaceDash(
-    params.searchName.toLowerCase().replace(/-/g, " ")
+    params.searchName.toLowerCase().replace(/-/g, " "),
   );
   const [data, setData] = useState<AllFilesAndLinksDataFormatted[]>([]);
 
   useEffect(() => {
     const fetchFilesAndLinks = async () => {
       const data: FetchedSearchResults = await fetchSearchResults(
-        formattedSearchName.toLowerCase()
+        formattedSearchName.toLowerCase(),
       );
       console.log(formattedSearchName);
 

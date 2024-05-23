@@ -15,7 +15,9 @@ import z from "zod";
  * @param {z.infer<typeof CreateResourceTypeSchema>} values - The values for the new resource type
  * @returns {{ error?: string, success?: string }} - The response from the database
  */
-const createResourceType = async (values: z.infer<typeof CreateResourceTypeSchema>) => {
+const createResourceType = async (
+  values: z.infer<typeof CreateResourceTypeSchema>,
+) => {
   try {
     const user = await getCurrentUser();
 
@@ -37,7 +39,10 @@ const createResourceType = async (values: z.infer<typeof CreateResourceTypeSchem
       return { error: "Course id not found" };
     }
 
-    const existingCourseTopic = await getCourseTopicByIdAndCourseId(courseTopicId, courseId);
+    const existingCourseTopic = await getCourseTopicByIdAndCourseId(
+      courseTopicId,
+      courseId,
+    );
 
     if (!existingCourseTopic) {
       return { error: "Course topic id not found" };
@@ -47,12 +52,14 @@ const createResourceType = async (values: z.infer<typeof CreateResourceTypeSchem
 
     const existingResourceType = await getResourceTypeByNameAndCourseTopicId(
       formattedResourceTypeName,
-      courseTopicId
+      courseTopicId,
     );
 
     if (existingResourceType) {
       console.log(existingResourceType);
-      return { error: "Resource type name already in use for that course topic" };
+      return {
+        error: "Resource type name already in use for that course topic",
+      };
     }
 
     const insertQuery = `INSERT INTO ResourceTypes_v2 (resourceTypeName, courseTopicId) VALUES (?, ?)`;

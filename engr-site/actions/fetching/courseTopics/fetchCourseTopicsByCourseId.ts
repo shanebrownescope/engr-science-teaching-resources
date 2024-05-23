@@ -13,9 +13,8 @@ import { CourseTopicData } from "@/database/data/courseTopics";
  * containing the fetched course topics or an error message
  */
 export const fetchCourseTopicsByCourseId = async (
-  courseId: string | number
+  courseId: string | number,
 ): Promise<FetchedFormattedData> => {
-
   try {
     const course = await getCourseById(courseId as string);
 
@@ -29,8 +28,9 @@ export const fetchCourseTopicsByCourseId = async (
     const { results } = await dbConnect(query, [course?.id]);
 
     if (results[0].length > 0) {
-      const formattedCourseTopicData: FormattedData[] = results[0].map((item: CourseTopicData) =>
-        lowercaseAndReplaceSpace(item.id, item.courseTopicName)
+      const formattedCourseTopicData: FormattedData[] = results[0].map(
+        (item: CourseTopicData) =>
+          lowercaseAndReplaceSpace(item.id, item.courseTopicName),
       );
       return { success: formattedCourseTopicData, failure: undefined };
     }

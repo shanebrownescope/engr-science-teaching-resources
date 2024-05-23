@@ -35,7 +35,7 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
               >
                 {tag}
               </p>
-            )
+            ),
         )}
       </div>
     </div>

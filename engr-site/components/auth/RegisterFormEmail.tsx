@@ -7,7 +7,6 @@ import * as z from "zod";
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";
 
-
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useTransition, useState } from "react";
 import { RegisterFormEmailSchema } from "@/schemas";
@@ -74,7 +73,7 @@ export const RegisterFormEmail = () => {
       const { email, firstName, lastName } = validatedFields.data;
 
       const approvalResults = await sendApprovalRequestToTeam(
-        validatedFields.data
+        validatedFields.data,
       );
       console.log(approvalResults);
       if (approvalResults.failure) {
@@ -86,7 +85,7 @@ export const RegisterFormEmail = () => {
       const confirmationResults = await sendUserRegistrationConfirmation(
         email,
         firstName,
-        lastName
+        lastName,
       );
       if (confirmationResults.failure) {
         console.log("here2");
@@ -95,10 +94,10 @@ export const RegisterFormEmail = () => {
       }
 
       console.log(
-        "Both approval request and registration confirmation email sent successfully"
+        "Both approval request and registration confirmation email sent successfully",
       );
       setSuccess(
-        "Success! Check your email for confirmation and an approval request will be sent."
+        "Success! Check your email for confirmation and an approval request will be sent.",
       );
     } catch (error) {
       setError("root", { message: "Error" });

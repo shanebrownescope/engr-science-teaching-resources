@@ -1,13 +1,10 @@
-import styles from '@/styles/form.module.css'
+import styles from "@/styles/form.module.css";
 
 type FormSuccessProps = {
-    message?: string;
-}
+  message?: string;
+};
 
-export const FormSuccess = ({
-  message
-}: FormSuccessProps) => {
-
+export const FormSuccess = ({ message }: FormSuccessProps) => {
   if (!message) {
     return null;
   }
@@ -16,6 +13,5 @@ export const FormSuccess = ({
     <div className={styles.formSuccess}>
       <p> {message} </p>
     </div>
-  )
-}
-
+  );
+};

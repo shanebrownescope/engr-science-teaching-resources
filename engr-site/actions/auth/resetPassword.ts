@@ -18,7 +18,7 @@ import { transporter } from "@/utils/email";
  */
 export const resetPasswordAction = async (
   values: z.infer<typeof ResetPasswordSchema>,
-  token?: string | null
+  token?: string | null,
 ) => {
   if (!token) {
     return { failure: "Missing token!" };
@@ -32,7 +32,8 @@ export const resetPasswordAction = async (
 
   const { password } = validatedFields.data;
 
-  const existingToken: PasswordResetTokenData = await getPasswordResetTokenByToken(token);
+  const existingToken: PasswordResetTokenData =
+    await getPasswordResetTokenByToken(token);
 
   if (!existingToken) {
     return { failure: "Invalid token!" };
@@ -75,7 +76,7 @@ export const resetPasswordAction = async (
   await sendUpdatePasswordEmail(
     existingUser.email,
     existingUser.firstName,
-    existingUser.lastName
+    existingUser.lastName,
   );
 
   return { success: "Password updated!" };
@@ -92,7 +93,7 @@ export const resetPasswordAction = async (
 const sendUpdatePasswordEmail = async (
   email: string,
   firstName: string,
-  lastName: string
+  lastName: string,
 ) => {
   const sendUpdatePasswordEmailContent = `
     <p>Dear ${firstName} ${lastName},</p>

@@ -11,7 +11,7 @@ import { ResourceTypeData } from "@/database/data/resourceTypes";
  * containing the fetched resource types or an error message
  */
 export const fetchResourceTypesByCourseTopicId = async (
-  id: string | number
+  id: string | number,
 ): Promise<FetchedFormattedData> => {
   try {
     const query = `
@@ -22,7 +22,7 @@ export const fetchResourceTypesByCourseTopicId = async (
     if (results[0].length > 0) {
       const formattedResourceTypeData: FormattedData[] = results[0].map(
         (item: ResourceTypeData) =>
-          lowercaseAndReplaceSpace(item.id, item.resourceTypeName)
+          lowercaseAndReplaceSpace(item.id, item.resourceTypeName),
       );
 
       return { success: formattedResourceTypeData, failure: undefined };

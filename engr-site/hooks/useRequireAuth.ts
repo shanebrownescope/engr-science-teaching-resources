@@ -3,7 +3,6 @@
 import requireAuth from "@/actions/auth/requireAuth";
 import { useEffect, useState } from "react";
 
-
 /**
  * Custom hook that requires authentication.
  *

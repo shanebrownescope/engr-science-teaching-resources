@@ -8,8 +8,12 @@ type SegmentedControlInputProps = {
   data: FormattedData[];
 };
 
-export function SegmentedControlInput({ value, onChange, data }: SegmentedControlInputProps) {
-  const dataArray = data.map((item: FormattedData) => (item.name));
+export function SegmentedControlInput({
+  value,
+  onChange,
+  data,
+}: SegmentedControlInputProps) {
+  const dataArray = data.map((item: FormattedData) => item.name);
   return (
     <SegmentedControl
       radius="xl"

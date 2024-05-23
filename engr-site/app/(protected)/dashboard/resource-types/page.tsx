@@ -46,7 +46,7 @@ const ResourceTypes = () => {
           (course: FormattedData) => ({
             value: course.id.toString(),
             label: course.name,
-          })
+          }),
         );
         setCourseList(formattedCourseList);
       }
@@ -85,10 +85,12 @@ const ResourceTypes = () => {
 
     const results = await fetchCourseTopicsByCourseId(selectedCourseId);
     if (results?.success) {
-      const formattedCourseTopicList = results.success.map((topic: FormattedData) => ({
-        value: topic.id.toString(),
-        label: topic.name,
-      }));
+      const formattedCourseTopicList = results.success.map(
+        (topic: FormattedData) => ({
+          value: topic.id.toString(),
+          label: topic.name,
+        }),
+      );
       setCourseTopicOptions(formattedCourseTopicList);
     }
   };

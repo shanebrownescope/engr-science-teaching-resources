@@ -11,7 +11,6 @@ import { resetPasswordAction } from "@/actions/auth/resetPassword";
 import { useSearchParams } from "next/navigation";
 import styles from "@/styles/form.module.css";
 
-
 type FormFields = z.infer<typeof ResetPasswordSchema>;
 
 const ResetPasswordForm = () => {
@@ -37,7 +36,7 @@ const ResetPasswordForm = () => {
     setSuccess("");
     try {
       console.log(data);
-    
+
       if (data.password !== data.confirmPassword) {
         setError("root", { message: "Passwords do not match" });
         return;
@@ -63,12 +62,8 @@ const ResetPasswordForm = () => {
   return (
     <div className={styles.formWrapper}>
       <label className={styles.title}> Reset password </label>
-      
-      <form 
-        className={`${styles.form} mt-2`}
-        onSubmit={handleSubmit(onSubmit)}
-      >
 
+      <form className={`${styles.form} mt-2`} onSubmit={handleSubmit(onSubmit)}>
         <div className="flex-col">
           <label> Password</label>
           <input
@@ -82,7 +77,6 @@ const ResetPasswordForm = () => {
             <p className="error">{errors.password.message}</p>
           )}
         </div>
-      
 
         <div className="flex-col">
           <label> Confirm password</label>
@@ -97,25 +91,23 @@ const ResetPasswordForm = () => {
             <p className="error">{errors.confirmPassword.message}</p>
           )}
         </div>
-        
 
         {errors.root && <FormError message={errors.root.message} />}
         {success && <FormSuccess message={success} />}
 
-        <button 
+        <button
           className={styles.formButton}
-          type="submit" 
+          type="submit"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Loading..." : "Reset password"}
         </button>
 
         <div className={styles.toLoginBtnWrapper}>
-          <p className="text-center sub-text"> Back to {" "}
-            <a 
-              className={styles.toLoginBtn}
-              href="/auth/login"
-            >
+          <p className="text-center sub-text">
+            {" "}
+            Back to{" "}
+            <a className={styles.toLoginBtn} href="/auth/login">
               Login
             </a>
           </p>

@@ -3,11 +3,7 @@
  ** These routes do not require authentication
  ** @type {string[]}
  */
-export const publicRoutes = [
-  "/",
-  "/acknowledgments"
-];
-
+export const publicRoutes = ["/", "/acknowledgments"];
 
 /**
  ** An array of routes that are used for authentication
@@ -20,11 +16,11 @@ export const authRoutes = [
   "/auth/register",
   "/auth/forgot-password",
   // "/auth/reset-password/[token]",
-  "/auth/reset-password"
+  "/auth/reset-password",
 ];
 
 /**
- ** An array of routes that are only accessible 
+ ** An array of routes that are only accessible
  */
 
 /**
@@ -34,10 +30,9 @@ export const authRoutes = [
  */
 export const apiAuthPrefix = "/api/auth";
 
-
 /**
  ** The default redirect path after logging in
  ** Can change default redirect page anytime
  * @type {string[]}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/home"
+export const DEFAULT_LOGIN_REDIRECT = "/home";
