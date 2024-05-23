@@ -35,33 +35,9 @@ import {
 } from "@tabler/icons-react";
 import classes from "./HeaderMegaMenu.module.css";
 import Link from "next/link";
+import useFetchCourses from "@/hooks/useFetchCourses";
 
-const mockdata = [
-  {
-    icon: IconAtom,
-    title: "Statics",
-    description: "Description goes here",
-    path: "/courses/statics",
-  },
-  {
-    icon: IconArrowsMove,
-    title: "Dynamics",
-    description: "Description goes here",
-    path: "/courses/dynamics",
-  },
-  {
-    icon: IconBarbell,
-    title: "Strengths of Materials",
-    description: "Description goes here",
-    path: "/courses/strengths-of-materials",
-  },
-  {
-    icon: IconBolt,
-    title: "Circuits & Electrical Fundamentals",
-    description: "Description goes here",
-    path: "/courses/circuits-electrical-fundamentals",
-  },
-];
+const icons = [IconAtom, IconArrowsMove, IconBarbell, IconBolt];
 
 export function HeaderMegaMenu() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
@@ -69,10 +45,19 @@ export function HeaderMegaMenu() {
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const theme = useMantineTheme();
 
-  const links = mockdata.map((item) => (
-    <Link href={`${item.path}`} key={item.path} passHref>
+  const { data, error, loading } = useFetchCourses(4);
+
+  const newData = data?.map((item, idx) => ({
+    icon: icons[idx] ? icons[idx] : IconBook,
+    title: item.name,
+    url: item.url
+  }))
+
+
+const FinalCourseLinks = newData?.map((item, idx) => ( 
+    <Link href={`/courses/${item.url}`} key={item.url} passHref>
       <UnstyledButton className={classes.subLink}>
-        <Group wrap="nowrap" align="flex-start">
+        <Group wrap="nowrap" align="center">
           <ThemeIcon size={34} variant="default" radius="md">
             <item.icon
               style={{ width: rem(22), height: rem(22) }}
@@ -80,23 +65,24 @@ export function HeaderMegaMenu() {
             />
           </ThemeIcon>
           <div>
-            <Text size="sm" fw={500}>
+            <Text size="sm" fw={500} >
               {item.title}
             </Text>
-            <Text size="xs" c="dimmed">
-              {item.description}
-            </Text>
+            {/* <Text size="xs" c="dimmed">
+              {item?.description}
+            </Text> */}
           </div>
         </Group>
       </UnstyledButton>
     </Link>
-  ));
+))
+
 
   return (
     <Box>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
-          <MantineLogo size={30} />
+          <div className="site-logo"> E-SCoPe</div>
 
           <Group h="100%" gap={0} visibleFrom="sm">
             <Link href="/home" className={classes.link}>
@@ -134,7 +120,7 @@ export function HeaderMegaMenu() {
                 <Divider my="sm" />
 
                 <SimpleGrid cols={2} spacing={0}>
-                  {links}
+                  {FinalCourseLinks}
                 </SimpleGrid>
               </HoverCard.Dropdown>
             </HoverCard>
@@ -178,7 +164,7 @@ export function HeaderMegaMenu() {
           <UnstyledButton className={classes.link} onClick={toggleLinks}>
             <Center inline>
               <Box component="span" mr={5}>
-                Features
+                Courses
               </Box>
               <IconChevronDown
                 style={{ width: rem(16), height: rem(16) }}
@@ -186,7 +172,7 @@ export function HeaderMegaMenu() {
               />
             </Center>
           </UnstyledButton>
-          <Collapse in={linksOpened}>{links}</Collapse>
+          <Collapse in={linksOpened}>{FinalCourseLinks}</Collapse>
           <a href="#" className={classes.link}>
             Learn
           </a>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ModuleCard } from "@/components/mantine";
 import { fetchCourseTopicsByCourseName } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseName";
 import requireAuth from "@/actions/auth/requireAuth";
+import SectionLayout from "@/components/custom/sectionLayout/SectionLayout";
 
 const CourseTopicsPage = async ({
   params,
@@ -19,33 +20,25 @@ const CourseTopicsPage = async ({
   console.log("== success: ", courseTopicList.success);
 
   return (
-    <div>
-      <p> {courseTopicName} </p>
+    <SectionLayout> 
+      <h2> {courseTopicName} </h2>
+
+      <label className="label-primary"> Course topics </label>
 
       {courseTopicList?.success?.map((item: any, index: number) => (
-        <div>
-          <ModuleCard
-            title={item.name}
-            description="description here"
-            href={`/courses/${params.courseName}/${item.url}`}
-          />
-
-          <Link
-            href={`/courses/${params.courseName}/${
-              item.url
-            }?${new URLSearchParams({
-              id: item.id,
-            })}`}
-            key={index}
-          >
-            {" "}
-            {item.name}{" "}
-          </Link>
-        </div>
+          <div>
+            <ModuleCard
+              title={item.name}
+              description="description here"
+              href={`/courses/${params.courseName}/${item.url}?${new URLSearchParams({
+                id: item.id,
+              }).toString()}`}
+            />
+          </div>
       ))}
 
       {courseTopicList?.failure && <p> No course topics </p>}
-    </div>
+    </SectionLayout>
   );
 };
 

@@ -8,10 +8,6 @@ import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { sanitizeUrl, validUrlPattern } from "@/utils/helpers";
 
 
-
-let TESTUSERID = 26
-
-
 type UploadLinkProps = {
   linkName: string, 
   linkUrl: string
@@ -21,40 +17,38 @@ type UploadLinkProps = {
   uploadDate: string
 };
 
+/**
+ * Uploads a link to the database and returns the ID of the link on success.
+ * @param {UploadLinkProps} props - The properties of the link to be uploaded.
+ * @returns {Promise<{success: {linkId: number}} | {failure: string}>} - A promise that resolves to an object with the success message and the ID of the link if the upload was successful, or a failure message if the upload was not successful.
+ */
 export const uploadLink = async ({ linkName, linkUrl, conceptId, description, contributor, uploadDate }: UploadLinkProps) => {
-  //* first check if user is logged before request
-
   const user = await getCurrentUser()
-
   if (user?.role && user.role !== "admin") {
     return { failure: "Not authenticated" }
   }
 
-  //* checking if url matches url pattern
+  // Check if the link URL is valid
   const pattern = validUrlPattern
   if (!pattern.test(linkUrl)) {
     return { failure: "Invalid URL format"}
   }
 
+  // Sanitize the link URL
   const sanitizedUrl = sanitizeUrl(linkUrl)
 
+  // Check if the link URL was altered during sanitization
   if (sanitizedUrl !== linkUrl || sanitizedUrl.includes('<') || sanitizedUrl.includes('>')) {
     return { failure: "URL was altered during sanitization. Not storing in database"}
   }
 
+  // Check if all required fields are present
   if (!linkName || !linkUrl  || !conceptId || !uploadDate ) {
     return { failure: "Missing required fields"}
   }
 
-  console.log(sanitizedUrl)
-
-  console.log(linkName)
- 
-
   const query = `
     INSERT INTO Links_v2 (linkName, linkUrl, description, uploadDate, contributor, conceptId, uploadedUserId) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-  //* extracts url without query parameters
-  console.log(uploadDate)
   const values = [linkName, sanitizedUrl, description, uploadDate, contributor, conceptId, user?.id]
 
   try {
@@ -75,7 +69,6 @@ export const uploadLink = async ({ linkName, linkUrl, conceptId, description, co
     }
 
   } catch (error) {
-    console.error(error);
     return {failure: "Internal server error"}
   }
 }

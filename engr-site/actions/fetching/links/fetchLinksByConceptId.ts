@@ -14,6 +14,11 @@ type fetchLinksByConceptIdProps = {
   id: string;
 };
 
+/**
+ * Asynchronously fetches links from the database by conceptId
+ * @param {fetchLinksByConceptIdProps} props - An object containing the conceptId of the links to fetch
+ * @returns {Promise<FetchedLinksDataArray>} An object containing the fetched links or an error message
+ */
 export const fetchLinksByConceptId = async ({
   id,
 }: fetchLinksByConceptIdProps): Promise<FetchedLinksDataArray> => {
@@ -29,10 +34,7 @@ export const fetchLinksByConceptId = async ({
 
     const { results, error } = await dbConnect(selectQuery, [id]);
 
-    console.log("-- link results", results[0]);
-
     if (error) {
-      console.error("Error retrieving data from the database:", error);
       return { failure: "Internal server error" };
     }
 
@@ -46,10 +48,9 @@ export const fetchLinksByConceptId = async ({
 
       return { success: formattedData };
     } else {
-      return { success: undefined };
+      return { success: undefined }; // no links found
     }
   } catch (error) {
-    console.error("An error occurred while fetching data:", error);
     return {
       failure: "Internal server error, error retrieving modules from db",
     };

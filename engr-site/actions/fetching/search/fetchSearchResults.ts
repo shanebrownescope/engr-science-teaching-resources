@@ -8,31 +8,28 @@ import {
   FetchedSearchResults,
 } from "@/utils/types";
 
-// Fetches files and links 
+//* old query, uses JSON_ARRAYAGG
+//   const combinedQuery = `
+// (
+//   SELECT 'file' AS type, f.FileId AS id, f.FileName AS name, f.Description AS description, f.UploadDate as uploadDate,
+//     JSON_ARRAYAGG(t.TagName) AS tagNames
+//   FROM Files f
+//   JOIN FileTags ft ON f.FileId = ft.FileId
+//   JOIN Tags t ON ft.TagId = t.TagId
+//   GROUP BY f.FileId
+//   )
 
-/**
-    const combinedQuery = `
-  (
-    SELECT 'file' AS type, f.FileId AS id, f.FileName AS name, f.Description AS description, f.UploadDate as uploadDate,
-      JSON_ARRAYAGG(t.TagName) AS tagNames
-    FROM Files f
-    JOIN FileTags ft ON f.FileId = ft.FileId
-    JOIN Tags t ON ft.TagId = t.TagId
-    GROUP BY f.FileId
-    )
+//   UNION
+// (
+//   SELECT 'link' AS type, l.LinkId AS id, l.LinkName AS name, l.Description AS description, l.UploadDate as uploadDate,
+//     JSON_ARRAYAGG(t.TagName) AS tagNames
+//   FROM Links l
+//   LEFT JOIN LinkTags lt ON l.LinkId = lt.LinkId
+//   LEFT JOIN Tags t ON lt.TagId = t.TagId
+//   GROUP BY l.LinkId
+// );`;
 
-    UNION
-  (
-    SELECT 'link' AS type, l.LinkId AS id, l.LinkName AS name, l.Description AS description, l.UploadDate as uploadDate,
-      JSON_ARRAYAGG(t.TagName) AS tagNames
-    FROM Links l
-    LEFT JOIN LinkTags lt ON l.LinkId = lt.LinkId
-    LEFT JOIN Tags t ON lt.TagId = t.TagId
-    GROUP BY l.LinkId
-  );`;
- */
-
-
+//* New query, uses GROUP_CONCAT
 // Fetches files and links that match the search query
 // The expression (f.FileName LIKE CONCAT('%', 'computer', '%'))   would work as follows:
 
@@ -108,50 +105,41 @@ const fetchQuery = `
     l.id;
 `;
 
-
+/**
+ * Fetches search results from the database based on a search query
+ * @param {string} searchQuery - The search query to match against file and link names and tags
+ * @returns {Promise<FetchedSearchResults>} An object containing the fetched search results or an error message
+ */
 export const fetchSearchResults = async (
   searchQuery: string
 ): Promise<FetchedSearchResults> => {
   try {
-
-    const { results, error } = await dbConnect(fetchQuery, [searchQuery, searchQuery, searchQuery, searchQuery, searchQuery, searchQuery]);
+    // searchQuery is used multiple times in the query
+    const { results, error } = await dbConnect(fetchQuery, [
+      searchQuery,
+      searchQuery,
+      searchQuery,
+      searchQuery,
+      searchQuery,
+      searchQuery,
+    ]);
 
     if (error) {
-      console.error("Error retrieving data from the database:", error);
       return { failure: "Internal server error" };
     }
 
     if (results[0].length > 0) {
-      console.log("-- found");
-      console.log("--result: ", results[0]);
       const formattedData: AllFilesAndLinksDataFormatted[] = results[0].map(
         (item: AllFilesAndLinksData) => {
           return processFilesAndLinks(item);
         }
       );
 
-      // const filteredData: AllFilesAndLinksDataFormatted[] =
-      //   formattedData.filter((item: AllFilesAndLinksDataFormatted) => {
-      //     const titleSimilar = item.originalName
-      //       .toLowerCase()
-      //       .includes(searchQuery);
-
-      //     const similarTags = item.tags.some((tag) =>
-      //       tag.toLowerCase().includes(searchQuery)
-      //     );
-
-      //     if (titleSimilar || similarTags) {
-      //       return item;
-      //     }
-      //   });
-
       return { success: formattedData, failure: undefined };
     }
-    console.log("--not found");
 
     return { success: [] };
   } catch (error) {
-    console.error("An error occurred while fetching data:", error);
     return {
       failure: "Internal server error, error retrieving modules from db",
     };

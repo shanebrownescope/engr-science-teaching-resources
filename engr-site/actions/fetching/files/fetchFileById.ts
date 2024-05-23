@@ -1,8 +1,6 @@
 "use server";
 
 import dbConnect from "@/database/dbConnector";
-import { capitalizeAndReplaceDash } from "@/utils/formatting";
-import { TagsData, fetchTagsByFileId } from "../fetchTagsByFileId";
 import { processFile } from "@/utils/helpers";
 import { FileData, FetchedFile } from "@/utils/types";
 
@@ -15,6 +13,11 @@ export type FetchedFileData = {
   failure?: string;
 };
 
+/**
+ * Asynchronously fetches a file from the database by its id
+ * @param {fetchFilesByIdProps} props - An object containing the id of the file to fetch
+ * @returns {Promise<FetchedFileData>} An object containing the fetched file or an error message
+ */
 export const fetchFileById = async ({
   id,
 }: fetchFilesByIdProps): Promise<FetchedFileData> => {
@@ -31,26 +34,21 @@ export const fetchFileById = async ({
     const { results: fileResult, error } = await dbConnect(selectQuery, [id]);
 
     if (error) {
-      console.error("Error retrieving data from the database:", error);
       return { failure: "Internal server error" };
     }
-
-    console.log(fileResult[0]);
 
     if (fileResult[0].length > 0) {
       const file: FileData = fileResult[0][0];
 
       const processedFile: FetchedFile = await processFile(file);
-      console.log("procesed file", processedFile);
 
       return { success: processedFile };
     }
 
     return {
-      failure: "Internal server error, error retrieving modules from db",
+      failure: "No file found with that id",
     };
   } catch (error) {
-    console.error("An error occurred while fetching data:", error);
     return {
       failure: "Internal server error, error retrieving modules from db",
     };

@@ -1,8 +1,5 @@
-import { fetchTagsByFileId } from "@/actions/fetching/fetchTagsByFileId";
 import { _Object } from "@aws-sdk/client-s3";
 import {
-  capitalizeAndReplaceDash,
-  lowercaseAndReplaceSpace,
   lowercaseAndReplaceSpaceString,
 } from "./formatting";
 

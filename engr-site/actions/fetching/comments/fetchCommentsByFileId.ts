@@ -7,15 +7,17 @@ import { CommentFileData, FetchedCommentFileData } from "@/utils/types";
 
 
 
+/**
+ * Fetches comments for a file from the database by its id
+ * @param {string} id - The id of the file
+ * @returns {Promise<FetchedCommentFileData | null>} - A promise that resolves to an object containing the fetched comments or an error message
+ */
 export const fetchCommentsByFileId = async (id: string): Promise<FetchedCommentFileData | null> => {
   try {
     const existingFile = getFileById(id);
-
     if (!existingFile) {
-      console.error("File not found");
-      return { failure: "File not found" };
+      return { failure: "File not found" }; 
     }
-
 
     const selectQuery = `
       SELECT fc.id, fc.fileId, fc.userId, fc.commentText, fc.uploadDate, u.name
@@ -26,36 +28,31 @@ export const fetchCommentsByFileId = async (id: string): Promise<FetchedCommentF
     const { results: comments, error } = await dbConnect(selectQuery, [id]);
 
     if (error) {
-      console.error("An error occurred while fetching data:", error);
       return {
         failure: "Internal server error, error retrieving file comments from db",
       };
     }
 
+    // Return empty array if no comments were found
     if (comments[0].length === 0) {
       return {
         success: []
       }
     }
-
-    console.log("date: ", comments[0][0].uploadDate);
     
     const commentsTransformed = comments[0].map((comment: CommentFileData) => {
+      // Transform uploadDate to time ago
       const timeAgoDate = formatTimeAgo(comment.uploadDate.toString());
       return {
         ...comment,
         uploadDate: timeAgoDate
-
       } 
     })
 
-    return { success: commentsTransformed };
-
-
+    return { success: commentsTransformed }; 
   } catch (error) {
-    console.error("An error occurred while fetching data:", error);
     return {
       failure: "Internal server error, error retrieving modules from db",
-    };
+    }; 
   }
 };

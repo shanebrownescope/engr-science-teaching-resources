@@ -8,15 +8,17 @@ import { CommentLinkData, FetchedCommentLinkData } from "@/utils/types";
 
 
 
+/**
+ * Fetches comments for a link from the database by its id
+ * @param {string} id - The id of the link
+ * @returns {Promise<FetchedCommentLinkData | null>} - A promise that resolves to an object containing the fetched comments or an error message
+ */
 export const fetchCommentsByLinkId = async (id: string): Promise<FetchedCommentLinkData | null> => {
   try {
     const existingLink = getLinkById(id);
-
     if (!existingLink) {
-      console.error("link not found");
       return { failure: "link not found" };
     }
-
 
     const selectQuery = `
       SELECT lc.id, lc.linkId, lc.userId, lc.commentText, lc.uploadDate, u.name
@@ -33,28 +35,25 @@ export const fetchCommentsByLinkId = async (id: string): Promise<FetchedCommentL
       };
     }
 
+    // Return empty array if no comments were found
     if (comments[0].length === 0) {
       return {
         success: []
       }
     }
 
-    console.log("date: ", comments[0][0].uploadDate);
-    
+    // Transform uploadDate to time ago and return fetched comments
     const commentsTransformed = comments[0].map((comment: CommentLinkData) => {
       const timeAgoDate = formatTimeAgo(comment.uploadDate.toString());
       return {
         ...comment,
         uploadDate: timeAgoDate
-
       } 
     })
 
     return { success: commentsTransformed };
 
-
   } catch (error) {
-    console.error("An error occurred while fetching data:", error);
     return {
       failure: "Internal server error, error retrieving modules from db",
     };

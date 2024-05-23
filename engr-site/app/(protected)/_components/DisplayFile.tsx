@@ -1,4 +1,3 @@
-import { TagsData } from "@/actions/fetching/fetchTagsByFileId";
 import { FetchedFile } from "@/utils/types";
 
 type DisplayFileProps = {

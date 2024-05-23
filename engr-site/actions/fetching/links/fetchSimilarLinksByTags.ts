@@ -9,31 +9,34 @@ type fetchSimilarLinksByTagsProps = {
   tags?: string[];
 };
 
+/**
+ * Asynchronously fetches similar links from the database by tags
+ * @param {fetchSimilarLinksByTagsProps} props - An object containing the linkId and tags to fetch similar links by
+ * @returns {Promise<FetchedLinksDataArray>} An object containing the fetched links or an error message
+ */
 export const fetchSimilarLinksByTags = async ({
   linkId,
   tags,
 }: fetchSimilarLinksByTagsProps): Promise<FetchedLinksDataArray> => {
   try {
     const selectQuery = `
-    SELECT l.id, l.linkName, l.linkUrl, l.description, l.uploadDate, l.contributor,
-      JSON_ARRAYAGG(t.tagName) AS tagNames
-    FROM Links_v2 l
-    JOIN LinkTags_v2 lt ON l.id = lt.linkId
-    JOIN Tags_v2 t ON lt.tagId = t.id
-    WHERE t.tagName IN (${JSON.stringify(tags)
-      .replace("[", "")
-      .replace("]", "")})
+      SELECT l.id, l.linkName, l.linkUrl, l.description, l.uploadDate, l.contributor,
+        JSON_ARRAYAGG(t.tagName) AS tagNames
+      FROM Links_v2 l
+      JOIN LinkTags_v2 lt ON l.id = lt.linkId
+      JOIN Tags_v2 t ON lt.tagId = t.id
+      WHERE t.tagName IN (${JSON.stringify(tags)
+        .replace("[", "")
+        .replace("]", "")})
       AND l.id != ?
-    GROUP BY l.id
-    LIMIT 3;`;
+      GROUP BY l.id
+      LIMIT 3;`;
 
     const { results: linksResult, error } = await dbConnect(selectQuery, [
       linkId,
     ]);
-    console.log("similar link results",linksResult);
 
     if (error) {
-      console.error("Error retrieving data from the database:", error);
       return { failure: "Internal server error" };
     }
 
@@ -47,10 +50,9 @@ export const fetchSimilarLinksByTags = async ({
 
       return { success: formattedData };
     } else {
-      return { success: undefined };
+      return { success: undefined }; // No similar links found
     }
   } catch (error) {
-    console.error("An error occurred while fetching data:", error);
     return {
       failure: "Internal server error, error retrieving modules from db",
     };
