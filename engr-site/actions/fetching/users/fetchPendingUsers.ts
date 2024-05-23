@@ -1,18 +1,21 @@
 "use server"
 
 import { getPendingUsers } from "@/database/data/user"
-import { transformObjectKeys } from "@/utils/helpers"
-import { FetchedUserData, UserData } from "@/utils/types"
+import { UserData } from "@/utils/types"
+
+export type FetchPendingUsersData = 
+  | { success: UserData[] }
+  | { failure: string };
 
 /**
  * Fetches all pending users from the database
- * @returns {Promise<{success: UserData[]} | {failure: string}>} - A promise that resolves to an object containing the fetched users or an error message
+ * @returns {Promise<FetchPendingUsersData>} - A promise that resolves to an object containing the fetched users or an error message
  */
-export const fetchPendingUsers = async (): Promise<{success: UserData[]} | {failure: string}> => {
+export const fetchPendingUsers = async (): Promise<FetchPendingUsersData> => {
   try {
     const results: UserData[] = await getPendingUsers()
 
-    if (!results) {
+    if (!results || results.length === 0) {
       return { failure: "No pending users" };
     }
 

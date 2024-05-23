@@ -26,7 +26,7 @@ const PendingUsersPage = async () => {
   await requireAuth();
 
   const pendingUsers = await fetchPendingUsers();
-  console.log("pendingUsers: ", pendingUsers.success);
+
 
   const handleApprove = async ({
     userId,
@@ -55,15 +55,15 @@ const PendingUsersPage = async () => {
 
   return (
     <div>
-      {pendingUsers?.success && (
+      {'success' in pendingUsers &&  (
         <PendingUserListPaginated
-          data={pendingUsers?.success}
+          data={pendingUsers.success}
           handleApprove={handleApprove}
           handleReject={handleReject}
         />
       )}
 
-      {pendingUsers?.failure && <p>No pending users</p>}
+      {'failure' in pendingUsers && <p>No pending users</p>}
     </div>
   );
 };
