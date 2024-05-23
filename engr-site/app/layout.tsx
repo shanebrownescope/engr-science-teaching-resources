@@ -45,7 +45,7 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className={inter.className}>
+        <body style={{ backgroundColor: "f7f5f5" }} className={inter.className}>
           <MantineProvider theme={theme}>{children}</MantineProvider>
         </body>
       </html>
