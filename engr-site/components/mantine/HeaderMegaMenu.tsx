@@ -63,6 +63,11 @@ const mockdata = [
   },
 ];
 
+/**
+ * Renders a nav bar for the actual application.
+ *
+ * @returns {JSX.Element} - The rendered HeaderMegaMenu component.
+ */
 export function HeaderMegaMenu() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);

@@ -2,6 +2,11 @@ import { Text, Title, TextInput, Button, Image, Center } from "@mantine/core";
 import image from "./image2.svg";
 import classes from "./EmailBanner.module.css";
 
+/**
+ * Renders an email banner component for newsletter subscription.
+ *
+ * @returns {JSX.Element} - The rendered EmailBanner component.
+ */
 export function EmailBanner() {
   return (
     <div className={classes.wrapper}>

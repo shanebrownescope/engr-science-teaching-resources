@@ -1,5 +1,18 @@
-"use client"
-import { Group, Code, ScrollArea, rem, Burger, Button, Divider, Drawer, UnstyledButton, Center, Box, Collapse } from '@mantine/core';
+"use client";
+import {
+  Group,
+  Code,
+  ScrollArea,
+  rem,
+  Burger,
+  Button,
+  Divider,
+  Drawer,
+  UnstyledButton,
+  Center,
+  Box,
+  Collapse,
+} from "@mantine/core";
 import {
   IconNotes,
   IconCalendarStats,
@@ -9,59 +22,59 @@ import {
   IconAdjustments,
   IconLock,
   IconChevronDown,
-} from '@tabler/icons-react';
+} from "@tabler/icons-react";
 // import { UserButton } from '../UserButton/UserButton';
-import { LinksGroup } from './NavbarLinksGroup';
+import { LinksGroup } from "./NavbarLinksGroup";
 // import { Logo } from './Logo';
-import classes from './NavbarNested.module.css';
-import { useDisclosure } from '@mantine/hooks';
+import classes from "./NavbarNested.module.css";
+import { useDisclosure } from "@mantine/hooks";
 
 const mockdataDesktop = [
-  { label: 'Dashboard', icon: IconGauge },
+  { label: "Dashboard", icon: IconGauge },
   {
-    label: 'Upload resource',
+    label: "Upload resource",
     icon: IconNotes,
     initiallyOpened: true,
     links: [
-      { label: 'Files', link: '/dashboard/upload-file' },
-      { label: 'Links', link: '/dashboard/upload-link' },
+      { label: "Files", link: "/dashboard/upload-file" },
+      { label: "Links", link: "/dashboard/upload-link" },
     ],
   },
   {
-    label: 'Add content',
+    label: "Add content",
     icon: IconCalendarStats,
     initiallyOpened: true,
     links: [
-      { label: 'Courses', link: '/dashboard/courses' },
-      { label: 'Course Topics', link: '/dashboard/course-topics' },
-      { label: 'Resource Types', link: '/dashboard/resource-types' },
-      { label: 'Concepts', link: '/dashboard/concepts' },
+      { label: "Courses", link: "/dashboard/courses" },
+      { label: "Course Topics", link: "/dashboard/course-topics" },
+      { label: "Resource Types", link: "/dashboard/resource-types" },
+      { label: "Concepts", link: "/dashboard/concepts" },
     ],
   },
-  { label: 'Registration Requests',
+  {
+    label: "Registration Requests",
     icon: IconNotes,
     initiallyOpened: true,
-    links: [
-      { label: 'Pending Users', link: '/dashboard/pending-users' },
-    ]
+    links: [{ label: "Pending Users", link: "/dashboard/pending-users" }],
   },
 ];
 
-
+/**
+ * Renders a nested navigation bar.
+ *
+ * @returns {JSX.Element} - The rendered NavbarNested component.
+ */
 export function NavbarNested() {
-  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = 
+  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
 
-  const linksDesktop = mockdataDesktop.map((item) => <LinksGroup {...item} key={item.label} />);
-
+  const linksDesktop = mockdataDesktop.map((item) => (
+    <LinksGroup {...item} key={item.label} />
+  ));
 
   return (
-    <div className={classes.sidebarContainer}> 
-      <Burger
-        opened={drawerOpened}
-        onClick={toggleDrawer}
-        hiddenFrom="sm"
-      />
+    <div className={classes.sidebarContainer}>
+      <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
 
       <Drawer
         opened={drawerOpened}
@@ -76,10 +89,8 @@ export function NavbarNested() {
           <Divider my="sm" />
 
           {linksDesktop}
-
         </ScrollArea>
       </Drawer>
-
 
       <div className={classes.desktopSidebar}>
         <div className={classes.navbar}>

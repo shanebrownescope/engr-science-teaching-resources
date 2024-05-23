@@ -33,6 +33,11 @@ const mockdata = [
   },
 ];
 
+/**
+ * Renders a set of cards with features of the website.
+ *
+ * @returns {JSX.Element} - The rendered FeaturesCards component.
+ */
 export function FeaturesCards() {
   const theme = useMantineTheme();
   const features = mockdata.map((feature) => (

@@ -9,6 +9,11 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
+/**
+ * Renders a simple form for users to get in touch.
+ *
+ * @returns {JSX.Element} - The rendered GetInTouchSimple component.
+ */
 export function GetInTouchSimple() {
   const form = useForm({
     initialValues: {

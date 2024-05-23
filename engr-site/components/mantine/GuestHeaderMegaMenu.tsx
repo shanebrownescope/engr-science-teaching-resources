@@ -35,6 +35,11 @@ import {
 import classes from "./GuestHeaderMegaMenu.module.css";
 import Link from "next/link";
 
+/**
+ * Renders a nav bar for the landing page.
+ *
+ * @returns {JSX.Element} - The rendered GuestHeaderMegaMenu component.
+ */
 export function GuestHeaderMegaMenu() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);

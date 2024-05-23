@@ -3,6 +3,15 @@ import { Card, Image, Text, Group, Button } from "@mantine/core";
 import classes from "./ModuleCard.module.css";
 import Link from "next/link";
 
+/**
+ * Renders a module card.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.title - The module title.
+ * @param {string} props.description - The module description.
+ * @param {string} props.href - The module href.
+ * @returns {JSX.Element} - The rendered ModuleCard component.
+ */
 export function ModuleCard({ title, description, href }) {
   return (
     <Card withBorder padding="lg" className={classes.card}>

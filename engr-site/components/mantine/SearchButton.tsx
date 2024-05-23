@@ -9,8 +9,17 @@ import {
 import { IconSearch, IconArrowRight } from "@tabler/icons-react";
 import classes from "./SearchButton.module.css";
 import Link from "next/link";
-import { lowercaseAndReplaceSpace, lowercaseAndReplaceSpaceString } from "@/utils/formatting";
+import {
+  lowercaseAndReplaceSpace,
+  lowercaseAndReplaceSpaceString,
+} from "@/utils/formatting";
 
+/**
+ * Renders a search button.
+ *
+ * @param {Object} props - The component props.
+ * @returns {JSX.Element} - The rendered SearchButton component.
+ */
 export function SearchButton(props: TextInputProps) {
   const theme = useMantineTheme();
 

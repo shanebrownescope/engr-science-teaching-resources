@@ -9,6 +9,15 @@ type CourseCardProps = {
   href: string;
 };
 
+/**
+ * Renders a card component for a course with title, description, and a link button.
+ *
+ * @param {CourseCardProps} props - The properties of the course card.
+ * @param {string} props.title - The title of the course.
+ * @param {string} props.description - The description of the course.
+ * @param {string} props.href - The link to the course details page.
+ * @returns {JSX.Element} - The rendered CourseCard component.
+ */
 export function CourseCard({ title, description, href }: CourseCardProps) {
   return (
     <Card withBorder padding="lg" className={classes.card}>

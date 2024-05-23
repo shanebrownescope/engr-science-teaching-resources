@@ -2,6 +2,11 @@
 import { Title, Text, Button, Container } from "@mantine/core";
 import classes from "./HeroText.module.css";
 
+/**
+ * Renders a hero section with text.
+ *
+ * @returns {JSX.Element} - The rendered HeroText component.
+ */
 export function HeroText() {
   return (
     <Container className={classes.wrapper} size={1400}>

@@ -34,6 +34,17 @@ interface ModuleContentTableProps {
   links: ModuleContent[];
 }
 
+/**
+ * Table header component with sorting functionality.
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {React.ReactNode} props.children - The content of the header cell.
+ * @param {boolean} props.reversed - Indicates if the sorting is reversed.
+ * @param {boolean} props.sorted - Indicates if the column is sorted.
+ * @param {() => void} props.onSort - Function to call when sorting is changed.
+ * @param {string} [props.width] - The width of the header cell.
+ * @returns {JSX.Element} - The rendered Table header component.
+ */
 function Th({
   children,
   reversed,
@@ -68,6 +79,14 @@ function Th({
   );
 }
 
+/**
+ * Renders a table to display module content with sorting and filtering capabilities.
+ *
+ * @param {ModuleContentTableProps} props - The properties of the ModuleContentTable component.
+ * @param {ModuleContent[]} props.files - Array of file objects to be displayed.
+ * @param {ModuleContent[]} props.links - Array of link objects to be displayed.
+ * @returns {JSX.Element} - The rendered ModuleContentTable component.
+ */
 export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<keyof ModuleContent | null>(null);

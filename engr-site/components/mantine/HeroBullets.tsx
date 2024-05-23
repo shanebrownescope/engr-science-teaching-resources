@@ -14,6 +14,11 @@ import { IconCheck } from "@tabler/icons-react";
 import image from "./image.svg";
 import classes from "./HeroBullets.module.css";
 
+/**
+ * Renders a hero section with bullets.
+ *
+ * @returns {JSX.Element} - The rendered HeroBullets component.
+ */
 export function HeroBullets() {
   return (
     <Container size="md">
