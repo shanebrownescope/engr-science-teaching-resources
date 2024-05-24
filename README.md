@@ -72,4 +72,19 @@ npm run dev
 
 <a href="https://next-auth.js.org/configuration/nextjs"> Next.auth configuration for Next.js</a>
 
+## Joining the community
+Before users can login and use the site, they first have to sign up and get authenticated by our team.
+
+Once approved or rejected, the user will get an email informing them and the user will be able to login and use the site if approved.
+
+
+## Contributing Information
+Users that want to contribute to site will need to submit a form with the necessary details of the resources they want to add. 
+
+Our team will check and verify the information and will add once approved.
+
+**NOTE** 
+
+This feature will be implemented soon.
+Users that want to contribute now can send an email to our team in the meantime.
 
