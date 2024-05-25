@@ -9,7 +9,6 @@ type ModuleCardProps = {
   href: string;
 };
 
-export function ModuleCard({ title, description, href }: ModuleCardProps) {
 /**
  * Renders a module card.
  *
@@ -19,7 +18,7 @@ export function ModuleCard({ title, description, href }: ModuleCardProps) {
  * @param {string} props.href - The module href.
  * @returns {JSX.Element} - The rendered ModuleCard component.
  */
-export function ModuleCard({ title, description, href }) {
+export function ModuleCard({ title, description, href }: ModuleCardProps) {
   return (
     <Card withBorder padding="lg" className={classes.card}>
       <Group justify="space-between" mt="xl">
