@@ -14,13 +14,11 @@ const Home = async () => {
       <div
         className="banner"
         style={{
-          width: "100%",
-          height: "400px",
           backgroundImage: 'url("/banner.jpg")',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
         }}
-      ></div>
+      >
+        <div className="banner-text">Welcome to Our E-SCoPe!</div>
+      </div>
 
       <div className="searchButtonContainer">
         <div className="shorterWidth">
@@ -39,6 +37,27 @@ const Home = async () => {
             provided with all of the resources for the given topic.
           </p>
         </div>
+      </div>
+
+      <div className="class-section">
+        <Link href="/courses/statics" passHref>
+          <div className="class-button">
+            <img src="/statics.png" alt="Statics" />
+            <p className="class-text">Statics</p>
+          </div>
+        </Link>
+        <Link href="/courses/dynamics" passHref>
+          <div className="class-button">
+            <img src="/dynamics.png" alt="Dynamics" />
+            <p className="class-text">Dynamics</p>
+          </div>
+        </Link>
+        <Link href="/courses/strengths-of-materials" passHref>
+          <div className="class-button">
+            <img src="/strengthsOfMaterials.png" alt="Strengths of Materials" />
+            <p className="class-text">Strengths of Materials</p>
+          </div>
+        </Link>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@
 }
 
 .indicator {
-  background-color: #00b4fc;
+  background-color: var(--osuOrange);
 }
 
 .control {

@@ -7,6 +7,11 @@ import {
 } from "@mantine/core";
 import classes from "./Comment.module.css";
 
+/**
+ * Renders a comment component with user avatar, name, timestamp, and content.
+ *
+ * @returns {JSX.Element} - The rendered comment component.
+ */
 export function Comment() {
   return (
     <Paper withBorder radius="md" className={classes.comment}>

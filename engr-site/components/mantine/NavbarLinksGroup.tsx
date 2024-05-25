@@ -21,6 +21,16 @@ interface LinksGroupProps {
   links?: { label: string; link: string }[];
 }
 
+/**
+ * Renders a group of links in the navbar.
+ *
+ * @param {Object} props - The component props.
+ * @param {React.FC<any>} props.icon - The icon to display.
+ * @param {string} props.label - The label for the group.
+ * @param {boolean} [props.initiallyOpened] - Indicates if the group should be initially opened.
+ * @param {Array<{ label: string, link: string }>} [props.links] - The links to display.
+ * @returns {JSX.Element} - The rendered LinksGroup component.
+ */
 export function LinksGroup({
   icon: Icon,
   label,

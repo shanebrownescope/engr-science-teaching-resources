@@ -11,6 +11,16 @@ type ConceptBarProps = {
   onConceptIdChange: (conceptId: string) => void;
 };
 
+/**
+ * Renders a navigation bar for selecting concepts.
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {Array} props.concepts - The list of concepts to display.
+ * @param {string} props.selectedConcept - The currently selected concept.
+ * @param {Function} props.onConceptChange - Function to call when the concept is changed.
+ * @param {Function} props.onConceptIdChange - Function to call when the concept ID is changed.
+ * @returns {JSX.Element} - The rendered ConceptBar component.
+ */
 export function ConceptBar({
   concepts,
   selectedConcept,

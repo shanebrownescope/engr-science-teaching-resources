@@ -5,6 +5,7 @@ import { ModuleCard } from "@/components/mantine";
 import { fetchCourseTopicsByCourseName } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseName";
 import requireAuth from "@/actions/auth/requireAuth";
 import SectionLayout from "@/components/custom/sectionLayout/SectionLayout";
+import "./page.css";
 
 const CourseTopicsPage = async ({
   params,

@@ -8,6 +8,15 @@ type SegmentedControlInputProps = {
   data: FormattedData[];
 };
 
+/**
+ * Renders a segmented control input. Used on the module page.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.value - The value of the input.
+ * @param {(value: string) => void} props.onChange - The function to call when the value changes.
+ * @param {FormattedData[]} props.data - The data to display in the control.
+ * @returns {JSX.Element} - The rendered SegmentedControlInput component.
+ */
 export function SegmentedControlInput({
   value,
   onChange,

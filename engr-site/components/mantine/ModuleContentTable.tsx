@@ -26,6 +26,7 @@ interface ModuleContent {
   description: string; // Assuming files and links both have descriptions now
   tags: string[]; // Assuming the 'tags' field is an array of strings
   id: number; // Assuming the 'id' field is a string
+  dateAdded: string; // Assuming the 'uploadDate' field is a string
 }
 
 interface ModuleContentTableProps {
@@ -33,6 +34,17 @@ interface ModuleContentTableProps {
   links: ModuleContent[];
 }
 
+/**
+ * Table header component with sorting functionality.
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {React.ReactNode} props.children - The content of the header cell.
+ * @param {boolean} props.reversed - Indicates if the sorting is reversed.
+ * @param {boolean} props.sorted - Indicates if the column is sorted.
+ * @param {() => void} props.onSort - Function to call when sorting is changed.
+ * @param {string} [props.width] - The width of the header cell.
+ * @returns {JSX.Element} - The rendered Table header component.
+ */
 function Th({
   children,
   reversed,
@@ -67,6 +79,14 @@ function Th({
   );
 }
 
+/**
+ * Renders a table to display module content with sorting and filtering capabilities.
+ *
+ * @param {ModuleContentTableProps} props - The properties of the ModuleContentTable component.
+ * @param {ModuleContent[]} props.files - Array of file objects to be displayed.
+ * @param {ModuleContent[]} props.links - Array of link objects to be displayed.
+ * @returns {JSX.Element} - The rendered ModuleContentTable component.
+ */
 export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<keyof ModuleContent | null>(null);
@@ -84,9 +104,13 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
 
     if (sortBy) {
       filteredData.sort((a, b) => {
-        const aValue = String(a[sortBy]);
-        const bValue = String(b[sortBy]);
-        const comparison = aValue.localeCompare(bValue);
+        let aValue = a[sortBy];
+        let bValue = b[sortBy];
+        if (sortBy === "dateAdded") {
+          aValue = new Date(aValue);
+          bValue = new Date(bValue);
+        }
+        const comparison = aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
         return reverseSortDirection ? -comparison : comparison;
       });
     }
@@ -103,7 +127,7 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
   };
 
   return (
-    <ScrollArea>
+    <ScrollArea className={classes.scrollAreaContainer}>
       <TextInput
         placeholder="Search by name, description, or tags"
         mb="md"
@@ -127,26 +151,29 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
             >
               Name
             </Th>
-            <Th
-              width="50%"
-              sorted={sortBy === "description"}
-              reversed={reverseSortDirection}
-              onSort={() => handleSortChange("description")}
-            >
-              Description
-            </Th>
+            <Table.Th className={classes.descriptionColumn}>
+              <Text fw={500} fz="sm">
+                Description
+              </Text>
+            </Table.Th>
             <Table.Th className={classes.tagsColumn}>
               <Text fw={500} fz="sm">
                 Tags
               </Text>
             </Table.Th>
+            <Th
+              sorted={sortBy === "dateAdded"}
+              reversed={reverseSortDirection}
+              onSort={() => handleSortChange("dateAdded")}
+            >
+              Date Added
+            </Th>
           </Table.Tr>
         </thead>
         <Table.Tbody>
           {displayedData.map((item, index) => (
             <Table.Tr key={index}>
               <Table.Td>
-                {" "}
                 <Link
                   href={`/resources/${item.type}/${item.urlName}?${new URLSearchParams(
                     {
@@ -166,11 +193,12 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
                   </span>
                 ))}
               </Table.Td>
+              <Table.Td> {item.dateAdded} </Table.Td>
             </Table.Tr>
           ))}
           {displayedData.length === 0 && (
             <Table.Tr>
-              <Table.Td colSpan={3} style={{ textAlign: "center" }}>
+              <Table.Td colSpan={4} style={{ textAlign: "center" }}>
                 No content found
               </Table.Td>
             </Table.Tr>

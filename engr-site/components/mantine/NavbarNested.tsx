@@ -59,6 +59,11 @@ const mockdataDesktop = [
   },
 ];
 
+/**
+ * Renders a nested navigation bar.
+ *
+ * @returns {JSX.Element} - The rendered NavbarNested component.
+ */
 export function NavbarNested() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);

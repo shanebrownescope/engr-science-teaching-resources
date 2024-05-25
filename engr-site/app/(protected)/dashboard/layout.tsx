@@ -1,5 +1,4 @@
 import { NavbarNested } from "@/components/mantine";
-import { MantineProvider } from "@mantine/core";
 
 type ProtectedLayoutProps = {
   children: React.ReactNode;

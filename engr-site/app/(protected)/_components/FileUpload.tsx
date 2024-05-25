@@ -384,7 +384,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
   return (
     <div className={styles.formAdminWrapper}>
-      {/* <MantineProvider>  */}
       <p className={styles.formAdminTitle}> Upload file </p>
 
       <form className={styles.form} onSubmit={handleSubmit}>
@@ -529,7 +528,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       /> */}
       {/* {error && <div> {error} </div>} */}
       {/* {testDbResult && <div> {testDbResult} </div>} */}
-      {/* </MantineProvider> */}
     </div>
   );
 };

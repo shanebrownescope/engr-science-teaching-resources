@@ -39,6 +39,11 @@ import useFetchCourses from "@/hooks/useFetchCourses";
 
 const icons = [IconAtom, IconArrowsMove, IconBarbell, IconBolt];
 
+/**
+ * Renders a nav bar for the actual application.
+ *
+ * @returns {JSX.Element} - The rendered HeaderMegaMenu component.
+ */
 export function HeaderMegaMenu() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
@@ -60,7 +65,7 @@ export function HeaderMegaMenu() {
           <ThemeIcon size={34} variant="default" radius="md">
             <item.icon
               style={{ width: rem(22), height: rem(22) }}
-              color={theme.colors.blue[6]}
+              color={theme.colors.dark[8]}
             />
           </ThemeIcon>
           <div>
@@ -101,7 +106,7 @@ export function HeaderMegaMenu() {
                     </Box>
                     <IconChevronDown
                       style={{ width: rem(16), height: rem(16) }}
-                      color={theme.colors.blue[6]}
+                      color={theme.colors.dark[8]}
                     />
                   </Center>
                 </a>
@@ -122,12 +127,6 @@ export function HeaderMegaMenu() {
                 </SimpleGrid>
               </HoverCard.Dropdown>
             </HoverCard>
-            <a href="#" className={classes.link}>
-              Learn
-            </a>
-            <a href="#" className={classes.link}>
-              Academy
-            </a>
           </Group>
 
           <Group visibleFrom="sm">
@@ -166,7 +165,7 @@ export function HeaderMegaMenu() {
               </Box>
               <IconChevronDown
                 style={{ width: rem(16), height: rem(16) }}
-                color={theme.colors.blue[6]}
+                color={theme.colors.dark[8]}
               />
             </Center>
           </UnstyledButton>

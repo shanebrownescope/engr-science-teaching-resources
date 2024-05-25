@@ -14,13 +14,18 @@ import { IconCheck } from "@tabler/icons-react";
 import image from "./image.svg";
 import classes from "./HeroBullets.module.css";
 
+/**
+ * Renders a hero section with bullets.
+ *
+ * @returns {JSX.Element} - The rendered HeroBullets component.
+ */
 export function HeroBullets() {
   return (
     <Container size="md">
       <div className={classes.inner}>
         <div className={classes.content}>
           <Title className={classes.title}>
-            Find learning resources{" "}
+            Find teaching material{" "}
             <span className={classes.highlight}>fast</span>
           </Title>
           <Text c="dimmed" mt="md">
@@ -28,7 +33,7 @@ export function HeroBullets() {
             scurry to create quality teaching material while coming up with
             useful homework, practice exercises, and quality exams. We've put
             together this website to ease the stress of teaching a new class by
-            creating a once place where you can find nearly all of the material
+            creating a place where you can find nearly all of the material
             required to effectively teach your class!
           </Text>
 
@@ -46,16 +51,17 @@ export function HeroBullets() {
             }
           >
             <List.Item>
-              <b>Pro 1</b> – Sed ut perspiciatis unde omnis iste natus error sit
-              voluptatem accusantium
+              <b>Comprehensive Lesson Plans</b> – Access detailed and adaptable
+              lesson plans for a variety of courses
             </List.Item>
             <List.Item>
-              <b>Pro 2</b> – quia consequuntur magni dolores eos qui ratione
-              voluptatem sequi nesciunt
+              <b>Homework and Practice Exercises</b> – Find a wide range of
+              homework assignments and practice exercises to reinforce classroom
+              learning
             </List.Item>
             <List.Item>
-              <b>Pro 3</b> – nostrum exercitationem ullam corporis suscipit
-              laboriosam
+              <b>Quality Exam Resources</b> – Utilize extensive collection of
+              quizzes, tests, and exam prep materials
             </List.Item>
           </List>
 
@@ -63,14 +69,14 @@ export function HeroBullets() {
             <Button radius="xl" size="md" className={classes.control}>
               Get started
             </Button>
-            <Button
+            {/* <Button
               variant="default"
               radius="xl"
               size="md"
               className={classes.control}
             >
               Source code
-            </Button>
+            </Button> */}
           </Group>
         </div>
         <Image src={image.src} className={classes.image} />

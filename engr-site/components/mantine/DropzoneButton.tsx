@@ -5,6 +5,11 @@ import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { IconCloudUpload, IconX, IconDownload } from "@tabler/icons-react";
 import classes from "./DropzoneButton.module.css";
 
+/**
+ * Renders a dropzone button component that allows users to upload PDF files.
+ *
+ * @returns {JSX.Element} - The rendered DropzoneButton component.
+ */
 export function DropzoneButton() {
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);

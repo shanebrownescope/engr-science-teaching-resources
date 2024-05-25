@@ -4,6 +4,11 @@ import { useInterval } from "@mantine/hooks";
 import { Button, Progress, useMantineTheme, rgba } from "@mantine/core";
 import classes from "./ButtonProgress.module.css";
 
+/**
+ * Renders a button with progress bar that simulates file upload.
+ *
+ * @returns {JSX.Element} - The rendered button with progress bar.
+ */
 export function ButtonProgress() {
   const theme = useMantineTheme();
   const [progress, setProgress] = useState(0);

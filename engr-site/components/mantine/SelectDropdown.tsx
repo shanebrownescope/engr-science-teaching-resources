@@ -13,6 +13,15 @@ interface CustomComboboxOptionProps extends ComboboxOptionProps {
 }
 
 // Reusable Select Component
+/**
+ * Renders a select dropdown.
+ *
+ * @param {Object} props - The component props.
+ * @param {Array<{ name: string, id: number }>} props.optionsList - The list of options.
+ * @param {(value: string, id: number, formatted: string) => void} props.onOptionChange - The function to call when an option is selected.
+ * @param {string} props.selectedValue - The selected value.
+ * @returns {JSX.Element} - The rendered SelectDropdown component.
+ */
 export const SelectDropdown = ({
   optionsList,
   onOptionChange,

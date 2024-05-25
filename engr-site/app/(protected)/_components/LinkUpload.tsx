@@ -5,7 +5,6 @@ import { createTagPostLink } from "@/actions/uploadingPostTags/uploadTagsAction"
 
 // import { createTagPost, getSignedURL } from "@/config/action";
 // import { DropzoneButton, ButtonProgress } from "../../components/mantine";
-// import { MantineProvider, TagsInput } from "@mantine/core";
 
 // import styles from '@/styles/test.module.css'
 import Tags from "./Tags";
@@ -285,6 +284,9 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
       setLinkName((link) => link.trim());
 
+      const formattedLinkName = capitalizeAndReplaceDash(linkName);
+      console.log(formattedLinkName);
+
       setLinkUrl((link) => link.trim());
       const sanitizedUrl = sanitizeUrl(linkUrl);
       if (
@@ -368,7 +370,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     <div className={styles.formAdminWrapper}>
       <p className={styles.formAdminTitle}> Link Upload </p>
 
-      {/* <MantineProvider>  */}
       <form className={styles.form} onSubmit={handleSubmit}>
         {statusMessage && (
           <p className={styles.messageStyle}> {statusMessage} </p>
@@ -493,7 +494,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       /> */}
       {/* {error && <div> {error} </div>} */}
       {/* {testDbResult && <div> {testDbResult} </div>} */}
-      {/* </MantineProvider> */}
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import { HeaderMegaMenu } from "@/components/mantine";
-import { MantineProvider } from "@mantine/core";
 type ProtectedLayoutProps = {
   children: React.ReactNode;
 };
@@ -7,10 +6,8 @@ type ProtectedLayoutProps = {
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return (
     <div>
-      <MantineProvider>
-        <HeaderMegaMenu />
-        {children}
-      </MantineProvider>
+      <HeaderMegaMenu />
+      {children}
     </div>
   );
 };

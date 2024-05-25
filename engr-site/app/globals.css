@@ -183,3 +183,11 @@ label,
   font-weight: bold;
   color: #6c757d;
 }
+
+:root {
+  --navBar: #e9e5e4;
+  --backgroundLight: #f7f5f5;
+  --backgroundDark: #212429;
+  --backgroundGray: #e0e0e0;
+  --osuOrange: #d73f08;
+}

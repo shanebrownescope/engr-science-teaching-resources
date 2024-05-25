@@ -349,7 +349,6 @@
 
 //   return (
 //     <div className={styles.formAdminWrapper}>
-//       {/* <MantineProvider>  */}
 //       <p className={styles.formAdminTitle}> Upload file </p>
 
 //       <form

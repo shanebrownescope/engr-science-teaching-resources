@@ -33,21 +33,21 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
   const [resourceTypeDataResults, setResourceTypeDataResults] =
     useState<ResourceTypeDataResults[]>(); // Store fetched section data
   const [isLoading, setIsLoading] = useState(false); // Track loading state
-  const [selectedConcept, setSelectedConcept] = useState("");
-  const [selectedConceptId, setSelectedConceptId] = useState("");
+  const [selectedConcept, setSelectedConcept] = useState('');
+  const [selectedConceptId, setSelectedConceptId] = useState('');
   const [conceptFiles, setConceptFiles] = useState<any[]>([]);
   const [conceptLinks, setConceptLinks] = useState<any[]>([]);
 
   const handleSegmentChange = (value: any) => {
-    console.log("Segment changed to", value);
+    console.log('Segment changed to', value);
     setSelectedSegment(value);
   };
 
-  console.log("selected segment: ", selectedSegment);
+  console.log('selected segment: ', selectedSegment);
 
   const id = searchParams.id; // Ensure this is consistent with your data structure
   const courseTopicName = capitalizeAndReplaceDash(params.courseTopicName);
-  console.log("courseTopicName: ", courseTopicName);
+  console.log('courseTopicName: ', courseTopicName);
   const searchParamId = searchParams.id;
 
   // Fetch resourceType data
@@ -65,7 +65,7 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
           setResourceType(fetchedData);
         }
       } catch (error) {
-        console.error("Failed to fetch sections", error);
+        console.error('Failed to fetch sections', error);
       } finally {
         setIsLoading(false); // End loading regardless of outcome
       }
@@ -73,10 +73,10 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
 
     fetchData();
   }, [id]);
-  console.log("resourceType: ", resourceType);
-  console.log("resourceTypeDataResults: ", resourceTypeDataResults);
-  console.log("selectedSegment: ", selectedSegment);
-  console.log("selectedConcept: ", selectedConcept);
+  console.log('resourceType: ', resourceType);
+  console.log('resourceTypeDataResults: ', resourceTypeDataResults);
+  console.log('selectedSegment: ', selectedSegment);
+  console.log('selectedConcept: ', selectedConcept);
   // Fetch data for each resource type
   useEffect(() => {
     const fetchAllResourceTypeData = async () => {
@@ -103,7 +103,7 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
             setResourceTypeDataResults(results);
           }
         } catch (error) {
-          console.error("Failed to fetch section details", error);
+          console.error('Failed to fetch section details', error);
         } finally {
           setIsLoading(false); // End loading regardless of outcome
         }
@@ -112,13 +112,13 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
 
     fetchAllResourceTypeData();
   }, [resourceType]); // Re-fetch whenever 'resourceType' changes
-  console.log(" == resourceTypeDataResults: ", resourceTypeDataResults);
+  console.log(' == resourceTypeDataResults: ', resourceTypeDataResults);
 
   // Update selectedConcept when resourceTypeDataResults or selectedSegment changes
   useEffect(() => {
     if (!resourceTypeDataResults || !selectedSegment) return;
-    setSelectedConceptId("");
-    setSelectedConcept("");
+    setSelectedConceptId('');
+    setSelectedConcept('');
     setConceptFiles([]);
     setConceptLinks([]);
 
@@ -153,9 +153,10 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
                 type: file.type,
                 originalName: file.fileName,
                 urlName: file.urlName,
-                description: file.description || "",
+                description: file.description || '',
                 tags: file.tags || [],
                 id: file.id,
+                dateAdded: file.uploadDate,
               }))
             : [],
         );
@@ -166,14 +167,15 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
                 type: link.type,
                 originalName: link.linkName,
                 urlName: link.urlName,
-                description: link.description || "",
+                description: link.description || '',
                 tags: link.tags || [],
                 id: link.id,
+                dateAdded: link.uploadDate,
               }))
             : [],
         );
       } catch (error) {
-        console.error("Failed to fetch concept data", error);
+        console.error('Failed to fetch concept data', error);
       } finally {
         setIsLoading(false);
       }
@@ -182,8 +184,8 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
     fetchConceptData();
   }, [selectedConceptId]); // Re-fetch whenever the selected concept changes
 
-  console.log("conceptFiles: ", conceptFiles);
-  console.log("conceptLinks: ", conceptLinks);
+  console.log('conceptFiles: ', conceptFiles);
+  console.log('conceptLinks: ', conceptLinks);
 
   if (!searchParamId) {
     return notFound();
@@ -196,7 +198,7 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
 
   return (
     <div>
-      <div className="concept-bar-container">
+      <div className='concept-bar-container'>
         <ConceptBar
           concepts={
             currentResourceType?.concepts.map((concept: FormattedData) => ({
@@ -210,7 +212,7 @@ const ResourceTypePage = ({ params, searchParams }: ResourceTypePageProps) => {
           onConceptIdChange={setSelectedConceptId}
         />
       </div>
-      <div className="main-content">
+      <div className='main-content'>
         <SegmentedControlInput
           data={resourceType?.success || []}
           value={selectedSegment}
