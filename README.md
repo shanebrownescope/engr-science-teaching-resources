@@ -67,7 +67,7 @@ npm install
 npm run dev
 ```
 
-5. Open <a href="http://localhost:3000"> http://localhost:3000 <a> with your browser to see the result
+5. Open <a href="http://localhost:3000"> http://localhost:3000 <> with your browser to see the result
 
 
 <a href="https://next-auth.js.org/configuration/nextjs"> Next.auth configuration for Next.js</a>
@@ -88,3 +88,5 @@ Our team will check and verify the information and will add once approved.
 This feature will be implemented soon.
 Users that want to contribute now can send an email to our team in the meantime.
 
+## Future Developers
+The [CONTRIBUTING.md](./CONTRIBUTING.md) file contains technical information about the project.  
