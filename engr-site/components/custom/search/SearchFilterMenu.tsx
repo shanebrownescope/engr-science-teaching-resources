@@ -8,6 +8,13 @@ import ResourcesListPaginated from "./ResourcesListPaginated";
 type SearchFilterMenuProps = {
   data: AllFilesAndLinksDataFormatted[];
 };
+
+/**
+ * Renders a search filter menu.
+ *
+ * @param {SearchFilterMenuProps} props - The props of the component.
+ * @returns {JSX.Element} - The rendered SearchFilterMenu component.
+ */
 export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
   // State to keep track of sorting option
   const [sortBy, setSortBy] = useState<string | null>("");

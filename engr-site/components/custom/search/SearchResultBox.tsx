@@ -11,6 +11,13 @@ type SearchResultBoxProps = {
   description: string;
   tags: string[];
 };
+
+/**
+ * Renders a search result box.
+ *
+ * @param {SearchResultBoxProps} props - The props of the component.
+ * @returns {JSX.Element} - The rendered SearchResultBox component.
+ */
 export const SearchResultBox = ({
   type,
   id,

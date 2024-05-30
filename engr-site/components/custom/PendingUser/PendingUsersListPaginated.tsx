@@ -25,6 +25,12 @@ type PendingUserListPaginatedProps = {
   }: HandleUserActionProps) => void;
 };
 
+/**
+ * Renders a paginated list of pending users.
+ *
+ * @param {PendingUserListPaginatedProps} props - The props of the component.
+ * @returns {JSX.Element} - The rendered PendingUserListPaginated component.
+ */
 const PendingUserListPaginated = ({
   data,
   handleApprove,

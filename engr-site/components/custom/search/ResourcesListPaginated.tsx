@@ -7,6 +7,12 @@ type ResourcesListPaginatedProps = {
   data: AllFilesAndLinksDataFormatted[];
 };
 
+/**
+ * Renders a paginated list of resources.
+ *
+ * @param {ResourcesListPaginatedProps} props - The props of the component.
+ * @returns {JSX.Element} - The rendered ResourcesListPaginated component.
+ */
 const ResourcesListPaginated = ({ data }: ResourcesListPaginatedProps) => {
   // The number of items to display on each page
   const itemsPerPage = 6;

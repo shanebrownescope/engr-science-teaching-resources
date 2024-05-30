@@ -6,6 +6,12 @@ type SimilarItemProps = {
   type: "file" | "link";
 };
 
+/**
+ * Renders a similar item card.
+ *
+ * @param {SimilarItemProps} props - The props of the component.
+ * @returns {JSX.Element} - The rendered SimilarItem component.
+ */
 const SimilarItem = ({ item, type }: SimilarItemProps) => {
   return (
     <div className={styles.container}>

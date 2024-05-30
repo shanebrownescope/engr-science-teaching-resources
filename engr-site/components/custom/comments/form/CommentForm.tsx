@@ -13,6 +13,12 @@ type CommentFormProps = {
   handleFormSubmit: (data: FormFields) => void;
 };
 
+/**
+ * Renders a comment form.
+ *
+ * @param {CommentFormProps} props - The props of the component.
+ * @returns {JSX.Element} - The rendered CommentForm component.
+ */
 const CommentForm = ({ handleFormSubmit }: CommentFormProps) => {
   const [success, setSuccess] = useState<string>("");
   const {

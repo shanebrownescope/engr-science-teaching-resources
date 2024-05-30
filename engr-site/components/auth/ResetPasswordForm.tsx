@@ -13,6 +13,11 @@ import styles from "@/styles/form.module.css";
 
 type FormFields = z.infer<typeof ResetPasswordSchema>;
 
+/**
+ * Renders a reset password form.
+ *
+ * @returns {JSX.Element} - The rendered ResetPasswordForm component.
+ */
 const ResetPasswordForm = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");

@@ -8,6 +8,12 @@ type CommentProps = {
   uploadDate: string;
 };
 
+/**
+ * Renders a comment.
+ *
+ * @param {CommentProps} props - The props of the component.
+ * @returns {JSX.Element} - The rendered Comment component.
+ */
 const Comment = ({
   authorId,
   authorName,

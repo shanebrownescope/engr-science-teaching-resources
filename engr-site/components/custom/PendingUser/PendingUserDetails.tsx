@@ -8,6 +8,12 @@ type PendingUserDetailsProps = {
   handleReject: () => void;
 };
 
+/**
+ * Renders the pending user details.
+ *
+ * @param {PendingUserDetailsProps} props - The props of the component.
+ * @returns {JSX.Element} - The rendered PendingUserDetails component.
+ */
 export const PendingUserDetails = ({
   firstName,
   lastName,

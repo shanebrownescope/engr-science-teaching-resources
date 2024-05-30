@@ -9,6 +9,12 @@ type CommentFileThreadProps = {
   commentThread: CommentFileData[] | undefined;
 };
 
+/**
+ * Renders a comment file thread.
+ *
+ * @param {CommentFileThreadProps} props - The props of the component.
+ * @returns {JSX.Element} - The rendered CommentFileThread component.
+ */
 const CommentFileThread = ({ commentThread }: CommentFileThreadProps) => {
   const [viewCount, setViewCount] = useState(6);
 

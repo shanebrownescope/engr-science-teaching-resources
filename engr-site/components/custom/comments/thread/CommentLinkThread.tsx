@@ -9,6 +9,12 @@ type CommentLinkThreadProps = {
   commentThread: CommentLinkData[] | undefined;
 };
 
+/**
+ * Renders a comment link thread.
+ *
+ * @param {CommentLinkThreadProps} props - The props of the component.
+ * @returns {JSX.Element} - The rendered CommentLinkThread component.
+ */
 const CommentLinkThread = ({ commentThread }: CommentLinkThreadProps) => {
   const [viewCount, setViewCount] = useState(6);
 

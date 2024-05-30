@@ -7,6 +7,12 @@ type SimilarResourcesDataProps = {
   type: "file" | "link";
 };
 
+/**
+ * Renders the similar resources data.
+ *
+ * @param {SimilarResourcesDataProps} props - The props of the component.
+ * @returns {JSX.Element} - The rendered SimilarResourcesData component.
+ */
 const SimilarResourcesData = ({
   similarResources,
   type,

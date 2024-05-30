@@ -1,6 +1,11 @@
 import React from "react";
 import styles from "./Document.module.css"; // Make sure to create this CSS file in the same directory
 
+/**
+ * Renders a document card.
+ *
+ * @returns {JSX.Element} - The rendered Document component.
+ */
 export const Document = () => {
   const imageUrl =
     "https://t4.ftcdn.net/jpg/02/71/07/33/360_F_271073385_A6geLjwkrty3xkDPxaf7lcaEiNMtMwjN.jpg";
