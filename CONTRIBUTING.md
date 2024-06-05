@@ -80,6 +80,14 @@ We are working on a more clear approach:
 
 ## <span id="mantine"> Mantine UI </span>
 
+The project uses Mantine v7 for UI components. Mantine is a React component library that provides a set of accessible and customizable UI elements.
+
+All Mantine UI components are located in the components directory. Components pulled [Mantine UI](https://ui.mantine.dev/) are located in the  ```mantine``` folder.
+Custom components that may also use Mantine objects are loated in the ```custom``` folder.
+
+We use Mantine's built-in theming capabilities to ensure a consistent look and feel across the application. The theme configuration can be found in ```/app/layout.tsx```.
+
+
 ## <span id="mysql"> MySQL </span>
 
 Files related to the database can be found in the [database](./engr-site/database) directory.
