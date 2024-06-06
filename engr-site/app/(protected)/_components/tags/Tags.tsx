@@ -10,7 +10,7 @@ type TagsProps = {
 const Tags = ({ tags, loading, handleAddTag, handleTagChange }: TagsProps) => {
   return (
     <div>
-      <h1>Tags</h1>
+      <h6 className="mt-4 mb-3">Tags</h6>
       {tags.map((tag, index) => (
         <div key={index}>
           <input
@@ -21,7 +21,7 @@ const Tags = ({ tags, loading, handleAddTag, handleTagChange }: TagsProps) => {
           />
         </div>
       ))}
-      <button type="button" disabled={loading} onClick={handleAddTag}>
+      <button type="button" className="mt-2" disabled={loading} onClick={handleAddTag}>
         Add Tag
       </button>
     </div>

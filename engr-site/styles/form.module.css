@@ -56,7 +56,7 @@
 }
 
 .formAdminWrapper {
-  margin-top: 40px;
+  /* margin-top: 40px; */
   width: 400px;
   height: max-content;
   border-radius: 0.5em;
@@ -78,6 +78,7 @@
 .formButton {
   padding-block: 10px;
   border-radius: 5px;
+  /* background: var(--osuOrange); */
   background: black;
   color: white;
 

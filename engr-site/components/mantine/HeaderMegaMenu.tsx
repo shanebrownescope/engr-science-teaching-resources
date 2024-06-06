@@ -36,6 +36,7 @@ import {
 import classes from "./HeaderMegaMenu.module.css";
 import Link from "next/link";
 import useFetchCourses from "@/hooks/useFetchCourses";
+import { useCurrentRole } from "@/hooks/useCurrentRole";
 
 const icons = [IconAtom, IconArrowsMove, IconBarbell, IconBolt];
 
@@ -45,6 +46,8 @@ const icons = [IconAtom, IconArrowsMove, IconBarbell, IconBolt];
  * @returns {JSX.Element} - The rendered HeaderMegaMenu component.
  */
 export function HeaderMegaMenu() {
+  const role = useCurrentRole();
+
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
@@ -127,7 +130,13 @@ export function HeaderMegaMenu() {
                 </SimpleGrid>
               </HoverCard.Dropdown>
             </HoverCard>
+
+            {role === "admin" && <Link href="/dashboard" className={classes.link}>
+              Dashboard
+            </Link>}
           </Group>
+
+        
 
           <Group visibleFrom="sm">
             <Link href={"/profile"}>

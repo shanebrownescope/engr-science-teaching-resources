@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+
   margin-inline: auto;
   margin-top: 5em;
   width: 25%;

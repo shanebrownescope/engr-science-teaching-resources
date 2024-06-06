@@ -3,6 +3,7 @@ import { signOut } from "@/auth";
 import { getCurrentUser } from "@/utils/authHelpers";
 import styles from "./profile.module.css";
 import requireAuth from "@/actions/auth/requireAuth";
+import { Button } from "@mantine/core";
 
 const Profile = async () => {
   /**
@@ -52,7 +53,7 @@ const Profile = async () => {
       </div>
 
       <form className={styles.signOut} action={handleSignOut}>
-        <button type="submit">Sign out</button>
+        <Button type="submit">Sign out</Button>
       </form>
     </div>
   );

@@ -22,6 +22,7 @@
     "@mantinex/mantine-logo": "^1.0.1",
     "@tabler/icons-react": "^2.46.0",
     "bcryptjs": "^2.4.3",
+    "classnames": "^2.5.1",
     "dayjs": "^1.11.10",
     "mysql2": "^3.9.1",
     "next": "14.0.2",

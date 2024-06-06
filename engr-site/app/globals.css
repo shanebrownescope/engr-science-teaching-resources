@@ -1,24 +1,6 @@
 /* @link https://utopia.fyi/type/calculator?c=320,14,1.25,1440,16,1.333,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 
 :root {
-  /* Step -2: 8.96px → 9.0045px */
-  --display--2: clamp(0.56rem, 0.5592rem + 0.004vi, 0.5628rem);
-  /* Step -1: 11.2px → 12.003px */
-  --display--1: clamp(0.7rem, 0.6857rem + 0.0717vi, 0.7502rem);
-  /* Step 0: 14px → 16px */
-  --display-0: clamp(0.875rem, 0.8393rem + 0.1786vi, 1rem);
-  /* Step 1: 17.5px → 21.328px */
-  --display-1: clamp(1.0938rem, 1.0254rem + 0.3418vi, 1.333rem);
-  /* Step 2: 21.875px → 28.4302px */
-  --display-2: clamp(1.3672rem, 1.2501rem + 0.5853vi, 1.7769rem);
-  /* Step 3: 27.3438px → 37.8975px */
-  --display-3: clamp(1.709rem, 1.5205rem + 0.9423vi, 2.3686rem);
-  /* Step 4: 34.1797px → 50.5174px */
-  --display-4: clamp(2.1362rem, 1.8445rem + 1.4587vi, 3.1573rem);
-  /* Step 5: 42.7246px → 67.3396px */
-  --display-5: clamp(2.6703rem, 2.2307rem + 2.1978vi, 4.2087rem);
-  /* Step 6: 53.4058px → 89.7637px */
-  --display-6: clamp(3.3379rem, 2.6886rem + 3.2462vi, 5.6102rem);
 
   --comment-author: 13px;
   --comment-upload-date: 12px;
@@ -27,30 +9,174 @@
   --comment-container-width: 600px;
 
   --grey-border-color: #afa9a9;
+
+  /* font sizes */
+  --text-tiny: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-regular: 1rem; /* 16px */
+  --text-md-sm: 1.125rem; /* 16px */
+  --text-md:  1.25rem /* 20px */;
+  --text-lg: 1.5rem /* 24px */;
+  --heading-1: clamp(40px, 4vw + 1rem, 56px);
+  --heading-2: clamp(36px, 3.6vw + 0.9rem, 48px);
+  --heading-3: clamp(32px, 3.2vw + 0.8rem, 40px);
+  --heading-4: clamp(24px, 2.4vw + 0.6rem, 32px);
+  --heading-5: clamp(20px, 2vw + 0.5rem, 24px);
+  --heading-6: clamp(18px, 1.8vw + 0.45rem, 20px);
+
+
+  /* line height  */
+  --display-line-height: 125%;
+  --heading-line-height: 120%;
+  --body-line-height: 147%;
+  --label-line-height: 141%;
+
+  /* letter spacing  */
+  --display-letter-spacing: calc(-2.5 / 100 * 1em);
+  --heading-letter-spacing: calc(-2 / 100 * 1em);
+  --body-letter-spacing: calc(0 / 100 * 1em);
+  --label-letter-spacing: calc(0 / 100 * 1em);
+
+
+
+
+
+  /* clamp padding used for top of each component */
+  --large-clamp-padding: clamp(1px, 10.6666666667vw, 144px);
+  --regular-clamp-padding: clamp(1px, 10.6666666667vw, 81.92px);
+  --md-clamp-padding: clamp(1px, 10.6666666667vw, 64px);
+
+  /* padding used for each component */
+  --min-padding-x: 6%;
+
+  /* max width */
+  --max-width: 1200px;
+  
 }
+
+
+/* Update font sizes for tablet */
+@media (min-width: 768px) {
+  :root {
+    --heading-1: clamp(52px, 5vw + 1rem, 72px);
+    --heading-2: clamp(44px, 4.4vw + 0.9rem, 48px);
+    --heading-3: clamp(36px, 3.6vw + 0.8rem, 40px);
+    --heading-4: clamp(28px, 2.8vw + 0.6rem, 32px);
+    --heading-5: clamp(24px, 2.4vw + 0.5rem, 24px);
+    --heading-6: clamp(20px, 2vw + 0.45rem, 20px);
+  }
+}
+
+/* Update font sizes for desktop */
+@media (min-width: 1024px) {
+  :root {
+    --heading-1: clamp(72px, 5.6vw + 1rem, 80px);
+    --heading-2: clamp(48px, 4.8vw + 0.9rem, 48px);
+    --heading-3: clamp(40px, 4vw + 0.8rem, 40px);
+    --heading-4: clamp(32px, 3.2vw + 0.6rem, 32px);
+    --heading-5: clamp(24px, 2.4vw + 0.5rem, 24px);
+    --heading-6: clamp(20px, 2vw + 0.45rem, 20px);
+  }
+}
+
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  text-decoration: none;
+}
+
+a {
+  /* color: black !important; */
 }
 
 body {
   font-size: 16px;
 }
 
+
+
+h1,
+.heading-1 {
+  font-size: var(--heading-1);
+  line-height: var(--display-line-height);
+  letter-spacing: var(--display-letter-spacing);
+}
+
+h2,
+.heading-2 {
+  font-size: var(--heading-2);
+}
+
+h3,
+.heading-3 {
+  font-size: var(--heading-3);
+}
+
+h4,
+.heading-4 {
+  font-size: var(--heading-4);
+}
+
+h5,
+.heading-5 {
+  font-size: var(--heading-5);
+}
+
+h6,
+.heading-6 {
+  font-size: var(--heading-6);
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: var(--heading-line-height);
+  letter-spacing: var(--heading-letter-spacing);
+}
+
+p {
+  line-height: var(--body-line-height);
+  letter-spacing: var(--body-letter-spacing);
+}
+
+.text-lg {
+  font-size: var(--text-lg);
+}
+
+.text-md {
+  font-size: var(--text-md);
+}
+
+.text-sm {
+  font-size: var(--text-sm);
+}
+
+.text-tiny {
+  font-size: var(--text-tiny);
+}
+
+.h-min-100 {
+  min-height: 100dvh;
+}
+
+
+
 .light-border {
   border: 1px solid var(--grey-border-color);
 }
 
 .md-container {
-  max-width: 1020px;
+  max-width: var(--max-width);
   margin-inline: auto;
   padding: 2em;
 }
 
 .comment-container {
-  max-width: var(--comment-container-width);
+  /* max-width: var(--comment-container-width); */
 }
 
 .required-symbol {
@@ -66,25 +192,7 @@ body {
   text-align: center;
 }
 
-.mt-1 {
-  margin-top: 0.5em;
-}
 
-.mt-2 {
-  margin-top: 1em;
-}
-
-.mt-3 {
-  margin-top: 3em;
-}
-
-.mb-2 {
-  margin-bottom: 1em;
-}
-
-.mb-3 {
-  margin-bottom: 3em;
-}
 
 .flex {
   display: flex;
@@ -174,7 +282,7 @@ button {
   margin-inline: auto;
   padding: 5%;
   /* width: 100%; */
-  max-width: 1280px;
+  max-width: var(--max-width);
   gap: 1em;
 }
 
@@ -183,6 +291,156 @@ label,
   font-weight: bold;
   color: #6c757d;
 }
+
+.label {
+  font-size: var(--text-md-sm);
+  font-weight: 700;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+
+
+/* Clamp padding used for top of each component  */
+
+.pt-clamp-lg {
+  padding-top: var(--large-clamp-padding);
+}
+
+.pt-clamp-regular {
+  padding-top: var(--regular-clamp-padding);
+}
+
+.pt-clamp-md {
+  padding-top: var(--md-clamp-padding);
+}
+
+/* max width used for each component */
+.container {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--min-padding-x);
+  /* overflow: hidden; */
+}
+
+.container-md {
+  max-width: 1000px;
+  margin-inline: auto;
+  padding-inline: var(--min-padding-x);
+  /* overflow: hidden; */
+}
+
+.h2-mb-lg {
+  margin-bottom: 56px;
+}
+
+.h2-mb-md {
+  margin-bottom: 32px;
+}
+
+.mb-3 {
+  margin-bottom: 12px;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+
+.mt-1 {
+  margin-top: 4px;
+}
+
+.mt-2 {
+  margin-top: 8px;
+}
+
+.mt-3 {
+  margin-top: 12px;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.margin-inline-auto {
+  margin-inline: auto;
+}
+
+
+/* resources page */
+.resource-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.resource-tags-container {
+  display: flex;
+  gap: 16px;
+}
+
+.resource-tag-item {
+  background: black;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+}
+
+.bg-primary {
+  background: var(--osuOrange);
+}
+
+.bg-primary-text {
+  color: white;
+}
+
+.max-width {
+  max-width: var(--max-width);
+}
+
+/* footer */
+.footer-container {
+  
+  margin-top: var(--md-clamp-padding);
+  padding: 32px var(--min-padding-x);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+}
+
+.footer-items-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+}
+
+.footer-item-title {
+  margin-bottom: 16px;
+}
+
+.footer-item-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-item-links a {
+  text-decoration: none;
+  color: white !important;
+}
+
 
 :root {
   --navBar: #e9e5e4;

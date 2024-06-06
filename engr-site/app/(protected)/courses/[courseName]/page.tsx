@@ -1,10 +1,10 @@
-import { capitalizeAndReplaceDash } from "@/utils/formatting";
+import { FormattedData, capitalizeAndReplaceDash } from "@/utils/formatting";
 import { FetchedFormattedData } from "@/utils/types";
 import Link from "next/link";
 import { ModuleCard } from "@/components/mantine";
 import { fetchCourseTopicsByCourseName } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseName";
 import requireAuth from "@/actions/auth/requireAuth";
-import SectionLayout from "@/components/custom/sectionLayout/SectionLayout";
+import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 import "./page.css";
 
 const CourseTopicsPage = async ({
@@ -21,27 +21,28 @@ const CourseTopicsPage = async ({
   console.log("== success: ", courseTopicList.success);
 
   return (
-    <SectionLayout>
-      <h2> {courseTopicName} </h2>
+    <ContainerLayout>
+      <h2 className="text-center mb-4 heading-3"> {courseTopicName} </h2>
 
-      <label className="label-primary"> Course topics </label>
+      <p className="label-primary h2-mb-md text-center label" > Course topics </p>
 
-      {courseTopicList?.success?.map((item: any, index: number) => (
-        <div>
+    <div className="flex-col gap-1">
+      {courseTopicList?.success?.map((item: FormattedData, index: number) => (
           <ModuleCard
             title={item.name}
-            description="description here"
+            description=""
             href={`/courses/${params.courseName}/${item.url}?${new URLSearchParams(
               {
-                id: item.id,
-              },
+                id: item.id.toString(),
+              }
             ).toString()}`}
           />
-        </div>
+   
       ))}
+      </div>
 
       {courseTopicList?.failure && <p> No course topics </p>}
-    </SectionLayout>
+    </ContainerLayout>
   );
 };
 

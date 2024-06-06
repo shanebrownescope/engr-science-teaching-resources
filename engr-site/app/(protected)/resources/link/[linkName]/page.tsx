@@ -65,7 +65,7 @@ const ResourceLinkPage = async ({
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "2em" }}>
+    <div>
       {linkData?.success && (
         <DisplayLink link={linkData.success as FetchedLink} />
       )}
