@@ -5,7 +5,7 @@ import "./page.css";
 import { FormattedData } from "@/utils/formatting";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import requireAuth from "@/actions/auth/requireAuth";
-import SectionLayout from "@/components/custom/sectionLayout/SectionLayout";
+import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 
 const Courses = async () => {
   const authResult = await requireAuth();
@@ -15,8 +15,8 @@ const Courses = async () => {
   console.log("--courseData: ", courseData);
 
   return (
-    <SectionLayout>
-      <h2>Courses</h2>
+    <ContainerLayout>
+      <h2 className="text-center h2-mb-md heading-3">Courses</h2>
 
       <div className="grid-container">
         {courseData?.success?.map((item: FormattedData) => (
@@ -29,7 +29,7 @@ const Courses = async () => {
       </div>
 
       {courseData?.failure && <div>No courses</div>}
-    </SectionLayout>
+    </ContainerLayout>
   );
 };
 

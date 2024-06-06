@@ -59,9 +59,6 @@ export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
           placeholder="Pick value"
           data={["Science", "Math", "History", "Literature"]}
         />
-        <div className={styles.yearSliderContainer}>
-          <YearSlider />
-        </div>
       </div>
 
       <ResourcesListPaginated data={sortedData} />

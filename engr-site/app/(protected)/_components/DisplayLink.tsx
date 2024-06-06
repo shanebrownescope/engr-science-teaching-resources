@@ -1,3 +1,4 @@
+import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 import { FetchedLink } from "@/utils/types";
 
 type DisplayLinkProps = {
@@ -6,37 +7,29 @@ type DisplayLinkProps = {
 
 export const DisplayLink = ({ link }: DisplayLinkProps) => {
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1em',
-        width: '50%',
-      }}
-    >
-      <h2> {link.linkName} </h2>
-      {link.description}
-      <p> {link.uploadDate} </p>
-      <p> Posted By: {link.contributor}</p>
-      <a href={link.linkUrl}> {link.linkName} </a>
-      <div style={{ display: 'flex', gap: '1em' }}>
-        {link.tags?.map(
-          (tag: string, index: number) =>
-            tag && (
-              <p
-                key={index}
-                style={{
-                  background: 'black',
-                  color: 'white',
-                  padding: '0.5em',
-                  borderRadius: '1em',
-                }}
-              >
-                {tag}
-              </p>
-            ),
-        )}
+    <ContainerLayout paddingTop="md"> 
+      <div className="resource-container"> 
+        <h2> {link.linkName} </h2>
+        <div> 
+          <p> {link.uploadDate} </p>
+          <p> Posted By: {link.contributor}</p>
+          <p> {link.description}  </p>
+        </div>
+        <a href={link.linkUrl}> Visit resource </a>
+        <div className="resource-tags-container">
+          {link.tags?.map(
+            (tag: string, index: number) =>
+              tag && (
+                <p
+                  key={index}
+                  className="resource-tag-item"
+                >
+                  {tag}
+                </p>
+              ),
+          )}
+        </div>
       </div>
-    </div>
+    </ContainerLayout>
   );
 };

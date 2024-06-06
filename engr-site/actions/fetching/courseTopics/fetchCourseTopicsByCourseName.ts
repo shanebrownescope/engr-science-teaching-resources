@@ -33,12 +33,18 @@ export const fetchCourseTopicsByCourseName = async (
     const { results } = await dbConnect(query, [course?.id]);
 
     if (results[0].length > 0) {
-      const formattedData = results[0].map((item: CourseTopicData) =>
-        lowercaseAndReplaceSpace(item.id, item.courseTopicName),
-      );
+      const formattedData = results[0].map((item: CourseTopicData) => {
+        const formatted = lowercaseAndReplaceSpace(item.id, item.courseTopicName)
+        return {
+          id: item.id,
+          name: formatted.name,
+          url: formatted.url,
+          // description: item.,
+        }
+    });
 
       return { success: formattedData, failure: undefined };
-    }
+    } 
 
     return { success: undefined, failure: "failed" };
   } catch (error) {

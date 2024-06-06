@@ -6,6 +6,7 @@ import { CommentSchema } from "@/schemas";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import ContainerLayout from "../../containerLayout/ContainerLayout";
 
 type FormFields = z.infer<typeof CommentSchema>;
 
@@ -48,8 +49,8 @@ const CommentForm = ({ handleFormSubmit }: CommentFormProps) => {
   };
 
   return (
-    <div className="comment-container">
-      <h3>Comments</h3>
+    <ContainerLayout paddingTop="md">
+      <h5 className="mb-4">Comments</h5>
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Textarea
@@ -68,7 +69,7 @@ const CommentForm = ({ handleFormSubmit }: CommentFormProps) => {
           </Button>
         </form>
       </div>
-    </div>
+    </ContainerLayout>
   );
 };
 

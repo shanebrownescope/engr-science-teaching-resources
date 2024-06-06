@@ -1,3 +1,4 @@
+import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 import { NavbarNested } from "@/components/mantine";
 
 type ProtectedLayoutProps = {
@@ -6,10 +7,14 @@ type ProtectedLayoutProps = {
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return (
+   
     <div className="flex">
       <NavbarNested />
+      <ContainerLayout paddingTop="md">  
       {children}
+      </ContainerLayout>
     </div>
+
   );
 };
 

@@ -9,6 +9,7 @@ import {
   FeaturesCards,
 } from "@/components/mantine";
 import "@mantine/core/styles.css";
+import Footer from "@/components/custom/footer/Footer";
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
       {/* <HeroText /> */}
       <GetInTouchSimple />
       <EmailBanner />
+      <Footer />
     </div>
   );
 }

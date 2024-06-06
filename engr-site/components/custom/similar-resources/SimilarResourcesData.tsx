@@ -1,6 +1,7 @@
 import { FetchedFile, FetchedLink } from "@/utils/types";
 import styles from "./similarResource.module.css";
 import SimilarItem from "./SimilarItem";
+import ContainerLayout from "../containerLayout/ContainerLayout";
 
 type SimilarResourcesDataProps = {
   similarResources: FetchedFile[] | FetchedLink[] | undefined;
@@ -18,8 +19,8 @@ const SimilarResourcesData = ({
   type,
 }: SimilarResourcesDataProps) => {
   return (
-    <div>
-      <h3>Similar resources </h3>
+    <ContainerLayout paddingTop="md">
+      <h5 className="mb-4">Similar resources </h5>
 
       <div className={styles.grid}>
         {similarResources &&
@@ -36,7 +37,7 @@ const SimilarResourcesData = ({
       </div>
 
       {similarResources?.length === 0 && <div> No similar resources </div>}
-    </div>
+    </ContainerLayout>
   );
 };
 

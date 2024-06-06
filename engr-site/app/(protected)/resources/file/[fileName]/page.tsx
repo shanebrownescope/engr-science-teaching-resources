@@ -13,6 +13,7 @@ import { uploadFileComment } from "@/actions/comments/uploadFileComment";
 import { revalidatePath } from "next/cache";
 import SimilarResourcesData from "@/components/custom/similar-resources/SimilarResourcesData";
 import requireAuth from "@/actions/auth/requireAuth";
+import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 
 type searchParams = {
   id: string;
@@ -64,7 +65,7 @@ const ResourceFilePage = async ({
   };
 
   return (
-    <div className="flex-col gap-2">
+    <div>
       {fileData.success && (
         <DisplayFile file={fileData.success as FetchedFile} />
       )}

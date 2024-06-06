@@ -21,7 +21,16 @@
 }
 
 .tagsColumn {
-  width: 25%;
+  width: 27%;
+}
+
+.tag {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: var(--mantine-color-gray-2);
+  color: var(--mantine-color-gray-8);
+  font-size: var(--text-tiny);
+  margin-right: 8px;
 }
 
 .descriptionColumn {

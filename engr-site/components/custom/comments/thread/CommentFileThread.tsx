@@ -4,6 +4,7 @@ import { CommentFileData } from "@/utils/types";
 import { Button, Textarea } from "@mantine/core";
 import React, { useState } from "react";
 import Comment from "../comment";
+import ContainerLayout from "../../containerLayout/ContainerLayout";
 
 type CommentFileThreadProps = {
   commentThread: CommentFileData[] | undefined;
@@ -27,7 +28,7 @@ const CommentFileThread = ({ commentThread }: CommentFileThreadProps) => {
   }
 
   return (
-    <div>
+    <ContainerLayout paddingTop="none" className="mt-4">
       {commentThread
         ?.slice(0, viewCount)
         .map((comment) => (
@@ -41,9 +42,9 @@ const CommentFileThread = ({ commentThread }: CommentFileThreadProps) => {
         ))}
 
       {commentThread && viewCount < commentThread?.length && (
-        <Button onClick={handleViewMore}> View more </Button>
+        <Button className="mt-2 margin-inline-auto" onClick={handleViewMore}> View more </Button>
       )}
-    </div>
+    </ContainerLayout>
   );
 };
 

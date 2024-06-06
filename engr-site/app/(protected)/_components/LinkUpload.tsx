@@ -7,7 +7,7 @@ import { createTagPostLink } from "@/actions/uploadingPostTags/uploadTagsAction"
 // import { DropzoneButton, ButtonProgress } from "../../components/mantine";
 
 // import styles from '@/styles/test.module.css'
-import Tags from "./Tags";
+import Tags from "./tags/Tags";
 // import styles from "@/styles/test.module.css";
 import { SelectDropdown } from "@/components/mantine";
 import {
@@ -123,7 +123,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   const handleCourseOptionSelect = async (
     name: string,
     id: number,
-    formatted: string,
+    formatted: string
   ) => {
     setSelectedCourseTopicOption({ value: null, id: null, formatted: null });
     setSelectedResourceTypeOption({ value: null, id: null, formatted: null });
@@ -141,7 +141,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   const handleCourseTopicOptionSelect = async (
     value: string,
     id: number,
-    formatted: string,
+    formatted: string
   ) => {
     setSelectedResourceTypeOption({ value: null, id: null, formatted: null });
     setResourceTypeOptionsData([]);
@@ -162,7 +162,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   const handleResourceTypeOptionSelect = async (
     value: string,
     id: number,
-    formatted: string,
+    formatted: string
   ) => {
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
@@ -181,7 +181,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   const handleConceptOptionSelect = (
     value: string,
     id: number,
-    formatted: string,
+    formatted: string
   ) => {
     setSelectedConceptOption({ value: value, id: id, formatted: formatted });
   };
@@ -295,7 +295,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         sanitizedUrl.includes(">")
       ) {
         setStatusMessage(
-          "URL was altered during sanitization. Not storing in database",
+          "URL was altered during sanitization. Not storing in database"
         );
         return;
       }
@@ -361,7 +361,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   console.log(
     selectedCourseOption.formatted,
     selectedCourseOption.formatted,
-    selectedResourceTypeOption.formatted,
+    selectedResourceTypeOption.formatted
   );
 
   console.log("valid url: ", isValidUrl);
