@@ -21,7 +21,12 @@ const Tags = ({ tags, loading, handleAddTag, handleTagChange }: TagsProps) => {
           />
         </div>
       ))}
-      <button type="button" className="mt-2" disabled={loading} onClick={handleAddTag}>
+      <button
+        type="button"
+        className="mt-2"
+        disabled={loading}
+        onClick={handleAddTag}
+      >
         Add Tag
       </button>
     </div>

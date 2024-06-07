@@ -42,7 +42,10 @@ const CommentFileThread = ({ commentThread }: CommentFileThreadProps) => {
         ))}
 
       {commentThread && viewCount < commentThread?.length && (
-        <Button className="mt-2 margin-inline-auto" onClick={handleViewMore}> View more </Button>
+        <Button className="mt-2 margin-inline-auto" onClick={handleViewMore}>
+          {" "}
+          View more{" "}
+        </Button>
       )}
     </ContainerLayout>
   );

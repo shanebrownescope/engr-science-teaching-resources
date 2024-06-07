@@ -1,9 +1,8 @@
 .resultBox {
   border: 1px solid #ddd; /* Light grey border */
   padding: 20px;
-  width: 1000px;
+  margin-inline: auto;
   margin-bottom: 20px;
-  margin-left: 50px;
   border-radius: 5px; /* Rounded corners */
   background-color: #f9f9f9; /* Light background */
 }
@@ -11,10 +10,12 @@
 .resultTitle {
   margin-top: 0;
   font-weight: bold; /* Bold title */
+  color: black;
 }
 
 .resultDescription {
   margin-top: 10px;
+  color: black;
 }
 
 .tagsContainer {

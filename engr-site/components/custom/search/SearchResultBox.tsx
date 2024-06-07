@@ -34,7 +34,7 @@ export const SearchResultBox = ({
           id: id.toString(),
         })}`}
       >
-        <h2 className={styles.resultTitle}>{title}</h2>
+        <h5 className={styles.resultTitle}>{title}</h5>
         <p className={styles.resultDescription}>{description}</p>
         <div className={styles.tagsContainer}>
           {tags.map((tag: string, index: number) => (

@@ -19,7 +19,6 @@ export default function Home() {
       <FeaturesCards />
       {/* <HeroText /> */}
       <GetInTouchSimple />
-      <EmailBanner />
       <Footer />
     </div>
   );

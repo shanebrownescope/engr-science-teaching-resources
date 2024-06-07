@@ -10,7 +10,7 @@ export const DisplayFile = ({ file }: DisplayFileProps) => {
   file?.tags?.map((tag: any) => console.log(typeof tag));
   return (
     <ContainerLayout paddingTop="md">
-      <div className="resource-container"> 
+      <div className="resource-container">
         <h2> {file.fileName} </h2>
         <div>
           <p> {file.uploadDate} </p>
@@ -20,18 +20,15 @@ export const DisplayFile = ({ file }: DisplayFileProps) => {
         <iframe
           src={file.s3Url}
           style={{
-            width: '100%',
-            height: '790px',
+            width: "100%",
+            height: "790px",
           }}
         />
         <div className="resource-tags-container">
           {file?.tags?.map((tag: any, index: number) => {
-            if (typeof tag === 'string') {
+            if (typeof tag === "string") {
               return (
-                <p
-                  key={index}
-                  className="resource-tag-item"
-                >
+                <p key={index} className="resource-tag-item">
                   {tag}
                 </p>
               );

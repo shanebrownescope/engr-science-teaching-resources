@@ -24,21 +24,23 @@ const CourseTopicsPage = async ({
     <ContainerLayout>
       <h2 className="text-center mb-4 heading-3"> {courseTopicName} </h2>
 
-      <p className="label-primary h2-mb-md text-center label" > Course topics </p>
+      <p className="label-primary h2-mb-md text-center label">
+        {" "}
+        Course topics{" "}
+      </p>
 
-    <div className="flex-col gap-1">
-      {courseTopicList?.success?.map((item: FormattedData, index: number) => (
+      <div className="flex-col gap-1">
+        {courseTopicList?.success?.map((item: FormattedData, index: number) => (
           <ModuleCard
             title={item.name}
             description=""
             href={`/courses/${params.courseName}/${item.url}?${new URLSearchParams(
               {
                 id: item.id.toString(),
-              }
+              },
             ).toString()}`}
           />
-   
-      ))}
+        ))}
       </div>
 
       {courseTopicList?.failure && <p> No course topics </p>}

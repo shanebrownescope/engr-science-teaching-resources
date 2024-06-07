@@ -131,12 +131,12 @@ export function HeaderMegaMenu() {
               </HoverCard.Dropdown>
             </HoverCard>
 
-            {role === "admin" && <Link href="/dashboard" className={classes.link}>
-              Dashboard
-            </Link>}
+            {role === "admin" && (
+              <Link href="/dashboard" className={classes.link}>
+                Dashboard
+              </Link>
+            )}
           </Group>
-
-        
 
           <Group visibleFrom="sm">
             <Link href={"/profile"}>

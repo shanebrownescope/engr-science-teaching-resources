@@ -13,14 +13,16 @@ const ContainerLayout: React.FC<ContainerLayoutProps> = ({
   paddingTop = "lg",
   className = "",
 }) => {
-  const containerClass = classNames({
-    "container": container === "regular",
-    "container-md": container === "md",
-    "pt-clamp-regular": paddingTop === "regular",
-    "pt-clamp-md": paddingTop === "md",
-    "pt-clamp-lg": paddingTop === "lg",
-
-  }, className);
+  const containerClass = classNames(
+    {
+      container: container === "regular",
+      "container-md": container === "md",
+      "pt-clamp-regular": paddingTop === "regular",
+      "pt-clamp-md": paddingTop === "md",
+      "pt-clamp-lg": paddingTop === "lg",
+    },
+    className,
+  );
 
   return <div className={containerClass}>{children}</div>;
 };
