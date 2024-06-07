@@ -62,6 +62,5 @@ export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
       </div>
 
       <ResourcesListPaginated data={sortedData} />
-    </div>
-  );
+    </div>  );
 };

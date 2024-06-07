@@ -11,6 +11,7 @@ import {
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { SearchFilterMenu } from "@/components/custom/search/SearchFilterMenu";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 
 // Mock data for demonstration
 const mockResults = [
@@ -69,13 +70,12 @@ const SearchResults = ({ params }: { params: { searchName: string } }) => {
   console.log(data.map((item) => item.type));
 
   return (
-    <div>
-      <h1>Your Search: {formattedSearchName}</h1>
+    <ContainerLayout paddingTop="md"> 
+      <h4 className="text-center mb-4">Your Search: {formattedSearchName}</h4>
       <div>
         <SearchFilterMenu data={data} />
       </div>
-    </div>
-  );
+    </ContainerLayout>  );
 };
 
 export default SearchResults;

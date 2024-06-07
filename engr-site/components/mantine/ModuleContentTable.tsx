@@ -107,7 +107,7 @@ export function ModuleContentTable({ files, links }: ModuleContentTableProps) {
         let aValue: any = a[sortBy];
         let bValue: any = b[sortBy];
         if (sortBy === "dateAdded") {
-          aValue = new Date(aValue)
+          aValue = new Date(aValue);
           bValue = new Date(bValue);
         }
         const comparison = aValue > bValue ? 1 : aValue < bValue ? -1 : 0;

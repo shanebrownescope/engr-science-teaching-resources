@@ -7,14 +7,10 @@ type ProtectedLayoutProps = {
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return (
-   
     <div className="flex">
       <NavbarNested />
-      <ContainerLayout paddingTop="md">  
-      {children}
-      </ContainerLayout>
+      <ContainerLayout paddingTop="md">{children}</ContainerLayout>
     </div>
-
   );
 };
 

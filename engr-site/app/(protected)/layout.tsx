@@ -8,9 +8,7 @@ const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return (
     <div>
       <HeaderMegaMenu />
-      <div className="h-min-100"> 
-        {children}
-      </div>
+      <div className="h-min-100">{children}</div>
       <Footer />
     </div>
   );

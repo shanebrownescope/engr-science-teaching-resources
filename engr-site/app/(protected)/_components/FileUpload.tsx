@@ -110,7 +110,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   const handleCourseOptionSelect = async (
     name: string,
     id: number,
-    formatted: string
+    formatted: string,
   ) => {
     setSelectedCourseTopicOption({ value: null, id: null, formatted: null });
     setSelectedResourceTypeOption({ value: null, id: null, formatted: null });
@@ -128,7 +128,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   const handleCourseTopicOptionSelect = async (
     value: string,
     id: number,
-    formatted: string
+    formatted: string,
   ) => {
     setSelectedResourceTypeOption({ value: null, id: null, formatted: null });
     setResourceTypeOptionsData([]);
@@ -149,7 +149,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   const handleResourceTypeOptionSelect = async (
     value: string,
     id: number,
-    formatted: string
+    formatted: string,
   ) => {
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
@@ -168,7 +168,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   const handleConceptOptionSelect = (
     value: string,
     id: number,
-    formatted: string
+    formatted: string,
   ) => {
     setSelectedConceptOption({ value: value, id: id, formatted: formatted });
   };
@@ -376,7 +376,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   console.log(
     selectedCourseOption.formatted,
     selectedCourseTopicOption.formatted,
-    selectedResourceTypeOption.formatted
+    selectedResourceTypeOption.formatted,
   );
 
   console.log("get file: ", file);

@@ -59,9 +59,7 @@ export function GuestHeaderMegaMenu() {
             <a href="#" className={classes.link}>
               Learn
             </a>
-            <a href="#" className={classes.link}>
-              Academy
-            </a>
+           
           </Group>
 
           <Group visibleFrom="sm">

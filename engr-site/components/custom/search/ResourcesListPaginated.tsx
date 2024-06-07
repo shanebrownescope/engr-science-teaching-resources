@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Pagination } from "@mantine/core";
+import { Container, Pagination } from "@mantine/core";
 import { AllFilesAndLinksDataFormatted } from "@/utils/types";
 import { SearchResultBox } from "@/components/custom/search/SearchResultBox";
 
@@ -46,7 +46,7 @@ const ResourcesListPaginated = ({ data }: ResourcesListPaginatedProps) => {
   return (
     <>
       {/* Render currentPageItems */}
-      <div>
+      <div> 
         {currentPageItems.map((item) => (
           // Render individual file/link item here
           <div key={item.id}>
@@ -61,12 +61,16 @@ const ResourcesListPaginated = ({ data }: ResourcesListPaginatedProps) => {
           </div>
         ))}
       </div>
+      <div className="middle"> 
+
       {/* Render Pagination component */}
       <Pagination
         total={totalPages}
         value={currentPage}
         onChange={handlePageChange}
-      />
+        />
+      </div>
+      
     </>
   );
 };

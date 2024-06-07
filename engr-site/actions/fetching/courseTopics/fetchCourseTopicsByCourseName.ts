@@ -34,17 +34,20 @@ export const fetchCourseTopicsByCourseName = async (
 
     if (results[0].length > 0) {
       const formattedData = results[0].map((item: CourseTopicData) => {
-        const formatted = lowercaseAndReplaceSpace(item.id, item.courseTopicName)
+        const formatted = lowercaseAndReplaceSpace(
+          item.id,
+          item.courseTopicName,
+        );
         return {
           id: item.id,
           name: formatted.name,
           url: formatted.url,
           // description: item.,
-        }
-    });
+        };
+      });
 
       return { success: formattedData, failure: undefined };
-    } 
+    }
 
     return { success: undefined, failure: "failed" };
   } catch (error) {

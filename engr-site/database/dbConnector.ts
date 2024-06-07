@@ -9,7 +9,6 @@ const db = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
-
 /**
  * Connects to the database and executes the given query.
  *

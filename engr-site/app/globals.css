@@ -1,7 +1,6 @@
 /* @link https://utopia.fyi/type/calculator?c=320,14,1.25,1440,16,1.333,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 
 :root {
-
   --comment-author: 13px;
   --comment-upload-date: 12px;
   --comment-text: 14px;
@@ -15,7 +14,7 @@
   --text-sm: 0.875rem; /* 14px */
   --text-regular: 1rem; /* 16px */
   --text-md-sm: 1.125rem; /* 16px */
-  --text-md:  1.25rem /* 20px */;
+  --text-md: 1.25rem /* 20px */;
   --text-lg: 1.5rem /* 24px */;
   --heading-1: clamp(40px, 4vw + 1rem, 56px);
   --heading-2: clamp(36px, 3.6vw + 0.9rem, 48px);
@@ -23,7 +22,6 @@
   --heading-4: clamp(24px, 2.4vw + 0.6rem, 32px);
   --heading-5: clamp(20px, 2vw + 0.5rem, 24px);
   --heading-6: clamp(18px, 1.8vw + 0.45rem, 20px);
-
 
   /* line height  */
   --display-line-height: 125%;
@@ -37,10 +35,6 @@
   --body-letter-spacing: calc(0 / 100 * 1em);
   --label-letter-spacing: calc(0 / 100 * 1em);
 
-
-
-
-
   /* clamp padding used for top of each component */
   --large-clamp-padding: clamp(1px, 10.6666666667vw, 144px);
   --regular-clamp-padding: clamp(1px, 10.6666666667vw, 81.92px);
@@ -51,9 +45,7 @@
 
   /* max width */
   --max-width: 1200px;
-  
 }
-
 
 /* Update font sizes for tablet */
 @media (min-width: 768px) {
@@ -79,7 +71,6 @@
   }
 }
 
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -94,8 +85,6 @@ a {
 body {
   font-size: 16px;
 }
-
-
 
 h1,
 .heading-1 {
@@ -163,8 +152,6 @@ p {
   min-height: 100dvh;
 }
 
-
-
 .light-border {
   border: 1px solid var(--grey-border-color);
 }
@@ -191,8 +178,6 @@ p {
 .text-center {
   text-align: center;
 }
-
-
 
 .flex {
   display: flex;
@@ -301,8 +286,6 @@ label,
   font-weight: bold;
 }
 
-
-
 /* Clamp padding used for top of each component  */
 
 .pt-clamp-lg {
@@ -348,7 +331,6 @@ label,
   margin-bottom: 16px;
 }
 
-
 .mt-1 {
   margin-top: 4px;
 }
@@ -369,6 +351,11 @@ label,
   margin-inline: auto;
 }
 
+.middle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* resources page */
 .resource-container {
@@ -403,7 +390,6 @@ label,
 
 /* footer */
 .footer-container {
-  
   margin-top: var(--md-clamp-padding);
   padding: 32px var(--min-padding-x);
 }
@@ -417,7 +403,6 @@ label,
   .footer-grid {
     grid-template-columns: 1fr 1fr;
   }
-  
 }
 
 .footer-items-container {
@@ -440,7 +425,6 @@ label,
   text-decoration: none;
   color: white !important;
 }
-
 
 :root {
   --navBar: #e9e5e4;
