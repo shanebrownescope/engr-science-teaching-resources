@@ -31,14 +31,14 @@ export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
       .slice()
       .sort(
         (a, b) =>
-          new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime(),
+          new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime()
       );
   } else if (sortBy === "Oldest") {
     sortedData = data
       .slice()
       .sort(
         (a, b) =>
-          new Date(a.uploadDate).getTime() - new Date(b.uploadDate).getTime(),
+          new Date(a.uploadDate).getTime() - new Date(b.uploadDate).getTime()
       );
   }
 
@@ -47,20 +47,32 @@ export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
   return (
     <div>
       <div className={styles.filterMenu}>
-        <Select
-          label="Sort by"
-          placeholder="Pick value"
-          data={["Newest", "Oldest", "Most Popular"]}
-          value={sortBy}
-          onChange={handleSortChange}
-        />
         <MultiSelect
           label="Tags"
           placeholder="Pick value"
           data={["Science", "Math", "History", "Literature"]}
+          searchable
+        />
+        <MultiSelect
+          label="Concept"
+          placeholder="Pick value"
+          data={["Stress", "Dynamics", "Strength of Materials"]}
+          searchable
+        />
+        <MultiSelect
+          label="Contributor"
+          placeholder="Pick value"
+          data={["#1", "#2", "#3"]}
+          searchable
+        />
+        <Select
+          label="Resource Type"
+          placeholder="Pick value"
+          data={["Problem/Exercise", "Course Notes", "Supplementary Material"]}
         />
       </div>
 
       <ResourcesListPaginated data={sortedData} />
-    </div>  );
+    </div>
+  );
 };
