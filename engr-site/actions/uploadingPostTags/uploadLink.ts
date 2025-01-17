@@ -8,7 +8,6 @@ import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { sanitizeUrl, validUrlPattern } from "@/utils/helpers";
 
 type UploadLinkProps = {
-  linkName: string;
   linkUrl: string;
   conceptId: number;
   description: string | null;
@@ -22,7 +21,6 @@ type UploadLinkProps = {
  * @returns {Promise<{success: {linkId: number}} | {failure: string}>} - A promise that resolves to an object with the success message and the ID of the link if the upload was successful, or a failure message if the upload was not successful.
  */
 export const uploadLink = async ({
-  linkName,
   linkUrl,
   conceptId,
   description,
@@ -55,19 +53,16 @@ export const uploadLink = async ({
   }
 
   // Check if all required fields are present
-  if (!linkName || !linkUrl || !conceptId || !uploadDate) {
+  if (!linkUrl || !uploadDate) {
     return { failure: "Missing required fields" };
   }
 
   const query = `
-    INSERT INTO Links_v2 (linkName, linkUrl, description, uploadDate, contributor, conceptId, uploadedUserId) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    INSERT INTO Links_v2 (linkUrl, uploadDate, contributor, uploadedUserId) VALUES (?, ?, ?, ?)`;
   const values = [
-    linkName,
     sanitizedUrl,
-    description,
     uploadDate,
     contributor,
-    conceptId,
     user?.id,
   ];
 
