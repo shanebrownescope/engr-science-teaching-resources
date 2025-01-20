@@ -14,6 +14,10 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
           <p> {link.uploadDate} </p>
           <p> Posted By: {link.contributor}</p>
           <p> {link.description} </p>
+          <p>Resource Category: {link.resourceCategory || "N/A"}</p>
+          {link.externalContributor && (
+            <p>Uploaded by External Faculty</p>
+           )}
         </div>
         <a href={link.linkUrl}> Visit resource </a>
         <div className="resource-tags-container">

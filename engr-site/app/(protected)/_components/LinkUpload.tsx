@@ -29,6 +29,12 @@ import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fet
 import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
 import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetchConceptsByResourceTypeId";
 
+const resourceCategoryOptions = [
+  { value: "Problems/Exercises", label: "Problems/Exercises" },
+  { value: "Course Notes", label: "Course Notes" },
+  { value: "Video/Interactive Content", label: "Video/Interactive Content" },
+];
+
 type Options = {
   value: string | null;
   id: number | null;
@@ -48,6 +54,7 @@ type FormErrorsLinkUpload = {
   resourceTypeName?: string;
   conceptName?: string;
   conceptId?: string;
+  resourceCategory?: string;
 };
 
 export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
@@ -62,7 +69,12 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   const [linkName, setLinkName] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
   const [isValidUrl, setIsValidUrl] = useState(false);
+  const [resourceCategory, setResourceCategory] = useState("");
+  const [externalContributor, setExternalContributor] = useState(false);
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
   const [tags, setTags] = useState([""]);
 
   const [loading, setLoading] = useState(false);
@@ -73,6 +85,9 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   console.log(description);
 
   const [contributor, setContributor] = useState("");
+  const [resourceCategory, setResourceCategory] = useState("");   
+  const [externalContributor, setExternalContributor] = useState(false); 
+
   const [selectedCourseOption, setSelectedCourseOption] = useState<Options>({
     value: null,
     id: null,
@@ -107,6 +122,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     resourceTypeName: undefined,
     conceptName: undefined,
     conceptId: undefined,
+    resourceCategory: undefined,
   });
   const errorMessages: { [key: string]: string } = {
     root: "Please fill out all required fields.",
@@ -116,10 +132,11 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     courseTopicId: "Please select a module.",
     resourceTypeId: "Please select a section.",
     conceptId: "Please select a concept.",
+    resourceCategory: "Please select a resource category.", 
   };
 
   console.log(selectedCourseOption);
-
+  
   const handleCourseOptionSelect = async (
     name: string,
     id: number,
@@ -226,7 +243,8 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         !selectedCourseOption.value ||
         !selectedCourseTopicOption.value ||
         !selectedResourceTypeOption.value ||
-        !selectedConceptOption.value
+        !selectedConceptOption.value ||
+        !resourceCategory
       ) {
         // Handle validation failure
         console.error("Validation failed: Some fields are empty");
@@ -247,9 +265,13 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           conceptName: !selectedConceptOption.value
             ? errorMessages.conceptId
             : undefined,
+          resourceCategory: !resourceCategory
+            ? errorMessages.resourceCategory
+            : undefined, 
         };
         setErrors(errors);
         setStatusMessage("validation failed");
+        setLoading(false);
         return;
       }
 
@@ -269,6 +291,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         resourceTypeName: undefined,
         conceptName: undefined,
         conceptId: undefined,
+        resourceCategory: undefined,
       });
 
       setStatusMessage("uploading link");
@@ -309,6 +332,8 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         contributor:
           formattedContributor.length > 0 ? formattedContributor : "Anonymous",
         uploadDate: currentDateWithoutTime!,
+        resourceCategory,     
+        externalContributor,    
       });
       // const signedURLResult = await getSignedURL()
 
@@ -443,6 +468,27 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
             selectedValue={selectedConceptOption.value}
           />
           {errors.conceptName && <p className="error">{errors.conceptName}</p>}
+        </div>
+
+        <div>
+          <label> Resource Category </label>
+          <SelectDropdown
+            optionsList={resourceCategoryOptions}
+            onOptionChange={(val) => setResourceCategory(val)}
+            selectedValue={resourceCategory}
+          />
+          {errors.resourceCategory && (
+            <p className="error">{errors.resourceCategory}</p>
+          )}
+        </div>
+
+        <div>
+          <label> External Contributor? </label>
+          <input
+            type="checkbox"
+            checked={externalContributor}
+            onChange={(e) => setExternalContributor(e.target.checked)}
+          />
         </div>
 
         <div className="flex-col">

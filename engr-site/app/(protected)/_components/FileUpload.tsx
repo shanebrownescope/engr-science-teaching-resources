@@ -21,6 +21,11 @@ import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetch
 
 //* Testing: file upload to s3 and db
 //* TestDb component: test db is working
+const resourceCategoryOptions = [
+  { value: "Problems/Exercises", label: "Problems/Exercises" },
+  { value: "Course Notes", label: "Course Notes" },
+  { value: "Video/Interactive Content", label: "Video/Interactive Content" },
+];
 
 type Options = {
   value: string | null;
@@ -41,6 +46,7 @@ type FormErrorsFileUpload = {
   resourceTypeName?: string;
   conceptName?: string;
   conceptId?: string;
+  resourceCategory?: string;  
 };
 
 export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
@@ -56,6 +62,8 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   const [tags, setTags] = useState([""]);
   const [file, setFile] = useState<File | undefined>(undefined);
   const [fileUrl, setFileUrl] = useState<string | undefined>(undefined);
+  const [resourceCategory, setResourceCategory] = useState("");
+  const [externalContributor, setExternalContributor] = useState(false);
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -96,6 +104,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     resourceTypeName: undefined,
     conceptName: undefined,
     conceptId: undefined,
+    resourceCategory: undefined,
   });
   const errorMessages: { [key: string]: string } = {
     root: "Please fill out all required fields.",
@@ -105,6 +114,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     courseTopicId: "Please select a module.",
     resourceTypeId: "Please select a section.",
     conceptId: "Please select a concept.",
+    resourceCategory: "Please select a resource category.",
   };
   console.log(selectedCourseOption);
 
@@ -229,7 +239,8 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       !selectedCourseOption.value ||
       !selectedCourseTopicOption.value ||
       !selectedResourceTypeOption.value ||
-      !selectedConceptOption.value
+      !selectedConceptOption.value ||
+      !resourceCategory
     ) {
       const errors = {
         root: errorMessages.root,
@@ -247,6 +258,9 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         conceptName: !selectedConceptOption.value
           ? errorMessages.conceptId
           : undefined,
+        resourceCategory: !resourceCategory
+          ? errorMessages.resourceCategory
+          : undefined,
       };
       setErrors(errors);
 
@@ -263,6 +277,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       resourceTypeName: undefined,
       conceptName: undefined,
       conceptId: undefined,
+      resourceCategory: undefined
     });
 
     const date = new Date();
@@ -296,6 +311,8 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         contributor:
           formattedContributor.length > 0 ? formattedContributor : "Anonymous",
         uploadDate: currentDateWithoutTime!,
+        resourceCategory,     
+        externalContributor,   
       });
       // const signedURLResult = await getSignedURL()
 
@@ -491,7 +508,34 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         </div>
 
         */}
-        
+
+        {/*
+        <div> 
+          <label> Resource Category </label>
+          <SelectDropdown
+            optionsList={resourceCategoryOptions} 
+            onOptionChange={(val) => {
+              setResourceCategory(val);
+            }}
+            selectedValue={resourceCategory}
+          />
+          {errors.resourceCategory && (
+            <p className="error">{errors.resourceCategory}</p>
+          )}
+        </div>
+        */}
+
+        {/* 
+        <div>
+          <label> External Contributor? </label>
+          <input
+            type="checkbox"
+            checked={externalContributor}
+            onChange={(e) => setExternalContributor(e.target.checked)}
+          />
+        </div>
+        */} 
+
         {/*
         <div className="flex-col">
           <label> Add Description </label>

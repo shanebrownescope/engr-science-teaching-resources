@@ -16,6 +16,10 @@ export const DisplayFile = ({ file }: DisplayFileProps) => {
           <p> {file.uploadDate} </p>
           <p> {file.description} </p>
           <p> Posted By: {file.contributor}</p>
+          <p>Resource Category: {file.resourceCategory || "N/A"}</p>
+           {file.externalContributor && (
+             <p>Uploaded by External Faculty</p>
+            )}
         </div>
         <iframe
           src={file.s3Url}
