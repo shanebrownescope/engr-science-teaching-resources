@@ -1,34 +1,54 @@
-"use client";
+import styles from './tags.module.css';
 
 type TagsProps = {
   tags: string[];
   loading: boolean;
   handleAddTag: () => void;
   handleTagChange: (index: number, value: string) => void;
+  handleRemoveTag: (index: number) => void;
 };
 
-const Tags = ({ tags, loading, handleAddTag, handleTagChange }: TagsProps) => {
+const Tags = ({
+  tags,
+  loading,
+  handleAddTag,
+  handleTagChange,
+  handleRemoveTag,
+}: TagsProps) => {
   return (
-    <div>
-      <h6 className="mt-4 mb-3">Tags</h6>
+    <div className={styles.tagsWrapper}>
+      <label className={styles.label}>Add Tags (max 3)</label>
       {tags.map((tag, index) => (
-        <div key={index}>
+        <div key={index} className={styles.tagInput}>
           <input
             type="text"
-            disabled={loading}
             value={tag}
+            placeholder="Enter tag"
+            disabled={loading}
             onChange={(e) => handleTagChange(index, e.target.value)}
+            className="flex-1"
           />
+          <button
+            type="button"
+            onClick={() => handleRemoveTag(index)}
+            disabled={loading}
+            className={styles.deleteButton}
+            aria-label="Remove tag"
+          >
+            ×
+          </button>
         </div>
       ))}
-      <button
-        type="button"
-        className="mt-2"
-        disabled={loading}
-        onClick={handleAddTag}
-      >
-        Add Tag
-      </button>
+      {tags.length < 3 && (
+        <button
+          type="button"
+          onClick={handleAddTag}
+          disabled={loading}
+          className={styles.addTagButton}
+        >
+          Add Tag
+        </button>
+      )}
     </div>
   );
 };
