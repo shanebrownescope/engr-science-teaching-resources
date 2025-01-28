@@ -204,6 +204,10 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   };
   console.log("== tags: ", tags);
 
+  const handleRemoveTag = (indexToRemove: number) => {
+    setTags((prevTags) => prevTags.filter((_, index) => index !== indexToRemove));
+  };
+
   const handleLinkUrlChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputUrl = e.target.value;
     setLinkUrl(inputUrl);
@@ -472,6 +476,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           loading={loading}
           handleAddTag={handleAddTag}
           handleTagChange={handleTagChange}
+          handleRemoveTag={handleRemoveTag} 
         />
 
         <button

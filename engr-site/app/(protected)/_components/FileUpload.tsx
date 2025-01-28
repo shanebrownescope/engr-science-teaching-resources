@@ -175,7 +175,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   };
 
   const handleAddTag = () => {
-    if (tags.length < 5) {
+    if (tags.length < 3) {
       setTags([...tags, ""]); // Add an empty tag to the array
     }
   };
@@ -191,6 +191,11 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     });
   };
   console.log("== tags: ", tags);
+
+
+  const handleRemoveTag = (indexToRemove: number) => {
+    setTags((prevTags) => prevTags.filter((_, index) => index !== indexToRemove));
+  };
 
   //* WebCrypto API
   //* hash file and turn into string
@@ -522,6 +527,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           loading={loading}
           handleAddTag={handleAddTag}
           handleTagChange={handleTagChange}
+          handleRemoveTag={handleRemoveTag}
         />
 
         <button

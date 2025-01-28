@@ -1,0 +1,52 @@
+/* tags.module.css */
+.tagsWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .tagInput {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .deleteButton {
+    padding: 0.25rem 0.5rem;
+    border: none;
+    background: none;
+    font-size: 1.25rem;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .deleteButton:hover {
+    color: #dc2626; /* This is the red-600 color from Tailwind */
+    cursor: pointer;
+  }
+  
+  .addTagButton {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .addTagButton:hover {
+    background-color: #f3f4f6;
+  }
+  
+  .addTagButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
