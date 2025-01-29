@@ -41,7 +41,6 @@ type LinkUploadProps = {
 
 type FormErrorsLinkUpload = {
   root?: string;
-  linkName?: string;
   linkUrl?: string;
   courseName?: string;
   courseTopicName?: string;
@@ -59,7 +58,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     router.push("/unauthorized");
   }
   //* state for form
-  const [linkName, setLinkName] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
   const [isValidUrl, setIsValidUrl] = useState(false);
 
@@ -100,7 +98,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     formatted: null,
   });
   const [errors, setErrors] = useState<FormErrorsLinkUpload>({
-    linkName: undefined,
     linkUrl: undefined,
     courseName: undefined,
     courseTopicName: undefined,
@@ -110,7 +107,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   });
   const errorMessages: { [key: string]: string } = {
     root: "Please fill out all required fields.",
-    linkName: "Link name is required.",
     linkUrl: "Link Url is required.",
     courseId: "Please select a course.",
     courseTopicId: "Please select a module.",
@@ -222,10 +218,9 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     e.preventDefault();
 
     setLoading(true);
-    console.log({ tags, linkName, linkUrl });
+    console.log({ tags, linkUrl });
     try {
       if (
-        !linkName ||
         !linkUrl ||
         !selectedCourseOption.value ||
         !selectedCourseTopicOption.value ||
@@ -237,7 +232,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         // Set custom error messages based on the failed validation conditions
         const errors = {
           root: errorMessages.root,
-          linkName: !linkName ? errorMessages.linkName : undefined,
           linkUrl: !linkUrl ? errorMessages.linkUrl : undefined,
           courseName: !selectedCourseOption.value
             ? errorMessages.courseId
@@ -266,7 +260,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       }
 
       setErrors({
-        linkName: undefined,
         linkUrl: undefined,
         courseName: undefined,
         courseTopicName: undefined,
@@ -286,11 +279,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       console.log(formattedDescription);
       console.log(formattedContributor);
 
-      setLinkName((link) => link.trim());
-
-      const formattedLinkName = capitalizeAndReplaceDash(linkName);
-      console.log(formattedLinkName);
-
       setLinkUrl((link) => link.trim());
       const sanitizedUrl = sanitizeUrl(linkUrl);
       if (
@@ -305,7 +293,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       }
 
       const linkResult = await uploadLink({
-        linkName: linkName,
         linkUrl: sanitizedUrl,
         conceptId: selectedConceptOption.id!,
         description:
@@ -361,7 +348,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     }
   };
 
-  console.log("link: ", linkName, linkUrl);
   console.log(
     selectedCourseOption.formatted,
     selectedCourseOption.formatted,
@@ -378,18 +364,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         {statusMessage && (
           <p className={styles.messageStyle}> {statusMessage} </p>
         )}
-
-        <div className="flex-col">
-          <label> Input linkName </label>
-          <input
-            className={errors.linkName && "input-error"}
-            value={linkName}
-            type="text"
-            disabled={loading}
-            onChange={(e) => setLinkName(e.target.value)}
-          />
-          {errors.linkName && <p className="error">{errors.linkName}</p>}
-        </div>
 
         <div className="flex-col">
           <label> Input linkUrl </label>
@@ -437,27 +411,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           {errors.resourceTypeName && (
             <p className="error">{errors.resourceTypeName}</p>
           )}
-        </div>
-
-        <div>
-          <label> Select a concept </label>
-          <SelectDropdown
-            optionsList={conceptOptionsData}
-            onOptionChange={handleConceptOptionSelect}
-            selectedValue={selectedConceptOption.value}
-          />
-          {errors.conceptName && <p className="error">{errors.conceptName}</p>}
-        </div>
-
-        <div className="flex-col">
-          <label> Add Description </label>
-          <input
-            type="text"
-            name="description"
-            value={description}
-            disabled={loading}
-            onChange={(e) => setDescription(e.target.value)}
-          />
         </div>
 
         <div className="flex-col">
