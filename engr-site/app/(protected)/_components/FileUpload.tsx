@@ -83,6 +83,27 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     });
   const [resourceTypeOptionsData, setResourceTypeOptionsData] =
     useState<any[]>();
+  const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchFiles() {
+      try {
+        const response = await fetch("/api/files");
+        const data = await response.json();
+
+        if (response.ok) {
+          setUploadedFiles(data); 
+        } else {
+          console.error("Error fetching files:", data.error);
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+      }
+    }
+
+    fetchFiles();
+  }, []);
+  
   const [selectedResourceTypeOption, setSelectedResourceTypeOption] =
     useState<Options>({
       value: null,
@@ -402,6 +423,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
   return (
     <div className={styles.formAdminWrapper}>
+      
       <p className={styles.formAdminTitle}> Upload file </p>
 
       <form className={styles.form} onSubmit={handleSubmit}>
@@ -560,7 +582,23 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             onChange={(e) => setContributor(e.target.value)}
           />
         </div>
+        <div className={styles.formAdminWrapper}>
+          <h2 className={styles.formAdminTitle}> Uploaded Files </h2>
 
+          {uploadedFiles.length === 0 ? (
+            <p>No files uploaded yet.</p>
+          ) : (
+            <ul>
+              {uploadedFiles.map((file) => (
+                <li key={file.id}>
+                  <a href={file.url} target="_blank" rel="noopener noreferrer">
+                    {file.name}
+                  </a> - {file.contributor} - {new Date(file.uploadedAt).toLocaleString()}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         <Tags
           tags={tags}
           loading={loading}
