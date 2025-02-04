@@ -22,6 +22,12 @@ import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetch
 //* Testing: file upload to s3 and db
 //* TestDb component: test db is working
 
+const RESOURCE_TYPE_OPTIONS = [
+  { value: "problems_exercises", label: "Problems/Exercises" },
+  { value: "course_notes", label: "Course Notes" },
+  { value: "video_interactive", label: "Video/Interactive Content" }
+] as const;
+
 type Options = {
   value: string | null;
   id: number | null;
@@ -475,24 +481,23 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         <div>
           <label> Select a resource type </label>
           <MultiSelect
-            data={[
-              { value: "problems_exercises", label: "Problems/Exercises" },
-              { value: "course_notes", label: "Course Notes" },
-              { value: "video_interactive", label: "Video/Interactive Content" },
-            ]}
-            defaultValue={[]} // No pre-selected values
+            data={RESOURCE_TYPE_OPTIONS}
+            defaultValue={[]}
             onChange={(selected: string[]) => {
               console.log('Selected resource types:', selected);
-              // Update your state here if needed
               setSelectedResourceTypeOption({
-                value: selected[0], // Take first selection if you only want one
-                id: null, // You may need to adjust this based on your needs
-                formatted: selected[0]
+                value: selected[0],
+                id: null,
+                formatted: selected[0],
               });
             }}
             placeholder="Select resource type(s)"
             searchable
+            maxSelectedValues={1}
           />
+          {errors.resourceTypeName && (
+            <p className="error">{errors.resourceTypeName}</p>
+          )}
         </div>
 
         {/*
