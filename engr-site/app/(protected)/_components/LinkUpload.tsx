@@ -28,7 +28,7 @@ import styles from "@/styles/form.module.css";
 import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseId";
 import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
 import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetchConceptsByResourceTypeId";
-import { MultiSelect } from "@/components/mantine";
+import { MultiSelect } from "@mantine/core";
 
 type Options = {
   value: string | null;

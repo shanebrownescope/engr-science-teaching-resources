@@ -18,6 +18,7 @@ export type FetchedFile = {
   conceptId: number;
   uploadedUserId: number;
   tags: string[];
+  resourceType: string;
 };
 
 export type FileData = {
@@ -56,6 +57,7 @@ export type FetchedLink = {
   conceptId: number;
   uploadedUserId: number;
   tags: string[];
+  resourceType: string;
 };
 
 export type searchParams = {
