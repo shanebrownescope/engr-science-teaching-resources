@@ -481,7 +481,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
               { value: "video_interactive", label: "Video/Interactive Content" },
             ]}
             defaultValue={[]} // No pre-selected values
-            onChange={(selected) => {
+            onChange={(selected: string[]) => {
               console.log('Selected courses:', selected); // Log the updated selections
             }}
             placeholder="Select one or more courses"
