@@ -28,6 +28,7 @@ import styles from "@/styles/form.module.css";
 import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseId";
 import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
 import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetchConceptsByResourceTypeId";
+import { MultiSelect } from "@/components/mantine";
 
 type Options = {
   value: string | null;
@@ -429,10 +430,24 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
         <div>
           <label> Select a resource type </label>
-          <SelectDropdown
-            optionsList={resourceTypeOptionsData}
-            onOptionChange={handleResourceTypeOptionSelect}
-            selectedValue={selectedResourceTypeOption.value}
+          <MultiSelect
+            data={[
+              { value: "problems_exercises", label: "Problems/Exercises" },
+              { value: "course_notes", label: "Course Notes" },
+              { value: "video_interactive", label: "Video/Interactive Content" },
+            ]}
+            defaultValue={[]}
+            onChange={(selected: string[]) => {
+              console.log('Selected resource types:', selected);
+              // Update your state here if needed
+              setSelectedResourceTypeOption({
+                value: selected[0], // Take first selection if you only want one
+                id: null, // You may need to adjust this based on your needs
+                formatted: selected[0]
+              });
+            }}
+            placeholder="Select resource type(s)"
+            searchable
           />
           {errors.resourceTypeName && (
             <p className="error">{errors.resourceTypeName}</p>
