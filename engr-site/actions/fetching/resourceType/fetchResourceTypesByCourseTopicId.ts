@@ -15,7 +15,9 @@ export const fetchResourceTypesByCourseTopicId = async (
 ): Promise<FetchedFormattedData> => {
   try {
     const query = `
-      SELECT * FROM ResourceTypes_v2 WHERE courseTopicId = ?`;
+      SELECT id, resourceTypeName FROM ResourceTypes_v2 
+      WHERE courseTopicId = ? 
+      AND resourceTypeName IN ('Problems/Exercises', 'Course Notes', 'Video/Interactive Content')`;
 
     const { results } = await dbConnect(query, [id]);
 

@@ -14,6 +14,7 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
           <p> {link.uploadDate} </p>
           <p> Posted By: {link.contributor}</p>
           <p> {link.description} </p>
+          <p> Resource Type: {link.resourceType}</p>
         </div>
         <a href={link.linkUrl}> Visit resource </a>
         <div className="resource-tags-container">

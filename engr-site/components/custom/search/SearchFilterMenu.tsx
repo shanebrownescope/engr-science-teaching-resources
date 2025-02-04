@@ -68,7 +68,11 @@ export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
         <Select
           label="Resource Type"
           placeholder="Pick value"
-          data={["Problem/Exercise", "Course Notes", "Supplementary Material"]}
+          data={[
+            { value: "problems_exercises", label: "Problems/Exercises" },
+            { value: "course_notes", label: "Course Notes" },
+            { value: "video_interactive", label: "Video/Interactive Content" }
+          ]}
         />
       </div>
 
