@@ -154,7 +154,12 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
     setResourceTypeOptionsData(results.success);
   };
+  const [selectedResourceType, setSelectedResourceType] = useState("");
 
+  const handleResourceTypeChange = (value: string) => {
+    setSelectedResourceType(value);
+  };
+  
   const handleResourceTypeOptionSelect = async (
     value: string,
     id: number,
@@ -402,16 +407,13 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         </div>
 
         <div>
-          <label> Select a resource type </label>
-          <SelectDropdown
-            optionsList={resourceTypeOptionsData}
-            onOptionChange={handleResourceTypeOptionSelect}
-            selectedValue={selectedResourceTypeOption.value}
-          />
-          {errors.resourceTypeName && (
-            <p className="error">{errors.resourceTypeName}</p>
-          )}
-        </div>
+  <label> Select Resource Type </label>
+  <SelectDropdown
+    optionsList={resourceTypeOptions}
+    onOptionChange={(value) => handleResourceTypeChange(value)}
+    selectedValue={selectedResourceType}
+  />
+</div>
 
         <div className="flex-col">
           <label> Add contributor </label>

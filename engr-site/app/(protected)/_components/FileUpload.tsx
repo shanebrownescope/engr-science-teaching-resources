@@ -1,5 +1,5 @@
 "use client";
-import { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent } from "react";
 
 import { getSignedURL } from "@/actions/uploadingPostTags/getSignedUrl";
 import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
@@ -145,7 +145,20 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     const results = await fetchResourceTypesByCourseTopicId(id);
 
     setResourceTypeOptionsData(results.success);
+  }; 
+  const resourceTypeOptions = [
+    { value: "problems_exercises", label: "Problems/Exercises" },
+    { value: "course_notes", label: "Course Notes" },
+    { value: "video_interactive", label: "Video/Interactive Content" },
+  ];
+  
+  const [selectedResourceType, setSelectedResourceType] = useState("");
+  
+  const handleResourceTypeChange = (value: string) => {
+    setSelectedResourceType(value);
   };
+
+  
 
   const handleResourceTypeOptionSelect = async (
     value: string,
@@ -474,15 +487,16 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
         <div>
           <label> Select a resource type </label>
+        <div>
+        <label> Select Resource Type </label>
           <SelectDropdown
-            optionsList={resourceTypeOptionsData}
-            onOptionChange={handleResourceTypeOptionSelect}
-            selectedValue={selectedResourceTypeOption.value}
+            optionsList={resourceTypeOptions}
+            onOptionChange={(value) => handleResourceTypeChange(value)}
+            selectedValue={selectedResourceType}
           />
-          {errors.resourceTypeName && (
-            <p className="error">{errors.resourceTypeName}</p>
-          )}
         </div>
+  
+  
 
         {/*
         <div>
