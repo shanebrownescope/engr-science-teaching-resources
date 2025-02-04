@@ -482,9 +482,15 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             ]}
             defaultValue={[]} // No pre-selected values
             onChange={(selected: string[]) => {
-              console.log('Selected courses:', selected); // Log the updated selections
+              console.log('Selected resource types:', selected);
+              // Update your state here if needed
+              setSelectedResourceTypeOption({
+                value: selected[0], // Take first selection if you only want one
+                id: null, // You may need to adjust this based on your needs
+                formatted: selected[0]
+              });
             }}
-            placeholder="Select one or more courses"
+            placeholder="Select resource type(s)"
             searchable
           />
         </div>
