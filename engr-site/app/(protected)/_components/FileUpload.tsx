@@ -485,15 +485,17 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             defaultValue={[]}
             onChange={(selected: string[]) => {
               console.log('Selected resource types:', selected);
+              // Only use the last selected value
+              const selectedValue = selected[selected.length - 1];
               setSelectedResourceTypeOption({
-                value: selected[0],
+                value: selectedValue,
                 id: null,
-                formatted: selected[0],
+                formatted: selectedValue
               });
             }}
-            placeholder="Select resource type(s)"
+            placeholder="Select resource type"
             searchable
-            maxSelectedValues={1}
+            maxValues={1}  // Use maxValues instead of maxSelectedValues
           />
           {errors.resourceTypeName && (
             <p className="error">{errors.resourceTypeName}</p>
