@@ -141,6 +141,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     setResourceTypeOptionsData([]);
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
+    setSelectedCourseOption({ value: null, id: null, formatted: null });
 
     setSelectedCourseTopicOption({
       value: value,
