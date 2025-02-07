@@ -142,7 +142,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       id: id,
       formatted: formatted,
     });
-
+  };
   const handleResourceTypeOptionSelect = async (
     value: string,
     id: number,
@@ -157,9 +157,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       formatted: formatted,
     });
 
-    const results = await fetchConceptsByResourceTypeId(id);
 
-    setConceptOptionData(results.success);
   };
 
   const handleConceptOptionSelect = (

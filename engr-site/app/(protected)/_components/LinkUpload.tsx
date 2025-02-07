@@ -149,7 +149,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       id: id,
       formatted: formatted,
     });
-
+  };
 
   const handleResourceTypeOptionSelect = async (
     value: string,
@@ -165,9 +165,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       formatted: formatted,
     });
 
-    const results = await fetchConceptsByResourceTypeId(id);
 
-    setConceptOptionData(results.success);
   };
 
   const handleConceptOptionSelect = (
