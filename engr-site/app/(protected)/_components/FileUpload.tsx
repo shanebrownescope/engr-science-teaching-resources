@@ -129,7 +129,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
     const results = await fetchCourseTopicsByCourseId(id);
 
-    setCourseTopicOptionsData(results.success);
+    setCourseTopicOptionsData(results.success || []);
   };
 
   const handleCourseTopicOptionSelect = async (
