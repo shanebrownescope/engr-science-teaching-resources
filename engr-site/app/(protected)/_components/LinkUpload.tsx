@@ -150,10 +150,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       formatted: formatted,
     });
 
-    const results = await fetchResourceTypesByCourseTopicId(id);
-
-    setResourceTypeOptionsData(results.success);
-  };
 
   const handleResourceTypeOptionSelect = async (
     value: string,
@@ -404,7 +400,11 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         <div>
           <label> Select a resource type </label>
           <SelectDropdown
-            optionsList={resourceTypeOptionsData}
+            optionsList={[
+              { value: 'problems-exercises', label: 'Problems/Exercises' },
+              { value: 'course-notes', label: 'Course Notes' },
+              { value: 'video-interactive', label: 'Video/Interactive Content' }
+            ]}
             onOptionChange={handleResourceTypeOptionSelect}
             selectedValue={selectedResourceTypeOption.value}
           />
@@ -429,14 +429,14 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           loading={loading}
           handleAddTag={handleAddTag}
           handleTagChange={handleTagChange}
-          handleRemoveTag={handleRemoveTag} 
+          handleRemoveTag={handleRemoveTag}
         />
 
         <button
           className={styles.formButton}
           disabled={loading}
           type="submit"
-          // disable={linkUrl != undefined ? true : false}
+        // disable={linkUrl != undefined ? true : false}
         >
           Upload
         </button>

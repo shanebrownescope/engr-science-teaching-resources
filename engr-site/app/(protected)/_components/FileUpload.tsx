@@ -143,11 +143,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       formatted: formatted,
     });
 
-    const results = await fetchResourceTypesByCourseTopicId(id);
-
-    setResourceTypeOptionsData(results.success);
-  };
-
   const handleResourceTypeOptionSelect = async (
     value: string,
     id: number,
@@ -475,21 +470,19 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
         <div>
           <label> Select a resource type </label>
-          <MultiSelect
-            data={[
-              { value: 'stress', label: 'Stress' },
-              { value: 'dynamics', label: 'Dynamics' },
-              { value: 'strength-of-materials', label: 'Strength of Materials' },
+          <SelectDropdown
+            optionsList={[
+              { value: 'problems-exercises', label: 'Problems/Exercises' },
+              { value: 'course-notes', label: 'Course Notes' },
+              { value: 'video-interactive', label: 'Video/Interactive Content' }
             ]}
-            defaultValue={[]} // No pre-selected values
-            onChange={(selected) => {
-              console.log('Selected courses:', selected); // Log the updated selections
-            }}
-            placeholder="Select one or more courses"
-            searchable
+            onOptionChange={handleResourceTypeOptionSelect}
+            selectedValue={selectedResourceTypeOption.value}
           />
+          {errors.resourceTypeName && (
+            <p className="error">{errors.resourceTypeName}</p>
+          )}
         </div>
-
         {/*
         <div>
           <label> Select a concept </label>
@@ -502,7 +495,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         </div>
 
         */}
-        
+
         {/*
         <div className="flex-col">
           <label> Add Description </label>
