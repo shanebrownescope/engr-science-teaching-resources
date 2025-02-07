@@ -66,7 +66,13 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     id: null,
     formatted: null,
   });
-  const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>();
+  const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>(
+    [
+      { value: 'Problems/Exercises', label: 'Problems/Exercises' },
+      { value: 'Course Notes', label: 'Course Notes' },
+      { value: ' Video/Interactive Content', label: ' Video/Interactive Content' },
+    ]
+  );
   const [selectedCourseTopicOption, setSelectedCourseTopicOption] =
     useState<Options>({
       value: null,
