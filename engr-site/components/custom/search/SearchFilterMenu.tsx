@@ -65,14 +65,24 @@ export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
           data={["#1", "#2", "#3"]}
           searchable
         />
-        <Select
+        <MultiSelect
           label="Resource Type"
           placeholder="Pick value"
           data={["Problem/Exercise", "Course Notes", "Supplementary Material"]}
+          searchable
         />
-      </div>
+        <Select
+          label="Resource Type"
+          placeholder="Pick value"
+          data={[
+            "Problems/Exercises",      
+            "Course Notes",
+            "Video/Interactive Content" 
+          ]}
+        />
 
       <ResourcesListPaginated data={sortedData} />
     </div>
   );
-};
+;
+}
