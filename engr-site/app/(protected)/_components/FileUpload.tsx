@@ -141,7 +141,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       formatted: formatted,
     });
 
-    const results = await fetchResourceTypesByCourseTopicId(id);
 
     setResourceTypeOptionsData([
         // ...(results.success as any),
