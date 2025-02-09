@@ -142,9 +142,30 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       formatted: formatted,
     });
 
+   
     const results = await fetchResourceTypesByCourseTopicId(id);
+    
+  
+    const mergedResourceTypes = [
+      ...(results.success || []),
+      { 
+        id: 9991, 
+        name: 'Problems/Exercises',
+        url: 'problems-exercises'
+      },
+      {
+        id: 9992,
+        name: 'Course Notes', 
+        url: 'course-notes'
+      },
+      {
+        id: 9993,
+        name: 'Video/Interactive Content',
+        url: 'video-content'
+      }
+    ];
 
-    setResourceTypeOptionsData(results.success);
+    setResourceTypeOptionsData(mergedResourceTypes);
   };
 
   const handleResourceTypeOptionSelect = async (
@@ -473,20 +494,19 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         </div>
 
         <div>
-          <label>Select a resource type</label>
-          <MultiSelect
-            data={[
-              { value: 'problems-exercises', label: 'Problems/Exercises' },
-              { value: 'course-notes', label: 'Course Notes' },
-              { value: 'video-content', label: 'Video/Interactive Content' },
-            ]}
-            defaultValue={[]}
-            onChange={(selected) => {
-              console.log('Selected resource types:', selected);
-            }}
-            placeholder="Select one or more resource types"
-            searchable
+          <label> Select a resource type </label>
+          <SelectDropdown
+            optionsList={resourceTypeOptionsData?.map(item => ({
+              value: item.name,
+              id: item.id,
+              formatted: item.name
+            }))}
+            onOptionChange={handleResourceTypeOptionSelect}
+            selectedValue={selectedResourceTypeOption.value}
           />
+          {errors.resourceTypeName && (
+            <p className="error">{errors.resourceTypeName}</p>
+          )}
         </div>
 
         {/*
