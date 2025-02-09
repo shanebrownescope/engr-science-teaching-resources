@@ -4,7 +4,7 @@ import { useState, ChangeEvent } from "react";
 import { getSignedURL } from "@/actions/uploadingPostTags/getSignedUrl";
 import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
 import { ComboboxItem, MultiSelect, Select } from "@mantine/core";
-
+import { SelectDropdown } from "@/components/mantine";
 // import styles from '@/styles/test.module.css'
 import Tags from "./tags/Tags";
 // import styles from "@/styles/test.module.css";
