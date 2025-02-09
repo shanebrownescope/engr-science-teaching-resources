@@ -473,16 +473,16 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         </div>
 
         <div>
-          <label> Select a resource type </label>
+          <label>Select a resource type</label>
           <MultiSelect
             data={[
-              { value: 'Problems/Exercises', label: 'Problems/Exercises' },
-              { value: 'Course Notes', label: 'Course Notes' },
-              { value: 'Video/Interactive Content', label: 'Video/Interactive Content' },
+              { value: 'problems-exercises', label: 'Problems/Exercises' },
+              { value: 'course-notes', label: 'Course Notes' },
+              { value: 'video-content', label: 'Video/Interactive Content' },
             ]}
-            defaultValue={[]} // No pre-selected values
+            defaultValue={[]}
             onChange={(selected) => {
-              console.log('Selected resource types:', selected); // Log the updated selections
+              console.log('Selected resource types:', selected);
             }}
             placeholder="Select one or more resource types"
             searchable
