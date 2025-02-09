@@ -9,7 +9,7 @@ import { createTagPostLink } from "@/actions/uploadingPostTags/uploadTagsAction"
 // import styles from '@/styles/test.module.css'
 import Tags from "./tags/Tags";
 // import styles from "@/styles/test.module.css";
-import { SelectDropdown } from "@/components/mantine";
+import { MultiSelect } from "@/components/mantine";
 import {
   FormattedData,
   capitalizeAndReplaceDash,
@@ -403,10 +403,18 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
         <div>
           <label> Select a resource type </label>
-          <SelectDropdown
-            optionsList={resourceTypeOptionsData}
-            onOptionChange={handleResourceTypeOptionSelect}
-            selectedValue={selectedResourceTypeOption.value}
+          <MultiSelect
+            data={[
+              { value: 'Problems/Exercises', label: 'Problems/Exercises' },
+              { value: 'Course Notes', label: 'Course Notes' }, 
+              { value: 'Video/Interactive Content', label: 'Video/Interactive Content' },
+            ]}
+            defaultValue={[]}
+            onChange={(selected) => {
+              console.log('Selected resource types:', selected);
+            }}
+            placeholder="Select one or more resource types"
+            searchable
           />
           {errors.resourceTypeName && (
             <p className="error">{errors.resourceTypeName}</p>
