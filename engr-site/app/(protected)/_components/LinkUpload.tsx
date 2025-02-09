@@ -403,18 +403,10 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
         <div>
           <label> Select a resource type </label>
-          <MultiSelect
-            data={[
-              { value: 'Problems/Exercises', label: 'Problems/Exercises' },
-              { value: 'Course Notes', label: 'Course Notes' }, 
-              { value: 'Video/Interactive Content', label: 'Video/Interactive Content' },
-            ]}
-            defaultValue={[]}
-            onChange={(selected) => {
-              console.log('Selected resource types:', selected);
-            }}
-            placeholder="Select one or more resource types"
-            searchable
+          <SelectDropdown
+            optionsList={resourceTypeOptionsData}
+            onOptionChange={handleResourceTypeOptionSelect}
+            selectedValue={selectedResourceTypeOption.value}
           />
           {errors.resourceTypeName && (
             <p className="error">{errors.resourceTypeName}</p>
