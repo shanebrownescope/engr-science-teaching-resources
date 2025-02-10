@@ -66,7 +66,13 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     id: null,
     formatted: null,
   });
-  const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>();
+  const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>(
+    [
+      { value: 'Problems/Exercises', label: 'Problems/Exercises' },
+      { value: 'Course Notes', label: 'Course Notes' },
+      { value: ' Video/Interactive Content', label: ' Video/Interactive Content' },
+    ]
+  );
   const [selectedCourseTopicOption, setSelectedCourseTopicOption] =
     useState<Options>({
       value: null,
@@ -123,7 +129,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
     const results = await fetchCourseTopicsByCourseId(id);
 
-    setCourseTopicOptionsData(results.success);
+    setCourseTopicOptionsData(results.success || []);
   };
 
   const handleCourseTopicOptionSelect = async (
@@ -135,6 +141,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     setResourceTypeOptionsData([]);
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
+    setSelectedCourseOption({ value: null, id: null, formatted: null });
 
     setSelectedCourseTopicOption({
       value: value,
