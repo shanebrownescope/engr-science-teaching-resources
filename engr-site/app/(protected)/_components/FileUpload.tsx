@@ -4,6 +4,7 @@ import { useState, ChangeEvent } from "react";
 import { getSignedURL } from "@/actions/uploadingPostTags/getSignedUrl";
 import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
 import { ComboboxItem, MultiSelect, Select } from "@mantine/core";
+import { MultiSelect } from "@/components/mantine";
 // import styles from '@/styles/test.module.css'
 import Tags from "./tags/Tags";
 // import styles from "@/styles/test.module.css";
@@ -141,30 +142,9 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       formatted: formatted,
     });
 
-   
     const results = await fetchResourceTypesByCourseTopicId(id);
-    
-  
-    const mergedResourceTypes = [
-      ...(results.success || []),
-      { 
-        id: 9991, 
-        name: 'Problems/Exercises',
-        url: 'problems-exercises'
-      },
-      {
-        id: 9992,
-        name: 'Course Notes', 
-        url: 'course-notes'
-      },
-      {
-        id: 9993,
-        name: 'Video/Interactive Content',
-        url: 'video-content'
-      }
-    ];
 
-    setResourceTypeOptionsData(mergedResourceTypes);
+    setResourceTypeOptionsData(results.success);
   };
 
   const handleResourceTypeOptionSelect = async (
@@ -497,17 +477,19 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           <MultiSelect
             data={[
               { value: 'Problems/Exercises', label: 'Problems/Exercises' },
-              { value: 'Course Notes', label: 'Course Notes' },
+              { value: 'Course Notes', label: 'Course Notes' }, 
               { value: 'Video/Interactive Content', label: 'Video/Interactive Content' },
             ]}
-            defaultValue={[]} // No pre-selected values
+            defaultValue={[]}
             onChange={(selected) => {
-              console.log('Selected resource types:', selected); // Log the updated selections
+              console.log('Selected resource types:', selected);
             }}
             placeholder="Select one or more resource types"
             searchable
           />
-          {errors.resourceTypeName && <p className="error">{errors.resourceTypeName}</p>}
+          {errors.resourceTypeName && (
+            <p className="error">{errors.resourceTypeName}</p>
+          )}
         </div>
 
         {/*
