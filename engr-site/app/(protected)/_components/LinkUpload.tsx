@@ -9,7 +9,11 @@ import { SelectDropdown } from "@/components/mantine";
 // import styles from '@/styles/test.module.css'
 import Tags from "./tags/Tags";
 // import styles from "@/styles/test.module.css";
+<<<<<<< HEAD
 import { MultiSelect } from "@mantine/core";
+=======
+import { SelectDropdown } from "@/components/mantine";
+>>>>>>> parent of e22c265 (Update LinkUpload.tsx)
 import {
   FormattedData,
   capitalizeAndReplaceDash,
