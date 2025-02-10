@@ -86,7 +86,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     id: null,
     formatted: null,
   });
-  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>([]);
 
   const [errors, setErrors] = useState<FormErrorsFileUpload>({
     fileName: undefined,
