@@ -494,16 +494,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
         <div>
           <label> Select a resource type </label>
-<<<<<<< HEAD
-          <SelectDropdown
-            optionsList={resourceTypeOptionsData?.map(item => ({
-              value: item.name,
-              id: item.id,
-              formatted: item.name
-            }))}
-            onOptionChange={handleResourceTypeOptionSelect}
-            selectedValue={selectedResourceTypeOption.value}
-=======
           <MultiSelect
             data={[
               { value: 'Problems/Exercises', label: 'Problems/Exercises' },
@@ -516,11 +506,8 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             }}
             placeholder="Select one or more resource types"
             searchable
->>>>>>> parent of aaca031 (Update FileUpload.tsx)
           />
-          {errors.resourceTypeName && (
-            <p className="error">{errors.resourceTypeName}</p>
-          )}
+          {errors.resourceTypeName && <p className="error">{errors.resourceTypeName}</p>}
         </div>
 
         {/*
