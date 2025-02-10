@@ -494,7 +494,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         </div>
 
         <div>
-          <label> Select a resource 34234type </label>
+          <label> Select a resource type </label>
           <SelectDropdown
             optionsList={resourceTypeOptionsData?.map(item => ({
               value: item.name,
