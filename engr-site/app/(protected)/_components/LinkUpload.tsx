@@ -152,7 +152,12 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
     const results = await fetchResourceTypesByCourseTopicId(id);
 
-    setResourceTypeOptionsData(results.success);
+    setResourceTypeOptionsData([
+      // ...(results.success as any),
+      { value: "Problems/Exercises", id: "Problems/Exercises", formatted: "Problems/Exercises" },
+      { value: "Course Notes", id: "Course Notes", formatted: "Course Notes" },
+      { value: "Video/Interactive Content", id: "Video/Interactive Content", formatted: "Video/Interactive Content" }
+  ]);
   };
 
   const handleResourceTypeOptionSelect = async (
