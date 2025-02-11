@@ -495,7 +495,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
                 name: "Strength of Materials" 
               }
             ]}
-            onOptionChange={(value, id, formatted) => {
+            onOptionChange={(value: string, id: number, formatted: string) => {
               handleResourceTypeOptionSelect(value, id, formatted)
             }}
             selectedValue={selectedResourceTypeOption.value}
