@@ -3,7 +3,6 @@ import { useState, ChangeEvent } from "react";
 
 import { getSignedURL } from "@/actions/uploadingPostTags/getSignedUrl";
 import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
-import { ComboboxItem, MultiSelect, Select } from "@mantine/core";
 
 // import styles from '@/styles/test.module.css'
 import Tags from "./tags/Tags";
@@ -142,9 +141,17 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       formatted: formatted,
     });
 
-    const results = await fetchResourceTypesByCourseTopicId(id);
 
+<<<<<<< HEAD
     setResourceTypeOptionsData(results.success);
+=======
+    setResourceTypeOptionsData([
+        // ...(results.success as any),
+        { value: "Problems/Exercises", id: "Problems/Exercises", formatted: "Problems/Exercises" },
+        { value: "Course Notes", id: "Course Notes", formatted: "Course Notes" },
+        { value: "Video/Interactive Content", id: "Video/Interactive Content", formatted: "Video/Interactive Content" }
+    ]);
+>>>>>>> parent of cf890e3 (Update FileUpload.tsx)
   };
 
   const handleResourceTypeOptionSelect = async (
@@ -175,7 +182,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   };
 
   const handleAddTag = () => {
-    if (tags.length < 3) {
+    if (tags.length < 5) {
       setTags([...tags, ""]); // Add an empty tag to the array
     }
   };
@@ -191,11 +198,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     });
   };
   console.log("== tags: ", tags);
-
-
-  const handleRemoveTag = (indexToRemove: number) => {
-    setTags((prevTags) => prevTags.filter((_, index) => index !== indexToRemove));
-  };
 
   //* WebCrypto API
   //* hash file and turn into string
@@ -423,7 +425,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         </div>
         {errors.file && <p className="error">{errors.file}</p>}
 
-        {/*}
         <div className="flex-col">
           <label> Enter file name </label>
           <input
@@ -438,25 +439,16 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           />
           {errors.fileName && <p className="error">{errors.fileName}</p>}
         </div>
-        */}
 
         <div>
-          <label>Select a course</label>
-          <MultiSelect
-            data={[
-              { value: 'stress', label: 'Stress' },
-              { value: 'dynamics', label: 'Dynamics' },
-              { value: 'strength-of-materials', label: 'Strength of Materials' },
-            ]}
-            defaultValue={[]} // No pre-selected values
-            onChange={(selected) => {
-              console.log('Selected courses:', selected); // Log the updated selections
-            }}
-            placeholder="Select one or more courses"
-            searchable
+          <label> Select a course </label>
+          <SelectDropdown
+            optionsList={coursesOptionsData}
+            onOptionChange={handleCourseOptionSelect}
+            selectedValue={selectedCourseOption.value}
           />
+          {errors.courseName && <p className="error">{errors.courseName}</p>}
         </div>
-
 
         <div>
           <label> Select a course topic </label>
@@ -475,34 +467,15 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         <div>
           <label> Select a resource type </label>
           <SelectDropdown
-            optionsList={[
-              { 
-                value: "stress", 
-                id: "stress", 
-                formatted: "Stress",
-                name: "Stress" 
-              },
-              { 
-                value: "dynamics", 
-                id: "dynamics", 
-                formatted: "Dynamics",
-                name: "Dynamics" 
-              },
-              { 
-                value: "strength-of-materials", 
-                id: "strength-of-materials", 
-                formatted: "Strength of Materials",
-                name: "Strength of Materials" 
-              }
-            ]}
-            onOptionChange={(value: string, id: number, formatted: string) => {
-              handleResourceTypeOptionSelect(value, id, formatted)
-            }}
+            optionsList={resourceTypeOptionsData}
+            onOptionChange={handleResourceTypeOptionSelect}
             selectedValue={selectedResourceTypeOption.value}
           />
+          {errors.resourceTypeName && (
+            <p className="error">{errors.resourceTypeName}</p>
+          )}
         </div>
 
-        {/*
         <div>
           <label> Select a concept </label>
           <SelectDropdown
@@ -513,9 +486,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           {errors.conceptName && <p className="error">{errors.conceptName}</p>}
         </div>
 
-        */}
-        
-        {/*
         <div className="flex-col">
           <label> Add Description </label>
           <input
@@ -527,7 +497,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
-        */}
 
         <div className="flex-col">
           <label> Add contributor </label>
@@ -545,7 +514,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           loading={loading}
           handleAddTag={handleAddTag}
           handleTagChange={handleTagChange}
-          handleRemoveTag={handleRemoveTag}
         />
 
         <button
