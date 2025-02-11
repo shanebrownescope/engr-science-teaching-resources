@@ -193,6 +193,11 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       return tagsCopy;
     });
   };
+
+  const handleRemoveTag = (indexToRemove: number) => {
+    setTags((prevTags) => prevTags.filter((_, index) => index !== indexToRemove));
+  };
+
   console.log("== tags: ", tags);
 
   //* WebCrypto API
@@ -510,6 +515,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           loading={loading}
           handleAddTag={handleAddTag}
           handleTagChange={handleTagChange}
+          handleRemoveTag={handleRemoveTag}
         />
 
         <button
