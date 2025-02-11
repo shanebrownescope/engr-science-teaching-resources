@@ -93,7 +93,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     id: null,
     formatted: null,
   });
-
+  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>([]);
   const [errors, setErrors] = useState<FormErrorsFileUpload>({
     fileName: undefined,
     file: undefined,
@@ -151,7 +151,26 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
     const results = await fetchResourceTypesByCourseTopicId(id);
 
-    setResourceTypeOptionsData(results.success);
+    const mergedResourceTypes = [
+      ...(results.success || []),
+      { 
+        id: 9991, 
+        name: 'Problems/Exercises',
+        url: 'problems-exercises'
+      },
+      {
+        id: 9992,
+        name: 'Course Notes', 
+        url: 'course-notes'
+      },
+      {
+        id: 9993,
+        name: 'Video/Interactive Content',
+        url: 'video-content'
+      }
+    ];
+
+    setResourceTypeOptionsData(mergedResourceTypes);
   };
 
   const handleResourceTypeOptionSelect = async (
@@ -481,18 +500,14 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
         <div>
           <label> Select a resource type </label>
-          <MultiSelect
-            data={[
-              { value: 'Problems/Exercises', label: 'Problems/Exercises' },
-              { value: 'Course Notes', label: 'Course Notes' }, 
-              { value: 'Video/Interactive Content', label: 'Video/Interactive Content' },
-            ]}
-            defaultValue={[]}
-            onChange={(selected) => {
-              console.log('Selected resource types:', selected);
-            }}
-            placeholder="Select one or more resource types"
-            searchable
+          <SelectDropdown
+            optionsList={resourceTypeOptionsData?.map(item => ({
+              value: item.name,
+              id: item.id,
+              formatted: item.name
+            }))}
+            onOptionChange={handleResourceTypeOptionSelect}
+            selectedValue={selectedResourceTypeOption.value}
           />
           {errors.resourceTypeName && (
             <p className="error">{errors.resourceTypeName}</p>
