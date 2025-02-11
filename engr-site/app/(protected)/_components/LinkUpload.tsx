@@ -10,7 +10,7 @@ import { createTagPostLink } from "@/actions/uploadingPostTags/uploadTagsAction"
 import Tags from "./tags/Tags";
 // import styles from "@/styles/test.module.css";
 import { SelectDropdown } from "@/components/mantine";
-import { MultiSelect } from "@/components/mantine";
+import { MultiSelect } from "@mantine/core";
 import {
   FormattedData,
   capitalizeAndReplaceDash,
