@@ -403,7 +403,13 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         <div>
           <label> Select a resource type </label>
           <SelectDropdown
-            optionsList={resourceTypeOptionsData}
+            optionsList={[
+              { value: 'exercise', label: 'Exercise' },
+              { value: 'notes', label: 'Notes' },
+              { value: 'video', label: 'Video' },
+              { value: 'interactive-content', label: 'Interactive Content' },
+              ...(resourceTypeOptionsData || [])
+            ]}
             onOptionChange={handleResourceTypeOptionSelect}
             selectedValue={selectedResourceTypeOption.value}
           />

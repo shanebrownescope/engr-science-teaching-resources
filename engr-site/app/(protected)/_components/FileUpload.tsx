@@ -476,11 +476,10 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           <label> Select a resource type </label>
           <SelectDropdown
             optionsList={[
-              // 静态选项
-              { value: 'problems-exercises', label: 'Problems/Exercises' },
-              { value: 'course-notes', label: 'Course Notes' },
-              { value: 'video-interactive', label: 'Video/Interactive Content' },
-              // 动态选项
+              { value: 'exercise', label: 'Exercise' },
+              { value: 'notes', label: 'Notes' },
+              { value: 'video', label: 'Video' },
+              { value: 'interactive-content', label: 'Interactive Content' },
               ...(resourceTypeOptionsData || [])
             ]}
             onOptionChange={handleResourceTypeOptionSelect}
