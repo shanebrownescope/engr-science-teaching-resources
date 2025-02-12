@@ -66,13 +66,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     id: null,
     formatted: null,
   });
-  const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>(
-    [
-      { value: 'Problems/Exercises', label: 'Problems/Exercises' },
-      { value: 'Course Notes', label: 'Course Notes' },
-      { value: ' Video/Interactive Content', label: ' Video/Interactive Content' },
-    ]
-  );
+  const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>();
   const [selectedCourseTopicOption, setSelectedCourseTopicOption] =
     useState<Options>({
       value: null,
@@ -501,11 +495,13 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         <div>
           <label> Select a resource type </label>
           <SelectDropdown
-            optionsList={resourceTypeOptionsData?.map(item => ({
-              value: item.name,
-              id: item.id,
-              formatted: item.name
-            }))}
+            optionsList={[
+              { value: 'exercise', label: 'Exercise' },
+              { value: 'notes', label: 'Notes' },
+              { value: 'video', label: 'Video' },
+              { value: 'interactive-content', label: 'Interactive Content' },
+              ...(resourceTypeOptionsData || [])
+            ]}
             onOptionChange={handleResourceTypeOptionSelect}
             selectedValue={selectedResourceTypeOption.value}
           />
