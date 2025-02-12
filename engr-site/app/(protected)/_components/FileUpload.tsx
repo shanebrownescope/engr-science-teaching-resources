@@ -3,6 +3,7 @@ import { useState, ChangeEvent } from "react";
 
 import { getSignedURL } from "@/actions/uploadingPostTags/getSignedUrl";
 import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
+import { ComboboxItem, MultiSelect, Select } from "@mantine/core";
 
 // import styles from '@/styles/test.module.css'
 import Tags from "./tags/Tags";
@@ -142,12 +143,8 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     });
 
     const results = await fetchResourceTypesByCourseTopicId(id);
-    setResourceTypeOptionsData([
-      // ...(results.success as any),
-      { value: "Problems/Exercises", id: "Problems/Exercises", formatted: "Problems/Exercises" },
-      { value: "Course Notes", id: "Course Notes", formatted: "Course Notes" },
-      { value: "Video/Interactive Content", id: "Video/Interactive Content", formatted: "Video/Interactive Content" }
-  ]);
+
+    setResourceTypeOptionsData(results.success);
   };
 
   const handleResourceTypeOptionSelect = async (
@@ -178,7 +175,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   };
 
   const handleAddTag = () => {
-    if (tags.length < 5) {
+    if (tags.length < 3) {
       setTags([...tags, ""]); // Add an empty tag to the array
     }
   };
@@ -193,12 +190,12 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       return tagsCopy;
     });
   };
+  console.log("== tags: ", tags);
+
 
   const handleRemoveTag = (indexToRemove: number) => {
     setTags((prevTags) => prevTags.filter((_, index) => index !== indexToRemove));
   };
-
-  console.log("== tags: ", tags);
 
   //* WebCrypto API
   //* hash file and turn into string
@@ -426,6 +423,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         </div>
         {errors.file && <p className="error">{errors.file}</p>}
 
+        {/*}
         <div className="flex-col">
           <label> Enter file name </label>
           <input
@@ -440,16 +438,25 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           />
           {errors.fileName && <p className="error">{errors.fileName}</p>}
         </div>
+        */}
 
         <div>
-          <label> Select a course </label>
-          <SelectDropdown
-            optionsList={coursesOptionsData}
-            onOptionChange={handleCourseOptionSelect}
-            selectedValue={selectedCourseOption.value}
+          <label>Select a course</label>
+          <MultiSelect
+            data={[
+              { value: 'stress', label: 'Stress' },
+              { value: 'dynamics', label: 'Dynamics' },
+              { value: 'strength-of-materials', label: 'Strength of Materials' },
+            ]}
+            defaultValue={[]} // No pre-selected values
+            onChange={(selected) => {
+              console.log('Selected courses:', selected); // Log the updated selections
+            }}
+            placeholder="Select one or more courses"
+            searchable
           />
-          {errors.courseName && <p className="error">{errors.courseName}</p>}
         </div>
+
 
         <div>
           <label> Select a course topic </label>
@@ -477,6 +484,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           )}
         </div>
 
+        {/*
         <div>
           <label> Select a concept </label>
           <SelectDropdown
@@ -487,6 +495,9 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           {errors.conceptName && <p className="error">{errors.conceptName}</p>}
         </div>
 
+        */}
+        
+        {/*
         <div className="flex-col">
           <label> Add Description </label>
           <input
@@ -498,6 +509,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
+        */}
 
         <div className="flex-col">
           <label> Add contributor </label>
