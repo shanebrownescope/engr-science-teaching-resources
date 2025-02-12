@@ -294,11 +294,10 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
       const linkResult = await uploadLink({
         linkUrl: sanitizedUrl,
+        linkName: selectedConceptOption.formatted!,
         conceptId: selectedConceptOption.id!,
-        description:
-          formattedDescription.length > 0 ? formattedDescription : null,
-        contributor:
-          formattedContributor.length > 0 ? formattedContributor : "Anonymous",
+        description: formattedDescription.length > 0 ? formattedDescription : null,
+        contributor: formattedContributor.length > 0 ? formattedContributor : "Anonymous",
         uploadDate: currentDateWithoutTime!,
       });
       // const signedURLResult = await getSignedURL()
