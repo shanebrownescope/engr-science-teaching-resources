@@ -87,7 +87,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     id: null,
     formatted: null,
   });
-
+  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>([]);
   const [errors, setErrors] = useState<FormErrorsFileUpload>({
     fileName: undefined,
     file: undefined,
@@ -123,7 +123,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
     const results = await fetchCourseTopicsByCourseId(id);
 
-    setCourseTopicOptionsData(results.success);
+    setCourseTopicOptionsData(results.success || []);
   };
 
   const handleCourseTopicOptionSelect = async (
@@ -135,6 +135,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     setResourceTypeOptionsData([]);
     setSelectedConceptOption({ value: null, id: null, formatted: null });
     setConceptOptionData([]);
+    setSelectedCourseOption({ value: null, id: null, formatted: null });
 
     setSelectedCourseTopicOption({
       value: value,
@@ -144,7 +145,26 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
     const results = await fetchResourceTypesByCourseTopicId(id);
 
-    setResourceTypeOptionsData(results.success);
+    const mergedResourceTypes = [
+      ...(results.success || []),
+      { 
+        id: 9991, 
+        name: 'Problems/Exercises',
+        url: 'problems-exercises'
+      },
+      {
+        id: 9992,
+        name: 'Course Notes', 
+        url: 'course-notes'
+      },
+      {
+        id: 9993,
+        name: 'Video/Interactive Content',
+        url: 'video-content'
+      }
+    ];
+
+    setResourceTypeOptionsData(mergedResourceTypes);
   };
 
   const handleResourceTypeOptionSelect = async (
