@@ -475,9 +475,15 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         <div>
           <label> Select a resource type </label>
           <SelectDropdown
+            optionsList={[
+              { value: 'problems-exercises', label: 'Problems/Exercises' },
+              { value: 'course-notes', label: 'Course Notes' },
+              { value: 'video-interactive', label: 'Video/Interactive Content' }
+            ]}
             optionsList={resourceTypeOptionsData}
             onOptionChange={handleResourceTypeOptionSelect}
             selectedValue={selectedResourceTypeOption.value}
+          />
           />
           {errors.resourceTypeName && (
             <p className="error">{errors.resourceTypeName}</p>
