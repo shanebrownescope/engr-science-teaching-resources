@@ -23,9 +23,9 @@ import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetch
 //* TestDb component: test db is working
 
 type Options = {
-  value: string | null;
-  id: number | null;
-  formatted: string | null;
+  value: string[] | null;
+  id: number[] | null;
+  formatted: string[] | null;
 };
 
 type FileUploadProps = {
@@ -62,30 +62,30 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   const [description, setDescription] = useState<string>("");
   const [contributor, setContributor] = useState("");
   const [selectedCourseOption, setSelectedCourseOption] = useState<Options>({
-    value: null,
-    id: null,
-    formatted: null,
+    value: [],
+    id: [],
+    formatted: []
   });
   const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>();
   const [selectedCourseTopicOption, setSelectedCourseTopicOption] =
     useState<Options>({
-      value: null,
-      id: null,
-      formatted: null,
+      value: [],
+      id: [],
+      formatted: []
     });
   const [resourceTypeOptionsData, setResourceTypeOptionsData] =
     useState<any[]>();
   const [selectedResourceTypeOption, setSelectedResourceTypeOption] =
     useState<Options>({
-      value: null,
-      id: null,
-      formatted: null,
+      value: [],
+      id: [],
+      formatted: []
     });
   const [conceptOptionsData, setConceptOptionData] = useState<any[]>();
   const [selectedConceptOption, setSelectedConceptOption] = useState<Options>({
-    value: null,
-    id: null,
-    formatted: null,
+    value: [],
+    id: [],
+    formatted: []
   });
   const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>([]);
   const [errors, setErrors] = useState<FormErrorsFileUpload>({
@@ -113,13 +113,13 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     id: number,
     formatted: string,
   ) => {
-    setSelectedCourseTopicOption({ value: null, id: null, formatted: null });
-    setSelectedResourceTypeOption({ value: null, id: null, formatted: null });
+    setSelectedCourseTopicOption({ value: [], id: [], formatted: [] });
+    setSelectedResourceTypeOption({ value: [], id: [], formatted: [] });
     setResourceTypeOptionsData([]);
-    setSelectedConceptOption({ value: null, id: null, formatted: null });
+    setSelectedConceptOption({ value: [], id: [], formatted: [] });
     setConceptOptionData([]);
 
-    setSelectedCourseOption({ value: name, id: id, formatted: formatted });
+    setSelectedCourseOption({ value: [name], id: [id], formatted: [formatted] });
 
     const results = await fetchCourseTopicsByCourseId(id);
 
@@ -131,16 +131,16 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     id: number,
     formatted: string,
   ) => {
-    setSelectedResourceTypeOption({ value: null, id: null, formatted: null });
+    setSelectedResourceTypeOption({ value: [], id: [], formatted: [] });
     setResourceTypeOptionsData([]);
-    setSelectedConceptOption({ value: null, id: null, formatted: null });
+    setSelectedConceptOption({ value: [], id: [], formatted: [] });
     setConceptOptionData([]);
-    setSelectedCourseOption({ value: null, id: null, formatted: null });
+    setSelectedCourseOption({ value: [], id: [], formatted: [] });
 
     setSelectedCourseTopicOption({
-      value: value,
-      id: id,
-      formatted: formatted,
+      value: [value],
+      id: [id],
+      formatted: [formatted]
     });
 
     const results = await fetchResourceTypesByCourseTopicId(id);
@@ -172,13 +172,13 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     id: number,
     formatted: string,
   ) => {
-    setSelectedConceptOption({ value: null, id: null, formatted: null });
+    setSelectedConceptOption({ value: [], id: [], formatted: [] });
     setConceptOptionData([]);
 
     setSelectedResourceTypeOption({
-      value: value,
-      id: id,
-      formatted: formatted,
+      value: [value],
+      id: [id],
+      formatted: [formatted]
     });
 
     const results = await fetchConceptsByResourceTypeId(id);
@@ -191,7 +191,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     id: number,
     formatted: string,
   ) => {
-    setSelectedConceptOption({ value: value, id: id, formatted: formatted });
+    setSelectedConceptOption({ value: [value], id: [id], formatted: [formatted] });
   };
 
   const handleAddTag = () => {
@@ -251,25 +251,25 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     if (
       !fileName ||
       !file ||
-      !selectedCourseOption.value ||
-      !selectedCourseTopicOption.value ||
-      !selectedResourceTypeOption.value ||
-      !selectedConceptOption.value
+      !selectedCourseOption.value?.length ||
+      !selectedCourseTopicOption.value?.length ||
+      !selectedResourceTypeOption.value?.length ||
+      !selectedConceptOption.value?.length
     ) {
       const errors = {
         root: errorMessages.root,
         fileName: !fileName ? errorMessages.fileName : undefined,
         file: !file ? errorMessages.file : undefined,
-        courseName: !selectedCourseOption.value
+        courseName: !selectedCourseOption.value?.length
           ? errorMessages.courseId
           : undefined,
-        courseTopic: !selectedCourseTopicOption.value
+        courseTopic: !selectedCourseTopicOption.value?.length
           ? errorMessages.moduleId
           : undefined,
-        resourceTypeName: !selectedResourceTypeOption.value
+        resourceTypeName: !selectedResourceTypeOption.value?.length
           ? errorMessages.sectionId
           : undefined,
-        conceptName: !selectedConceptOption.value
+        conceptName: !selectedConceptOption.value?.length
           ? errorMessages.conceptId
           : undefined,
       };
@@ -311,18 +311,17 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         fileType: file!.type,
         fileSize: file!.size,
         checksum: checksum,
-        course: selectedCourseOption.formatted!,
-        courseTopic: selectedCourseTopicOption.formatted!,
-        resourceType: selectedResourceTypeOption.formatted!,
-        concept: selectedConceptOption.formatted!,
-        conceptId: selectedConceptOption.id!,
+        course: selectedCourseOption.formatted![0],
+        courseTopic: selectedCourseTopicOption.formatted![0],
+        resourceType: selectedResourceTypeOption.formatted![0],
+        concept: selectedConceptOption.formatted![0],
+        conceptId: selectedConceptOption.id![0],
         description:
           formattedDescription.length > 0 ? formattedDescription : null,
         contributor:
           formattedContributor.length > 0 ? formattedContributor : "Anonymous",
         uploadDate: currentDateWithoutTime!,
       });
-      // const signedURLResult = await getSignedURL()
 
       if (signedURLResult?.failure) {
         setStatusMessage("Failed" + signedURLResult?.failure);
@@ -411,12 +410,10 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   return (
     <div className={styles.formAdminWrapper}>
       <p className={styles.formAdminTitle}> Upload file </p>
-
       <form className={styles.form} onSubmit={handleSubmit}>
         {statusMessage && (
           <p className={styles.messageStyle}> {statusMessage} </p>
         )}
-
         <div>
           <label> Select file </label>
           <input
@@ -428,7 +425,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           {fileUrl && file && (
             <div>
               <iframe src={fileUrl} />
-
               <button
                 type="button"
                 onClick={() => {
@@ -440,8 +436,8 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
               </button>
             </div>
           )}
+          {errors.file && <p className="error">{errors.file}</p>}
         </div>
-        {errors.file && <p className="error">{errors.file}</p>}
 
         {/*}
         <div className="flex-col">
@@ -463,20 +459,29 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         <div>
           <label>Select a course</label>
           <MultiSelect
-            data={[
-              { value: 'stress', label: 'Stress' },
-              { value: 'dynamics', label: 'Dynamics' },
-              { value: 'strength-of-materials', label: 'Strength of Materials' },
-            ]}
-            defaultValue={[]} // No pre-selected values
-            onChange={(selected) => {
-              console.log('Selected courses:', selected); // Log the updated selections
-            }}
-            placeholder="Select one or more courses"
-            searchable
-          />
+          data={[
+            { value: 'stress', label: 'Stress' },
+            { value: 'dynamics', label: 'Dynamics' },
+            { value: 'strength-of-materials', label: 'Strength of Materials' },
+          ]}
+          value={selectedCourseOption.value || []}
+          onChange={(selected) => {
+            setSelectedCourseOption({
+              value: selected,
+              id: selected.map(s => {
+                const courseData = coursesOptionsData?.find(c => c.name === s);
+                return courseData?.id ?? 0;
+              }).filter((id): id is number => typeof id === 'number'),
+              formatted: selected.map(s => {
+                const courseData = coursesOptionsData?.find(c => c.name === s);
+                return courseData?.url ?? s;
+              })
+            });
+          }}
+          placeholder="Select one or more courses"
+          searchable
+        />
         </div>
-
 
         <div>
           <label> Select a course topic </label>
@@ -484,7 +489,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
             <SelectDropdown
               optionsList={courseTopicOptionsData}
               onOptionChange={handleCourseTopicOptionSelect}
-              selectedValue={selectedCourseTopicOption.value}
+              selectedValue={selectedCourseTopicOption.value?.[0] || null}
             />
           }
           {errors.courseTopicName && (
@@ -503,7 +508,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
               ...(resourceTypeOptionsData || [])
             ]}
             onOptionChange={handleResourceTypeOptionSelect}
-            selectedValue={selectedResourceTypeOption.value}
+            selectedValue={selectedResourceTypeOption.value?.[0] || null}
           />
           {errors.resourceTypeName && (
             <p className="error">{errors.resourceTypeName}</p>
