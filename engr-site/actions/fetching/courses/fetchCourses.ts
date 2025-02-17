@@ -18,7 +18,7 @@ export const fetchCourses = async (
   limit?: number,
 ): Promise<FetchedFormattedData> => {
   try {
-    let query = `SELECT * FROM Courses_v2`;
+    let query = `SELECT * FROM Courses_v3`;
 
     if (limit !== undefined) {
       query += ` LIMIT ${limit}`;
@@ -31,7 +31,6 @@ export const fetchCourses = async (
         (item: CourseData) =>
           lowercaseAndReplaceSpace(item.id, item.courseName),
       );
-
       return { success: formattedCourseData, failure: undefined };
     }
   } catch (error) {

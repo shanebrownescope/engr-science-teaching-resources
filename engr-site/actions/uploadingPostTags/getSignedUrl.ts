@@ -5,6 +5,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dbConnect from "@/database/dbConnector";
 import { getCurrentUser } from "@/utils/authHelpers";
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
+import { fetchFileByName } from "../fetching/files/fetchFileByName";
 
 /**
  * Adds '.pdf' extension to the given file name if it's not already present.
@@ -45,16 +46,12 @@ const maxFileSize = 1024 * 1024 * 10; //* 10MB
 let TESTUSERID = 26;
 
 type GetSignedURLProps = {
-  fileName: string;
   fileType: string;
   fileSize: number;
   checksum: string;
-  course: string;
-  courseTopic: string;
+  courses: string[];
+  courseTopics: string[];
   resourceType: string;
-  concept: string;
-  conceptId: number;
-  description: string | null;
   contributor: string;
   uploadDate: string;
 };
@@ -63,32 +60,24 @@ type GetSignedURLProps = {
  * Generates a pre-signed URL for uploading a file to S3.
  *
  * @param {Object} props - The properties of the file to be uploaded.
- * @param {string} props.fileName - The original filename of the file.
  * @param {string} props.fileType - The MIME type of the file.
  * @param {number} props.fileSize - The size of the file in bytes.
  * @param {string} props.checksum - The SHA256 checksum of the file.
- * @param {string} props.course - The course the file belongs to.
- * @param {string} props.courseTopic - The course topic the file belongs to.
+ * @param {string} props.courses - The course the file belongs to.
+ * @param {string} props.courseTopics - The course topic the file belongs to.
  * @param {string} props.resourceType - The type of resource the file represents.
- * @param {string} props.concept - The concept the file represents.
- * @param {number} props.conceptId - The ID of the concept the file represents.
- * @param {string | null} props.description - The description of the file.
  * @param {string} props.contributor - The contributor of the file.
  * @param {string} props.uploadDate - The date the file was uploaded.
  * @returns {Object} - An object containing the pre-signed URL and the ID of the inserted file.
  * @throws {Object} - An object containing an error message if there was an error inserting the file.
  */
 export const getSignedURL = async ({
-  fileName,
   fileType,
   fileSize,
   checksum,
-  course,
-  courseTopic,
+  courses,
+  courseTopics,
   resourceType,
-  concept,
-  conceptId,
-  description,
   contributor,
   uploadDate,
 }: GetSignedURLProps) => {
@@ -112,25 +101,38 @@ export const getSignedURL = async ({
 
   // Check if all required fields are present
   if (
-    !fileName ||
     !fileType ||
     !fileSize ||
     !checksum ||
-    !course ||
-    !courseTopic ||
+    !courses ||
+    courses.length == 0 ||
+    !courseTopics ||
+    courseTopics.length == 0 ||
     !resourceType ||
-    !concept ||
-    !conceptId ||
     !uploadDate
   ) {
     return { failure: "Missing required fields" };
   }
 
+  // Generate random sequence of characters for fileName
+  let fileName;
+  let fileExists;
+  const length = 16;
+
+  do {
+    // Generate a random string for the fileName
+    fileName = Math.random().toString(36).substring(2, length + 2);
+
+    // Check if the fileName already exists in the database
+    fileExists = await fetchFileByName({name: fileName});
+
+  } while (fileExists.failure)
+
   // Generate the unique file name
   const uniqueFileName = generateTimestampedKey(fileName);
 
   // Generate the file location in S3
-  const fileLocation = `courses/${course}/courseTopic/${courseTopic}/resourceType/${resourceType}/${uniqueFileName}`;
+  const fileLocation = `courses/${courses.length}/courseTopic/${courseTopics.length}/resourceType/${resourceType}/${uniqueFileName}`;
 
   // Create a PutObjectCommand to upload the file to S3
   const putObjectCommand = new PutObjectCommand({
@@ -148,14 +150,13 @@ export const getSignedURL = async ({
 
   // Insert the file metadata into the database
   const query = `
-    INSERT INTO Files_v2 (fileName, s3Url, description, uploadDate, contributor, conceptId, uploadedUserId) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    INSERT INTO Files_v3 (fileName, s3Url, uploadDate, contributor, resourceType, uploadedUserId) VALUES (?, ?, ?, ?, ?, ?)`;
   const values = [
     uniqueFileName,
     signedURL.split("?")[0],
-    description,
     uploadDate,
     contributor,
-    conceptId,
+    resourceType,
     user?.id,
   ];
 
@@ -172,6 +173,4 @@ export const getSignedURL = async ({
       return { success: { url: signedURL, fileId: fileId } };
     }
   } catch (error) {
-    return { failure: "Internal server error" };
-  }
-};
+    return { failure:
