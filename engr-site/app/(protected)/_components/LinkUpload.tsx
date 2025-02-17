@@ -10,6 +10,7 @@ import { createTagPostLink } from "@/actions/uploadingPostTags/uploadTagsAction"
 import Tags from "./tags/Tags";
 // import styles from "@/styles/test.module.css";
 import { SelectDropdown } from "@/components/mantine";
+import { MultiSelect } from "@mantine/core";
 import {
   FormattedData,
   capitalizeAndReplaceDash,
@@ -83,6 +84,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       id: null,
       formatted: null,
     });
+  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>([]);
   const [resourceTypeOptionsData, setResourceTypeOptionsData] =
     useState<any[]>();
   const [selectedResourceTypeOption, setSelectedResourceTypeOption] =
@@ -294,11 +296,10 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
       const linkResult = await uploadLink({
         linkUrl: sanitizedUrl,
+        linkName: selectedConceptOption.formatted!,
         conceptId: selectedConceptOption.id!,
-        description:
-          formattedDescription.length > 0 ? formattedDescription : null,
-        contributor:
-          formattedContributor.length > 0 ? formattedContributor : "Anonymous",
+        description: formattedDescription.length > 0 ? formattedDescription : null,
+        contributor: formattedContributor.length > 0 ? formattedContributor : "Anonymous",
         uploadDate: currentDateWithoutTime!,
       });
       // const signedURLResult = await getSignedURL()
@@ -404,7 +405,13 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         <div>
           <label> Select a resource type </label>
           <SelectDropdown
-            optionsList={resourceTypeOptionsData}
+            optionsList={[
+              { value: 'exercise', label: 'Exercise' },
+              { value: 'notes', label: 'Notes' },
+              { value: 'video', label: 'Video' },
+              { value: 'interactive-content', label: 'Interactive Content' },
+              ...(resourceTypeOptionsData || [])
+            ]}
             onOptionChange={handleResourceTypeOptionSelect}
             selectedValue={selectedResourceTypeOption.value}
           />
