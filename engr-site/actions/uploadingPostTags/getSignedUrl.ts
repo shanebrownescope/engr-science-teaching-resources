@@ -173,4 +173,6 @@ export const getSignedURL = async ({
       return { success: { url: signedURL, fileId: fileId } };
     }
   } catch (error) {
-    return { failure:
+    return { failure: "Internal server error" };
+  }
+};
