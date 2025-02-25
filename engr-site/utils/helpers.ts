@@ -7,7 +7,7 @@ import {
   LinkData,
   FetchedFile,
   FetchedLink,
-} from "./types";
+} from "./types_v2";
 
 /**
  *
