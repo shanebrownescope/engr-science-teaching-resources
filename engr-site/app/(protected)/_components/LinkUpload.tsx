@@ -323,7 +323,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           .map((tag) => capitalizeWords(tag.trim())); // Format the remaining tags
 
         if (trimmedTags && trimmedTags.length > 0) {
-          const tagsResult = await createTagPostLink(trimmedTags, linkId);
+          const tagsResult = await createTagPostFile(trimmedTags, linkId);
 
           if (tagsResult?.failure) {
             setStatusMessage("Failed in tag insertion" + tagsResult.failure);
