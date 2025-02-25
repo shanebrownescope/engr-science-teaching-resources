@@ -1,7 +1,7 @@
 "use client";
 import { useState, ChangeEvent } from "react";
 
-import { createTagPostLink } from "@/actions/uploadingPostTags/uploadTagsAction";
+import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
 
 // import { createTagPost, getSignedURL } from "@/config/action";
 // import { DropzoneButton, ButtonProgress } from "../../components/mantine";
