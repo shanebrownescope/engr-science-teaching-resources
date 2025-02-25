@@ -16,19 +16,27 @@ const UploadFile = () => {
     // notFound()
   }
 
-  const [coursesOptionsData, setCoursesOptionsData] = useState<FormattedData[] | undefined>();
+  const [coursesOptionsData, setCoursesOptionsData] = useState<any[]>();
   useEffect(() => {
     const fetchAllCourses = async () => {
-      const fetchedCourses = await fetchCourses();
-      if (fetchedCourses.success) {
-        console.log("success: ", fetchedCourses.success);
-        setCoursesOptionsData(fetchedCourses.success);
+      const coursesOptionsData = await fetchCourses();
+      console.log(coursesOptionsData.success);
+      if (coursesOptionsData.success) {
+        console.log("success: ", coursesOptionsData.success);
+        // const formattedData = coursesOptionsData?.success?.map((course: FormattedData) => ({
+        //   value: course.id.toString(),
+        //   url: course.url,
+        //   label: course.name,
+        // }));
+        // setCoursesOptionsData(formattedData);
+        setCoursesOptionsData(coursesOptionsData.success);
       }
     };
 
     fetchAllCourses();
   }, []);
 
+  console.log("coursesOptionsData: ", coursesOptionsData);
   return (
     <div>
       <FileUpload coursesOptionsData={coursesOptionsData} />

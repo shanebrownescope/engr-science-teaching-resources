@@ -14,13 +14,14 @@ const UploadLink = () => {
     // notFound()
   }
 
-  const [coursesOptionsData, setCoursesOptionsData] = useState<FormattedData[] | undefined>();
+  const [coursesOptionsData, setCoursesOptionsData] =
+    useState<FormattedData[]>();
   useEffect(() => {
     const fetchAllCourses = async () => {
-      const fetchedCourses = await fetchCourses();
-      if (fetchedCourses.success) {
-        console.log("success: ", fetchedCourses.success);
-        setCoursesOptionsData(fetchedCourses.success);
+      const coursesOptionsData = await fetchCourses();
+      console.log(coursesOptionsData.success);
+      if (coursesOptionsData.success) {
+        setCoursesOptionsData(coursesOptionsData.success);
       }
     };
 
