@@ -131,9 +131,21 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     const results = await fetchResourceTypesByCourseTopicId(id);
     const mergedResourceTypes = [
       ...(results.success || []),
-      { id: 9991, name: 'Problems/Exercises', url: 'problems-exercises' },
-      { id: 9992, name: 'Course Notes', url: 'course-notes' },
-      { id: 9993, name: 'Video/Interactive Content', url: 'video-content' }
+      { 
+        id: 9991, 
+        name: 'Problems/Exercises',
+        url: 'problems-exercises'
+      },
+      {
+        id: 9992,
+        name: 'Course Notes', 
+        url: 'course-notes'
+      },
+      {
+        id: 9993,
+        name: 'Video/Interactive Content',
+        url: 'video-content'
+      }
     ];
 
     setResourceTypeOptionsData(mergedResourceTypes);
