@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ComboboxItem, MultiSelect, Select } from "@mantine/core";
 import { YearSlider } from "../../mantine";
 import styles from "@/components/custom/search/SearchFilterMenu.module.css";
 import { AllFilesAndLinksDataFormatted } from "@/utils/types";
 import ResourcesListPaginated from "./ResourcesListPaginated";
+import { fetchAllTags } from "@/actions/fetching/tags/fetchTagsByTagId";
 
 type SearchFilterMenuProps = {
   data: AllFilesAndLinksDataFormatted[];
@@ -16,8 +17,29 @@ type SearchFilterMenuProps = {
  * @returns {JSX.Element} - The rendered SearchFilterMenu component.
  */
 export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
-  // State to keep track of sorting option
+  // State to keep track of sorting option and tags
   const [sortBy, setSortBy] = useState<string | null>("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [isLoadingTags, setIsLoadingTags] = useState(true);
+
+  // Fetch tags when component mounts
+  useEffect(() => {
+    const loadTags = async () => {
+      try {
+        const response = await fetchAllTags();
+        if (response.success) {
+          const tagNames = response.success.map(tag => tag.name);
+          setTags(tagNames);
+        }
+      } catch (error) {
+        console.error("Error loading tags:", error);
+      } finally {
+        setIsLoadingTags(false);
+      }
+    };
+
+    loadTags();
+  }, []);
 
   // Function to handle sorting change
   const handleSortChange = (value: string | null) => {
@@ -50,8 +72,9 @@ export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
         <MultiSelect
           label="Tags"
           placeholder="Pick value"
-          data={["Science", "Math", "History", "Literature"]}
+          data={tags}
           searchable
+          loading={isLoadingTags}
         />
         <MultiSelect
           label="Concept"
