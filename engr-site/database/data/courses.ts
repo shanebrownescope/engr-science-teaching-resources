@@ -11,7 +11,7 @@ export const getCourseByName = async (
   console.log(name);
   try {
     const selectQuery = `
-      SELECT * FROM Courses_v3 WHERE courseName LIKE ?`;
+      SELECT * FROM Courses_v2 WHERE courseName LIKE ?`;
 
     const { results, error } = await dbConnect(selectQuery, [name]);
 
@@ -30,7 +30,7 @@ export const getCourseByName = async (
 export const getCourseById = async (id: string): Promise<CourseData | null> => {
   try {
     const selectQuery = `
-      SELECT * FROM Courses_v3 WHERE id = ?`;
+      SELECT * FROM Courses_v2 WHERE id = ?`;
 
     const { results: course, error } = await dbConnect(selectQuery, [id]);
 
@@ -47,7 +47,7 @@ export const getCourseById = async (id: string): Promise<CourseData | null> => {
 export const getAllCourses = async (): Promise<CourseData[] | null> => {
   try {
     const selectQuery = `
-      SELECT * FROM Courses_v3`;
+      SELECT * FROM Courses_v2`;
 
     const { results, error } = await dbConnect(selectQuery);
 

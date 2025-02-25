@@ -18,7 +18,7 @@ export const fetchCourses = async (
   limit?: number,
 ): Promise<FetchedFormattedData> => {
   try {
-    let query = `SELECT * FROM Courses_v3`;
+    let query = `SELECT * FROM Courses_v2`;
 
     if (limit !== undefined) {
       query += ` LIMIT ${limit}`;
