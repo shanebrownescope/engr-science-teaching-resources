@@ -71,8 +71,8 @@ export const createTagPostFile = async (tags: string[], fileId: number) => {
       })
     );
 
-    // Remove null values (failed inserts)
-    const validTags = tagResponses.filter(Boolean);
+    // Remove null values (failed inserts) and explicitly define the type
+    const validTags = tagResponses.filter((tag): tag is { name: string; id: any } => tag !== null);
 
     if (validTags.length === 0) {
       return { failure: "No valid tags were processed." };
@@ -82,7 +82,7 @@ export const createTagPostFile = async (tags: string[], fileId: number) => {
     return {
       success: true,
       tags: validTags,
-      message: `Successfully processed tags: ${validTags.map(t =>  t.name).join(', ')}`,
+      message: `Successfully processed tags: ${validTags.map(t => t.name).join(', ')}`,
     };
   } catch (error) {
     console.error("Error processing tags:", error);
