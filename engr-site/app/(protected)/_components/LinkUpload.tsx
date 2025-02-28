@@ -77,23 +77,22 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     id: [],
     formatted: []
   });
-  const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>();
+  const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>([]);
   const [selectedCourseTopicOption, setSelectedCourseTopicOption] =
     useState<Options>({
       value: [],
       id: [],
       formatted: []
     });
-  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>([]);
   const [resourceTypeOptionsData, setResourceTypeOptionsData] =
-    useState<any[]>();
+    useState<any[]>([]);
   const [selectedResourceTypeOption, setSelectedResourceTypeOption] =
     useState<Options>({
       value: [],
       id: [],
       formatted: []
     });
-  const [conceptOptionsData, setConceptOptionData] = useState<any[]>();
+  const [conceptOptionsData, setConceptOptionData] = useState<any[]>([]);
   const [selectedConceptOption, setSelectedConceptOption] = useState<Options>({
     value: [],
     id: [],
@@ -118,89 +117,152 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
   console.log(selectedCourseOption);
 
-  const handleCourseOptionSelect = async (
-    name: string,
-    id: number,
-    formatted: string,
-  ) => {
+  const handleCourseChange = async (selected: string[]) => {
+    // Reset dependent fields
     setSelectedCourseTopicOption({ value: [], id: [], formatted: [] });
     setSelectedResourceTypeOption({ value: [], id: [], formatted: [] });
+    setCourseTopicOptionsData([]);
     setResourceTypeOptionsData([]);
     setSelectedConceptOption({ value: [], id: [], formatted: [] });
     setConceptOptionData([]);
 
-    setSelectedCourseOption({ value: [name], id: [id], formatted: [formatted] });
+    if (selected.length > 0) {
+      // Map the selected course values to their corresponding data
+      const selectedIds = selected.map(s => {
+        const courseData = coursesOptionsData?.find(c => c.name === s);
+        return courseData?.id ?? 0;
+      }).filter((id): id is number => typeof id === 'number');
 
-    const results = await fetchCourseTopicsByCourseId(id);
+      const selectedFormatted = selected.map(s => {
+        const courseData = coursesOptionsData?.find(c => c.name === s);
+        return courseData?.url ?? s;
+      });
 
-    setCourseTopicOptionsData(results.success || []);
+      setSelectedCourseOption({
+        value: selected,
+        id: selectedIds,
+        formatted: selectedFormatted
+      });
+
+      // If we have a course id, fetch the course topics
+      if (selectedIds.length > 0) {
+        const results = await fetchCourseTopicsByCourseId(selectedIds[0]);
+        setCourseTopicOptionsData(results.success || []);
+      }
+    } else {
+      setSelectedCourseOption({
+        value: [],
+        id: [],
+        formatted: []
+      });
+    }
   };
 
-  const handleCourseTopicOptionSelect = async (
-    value: string,
-    id: number,
-    formatted: string,
-  ) => {
+  const handleCourseTopicChange = async (selected: string[]) => {
+    // Reset dependent fields
     setSelectedResourceTypeOption({ value: [], id: [], formatted: [] });
     setResourceTypeOptionsData([]);
     setSelectedConceptOption({ value: [], id: [], formatted: [] });
     setConceptOptionData([]);
 
-    setSelectedCourseTopicOption({
-      value: [value],
-      id: [id],
-      formatted: [formatted]
-    });
+    if (selected.length > 0) {
+      // Convert from the MultiSelect format to our Options format
+      const selectedTopicData = courseTopicOptionsData.find(
+        topic => topic.name === selected[0]
+      );
 
-    const results = await fetchResourceTypesByCourseTopicId(id);
+      if (selectedTopicData) {
+        setSelectedCourseTopicOption({
+          value: selected,
+          id: [selectedTopicData.id],
+          formatted: [selectedTopicData.url]
+        });
 
-    const mergedResourceTypes = [
-      ...(results.success || []),
-      { 
-        id: 9991, 
-        name: 'Problems/Exercises',
-        url: 'problems-exercises'
-      },
-      {
-        id: 9992,
-        name: 'Course Notes', 
-        url: 'course-notes'
-      },
-      {
-        id: 9993,
-        name: 'Video/Interactive Content',
-        url: 'video-content'
+        // Fetch resource types for the selected course topic
+        const results = await fetchResourceTypesByCourseTopicId(selectedTopicData.id);
+
+        const mergedResourceTypes = [
+          ...(results.success || []),
+          { 
+            id: 9991, 
+            name: 'Problems/Exercises',
+            url: 'problems-exercises'
+          },
+          {
+            id: 9992,
+            name: 'Course Notes', 
+            url: 'course-notes'
+          },
+          {
+            id: 9993,
+            name: 'Video/Interactive Content',
+            url: 'video-content'
+          }
+        ];
+
+        setResourceTypeOptionsData(mergedResourceTypes);
       }
-    ];
-
-    setResourceTypeOptionsData(mergedResourceTypes);
+    } else {
+      setSelectedCourseTopicOption({
+        value: [],
+        id: [],
+        formatted: []
+      });
+    }
   };
 
-  const handleResourceTypeOptionSelect = async (
-    value: string,
-    id: number,
-    formatted: string,
-  ) => {
+  const handleResourceTypeChange = async (selected: string[]) => {
+    // Reset concept data
     setSelectedConceptOption({ value: [], id: [], formatted: [] });
     setConceptOptionData([]);
 
-    setSelectedResourceTypeOption({
-      value: [value],
-      id: [id],
-      formatted: [formatted]
-    });
+    if (selected.length > 0) {
+      // Convert from the MultiSelect format to our Options format
+      const selectedTypeData = resourceTypeOptionsData.find(
+        type => type.name === selected[0]
+      );
 
-    const results = await fetchConceptsByResourceTypeId(id);
+      if (selectedTypeData) {
+        setSelectedResourceTypeOption({
+          value: selected,
+          id: [selectedTypeData.id],
+          formatted: [selectedTypeData.url]
+        });
 
-    setConceptOptionData(results.success);
+        // Fetch concepts for the selected resource type
+        const results = await fetchConceptsByResourceTypeId(selectedTypeData.id);
+        setConceptOptionData(results.success || []);
+      }
+    } else {
+      setSelectedResourceTypeOption({
+        value: [],
+        id: [],
+        formatted: []
+      });
+    }
   };
 
-  const handleConceptOptionSelect = (
-    value: string,
-    id: number,
-    formatted: string,
-  ) => {
-    setSelectedConceptOption({ value: [value], id: [id], formatted: [formatted] });
+  const handleConceptChange = (selected: string[]) => {
+    if (selected.length > 0) {
+      // Convert from the MultiSelect format to our Options format
+      const selectedConceptData = conceptOptionsData.find(
+        concept => concept.name === selected[0]
+      );
+
+      if (selectedConceptData) {
+        setSelectedConceptOption({
+          value: selected,
+          id: [selectedConceptData.id],
+          formatted: [selectedConceptData.url]
+        });
+      }
+    } else {
+      setSelectedConceptOption({
+        value: [],
+        id: [],
+        formatted: []
+      });
+    }
   };
 
   const handleAddTag = () => {
@@ -400,61 +462,68 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         <div>
           <label>Select a course</label>
           <MultiSelect
-          data={[
-            { value: 'stress', label: 'Stress' },
-            { value: 'dynamics', label: 'Dynamics' },
-            { value: 'strength-of-materials', label: 'Strength of Materials' },
-          ]}
-          value={selectedCourseOption.value || []}
-          onChange={(selected) => {
-            setSelectedCourseOption({
-              value: selected,
-              id: selected.map(s => {
-                const courseData = coursesOptionsData?.find(c => c.name === s);
-                return courseData?.id ?? 0;
-              }).filter((id): id is number => typeof id === 'number'),
-              formatted: selected.map(s => {
-                const courseData = coursesOptionsData?.find(c => c.name === s);
-                return courseData?.url ?? s;
-              })
-            });
-          }}
-          placeholder="Select one or more courses"
-          searchable
-        />
-        {errors.courseName && <p className="error">{errors.courseName}</p>}
+            data={coursesOptionsData?.map(course => ({ 
+              value: course.name, 
+              label: course.name 
+            })) || []}
+            value={selectedCourseOption.value || []}
+            onChange={handleCourseChange}
+            placeholder="Select one or more courses"
+            searchable
+          />
+          {errors.courseName && <p className="error">{errors.courseName}</p>}
         </div>
 
         <div>
-          <label> Select a course topic </label>
-          {
-            <SelectDropdown
-              optionsList={courseTopicOptionsData}
-              onOptionChange={handleCourseTopicOptionSelect}
-              selectedValue={selectedCourseTopicOption.value?.[0] || null}
-            />
-          }
+          <label>Select a course topic</label>
+          <MultiSelect
+            data={courseTopicOptionsData?.map(topic => ({ 
+              value: topic.name, 
+              label: topic.name 
+            })) || []}
+            value={selectedCourseTopicOption.value || []}
+            onChange={handleCourseTopicChange}
+            placeholder="Select a course topic"
+            searchable
+            disabled={!selectedCourseOption.value?.length}
+          />
           {errors.courseTopicName && (
             <p className="error">{errors.courseTopicName}</p>
           )}
         </div>
 
         <div>
-          <label> Select a resource type </label>
-          <SelectDropdown
-            optionsList={[
-              { value: 'exercise', label: 'Exercise' },
-              { value: 'notes', label: 'Notes' },
-              { value: 'video', label: 'Video' },
-              { value: 'interactive-content', label: 'Interactive Content' },
-              ...(resourceTypeOptionsData || [])
-            ]}
-            onOptionChange={handleResourceTypeOptionSelect}
-            selectedValue={selectedResourceTypeOption.value?.[0] || null}
+          <label>Select a resource type</label>
+          <MultiSelect
+            data={resourceTypeOptionsData?.map(type => ({
+              value: type.name,
+              label: type.name
+            })) || []}
+            value={selectedResourceTypeOption.value || []}
+            onChange={handleResourceTypeChange}
+            placeholder="Select a resource type"
+            searchable
+            disabled={!selectedCourseTopicOption.value?.length}
           />
           {errors.resourceTypeName && (
             <p className="error">{errors.resourceTypeName}</p>
           )}
+        </div>
+
+        <div>
+          <label>Select a concept</label>
+          <MultiSelect
+            data={conceptOptionsData?.map(concept => ({
+              value: concept.name,
+              label: concept.name
+            })) || []}
+            value={selectedConceptOption.value || []}
+            onChange={handleConceptChange}
+            placeholder="Select a concept"
+            searchable
+            disabled={!selectedResourceTypeOption.value?.length}
+          />
+          {errors.conceptName && <p className="error">{errors.conceptName}</p>}
         </div>
 
         <div className="flex-col">
@@ -486,16 +555,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         </button>
         {errors.root && <FormError message={errors.root} />}
       </form>
-
-      {/* <DropzoneButton /> */}
-      {/* <ButtonProgress /> */}
-      {/* <TagsInput
-        style={{ width: "25%", marginLeft: "10px" }}
-        label="Press Enter to submit a tag"
-        placeholder="Enter tag"
-      /> */}
-      {/* {error && <div> {error} </div>} */}
-      {/* {testDbResult && <div> {testDbResult} </div>} */}
     </div>
   );
 };
