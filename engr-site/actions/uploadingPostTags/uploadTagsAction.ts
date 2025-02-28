@@ -3,154 +3,89 @@
 import dbConnect from "@/database/dbConnector";
 import { getCurrentUser } from "@/utils/authHelpers";
 
-/**
- * Returns the TagId of a given tagName. If the tagName exists in the database,
- * it returns the existing TagId. Otherwise, it inserts the tagName into the database
- * and returns the new TagId.
- *
- * @param {string} tagName - The name of the tag.
- * @returns {Object} - An object with a 'tagId' property representing the TagId.
- * If the operation fails, the object will have a 'failure' property instead.
- */
 const getTagId = async (tagName: string) => {
-  const query = `
-    SELECT * FROM Tags_v2 WHERE tagName = ?`;
+  console.log("Processing tag:", tagName);
 
-  const { results: selectResults, error } = await dbConnect(query, [tagName]);
+  try {
+    // First check if tag exists
+    const checkQuery = `SELECT id FROM Tags_v3 WHERE tagName = ?`;
+    const { results: existingTags, error: selectError } = await dbConnect(checkQuery, [tagName]);
 
-  if (error) {
-    return { failure: "error in getting tag name in Tag" };
+    if (selectError) {
+      console.error("Error checking existing tag:", selectError);
+      return { failure: "Error checking existing tag" };
+    }
+
+    // Check if we got any results
+    if (existingTags[0] && existingTags[0].length > 0) {
+      console.log("Found existing tag:", existingTags[0][0]);
+      return { tagId: existingTags[0][0].id };
+    }
+
+    // If we get here, tag doesn't exist, so create it
+    const insertQuery = `INSERT INTO Tags_v3 (tagName) VALUES (?)`;
+    const { results: insertResult, error: insertError } = await dbConnect(insertQuery, [tagName]);
+
+    if (insertError) {
+      console.error("Error creating new tag:", insertError);
+      return { failure: "Error creating new tag" };
+    }
+
+    if (!insertResult[0] || !insertResult[0].insertId) {
+      console.error("Insert succeeded but no ID returned");
+      return { failure: "Failed to get new tag ID" };
+    }
+
+    console.log("Created new tag with ID:", insertResult[0].insertId);
+    return { tagId: insertResult[0].insertId };
+
+  } catch (error) {
+    console.error("Unexpected error in getTagId:", error);
+    return { failure: "Unexpected error processing tag" };
   }
-
-  // If the tagName exists in the database, return the existing TagId
-  if (selectResults[0].length > 0) {
-    console.log("tag exists", selectResults[0][0]);
-    return { tagId: selectResults[0][0].id };
-  }
-
-  // If the tagName doesn't exist, insert it into the database and return the new TagId
-  const queryInsert = `
-    INSERT INTO Tags_v2 (tagName) VALUES (?)`;
-  const { results: insertResult, error: insertError } = await dbConnect(
-    queryInsert,
-    [tagName],
-  );
-
-  if (insertError) {
-    return { failure: "error inserting tag name in Tag" };
-  }
-
-  return { tagId: insertResult[0].insertId };
 };
 
-/**
- * Creates tags for a file in the database.
- * @param {string[]} tags - The names of the tags.
- * @param {number} fileId - The id of the file.
- * @returns {Object} - An object with a 'success' property if the operation was successful,
- *                    or a 'failure' property if an error occurred.
- */
 export const createTagPostFile = async (tags: string[], fileId: number) => {
+  console.log("Processing tags:", tags);
+
   const user = await getCurrentUser();
-  console.log("parameters: ", tags, fileId, user?.id);
-  if (user?.role && user?.role !== "admin") {
+  if (!user?.id || user?.role !== "admin") {
     return { failure: "Not authenticated" };
   }
 
-  if (fileId) {
-    const queryFileExists = `
-      SELECT * FROM Files_v2 WHERE id = ? AND uploadedUserId = ?`;
-    const valuesFileExists = [fileId, user?.id];
-    try {
-      const { results: fileExistsResults, error } = await dbConnect(
-        queryFileExists,
-        valuesFileExists,
-      );
+  try {
+    const processedTags = [];
 
-      if (error) {
-        return { failure: "error in checking file is in Files" };
-      }
+    // Use Promise.all to process tags in parallel
+    const tagResponses = await Promise.all(
+      tags.map(async (tagName) => {
+        if (!tagName.trim()) return null;
 
-      if (fileExistsResults[0][0].id != fileId) {
-        return { failure: "Media not found createTagPost" };
-      }
-
-      //* insert tags
-      for (const tagName of tags) {
-        // Get the tagId for the tagName
-        const tagResponse = await getTagId(tagName);
-
+        const tagResponse = await getTagId(tagName.trim());
         if (tagResponse.failure) {
-          return { failure: "failed in getTagId() " };
+          console.error(`Failed to process tag "${tagName}":`, tagResponse.failure);
+          return null;
         }
+        
+        return { name: tagName, id: tagResponse.tagId };
+      })
+    );
 
-        const tagId = tagResponse.tagId;
+    // Remove null values (failed inserts) and explicitly define the type
+    const validTags = tagResponses.filter((tag): tag is { name: string; id: any } => tag !== null);
 
-        // Linking tags to the file
-        const queryInsert = `
-          INSERT INTO FileTags_v2 (fileId, tagId) VALUES (?, ?)`;
-        const valuesInsert = [fileId, tagId];
-        const { results: fileTagsResult, error: insertError } = await dbConnect(
-          queryInsert,
-          valuesInsert,
-        );
-      }
-      return { success: "Tags and FileTags inserted successfully" };
-    } catch (error) {
-      return { failure: "Internal server error in createTagPost()" };
+    if (validTags.length === 0) {
+      return { failure: "No valid tags were processed." };
     }
-  }
-};
 
-//* inserts tags for file
-export const createTagPostLink = async (tags: string[], linkId: number) => {
-  //* first check if user is logged before request
-  const user = await getCurrentUser();
-  console.log("parameters: ", tags, linkId, user?.id);
-  if (user?.role && user?.role !== "admin") {
-    return { failure: "Not authenticated" };
-  }
-
-  //* check if fileId is created in db
-  if (linkId) {
-    const queryLinkExists = `
-      SELECT * FROM Links_v2 WHERE id = ? AND uploadedUserId = ?`;
-    const valuesFileExists = [linkId, user?.id];
-    try {
-      const { results: linkExistsResults, error } = await dbConnect(
-        queryLinkExists,
-        valuesFileExists,
-      );
-
-      if (error) {
-        return { failure: "error in checking file is in Files" };
-      }
-
-      if (linkExistsResults[0][0].id != linkId) {
-        console.error("Link not found");
-        return { failure: "Link not found createTagPostLink" };
-      }
-
-      //* insert tags
-      for (const tagName of tags) {
-        const tagResponse = await getTagId(tagName);
-
-        if (tagResponse.failure) {
-          return { failure: "failed in getTagId() " };
-        }
-
-        const tagId = tagResponse.tagId;
-
-        // Linking tags to the file
-        const queryInsert = `
-          INSERT INTO LinkTags_v2 (linkId, tagId) VALUES (?, ?)`;
-        const valuesInsert = [linkId, tagId];
-        await dbConnect(queryInsert, valuesInsert);
-      }
-      return { success: "Tags and LinkTags inserted successful" };
-    } catch (error) {
-      console.error("Internal server error in createTagPost()");
-      return { failure: "Internal server error in createTagPost()" };
-    }
+    console.log("Successfully processed tags:", validTags);
+    return {
+      success: true,
+      tags: validTags,
+      message: `Successfully processed tags: ${validTags.map((t: {name: string, id: any}) => t.name).join(', ')}`,
+    };
+  } catch (error) {
+    console.error("Error processing tags:", error);
+    return { failure: "Internal server error while processing tags" };
   }
 };

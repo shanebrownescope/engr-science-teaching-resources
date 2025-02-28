@@ -1,7 +1,7 @@
 "use client";
 import { useState, ChangeEvent } from "react";
 
-import { createTagPostLink } from "@/actions/uploadingPostTags/uploadTagsAction";
+import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
 
 // import { createTagPost, getSignedURL } from "@/config/action";
 // import { DropzoneButton, ButtonProgress } from "../../components/mantine";
@@ -185,7 +185,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   };
 
   const handleAddTag = () => {
-    if (tags.length < 5) {
+    if (tags.length < 3) {
       setTags([...tags, ""]); // Add an empty tag to the array
     }
   };
@@ -239,10 +239,10 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
             ? errorMessages.courseId
             : undefined,
           courseTopicName: !selectedCourseTopicOption.value
-            ? errorMessages.moduleId
+            ? errorMessages.courseTopicId
             : undefined,
           resourceTypeName: !selectedResourceTypeOption.value
-            ? errorMessages.sectionId
+            ? errorMessages.resourceTypeId
             : undefined,
           conceptName: !selectedConceptOption.value
             ? errorMessages.conceptId
@@ -250,6 +250,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         };
         setErrors(errors);
         setStatusMessage("validation failed");
+        setLoading(false);
         return;
       }
 
@@ -257,7 +258,8 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       const pattern = validUrlPattern;
       if (!pattern.test(linkUrl)) {
         setStatusMessage("Invalid url");
-        setErrors({ ...errors, linkUrl: errors.linkUrl });
+        setErrors({ ...errors, linkUrl: "Invalid URL format" });
+        setLoading(false);
         return;
       }
 
@@ -289,8 +291,9 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         sanitizedUrl.includes(">")
       ) {
         setStatusMessage(
-          "URL was altered during sanitization. Not storing in database",
+          "URL was altered during sanitization. Not storing in database"
         );
+        setLoading(false);
         return;
       }
 
@@ -302,7 +305,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         contributor: formattedContributor.length > 0 ? formattedContributor : "Anonymous",
         uploadDate: currentDateWithoutTime!,
       });
-      // const signedURLResult = await getSignedURL()
 
       if (linkResult?.failure) {
         setStatusMessage("Failed" + linkResult?.failure);
@@ -323,7 +325,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           .map((tag) => capitalizeWords(tag.trim())); // Format the remaining tags
 
         if (trimmedTags && trimmedTags.length > 0) {
-          const tagsResult = await createTagPostLink(trimmedTags, linkId);
+          const tagsResult = await createTagPostFile(trimmedTags, linkId);
 
           if (tagsResult?.failure) {
             setStatusMessage("Failed in tag insertion" + tagsResult.failure);
@@ -351,7 +353,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
   console.log(
     selectedCourseOption.formatted,
-    selectedCourseOption.formatted,
+    selectedCourseTopicOption.formatted,
     selectedResourceTypeOption.formatted,
   );
 
@@ -420,6 +422,26 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           )}
         </div>
 
+        <div>
+          <label> Select a concept </label>
+          <SelectDropdown
+            optionsList={conceptOptionsData}
+            onOptionChange={handleConceptOptionSelect}
+            selectedValue={selectedConceptOption.value}
+          />
+          {errors.conceptName && <p className="error">{errors.conceptName}</p>}
+        </div>
+
+        <div className="flex-col">
+          <label> Add description </label>
+          <textarea
+            name="description"
+            value={description}
+            disabled={loading}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+
         <div className="flex-col">
           <label> Add contributor </label>
           <input
@@ -443,22 +465,11 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           className={styles.formButton}
           disabled={loading}
           type="submit"
-          // disable={linkUrl != undefined ? true : false}
         >
-          Upload
+          {loading ? "Uploading..." : "Upload"}
         </button>
         {errors.root && <FormError message={errors.root} />}
       </form>
-
-      {/* <DropzoneButton /> */}
-      {/* <ButtonProgress /> */}
-      {/* <TagsInput
-        style={{ width: "25%", marginLeft: "10px" }}
-        label="Press Enter to submit a tag"
-        placeholder="Enter tag"
-      /> */}
-      {/* {error && <div> {error} </div>} */}
-      {/* {testDbResult && <div> {testDbResult} </div>} */}
     </div>
   );
 };
