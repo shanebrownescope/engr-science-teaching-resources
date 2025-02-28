@@ -82,7 +82,7 @@ export const createTagPostFile = async (tags: string[], fileId: number) => {
     return {
       success: true,
       tags: validTags,
-      message: `Successfully processed tags: ${validTags.map(t => t.name).join(', ')}`,
+      message: `Successfully processed tags: ${validTags.map((t: {name: string, id: any}) => t.name).join(', ')}`,
     };
   } catch (error) {
     console.error("Error processing tags:", error);

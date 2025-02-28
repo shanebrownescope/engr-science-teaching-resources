@@ -2,6 +2,7 @@
 import { useState, ChangeEvent } from "react";
 
 import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
+export const createTagPostLink = createTagPostFile;
 
 // import { createTagPost, getSignedURL } from "@/config/action";
 // import { DropzoneButton, ButtonProgress } from "../../components/mantine";
@@ -323,7 +324,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           .map((tag) => capitalizeWords(tag.trim())); // Format the remaining tags
 
         if (trimmedTags && trimmedTags.length > 0) {
-          const tagsResult = await createTagPostFile(trimmedTags, linkId);
+          const tagsResult = await createTagPostLink(trimmedTags, linkId);
 
           if (tagsResult?.failure) {
             setStatusMessage("Failed in tag insertion" + tagsResult.failure);
