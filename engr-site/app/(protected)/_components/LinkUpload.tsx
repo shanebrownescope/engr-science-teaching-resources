@@ -84,6 +84,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       id: [],
       formatted: []
     });
+  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>([]);
   const [resourceTypeOptionsData, setResourceTypeOptionsData] =
     useState<any[]>([]);
   const [selectedResourceTypeOption, setSelectedResourceTypeOption] =
@@ -555,6 +556,16 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         </button>
         {errors.root && <FormError message={errors.root} />}
       </form>
+
+      {/* <DropzoneButton /> */}
+      {/* <ButtonProgress /> */}
+      {/* <TagsInput
+        style={{ width: "25%", marginLeft: "10px" }}
+        label="Press Enter to submit a tag"
+        placeholder="Enter tag"
+      /> */}
+      {/* {error && <div> {error} </div>} */}
+      {/* {testDbResult && <div> {testDbResult} </div>} */}
     </div>
   );
 };
