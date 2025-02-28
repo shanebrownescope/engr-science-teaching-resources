@@ -89,3 +89,60 @@ export const createTagPostFile = async (tags: string[], fileId: number) => {
     return { failure: "Internal server error while processing tags" };
   }
 };
+
+export const createTagPostLink = async (tags: string[], linkId: number) => {
+  console.log("Processing tags for link:", tags);
+
+  const user = await getCurrentUser();
+  if (!user?.id || user?.role !== "admin") {
+    return { failure: "Not authenticated" };
+  }
+
+  try {
+    const processedTags = [];
+
+    // Use Promise.all to process tags in parallel
+    const tagResponses = await Promise.all(
+      tags.map(async (tagName) => {
+        if (!tagName.trim()) return null;
+
+        const tagResponse = await getTagId(tagName.trim());
+        if (tagResponse.failure) {
+          console.error(`Failed to process tag "${tagName}":`, tagResponse.failure);
+          return null;
+        }
+        
+        // Associate tag with link in LinkTags table
+        const linkTagQuery = `INSERT INTO LinkTags_v3 (linkId, tagId) VALUES (?, ?)`;
+        const { results: linkTagResult, error: linkTagError } = await dbConnect(linkTagQuery, [
+          linkId,
+          tagResponse.tagId
+        ]);
+
+        if (linkTagError) {
+          console.error(`Error associating tag "${tagName}" with link:`, linkTagError);
+          return null;
+        }
+
+        return { name: tagName, id: tagResponse.tagId };
+      })
+    );
+
+    // Remove null values (failed inserts) and explicitly define the type
+    const validTags = tagResponses.filter((tag): tag is { name: string; id: any } => tag !== null);
+
+    if (validTags.length === 0) {
+      return { failure: "No valid tags were associated with the link." };
+    }
+
+    console.log("Successfully processed tags for link:", validTags);
+    return {
+      success: true,
+      tags: validTags,
+      message: `Successfully associated tags with link: ${validTags.map((t: {name: string, id: any}) => t.name).join(', ')}`,
+    };
+  } catch (error) {
+    console.error("Error processing link tags:", error);
+    return { failure: "Internal server error while processing link tags" };
+  }
+};
