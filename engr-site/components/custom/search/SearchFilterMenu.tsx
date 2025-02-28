@@ -70,11 +70,11 @@ export const SearchFilterMenu = ({ data }: SearchFilterMenuProps) => {
     <div>
       <div className={styles.filterMenu}>
         <MultiSelect
-          label="Tags"
-          placeholder="Pick value"
-          data={tags}
-          searchable
-          loading={isLoadingTags}
+        label="Tags"
+        placeholder="Pick value"
+        data={tags}
+        searchable
+        {...({ loading: isLoadingTags } as any)}
         />
         <MultiSelect
           label="Concept"
