@@ -8,12 +8,12 @@ import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { sanitizeUrl, validUrlPattern } from "@/utils/helpers";
 
 type UploadLinkProps = {
+  linkName: string;
   linkUrl: string;
+  conceptId: number;
+  description: string | null;
   contributor: string;
   uploadDate: string;
-  courses: string[];
-  courseTopics: string[];
-  resourceType: string;
 };
 
 /**
@@ -22,12 +22,12 @@ type UploadLinkProps = {
  * @returns {Promise<{success: {linkId: number}} | {failure: string}>} - A promise that resolves to an object with the success message and the ID of the link if the upload was successful, or a failure message if the upload was not successful.
  */
 export const uploadLink = async ({
+  linkName,
   linkUrl,
+  conceptId,
+  description,
   contributor,
   uploadDate,
-  courses,
-  courseTopics,
-  resourceType,
 }: UploadLinkProps) => {
   const user = await getCurrentUser();
   if (user?.role && user.role !== "admin") {
@@ -55,17 +55,19 @@ export const uploadLink = async ({
   }
 
   // Check if all required fields are present
-  if (!linkUrl || !uploadDate) {
+  if (!linkName || !linkUrl || !conceptId || !uploadDate) {
     return { failure: "Missing required fields" };
   }
 
   const query = `
-    INSERT INTO Links_v3 (linkUrl, uploadDate, contributor, resourceType, uploadedUserId) VALUES (?, ?, ?, ?, ?)`;
+    INSERT INTO Links_v2 (linkName, linkUrl, description, uploadDate, contributor, conceptId, uploadedUserId) VALUES (?, ?, ?, ?, ?, ?, ?)`;
   const values = [
+    linkName,
     sanitizedUrl,
+    description,
     uploadDate,
     contributor,
-    resourceType,
+    conceptId,
     user?.id,
   ];
 

@@ -28,7 +28,7 @@ export const fetchCourseTopicsByCourseName = async (
     }
 
     const query = `
-      SELECT * FROM CourseTopics_v3 WHERE courseId = ?`;
+      SELECT * FROM CourseTopics_v2 WHERE courseId = ?`;
 
     const { results } = await dbConnect(query, [course?.id]);
 
