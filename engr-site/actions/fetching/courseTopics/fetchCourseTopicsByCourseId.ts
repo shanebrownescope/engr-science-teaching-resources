@@ -2,7 +2,7 @@
 import { getCourseById, getCourseByName } from "@/database/data/courses";
 import dbConnect from "@/database/dbConnector";
 import { FormattedData, lowercaseAndReplaceSpace } from "@/utils/formatting";
-import { FetchedFormattedData } from "@/utils/types";
+import { FetchedFormattedData } from "@/utils/types_v2";
 import { CourseTopicData } from "@/database/data/courseTopics";
 
 /**

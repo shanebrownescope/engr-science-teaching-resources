@@ -2,7 +2,7 @@
 import dbConnect from "@/database/dbConnector";
 import { FormattedData, lowercaseAndReplaceSpace } from "@/utils/formatting";
 import { CourseData } from "@/database/data/courses";
-import { FetchedFormattedData } from "@/utils/types";
+import { FetchedFormattedData } from "@/utils/types_v2";
 
 type FetchCoursesProps = {
   limit?: number;

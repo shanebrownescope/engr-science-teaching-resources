@@ -49,12 +49,8 @@ export const getNameFromKey = async (Contents: _Object[] | undefined) => {
   return courseNameFromKey;
 };
 
-/**
- * @param File
- * @returns FetchedFile
- */
 
-export const processFile = async (file: FileData): Promise<FetchedFile> => {
+export const processFile = async (file: any): Promise<any> => {
   console.log("tagNames: ", file.tagNames);
   let tags: any;
 
