@@ -100,12 +100,8 @@ export const processFile = async (file: any): Promise<any> => {
   };
 };
 
-/**
- * @param link
- * @returns FetchedLink
- */
 
-export const processLink = async (link: LinkData): Promise<FetchedLink> => {
+export const processLink = async (link: any): Promise<any> => {
   let tags: any;
   // Convert [null] to an empty array if the first element is null
   if (link.tagNames?.length === 1 && link.tagNames[0] === null) {
