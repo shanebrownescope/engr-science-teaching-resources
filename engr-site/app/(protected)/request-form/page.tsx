@@ -7,15 +7,20 @@ import {
   Button,
   Container,
   Select,
+  Alert,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import { useEffect, useState } from "react";
 import { FormattedData } from "@/utils/formatting";
-import requireAuth from "@/actions/auth/requireAuth";
+import { submitRequest, RequestFormData } from "@/actions/requests/submitRequest";
+import { IconAlertCircle, IconCheck } from '@tabler/icons-react';
 
 export default function RequestForm() {
   const [courses, setCourses] = useState<FormattedData[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     const getCourses = async () => {
@@ -42,14 +47,45 @@ export default function RequestForm() {
     },
   });
 
-  const handleSubmit = form.onSubmit((values) => {
-    console.log(values);
-    // Here we would typically send the data to our backend
-  });
+  const handleSubmit = async (values: RequestFormData) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    
+    try {
+      const result = await submitRequest(values);
+      
+      if (result.success) {
+        setSuccess(result.success);
+        form.reset(); // 重置表单
+      } else if (result.error) {
+        setError(result.error);
+      } else if (result.failure) {
+        setError(result.failure);
+      }
+    } catch (err) {
+      setError('An error occurred while submitting your request. Please try again later.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Container size="md" my={40}>
-      <form onSubmit={handleSubmit}>
+      {error && (
+        <Alert icon={<IconAlertCircle size="1rem" />} title="Error" color="red" mb="md">
+          {error}
+        </Alert>
+      )}
+      
+      {success && (
+        <Alert icon={<IconCheck size="1rem" />} title="Success" color="green" mb="md">
+          {success}
+        </Alert>
+      )}
+      
+      <form onSubmit={form.onSubmit(handleSubmit)}>
         <Title
           order={2}
           size="h1"
@@ -58,13 +94,13 @@ export default function RequestForm() {
           ta="center"
           mb="xl"
         >
-          Request Form for External Faculty
+          External Faculty Request Form
         </Title>
 
         <SimpleGrid cols={{ base: 1, sm: 2 }} mb="md">
           <TextInput
             label="Name"
-            placeholder="Your name"
+            placeholder="Your Name"
             required
             {...form.getInputProps("name")}
           />
@@ -102,6 +138,7 @@ export default function RequestForm() {
           mt="xl"
           size="md"
           fullWidth
+          loading={loading}
         >
           Submit Request
         </Button>
