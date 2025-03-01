@@ -12,17 +12,9 @@ import { trimCapitalizeFirstLetter } from "@/utils/helpers";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { useRouter } from "next/navigation";
 import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseId";
-import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
-import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetchConceptsByResourceTypeId";
 
 //* Testing: file upload to s3 and db
 //* TestDb component: test db is working
-
-type Options = {
-  value: string[] | null;
-  id: number[] | null;
-  formatted: string[] | null;
-};
 
 type FileUploadProps = {
   coursesOptionsData: FormattedData[] | undefined;
@@ -30,13 +22,10 @@ type FileUploadProps = {
 
 type FormErrorsFileUpload = {
   root?: string;
-  fileName?: string;
   file?: string;
-  courseName?: string;
-  courseTopicName?: string;
-  resourceTypeName?: string;
-  conceptName?: string;
-  conceptId?: string;
+  courses?: string;
+  courseTopics?: string;
+  resourceType?: string;
 };
 
 export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
@@ -49,124 +38,80 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   console.log("data: ", coursesOptionsData);
 
   //* state for form
-  const [fileName, setFileName] = useState("");
-  const [tags, setTags] = useState([""]); // State for tags
+  const [tags, setTags] = useState([""]);
   const [file, setFile] = useState<File | undefined>(undefined);
   const [fileUrl, setFileUrl] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [description, setDescription] = useState<string>("");
   const [contributor, setContributor] = useState("");
-  const [selectedCourseOption, setSelectedCourseOption] = useState<Options>({
-    value: [],
-    id: [],
-    formatted: []
-  });
-  const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>();
-  const [selectedCourseTopicOption, setSelectedCourseTopicOption] = useState<Options>({
-    value: [],
-    id: [],
-    formatted: []
-  });
-  const [resourceTypeOptionsData, setResourceTypeOptionsData] = useState<any[]>();
-  const [selectedResourceTypeOption, setSelectedResourceTypeOption] = useState<Options>({
-    value: [],
-    id: [],
-    formatted: []
-  });
-  const [conceptOptionsData, setConceptOptionData] = useState<any[]>();
-  const [selectedConceptOption, setSelectedConceptOption] = useState<Options>({
-    value: [],
-    id: [],
-    formatted: []
-  });
-  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>([]);
+  const [selectedCoursesOption, setSelectedCoursesOption] = useState<any[]>();
+  const [courseTopicsOptionData, setCourseTopicsOptionData] = useState<any[]>();
+  const [selectedCourseTopicsOption, setSelectedCourseTopicsOption] = useState<any[]>()
+  const [selectedResourceTypeOption, setSelectedResourceTypeOption] = useState<any>();
   const [errors, setErrors] = useState<FormErrorsFileUpload>({
-    fileName: undefined,
     file: undefined,
-    courseName: undefined,
-    courseTopicName: undefined,
-    resourceTypeName: undefined,
-    conceptName: undefined,
-    conceptId: undefined,
+    courses: undefined,
+    courseTopics: undefined,
+    resourceType: undefined
   });
 
   const errorMessages: { [key: string]: string } = {
     root: "Please fill out all required fields.",
-    fileName: "File name is required.",
     file: "File is required.",
-    courseId: "Please select a course.",
-    courseTopicId: "Please select a module.",
-    resourceTypeId: "Please select a section.",
-    conceptId: "Please select a concept.",
+    courses: "Please select a course.",
+    courseTopics: "Please select a course topic.",
+    resourceType: "Please select a resource type."
   };
 
-  const handleCourseOptionSelect = async (name: string, id: number, formatted: string) => {
-    setSelectedCourseTopicOption({ value: [], id: [], formatted: [] });
-    setSelectedResourceTypeOption({ value: [], id: [], formatted: [] });
-    setResourceTypeOptionsData([]);
-    setSelectedConceptOption({ value: [], id: [], formatted: [] });
-    setConceptOptionData([]);
-
-    setSelectedCourseOption({ value: [name], id: [id], formatted: [formatted] });
-
-    const results = await fetchCourseTopicsByCourseId(id);
-    setCourseTopicOptionsData(results.success || []);
+  const handleCoursesOptionSelect = async (value?: string[]) => {
+    // Update the selected courses
+    setSelectedCoursesOption(value);
+  
+    if (!value || value.length === 0) {
+      // If no courses are selected, reset the course topics data and selected topics
+      setCourseTopicsOptionData([]);
+      setSelectedCourseTopicsOption([]);
+      return;
+    }
+  
+    try {
+      // Fetch course topics for each course ID and combine the results (array of fetched objects)
+      const results = await Promise.all(
+        value.map((courseId) => fetchCourseTopicsByCourseId(courseId))
+      );
+  
+      // Combine all the course topics into a single array (flatMap == map + flat)
+      const combinedCourseTopics = results.flatMap((result) => result.success || []);
+  
+      // Update the course topics data state
+      setCourseTopicsOptionData(combinedCourseTopics);
+  
+      // Filter the selected course topics to keep only those associated with the remaining courses
+      setSelectedCourseTopicsOption((prevSelectedTopics) => {
+        return prevSelectedTopics?.filter((topic) =>
+          combinedCourseTopics.some((ct) => ct.id == topic)
+        );
+      });
+    } catch (error) {
+      console.error('Error fetching course topics:', error);
+      setStatusMessage("Failed to fetch course topics");
+      setErrors({ ...errors, root: error as string });
+      setCourseTopicsOptionData([]);
+      setSelectedCourseTopicsOption([]);
+    }
   };
 
-  const handleCourseTopicOptionSelect = async (value: string, id: number, formatted: string) => {
-    setSelectedResourceTypeOption({ value: [], id: [], formatted: [] });
-    setResourceTypeOptionsData([]);
-    setSelectedConceptOption({ value: [], id: [], formatted: [] });
-    setConceptOptionData([]);
-    setSelectedCourseOption({ value: [], id: [], formatted: [] });
+  const handleCourseTopicsOptionSelect = async (value?: string[]) => {
+    if (!value || value.length === 0) {
+      setCourseTopicsOptionData([]);
+      return;
+    }
 
-    setSelectedCourseTopicOption({
-      value: [value],
-      id: [id],
-      formatted: [formatted]
-    });
-
-    const results = await fetchResourceTypesByCourseTopicId(id);
-    const mergedResourceTypes = [
-      ...(results.success || []),
-      { 
-        id: 9991, 
-        name: 'Problems/Exercises',
-        url: 'problems-exercises'
-      },
-      {
-        id: 9992,
-        name: 'Course Notes', 
-        url: 'course-notes'
-      },
-      {
-        id: 9993,
-        name: 'Video/Interactive Content',
-        url: 'video-content'
-      }
-    ];
-
-    setResourceTypeOptionsData(mergedResourceTypes);
+    setSelectedCourseTopicsOption(value);
   };
 
-  const handleResourceTypeOptionSelect = async (value: string, id: number, formatted: string) => {
-    setSelectedConceptOption({ value: [], id: [], formatted: [] });
-    setConceptOptionData([]);
-
-    setSelectedResourceTypeOption({
-      value: [value],
-      id: [id],
-      formatted: [formatted]
-    });
-
-    const results = await fetchConceptsByResourceTypeId(id);
-    setConceptOptionData(results.success);
-  };
-
-  const handleConceptOptionSelect = (value: string, id: number, formatted: string) => {
-    setSelectedConceptOption({ value: [value], id: [id], formatted: [formatted] });
+  const handleResourceTypeOptionSelect = (value: string | null) => {
+    setSelectedResourceTypeOption(value || null);
   };
 
   //* Tags functionality
@@ -209,21 +154,20 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     setStatusMessage("validating input");
 
     if (
-      !fileName ||
       !file ||
-      !selectedCourseOption.value?.length ||
-      !selectedCourseTopicOption.value?.length ||
-      !selectedResourceTypeOption.value?.length ||
-      !selectedConceptOption.value?.length
+      !selectedCoursesOption?.length ||
+      !selectedCourseTopicsOption?.length ||
+      !selectedResourceTypeOption
     ) {
       const errors = {
         root: errorMessages.root,
-        fileName: !fileName ? errorMessages.fileName : undefined,
         file: !file ? errorMessages.file : undefined,
-        courseName: !selectedCourseOption.value?.length ? errorMessages.courseId : undefined,
-        courseTopic: !selectedCourseTopicOption.value?.length ? errorMessages.moduleId : undefined,
-        resourceTypeName: !selectedResourceTypeOption.value?.length ? errorMessages.sectionId : undefined,
-        conceptName: !selectedConceptOption.value?.length ? errorMessages.conceptId : undefined,
+        courses: !selectedCoursesOption?.length
+          ? errorMessages.courses : undefined,
+        courseTopics: !selectedCourseTopicsOption?.length
+          ? errorMessages.courseTopics : undefined,
+        resourceType: !selectedResourceTypeOption
+          ? errorMessages.resourceType : undefined
       };
       setErrors(errors);
 
@@ -233,22 +177,17 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     }
 
     setErrors({
-      fileName: undefined,
       file: undefined,
-      courseName: undefined,
-      courseTopicName: undefined,
-      resourceTypeName: undefined,
-      conceptName: undefined,
-      conceptId: undefined,
+      courses: undefined,
+      courseTopics: undefined,
+      resourceType: undefined,
     });
 
     const date = new Date();
     const currentDateWithoutTime = date.toISOString().slice(0, 10);
     console.log(currentDateWithoutTime);
 
-    const formattedDescription = trimCapitalizeFirstLetter(description);
     const formattedContributor = trimCapitalizeFirstLetter(contributor);
-    console.log(formattedDescription);
     console.log(formattedContributor);
     console.log("-- how many times");
 
@@ -259,17 +198,14 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
       const checksum = await computeSHA256(file);
       const signedURLResult = await getSignedURL({
-        fileName: fileName.trim(),
         fileType: file!.type,
         fileSize: file!.size,
         checksum: checksum,
-        course: selectedCourseOption.formatted![0],
-        courseTopic: selectedCourseTopicOption.formatted![0],
-        resourceType: selectedResourceTypeOption.formatted![0],
-        concept: selectedConceptOption.formatted![0],
-        conceptId: selectedConceptOption.id![0],
-        description: formattedDescription.length > 0 ? formattedDescription : null,
-        contributor: formattedContributor.length > 0 ? formattedContributor : "Anonymous",
+        courses: selectedCoursesOption,
+        courseTopics: selectedCourseTopicsOption,
+        resourceType: selectedResourceTypeOption,
+        contributor:
+          formattedContributor.length > 0 ? formattedContributor : "Anonymous",
         uploadDate: currentDateWithoutTime!,
       });
 
@@ -318,6 +254,21 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         }
 
         setStatusMessage("successful uploaded, created");
+
+        // Clear all fields
+        setFile(undefined)
+        setSelectedCoursesOption(undefined)
+        setCourseTopicsOptionData(undefined)
+        setSelectedCourseTopicsOption(undefined)
+        setSelectedResourceTypeOption(undefined)
+        setContributor("")
+        setErrors({
+          file: undefined,
+          courses: undefined,
+          courseTopics: undefined,
+          resourceType: undefined
+        })
+        setTags([""])
       }
     } catch (error) {
       console.error("Error during file upload:", error);
@@ -347,16 +298,6 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     }
   };
 
-  console.log("file name: ", file && file.name);
-  console.log(
-    selectedCourseOption.formatted,
-    selectedCourseTopicOption.formatted,
-    selectedResourceTypeOption.formatted,
-  );
-
-  console.log("get file: ", file);
-  console.log("get file url: ", fileUrl);
-
   return (
     <div className={styles.formAdminWrapper}>
       <p className={styles.formAdminTitle}> Upload file </p>
@@ -377,56 +318,52 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         </div>
 
         <div>
-          <label>Select a course</label>
+          <label>Select course(s)</label>
           <MultiSelect
-            data={[
-              { value: 'stress', label: 'Stress' },
-              { value: 'dynamics', label: 'Dynamics' },
-              { value: 'strength-of-materials', label: 'Strength of Materials' },
-            ]}
-            value={selectedCourseOption.value || []}
-            onChange={(selected) => {
-              setSelectedCourseOption({
-                value: selected,
-                id: selected.map(s => {
-                  const courseData = coursesOptionsData?.find(c => c.name === s);
-                  return courseData?.id ?? 0;
-                }).filter((id): id is number => typeof id === 'number'),
-                formatted: selected.map(s => {
-                  const courseData = coursesOptionsData?.find(c => c.name === s);
-                  return courseData?.url ?? s;
-                })
-              });
-            }}
-            placeholder="Select one or more courses"
+            data={coursesOptionsData?.map((course) => ({
+              value: String(course.id), 
+              label: course.name
+            }))}
+            value={selectedCoursesOption || []}
+            onChange={handleCoursesOptionSelect}
             searchable
           />
+          {errors.courses && (
+            <p className="error">{errors.courses}</p>
+          )}
         </div>
 
         <div>
-          <label> Select a course topic </label>
-          <SelectDropdown
-            optionsList={courseTopicOptionsData}
-            onOptionChange={handleCourseTopicOptionSelect}
-            selectedValue={selectedCourseTopicOption.value?.[0] || null}
+          <label> Select course topic(s) </label>
+          <MultiSelect
+            data={courseTopicsOptionData?.map((topic) => ({
+              value: String(topic.id), 
+              label: topic.name
+            }))}
+            value={selectedCourseTopicsOption || []}
+            onChange={handleCourseTopicsOptionSelect}
+            searchable
           />
-          {errors.courseTopicName && <p className="error">{errors.courseName}</p>}
+          {errors.courseTopics && (
+            <p className="error">{errors.courseTopics}</p>
+          )}
         </div>
 
         <div>
           <label> Select a resource type </label>
-          <SelectDropdown
-            optionsList={[
+          <Select
+            data={[
               { value: 'exercise', label: 'Exercise' },
               { value: 'notes', label: 'Notes' },
               { value: 'video', label: 'Video' },
-              { value: 'interactive-content', label: 'Interactive Content' },
-              ...(resourceTypeOptionsData || [])
+              { value: 'interactive', label: 'Interactive Content' }
             ]}
-            onOptionChange={handleResourceTypeOptionSelect}
-            selectedValue={selectedResourceTypeOption.value?.[0] || null}
+            onChange={handleResourceTypeOptionSelect}
+            value={selectedResourceTypeOption || null}
           />
-          {errors.resourceTypeName && <p className="error">{errors.resourceTypeName}</p>}
+          {errors.resourceType && (
+            <p className="error">{errors.resourceType}</p>
+          )}
         </div>
 
         <div className="flex-col">
@@ -455,6 +392,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
         {errors.root && <FormError message={errors.root} />}
       </form>
+
     </div>
   );
 };
