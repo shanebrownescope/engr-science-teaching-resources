@@ -1,32 +1,20 @@
 "use client";
 import { useState, ChangeEvent } from "react";
-
 import { getSignedURL } from "@/actions/uploadingPostTags/getSignedUrl";
 import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
 import { ComboboxItem, MultiSelect, Select } from "@mantine/core";
-
-// import styles from '@/styles/test.module.css'
+import { FormError } from "@/components/FormError";
+import styles from "@/styles/form.module.css";
 import Tags from "./tags/Tags";
-// import styles from "@/styles/test.module.css";
 import { ButtonProgress, SelectDropdown } from "@/components/mantine";
 import { FormattedData, capitalizeWords } from "@/utils/formatting";
 import { trimCapitalizeFirstLetter } from "@/utils/helpers";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { useRouter } from "next/navigation";
-import { FormError } from "@/components/FormError";
-import styles from "@/styles/form.module.css";
 import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseId";
-import { fetchResourceTypesByCourseTopicId } from "@/actions/fetching/resourceType/fetchResourceTypesByCourseTopicId";
-import { fetchConceptsByResourceTypeId } from "@/actions/fetching/concepts/fetchConceptsByResourceTypeId";
 
 //* Testing: file upload to s3 and db
 //* TestDb component: test db is working
-
-type Options = {
-  value: string[] | null;
-  id: number[] | null;
-  formatted: string[] | null;
-};
 
 type FileUploadProps = {
   coursesOptionsData: FormattedData[] | undefined;
@@ -34,13 +22,10 @@ type FileUploadProps = {
 
 type FormErrorsFileUpload = {
   root?: string;
-  fileName?: string;
   file?: string;
-  courseName?: string;
-  courseTopicName?: string;
-  resourceTypeName?: string;
-  conceptName?: string;
-  conceptId?: string;
+  courses?: string;
+  courseTopics?: string;
+  resourceType?: string;
 };
 
 export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
@@ -51,211 +36,85 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     router.push("/unauthorized");
   }
   console.log("data: ", coursesOptionsData);
+
   //* state for form
-  const [fileName, setFileName] = useState("");
   const [tags, setTags] = useState([""]);
   const [file, setFile] = useState<File | undefined>(undefined);
   const [fileUrl, setFileUrl] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [description, setDescription] = useState<string>("");
   const [contributor, setContributor] = useState("");
-  const [selectedCourseOption, setSelectedCourseOption] = useState<Options>({
-    value: [],
-    id: [],
-    formatted: []
-  });
-  const [courseTopicOptionsData, setCourseTopicOptionsData] = useState<any[]>([]);
-  const [selectedCourseTopicOption, setSelectedCourseTopicOption] =
-    useState<Options>({
-      value: [],
-      id: [],
-      formatted: []
-    });
-  const [resourceTypeOptionsData, setResourceTypeOptionsData] =
-    useState<any[]>([]);
-  const [selectedResourceTypeOption, setSelectedResourceTypeOption] =
-    useState<Options>({
-      value: [],
-      id: [],
-      formatted: []
-    });
-  const [conceptOptionsData, setConceptOptionData] = useState<any[]>([]);
-  const [selectedConceptOption, setSelectedConceptOption] = useState<Options>({
-    value: [],
-    id: [],
-    formatted: []
-  });
-  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>([]);
+  const [selectedCoursesOption, setSelectedCoursesOption] = useState<any[]>();
+  const [courseTopicsOptionData, setCourseTopicsOptionData] = useState<any[]>();
+  const [selectedCourseTopicsOption, setSelectedCourseTopicsOption] = useState<any[]>()
+  const [selectedResourceTypeOption, setSelectedResourceTypeOption] = useState<any>();
   const [errors, setErrors] = useState<FormErrorsFileUpload>({
-    fileName: undefined,
     file: undefined,
-    courseName: undefined,
-    courseTopicName: undefined,
-    resourceTypeName: undefined,
-    conceptName: undefined,
-    conceptId: undefined,
+    courses: undefined,
+    courseTopics: undefined,
+    resourceType: undefined
   });
+
   const errorMessages: { [key: string]: string } = {
     root: "Please fill out all required fields.",
-    fileName: "File name is required.",
     file: "File is required.",
-    courseId: "Please select a course.",
-    courseTopicId: "Please select a module.",
-    resourceTypeId: "Please select a section.",
-    conceptId: "Please select a concept.",
+    courses: "Please select a course.",
+    courseTopics: "Please select a course topic.",
+    resourceType: "Please select a resource type."
   };
-  console.log(selectedCourseOption);
 
-  const handleCourseChange = async (selected: string[]) => {
-    // Reset dependent fields
-    setSelectedCourseTopicOption({ value: [], id: [], formatted: [] });
-    setSelectedResourceTypeOption({ value: [], id: [], formatted: [] });
-    setCourseTopicOptionsData([]);
-    setResourceTypeOptionsData([]);
-    setSelectedConceptOption({ value: [], id: [], formatted: [] });
-    setConceptOptionData([]);
-
-    if (selected.length > 0) {
-      // Map the selected course values to their corresponding data
-      const selectedIds = selected.map(s => {
-        const courseData = coursesOptionsData?.find(c => c.name === s);
-        return courseData?.id ?? 0;
-      }).filter((id): id is number => typeof id === 'number');
-
-      const selectedFormatted = selected.map(s => {
-        const courseData = coursesOptionsData?.find(c => c.name === s);
-        return courseData?.url ?? s;
-      });
-
-      setSelectedCourseOption({
-        value: selected,
-        id: selectedIds,
-        formatted: selectedFormatted
-      });
-
-      // If we have a course id, fetch the course topics
-      if (selectedIds.length > 0) {
-        const results = await fetchCourseTopicsByCourseId(selectedIds[0]);
-        setCourseTopicOptionsData(results.success || []);
-      }
-    } else {
-      setSelectedCourseOption({
-        value: [],
-        id: [],
-        formatted: []
-      });
+  const handleCoursesOptionSelect = async (value?: string[]) => {
+    // Update the selected courses
+    setSelectedCoursesOption(value);
+  
+    if (!value || value.length === 0) {
+      // If no courses are selected, reset the course topics data and selected topics
+      setCourseTopicsOptionData([]);
+      setSelectedCourseTopicsOption([]);
+      return;
     }
-  };
-
-  const handleCourseTopicChange = async (selected: string[]) => {
-    // Reset dependent fields
-    setSelectedResourceTypeOption({ value: [], id: [], formatted: [] });
-    setResourceTypeOptionsData([]);
-    setSelectedConceptOption({ value: [], id: [], formatted: [] });
-    setConceptOptionData([]);
-
-    if (selected.length > 0) {
-      // Convert from the MultiSelect format to our Options format
-      const selectedTopicData = courseTopicOptionsData.find(
-        topic => topic.name === selected[0]
+  
+    try {
+      // Fetch course topics for each course ID and combine the results (array of fetched objects)
+      const results = await Promise.all(
+        value.map((courseId) => fetchCourseTopicsByCourseId(courseId))
       );
-
-      if (selectedTopicData) {
-        setSelectedCourseTopicOption({
-          value: selected,
-          id: [selectedTopicData.id],
-          formatted: [selectedTopicData.url]
-        });
-
-        // Fetch resource types for the selected course topic
-        const results = await fetchResourceTypesByCourseTopicId(selectedTopicData.id);
-
-        const mergedResourceTypes = [
-          ...(results.success || []),
-          { 
-            id: 9991, 
-            name: 'Problems/Exercises',
-            url: 'problems-exercises'
-          },
-          {
-            id: 9992,
-            name: 'Course Notes', 
-            url: 'course-notes'
-          },
-          {
-            id: 9993,
-            name: 'Video/Interactive Content',
-            url: 'video-content'
-          }
-        ];
-
-        setResourceTypeOptionsData(mergedResourceTypes);
-      }
-    } else {
-      setSelectedCourseTopicOption({
-        value: [],
-        id: [],
-        formatted: []
+  
+      // Combine all the course topics into a single array (flatMap == map + flat)
+      const combinedCourseTopics = results.flatMap((result) => result.success || []);
+  
+      // Update the course topics data state
+      setCourseTopicsOptionData(combinedCourseTopics);
+  
+      // Filter the selected course topics to keep only those associated with the remaining courses
+      setSelectedCourseTopicsOption((prevSelectedTopics) => {
+        return prevSelectedTopics?.filter((topic) =>
+          combinedCourseTopics.some((ct) => ct.id == topic)
+        );
       });
+    } catch (error) {
+      console.error('Error fetching course topics:', error);
+      setStatusMessage("Failed to fetch course topics");
+      setErrors({ ...errors, root: error as string });
+      setCourseTopicsOptionData([]);
+      setSelectedCourseTopicsOption([]);
     }
   };
 
-  const handleResourceTypeChange = async (selected: string[]) => {
-    // Reset concept data
-    setSelectedConceptOption({ value: [], id: [], formatted: [] });
-    setConceptOptionData([]);
-
-    if (selected.length > 0) {
-      // Convert from the MultiSelect format to our Options format
-      const selectedTypeData = resourceTypeOptionsData.find(
-        type => type.name === selected[0]
-      );
-
-      if (selectedTypeData) {
-        setSelectedResourceTypeOption({
-          value: selected,
-          id: [selectedTypeData.id],
-          formatted: [selectedTypeData.url]
-        });
-
-        // Fetch concepts for the selected resource type
-        const results = await fetchConceptsByResourceTypeId(selectedTypeData.id);
-        setConceptOptionData(results.success || []);
-      }
-    } else {
-      setSelectedResourceTypeOption({
-        value: [],
-        id: [],
-        formatted: []
-      });
+  const handleCourseTopicsOptionSelect = async (value?: string[]) => {
+    if (!value || value.length === 0) {
+      setCourseTopicsOptionData([]);
+      return;
     }
+
+    setSelectedCourseTopicsOption(value);
   };
 
-  const handleConceptChange = (selected: string[]) => {
-    if (selected.length > 0) {
-      // Convert from the MultiSelect format to our Options format
-      const selectedConceptData = conceptOptionsData.find(
-        concept => concept.name === selected[0]
-      );
-
-      if (selectedConceptData) {
-        setSelectedConceptOption({
-          value: selected,
-          id: [selectedConceptData.id],
-          formatted: [selectedConceptData.url]
-        });
-      }
-    } else {
-      setSelectedConceptOption({
-        value: [],
-        id: [],
-        formatted: []
-      });
-    }
+  const handleResourceTypeOptionSelect = (value: string | null) => {
+    setSelectedResourceTypeOption(value || null);
   };
 
+  //* Tags functionality
   const handleAddTag = () => {
     if (tags.length < 3) {
       setTags([...tags, ""]); // Add an empty tag to the array
@@ -263,17 +122,12 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   };
 
   const handleTagChange = (index: number, value: string) => {
-    console.log("== value: ", value);
     setTags((prevValues) => {
-      // Create a copy of the array
       const tagsCopy = [...prevValues];
-      // Update the value at the specified index
       tagsCopy[index] = value;
       return tagsCopy;
     });
   };
-  console.log("== tags: ", tags);
-
 
   const handleRemoveTag = (indexToRemove: number) => {
     setTags((prevTags) => prevTags.filter((_, index) => index !== indexToRemove));
@@ -283,21 +137,10 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   //* hash file and turn into string
   //* used to make sure file doesn't change
   const computeSHA256 = async (file: File) => {
-    // Convert file content to array buffer
     const buffer = await file.arrayBuffer();
-
-    // Calculate SHA-256 hash of buffer
     const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
-
-    // Convert ArrayBuffer to array of bytes (hashArray)
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-
-    // Convert each byte to hexadecimal string and pad it with leading zeros to ensure the string is two characters long
-    const hashHex = hashArray
-      .map((byte) => byte.toString(16).padStart(2, "0"))
-      .join("");
-
-    // Return the hexadecimal SHA-256 hash
+    const hashHex = hashArray.map((byte) => byte.toString(16).padStart(2, "0")).join("");
     return hashHex;
   };
 
@@ -311,29 +154,20 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     setStatusMessage("validating input");
 
     if (
-      !fileName ||
       !file ||
-      !selectedCourseOption.value?.length ||
-      !selectedCourseTopicOption.value?.length ||
-      !selectedResourceTypeOption.value?.length ||
-      !selectedConceptOption.value?.length
+      !selectedCoursesOption?.length ||
+      !selectedCourseTopicsOption?.length ||
+      !selectedResourceTypeOption
     ) {
       const errors = {
         root: errorMessages.root,
-        fileName: !fileName ? errorMessages.fileName : undefined,
         file: !file ? errorMessages.file : undefined,
-        courseName: !selectedCourseOption.value?.length
-          ? errorMessages.courseId
-          : undefined,
-        courseTopic: !selectedCourseTopicOption.value?.length
-          ? errorMessages.moduleId
-          : undefined,
-        resourceTypeName: !selectedResourceTypeOption.value?.length
-          ? errorMessages.sectionId
-          : undefined,
-        conceptName: !selectedConceptOption.value?.length
-          ? errorMessages.conceptId
-          : undefined,
+        courses: !selectedCoursesOption?.length
+          ? errorMessages.courses : undefined,
+        courseTopics: !selectedCourseTopicsOption?.length
+          ? errorMessages.courseTopics : undefined,
+        resourceType: !selectedResourceTypeOption
+          ? errorMessages.resourceType : undefined
       };
       setErrors(errors);
 
@@ -343,22 +177,17 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     }
 
     setErrors({
-      fileName: undefined,
       file: undefined,
-      courseName: undefined,
-      courseTopicName: undefined,
-      resourceTypeName: undefined,
-      conceptName: undefined,
-      conceptId: undefined,
+      courses: undefined,
+      courseTopics: undefined,
+      resourceType: undefined,
     });
 
     const date = new Date();
     const currentDateWithoutTime = date.toISOString().slice(0, 10);
     console.log(currentDateWithoutTime);
 
-    const formattedDescription = trimCapitalizeFirstLetter(description);
     const formattedContributor = trimCapitalizeFirstLetter(contributor);
-    console.log(formattedDescription);
     console.log(formattedContributor);
     console.log("-- how many times");
 
@@ -369,17 +198,12 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
       const checksum = await computeSHA256(file);
       const signedURLResult = await getSignedURL({
-        fileName: fileName.trim(),
         fileType: file!.type,
         fileSize: file!.size,
         checksum: checksum,
-        course: selectedCourseOption.formatted![0],
-        courseTopic: selectedCourseTopicOption.formatted![0],
-        resourceType: selectedResourceTypeOption.formatted![0],
-        concept: selectedConceptOption.formatted![0],
-        conceptId: selectedConceptOption.id![0],
-        description:
-          formattedDescription.length > 0 ? formattedDescription : null,
+        courses: selectedCoursesOption,
+        courseTopics: selectedCourseTopicsOption,
+        resourceType: selectedResourceTypeOption,
         contributor:
           formattedContributor.length > 0 ? formattedContributor : "Anonymous",
         uploadDate: currentDateWithoutTime!,
@@ -430,6 +254,21 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         }
 
         setStatusMessage("successful uploaded, created");
+
+        // Clear all fields
+        setFile(undefined)
+        setSelectedCoursesOption(undefined)
+        setCourseTopicsOptionData(undefined)
+        setSelectedCourseTopicsOption(undefined)
+        setSelectedResourceTypeOption(undefined)
+        setContributor("")
+        setErrors({
+          file: undefined,
+          courses: undefined,
+          courseTopics: undefined,
+          resourceType: undefined
+        })
+        setTags([""])
       }
     } catch (error) {
       console.error("Error during file upload:", error);
@@ -459,41 +298,18 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     }
   };
 
-  console.log("file name: ", file && file.name);
-  console.log(
-    selectedCourseOption.formatted,
-    selectedCourseTopicOption.formatted,
-    selectedResourceTypeOption.formatted,
-  );
-
-  console.log("get file: ", file);
-  console.log("get file url: ", fileUrl);
-
   return (
     <div className={styles.formAdminWrapper}>
       <p className={styles.formAdminTitle}> Upload file </p>
       <form className={styles.form} onSubmit={handleSubmit}>
-        {statusMessage && (
-          <p className={styles.messageStyle}> {statusMessage} </p>
-        )}
+        {statusMessage && <p className={styles.messageStyle}> {statusMessage} </p>}
         <div>
           <label> Select file </label>
-          <input
-            type="file"
-            accept="pdf"
-            disabled={loading}
-            onChange={handleFileChange}
-          />
+          <input type="file" accept="pdf" disabled={loading} onChange={handleFileChange} />
           {fileUrl && file && (
             <div>
               <iframe src={fileUrl} />
-              <button
-                type="button"
-                onClick={() => {
-                  setFile(undefined);
-                  setFileUrl(undefined);
-                }}
-              >
+              <button type="button" onClick={() => { setFile(undefined); setFileUrl(undefined); }}>
                 Remove
               </button>
             </div>
@@ -501,103 +317,54 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           {errors.file && <p className="error">{errors.file}</p>}
         </div>
 
-        {/*}
-        <div className="flex-col">
-          <label> Enter file name </label>
-          <input
-            className={errors.fileName && "input-error"}
-            type="text"
-            placeholder="Enter file name"
-            max={100}
-            name="fileName"
-            value={fileName}
-            disabled={loading}
-            onChange={(e) => setFileName(e.target.value)}
-          />
-          {errors.fileName && <p className="error">{errors.fileName}</p>}
-        </div>
-        */}
-
         <div>
-          <label>Select a course</label>
+          <label>Select course(s)</label>
           <MultiSelect
-          data={coursesOptionsData?.map(course => ({ 
-              value: course.name, 
-              label: course.name 
-          })) || []}
-          value={selectedCourseOption.value || []}
-          onChange={handleCourseChange}
-          placeholder="Select one or more courses"
-          searchable
-        />
-        {errors.courseName && <p className="error">{errors.courseName}</p>}
-        </div>
-
-        <div>
-          <label>Select a course topic</label>
-          <MultiSelect
-            data={courseTopicOptionsData?.map(topic => ({ 
-              value: topic.name, 
-              label: topic.name 
-            })) || []}
-            value={selectedCourseTopicOption.value || []}
-            onChange={handleCourseTopicChange}
-            placeholder="Select a course topic"
+            data={coursesOptionsData?.map((course) => ({
+              value: String(course.id), 
+              label: course.name
+            }))}
+            value={selectedCoursesOption || []}
+            onChange={handleCoursesOptionSelect}
             searchable
-            disabled={!selectedCourseOption.value?.length}
           />
-          {errors.courseTopicName && (
-            <p className="error">{errors.courseTopicName}</p>
+          {errors.courses && (
+            <p className="error">{errors.courses}</p>
           )}
         </div>
 
         <div>
-          <label>Select a resource type</label>
+          <label> Select course topic(s) </label>
           <MultiSelect
-            data={resourceTypeOptionsData?.map(type => ({
-              value: type.name,
-              label: type.name
-            })) || []}
-            value={selectedResourceTypeOption.value || []}
-            onChange={handleResourceTypeChange}
-            placeholder="Select a resource type"
+            data={courseTopicsOptionData?.map((topic) => ({
+              value: String(topic.id), 
+              label: topic.name
+            }))}
+            value={selectedCourseTopicsOption || []}
+            onChange={handleCourseTopicsOptionSelect}
             searchable
-            disabled={!selectedCourseTopicOption.value?.length}
           />
-          {errors.resourceTypeName && (
-            <p className="error">{errors.resourceTypeName}</p>
+          {errors.courseTopics && (
+            <p className="error">{errors.courseTopics}</p>
           )}
         </div>
 
         <div>
-          <label>Select a concept</label>
-          <MultiSelect
-            data={conceptOptionsData?.map(concept => ({
-              value: concept.name,
-              label: concept.name
-            })) || []}
-            value={selectedConceptOption.value || []}
-            onChange={handleConceptChange}
-            placeholder="Select a concept"
-            searchable
-            disabled={!selectedResourceTypeOption.value?.length}
+          <label> Select a resource type </label>
+          <Select
+            data={[
+              { value: 'exercise', label: 'Exercise' },
+              { value: 'notes', label: 'Notes' },
+              { value: 'video', label: 'Video' },
+              { value: 'interactive', label: 'Interactive Content' }
+            ]}
+            onChange={handleResourceTypeOptionSelect}
+            value={selectedResourceTypeOption || null}
           />
-          {errors.conceptName && <p className="error">{errors.conceptName}</p>}
+          {errors.resourceType && (
+            <p className="error">{errors.resourceType}</p>
+          )}
         </div>
-        
-        {/*
-        <div className="flex-col">
-          <label> Add Description </label>
-          <input
-            type="text"
-            name="description"
-            value={description}
-            placeholder="Enter description"
-            disabled={loading}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-        */}
 
         <div className="flex-col">
           <label> Add contributor </label>
@@ -610,6 +377,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           />
         </div>
 
+        {/* Tags component */}
         <Tags
           tags={tags}
           loading={loading}
@@ -618,26 +386,13 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           handleRemoveTag={handleRemoveTag}
         />
 
-        <button
-          className={`${styles.formButton}`}
-          type="submit"
-          disabled={loading}
-        >
+        <button className={`${styles.formButton}`} type="submit" disabled={loading}>
           {loading ? "Uploading..." : "Upload"}
         </button>
 
         {errors.root && <FormError message={errors.root} />}
       </form>
 
-      {/* <DropzoneButton /> */}
-      {/* <ButtonProgress /> */}
-      {/* <TagsInput
-        style={{ width: "25%", marginLeft: "10px" }}
-        label="Press Enter to submit a tag"
-        placeholder="Enter tag"
-      /> */}
-      {/* {error && <div> {error} </div>} */}
-      {/* {testDbResult && <div> {testDbResult} </div>} */}
     </div>
   );
 };

@@ -54,7 +54,7 @@ CREATE TABLE Files_v3 (
   FOREIGN KEY (uploadedUserId) REFERENCES Users_v3(id) ON DELETE CASCADE
 );
 
-CREATE TABLE CourseTopicFiles (
+CREATE TABLE CourseTopicFiles_v3 (
   id INT NOT NULL AUTO_INCREMENT,
   courseTopicId INT,
   fileId INT,
@@ -82,7 +82,7 @@ CREATE TABLE FileTags_v3 (
 
 CREATE TABLE Links_v3 (
   id INT NOT NULL AUTO_INCREMENT,
-  linkName VARCHAR(255) NOT NULL,
+  linkName VARCHAR(255),
   linkUrl VARCHAR(255) NOT NULL,
   description TEXT,
   uploadDate DATE,
@@ -93,7 +93,7 @@ CREATE TABLE Links_v3 (
   FOREIGN KEY (uploadedUserId) REFERENCES Users_v3(id) ON DELETE CASCADE
 );
 
-CREATE TABLE CourseTopicLinks (
+CREATE TABLE CourseTopicLinks_v3 (
   id INT NOT NULL AUTO_INCREMENT,
   courseTopicId INT,
   linkId INT,
@@ -136,4 +136,17 @@ CREATE TABLE LinkComments_v3 (
   FOREIGN KEY (userId) REFERENCES Users_v3(id) ON DELETE CASCADE,
   FOREIGN KEY (parentCommentId) REFERENCES LinkComments_v3(id),
   FOREIGN KEY (linkId) REFERENCES Links_v3(id) ON DELETE CASCADE
+);
+CREATE TABLE ExternalRequests_v3 (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  courseId INT NOT NULL,
+  requestDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+  responseDate TIMESTAMP NULL,
+  responseNotes TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (courseId) REFERENCES Courses_v3(id)
 );
