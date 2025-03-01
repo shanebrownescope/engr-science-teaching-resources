@@ -2,8 +2,7 @@
 import { getCourseById, getCourseByName } from "@/database/data/courses";
 import dbConnect from "@/database/dbConnector";
 import { FormattedData, lowercaseAndReplaceSpace } from "@/utils/formatting";
-import { ModuleData } from "@/database/data/old/modules";
-import { FetchedFormattedData } from "@/utils/types";
+import { FetchedFormattedData } from "@/utils/types_v2";
 import { CourseTopicData } from "@/database/data/courseTopics";
 
 /**
@@ -23,7 +22,7 @@ export const fetchCourseTopicsByCourseId = async (
     }
 
     const query = `
-      SELECT * FROM CourseTopics_v2 WHERE courseId = ?`;
+      SELECT * FROM CourseTopics_v3 WHERE courseId = ?`;
 
     const { results } = await dbConnect(query, [course?.id]);
 

@@ -137,3 +137,16 @@ CREATE TABLE LinkComments_v3 (
   FOREIGN KEY (parentCommentId) REFERENCES LinkComments_v3(id),
   FOREIGN KEY (linkId) REFERENCES Links_v3(id) ON DELETE CASCADE
 );
+CREATE TABLE ExternalRequests_v3 (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  courseId INT NOT NULL,
+  requestDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+  responseDate TIMESTAMP NULL,
+  responseNotes TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (courseId) REFERENCES Courses_v3(id)
+);
