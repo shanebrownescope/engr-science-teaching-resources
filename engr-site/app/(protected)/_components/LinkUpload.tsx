@@ -188,6 +188,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         };
         setErrors(errors);
         setStatusMessage("validation failed");
+        setLoading(false);
         return;
       }
 
@@ -195,7 +196,8 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       const pattern = validUrlPattern;
       if (!pattern.test(linkUrl)) {
         setStatusMessage("Invalid url");
-        setErrors({ ...errors, linkUrl: errors.linkUrl });
+        setErrors({ ...errors, linkUrl: "Invalid URL format" });
+        setLoading(false);
         return;
       }
 
@@ -223,8 +225,9 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         sanitizedUrl.includes(">")
       ) {
         setStatusMessage(
-          "URL was altered during sanitization. Not storing in database",
+          "URL was altered during sanitization. Not storing in database"
         );
+        setLoading(false);
         return;
       }
 
@@ -237,7 +240,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           formattedContributor.length > 0 ? formattedContributor : "Anonymous",
         uploadDate: currentDateWithoutTime!,
       });
-      // const signedURLResult = await getSignedURL()
 
       if (linkResult?.failure) {
         setStatusMessage("Failed" + linkResult?.failure);
@@ -356,6 +358,26 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           )}
         </div>
 
+        <div>
+          <label> Select a concept </label>
+          <SelectDropdown
+            optionsList={conceptOptionsData}
+            onOptionChange={handleConceptOptionSelect}
+            selectedValue={selectedConceptOption.value}
+          />
+          {errors.conceptName && <p className="error">{errors.conceptName}</p>}
+        </div>
+
+        <div className="flex-col">
+          <label> Add description </label>
+          <textarea
+            name="description"
+            value={description}
+            disabled={loading}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+
         <div className="flex-col">
           <label> Add contributor </label>
           <input
@@ -379,9 +401,8 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           className={styles.formButton}
           disabled={loading}
           type="submit"
-          // disable={linkUrl != undefined ? true : false}
         >
-          Upload
+          {loading ? "Uploading..." : "Upload"}
         </button>
         {errors.root && <FormError message={errors.root} />}
       </form>
