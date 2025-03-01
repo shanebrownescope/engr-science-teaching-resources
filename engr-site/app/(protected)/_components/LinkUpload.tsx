@@ -385,7 +385,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         </button>
         {errors.root && <FormError message={errors.root} />}
       </form>
-      
     </div>
   );
 };
