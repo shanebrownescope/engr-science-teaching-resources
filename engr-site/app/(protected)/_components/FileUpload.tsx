@@ -1,20 +1,16 @@
 "use client";
 import { useState, ChangeEvent } from "react";
-
 import { getSignedURL } from "@/actions/uploadingPostTags/getSignedUrl";
 import { createTagPostFile } from "@/actions/uploadingPostTags/uploadTagsAction";
 import { ComboboxItem, MultiSelect, Select } from "@mantine/core";
-
-// import styles from '@/styles/test.module.css'
+import { FormError } from "@/components/FormError";
+import styles from "@/styles/form.module.css";
 import Tags from "./tags/Tags";
-// import styles from "@/styles/test.module.css";
 import { ButtonProgress, SelectDropdown } from "@/components/mantine";
 import { FormattedData, capitalizeWords } from "@/utils/formatting";
 import { trimCapitalizeFirstLetter } from "@/utils/helpers";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { useRouter } from "next/navigation";
-import { FormError } from "@/components/FormError";
-import styles from "@/styles/form.module.css";
 import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseId";
 
 //* Testing: file upload to s3 and db
@@ -40,6 +36,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     router.push("/unauthorized");
   }
   console.log("data: ", coursesOptionsData);
+
   //* state for form
   const [tags, setTags] = useState([""]);
   const [file, setFile] = useState<File | undefined>(undefined);
@@ -57,6 +54,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     courseTopics: undefined,
     resourceType: undefined
   });
+
   const errorMessages: { [key: string]: string } = {
     root: "Please fill out all required fields.",
     file: "File is required.",
@@ -116,6 +114,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     setSelectedResourceTypeOption(value || null);
   };
 
+  //* Tags functionality
   const handleAddTag = () => {
     if (tags.length < 3) {
       setTags([...tags, ""]); // Add an empty tag to the array
@@ -123,17 +122,12 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   };
 
   const handleTagChange = (index: number, value: string) => {
-    console.log("== value: ", value);
     setTags((prevValues) => {
-      // Create a copy of the array
       const tagsCopy = [...prevValues];
-      // Update the value at the specified index
       tagsCopy[index] = value;
       return tagsCopy;
     });
   };
-  console.log("== tags: ", tags);
-
 
   const handleRemoveTag = (indexToRemove: number) => {
     setTags((prevTags) => prevTags.filter((_, index) => index !== indexToRemove));
@@ -143,21 +137,10 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   //* hash file and turn into string
   //* used to make sure file doesn't change
   const computeSHA256 = async (file: File) => {
-    // Convert file content to array buffer
     const buffer = await file.arrayBuffer();
-
-    // Calculate SHA-256 hash of buffer
     const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
-
-    // Convert ArrayBuffer to array of bytes (hashArray)
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-
-    // Convert each byte to hexadecimal string and pad it with leading zeros to ensure the string is two characters long
-    const hashHex = hashArray
-      .map((byte) => byte.toString(16).padStart(2, "0"))
-      .join("");
-
-    // Return the hexadecimal SHA-256 hash
+    const hashHex = hashArray.map((byte) => byte.toString(16).padStart(2, "0")).join("");
     return hashHex;
   };
 
@@ -319,27 +302,14 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     <div className={styles.formAdminWrapper}>
       <p className={styles.formAdminTitle}> Upload file </p>
       <form className={styles.form} onSubmit={handleSubmit}>
-        {statusMessage && (
-          <p className={styles.messageStyle}> {statusMessage} </p>
-        )}
+        {statusMessage && <p className={styles.messageStyle}> {statusMessage} </p>}
         <div>
           <label> Select file </label>
-          <input
-            type="file"
-            accept="pdf"
-            disabled={loading}
-            onChange={handleFileChange}
-          />
+          <input type="file" accept="pdf" disabled={loading} onChange={handleFileChange} />
           {fileUrl && file && (
             <div>
               <iframe src={fileUrl} />
-              <button
-                type="button"
-                onClick={() => {
-                  setFile(undefined);
-                  setFileUrl(undefined);
-                }}
-              >
+              <button type="button" onClick={() => { setFile(undefined); setFileUrl(undefined); }}>
                 Remove
               </button>
             </div>
@@ -407,6 +377,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           />
         </div>
 
+        {/* Tags component */}
         <Tags
           tags={tags}
           loading={loading}
@@ -415,11 +386,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           handleRemoveTag={handleRemoveTag}
         />
 
-        <button
-          className={`${styles.formButton}`}
-          type="submit"
-          disabled={loading}
-        >
+        <button className={`${styles.formButton}`} type="submit" disabled={loading}>
           {loading ? "Uploading..." : "Upload"}
         </button>
 

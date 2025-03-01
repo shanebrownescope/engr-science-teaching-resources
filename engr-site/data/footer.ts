@@ -6,7 +6,12 @@ export type FooterData = {
 export const footerData: FooterData[] = [
   {
     title: "Company",
-    links: [],
+    links: [
+      {
+        label: "Request Form",
+        link: "/request-form",
+      },
+    ],
   },
   {
     title: "Quick Links",
