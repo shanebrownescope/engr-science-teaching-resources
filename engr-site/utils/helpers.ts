@@ -7,7 +7,7 @@ import {
   LinkData,
   FetchedFile,
   FetchedLink,
-} from "./types";
+} from "./types_v2";
 
 /**
  *
@@ -49,12 +49,8 @@ export const getNameFromKey = async (Contents: _Object[] | undefined) => {
   return courseNameFromKey;
 };
 
-/**
- * @param File
- * @returns FetchedFile
- */
 
-export const processFile = async (file: FileData): Promise<FetchedFile> => {
+export const processFile = async (file: any): Promise<any> => {
   console.log("tagNames: ", file.tagNames);
   let tags: any;
 
@@ -104,12 +100,8 @@ export const processFile = async (file: FileData): Promise<FetchedFile> => {
   };
 };
 
-/**
- * @param link
- * @returns FetchedLink
- */
 
-export const processLink = async (link: LinkData): Promise<FetchedLink> => {
+export const processLink = async (link: any): Promise<any> => {
   let tags: any;
   // Convert [null] to an empty array if the first element is null
   if (link.tagNames?.length === 1 && link.tagNames[0] === null) {
