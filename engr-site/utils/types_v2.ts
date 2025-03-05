@@ -14,7 +14,21 @@ export type FetchedFile = {
   s3Url: string;
   description: string | undefined;
   uploadDate: string;
-  contributor: string | undefined;
+  contributor: string | null;
+  resourceType: "exercise" | "notes" | "video" | "interactive";
+  uploadedUserId: number;
+  tags: string[];
+};
+
+export type FetchedLink = {
+  id: number;
+  type: string;
+  linkName: string;
+  urlName: string;
+  linkUrl: string;
+  description: string | undefined;
+  uploadDate: string;
+  contributor: string | null;
   resourceType: "exercise" | "notes" | "video" | "interactive";
   uploadedUserId: number;
   tags: string[];
@@ -26,7 +40,7 @@ export type FileData = {
   s3Url: string;
   description: string | undefined;
   uploadDate: Date;
-  contributor: string | undefined;
+  contributor: string | null;
   resourceType: "exercise" | "notes" | "video" | "interactive";
   uploadedUserId: number;
   tagNames: string[];
@@ -38,24 +52,10 @@ export type LinkData = {
   linkUrl: string;
   description: string | undefined;
   uploadDate: Date;
-  contributor: string | undefined;
+  contributor: string | null;
   resourceType: "exercise" | "notes" | "video" | "interactive";
   uploadedUserId: number;
   tagNames: string[];
-};
-
-export type FetchedLink = {
-  id: number;
-  type: string;
-  linkName: string;
-  urlName: string;
-  linkUrl: string;
-  description: string | undefined;
-  uploadDate: string;
-  contributor: string | undefined;
-  resourceType: "exercise" | "notes" | "video" | "interactive";
-  uploadedUserId: number;
-  tags: string[];
 };
 
 export type searchParams = {
@@ -91,6 +91,8 @@ export type AllFilesAndLinksData = {
   id: number;
   name: string;
   type: string;
+  resourceType: "exercise" | "notes" | "video" | "interactive";
+  contributor: string | null,
   description: string;
   uploadDate: Date;
   tags: string | null;
@@ -102,6 +104,8 @@ export type AllFilesAndLinksDataFormatted = {
   description: string;
   uploadDate: Date;
   type: string;
+  resourceType: "exercise" | "notes" | "video" | "interactive";
+  contributor: string | null,
   tags: string[];
 };
 

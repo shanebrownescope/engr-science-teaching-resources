@@ -6,28 +6,7 @@ import {
   AllFilesAndLinksData,
   AllFilesAndLinksDataFormatted,
   FetchedSearchResults,
-} from "@/utils/types";
-
-//* old query, uses JSON_ARRAYAGG
-//   const combinedQuery = `
-// (
-//   SELECT 'file' AS type, f.FileId AS id, f.FileName AS name, f.Description AS description, f.UploadDate as uploadDate,
-//     JSON_ARRAYAGG(t.TagName) AS tagNames
-//   FROM Files f
-//   JOIN FileTags ft ON f.FileId = ft.FileId
-//   JOIN Tags t ON ft.TagId = t.TagId
-//   GROUP BY f.FileId
-//   )
-
-//   UNION
-// (
-//   SELECT 'link' AS type, l.LinkId AS id, l.LinkName AS name, l.Description AS description, l.UploadDate as uploadDate,
-//     JSON_ARRAYAGG(t.TagName) AS tagNames
-//   FROM Links l
-//   LEFT JOIN LinkTags lt ON l.LinkId = lt.LinkId
-//   LEFT JOIN Tags t ON lt.TagId = t.TagId
-//   GROUP BY l.LinkId
-// );`;
+} from "@/utils/types_v2";
 
 //* New query, uses GROUP_CONCAT
 // Fetches files and links that match the search query
@@ -52,23 +31,28 @@ const fetchQuery = `
     f.fileName AS name,
     f.description,
     f.uploadDate,
-    f.contributor,
+    c.contributorName AS contributor,
+    f.resourceType,
     IFNULL(GROUP_CONCAT(FileTagConcat.tagName SEPARATOR ', '), '') AS tags
   FROM 
-    Files_v2 AS f
+    Files_v3 AS f
   LEFT JOIN 
     (
       SELECT 
         fileId, GROUP_CONCAT(t.tagName) AS tagName
       FROM 
-        FileTags_v2 AS ft
+        FileTags_v3 AS ft
       JOIN 
-        Tags_v2 AS t ON ft.tagId = t.id
+        Tags_v3 AS t ON ft.tagId = t.id
       GROUP BY 
         fileId
     ) AS FileTagConcat
   ON 
     f.id = FileTagConcat.fileId
+  LEFT JOIN 
+    Contributors_v3 AS c 
+  ON 
+    f.contributorId = c.id
   WHERE 
     ((FileTagConcat.tagName LIKE CONCAT('%', ?, '%') OR f.fileName LIKE CONCAT('%', ?, '%')) OR (f.fileName LIKE CONCAT('%', ?, '%') AND (FileTagConcat.tagName IS NULL OR FileTagConcat.tagName = '')))
   GROUP BY 
@@ -82,23 +66,28 @@ const fetchQuery = `
     l.linkName AS name,
     l.description,
     l.uploadDate,
-    l.contributor,
+    c.contributorName AS contributor,
+    l.resourceType,
     IFNULL(GROUP_CONCAT(LinkTagConcat.tagName SEPARATOR ', '), '') AS tags
   FROM 
-    Links_v2 AS l
+    Links_v3 AS l
   LEFT JOIN  
     (
       SELECT 
         linkId, GROUP_CONCAT(t.tagName) AS tagName
       FROM 
-        LinkTags_v2 AS lt
+        LinkTags_v3 AS lt
       JOIN 
-        Tags_v2 AS t ON lt.tagId = t.id
+        Tags_v3 AS t ON lt.tagId = t.id
       GROUP BY 
         linkId
     ) AS LinkTagConcat
   ON 
     l.id = LinkTagConcat.linkId
+  LEFT JOIN 
+    Contributors_v3 AS c 
+  ON 
+    l.contributorId = c.id
   WHERE 
     ((LinkTagConcat.tagName LIKE CONCAT('%', ?, '%') OR l.linkName LIKE CONCAT('%', ?, '%')) OR (l.linkName LIKE CONCAT('%', ?, '%') AND (LinkTagConcat.tagName IS NULL OR LinkTagConcat.tagName = '')))
   GROUP BY 
@@ -139,6 +128,7 @@ export const fetchSearchResults = async (
     }
 
     return { success: [] };
+
   } catch (error) {
     return {
       failure: "Internal server error, error retrieving modules from db",

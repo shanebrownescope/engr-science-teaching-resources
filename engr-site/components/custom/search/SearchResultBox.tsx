@@ -10,6 +10,8 @@ type SearchResultBoxProps = {
   urlName: string;
   description: string;
   tags: string[];
+  resourceType: string;
+  contributor: string
 };
 
 /**
@@ -25,8 +27,9 @@ export const SearchResultBox = ({
   urlName,
   description,
   tags,
+  resourceType,
+  contributor
 }: SearchResultBoxProps) => {
-  console.log(tags);
   return (
     <div className={styles.resultBox}>
       <Link
@@ -35,7 +38,8 @@ export const SearchResultBox = ({
         })}`}
       >
         <h5 className={styles.resultTitle}>{title}</h5>
-        <p className={styles.resultDescription}>{description}</p>
+        <p className={styles.resultDescription}>{resourceType}</p>
+        <p className={styles.resultDescription}>{contributor}</p>
         <div className={styles.tagsContainer}>
           {tags.map((tag: string, index: number) => (
             <span

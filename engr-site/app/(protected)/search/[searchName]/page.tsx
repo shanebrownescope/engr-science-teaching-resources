@@ -7,75 +7,56 @@ import { fetchSearchResults } from "@/actions/fetching/search/fetchSearchResults
 import {
   AllFilesAndLinksDataFormatted,
   FetchedSearchResults,
-} from "@/utils/types";
+} from "@/utils/types_v2";
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { SearchFilterMenu } from "@/components/custom/search/SearchFilterMenu";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 
-// Mock data for demonstration
-const mockResults = [
-  {
-    title: "The Secrets of Quantum Physics",
-    description: "Delve into the mysterious world of quantum mechanics.",
-    tags: ["Science", "Physics", "Quantum"],
-  },
-  {
-    title: "Exploring the Depths of History",
-    description: "A journey through time to understand our past.",
-    tags: ["History", "Education", "Time"],
-  },
-  {
-    title: "Mathematics in Real Life",
-    description: "Discover how math applies to everyday situations.",
-    tags: ["Math", "Education", "Real Life"],
-  },
-  {
-    title: "The Evolution of Literature",
-    description: "Trace the development of literature through the ages.",
-    tags: ["Literature", "History", "Culture"],
-  },
-  {
-    title: "Breaking Down the Barriers of Science",
-    description: "How modern science is addressing today's challenges.",
-    tags: ["Science", "Innovation", "Challenges"],
-  },
-];
-
 const SearchResults = ({ params }: { params: { searchName: string } }) => {
   useRequireAuth();
-
   const formattedSearchName = capitalizeAndReplaceDash(
     params.searchName.toLowerCase().replace(/-/g, " "),
   );
-  const [data, setData] = useState<AllFilesAndLinksDataFormatted[]>([]);
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [resourcesData, setResourcesData] = useState<AllFilesAndLinksDataFormatted[]>([]);
+  
+  // Fetch all files+links resources data
   useEffect(() => {
     const fetchFilesAndLinks = async () => {
-      const data: FetchedSearchResults = await fetchSearchResults(
-        formattedSearchName.toLowerCase(),
-      );
-      console.log(formattedSearchName);
+      try {
+        const data: FetchedSearchResults = await fetchSearchResults(
+          formattedSearchName.toLowerCase(),
+        );
 
-      if (data?.failure) {
-        return;
+        if (data?.failure) {
+          console.log("Error loading search results")
+          return;
+        }
+        setResourcesData(data?.success || []);
+      } catch (error) {
+        console.error("Error loading search results:", error)
+      } finally {
+        setIsLoading(false)
       }
-      setData(data.success || []);
     };
+
     fetchFilesAndLinks();
+
   }, [params.searchName]);
 
-  console.log("----data: ", data);
-
-  console.log(data.map((item) => item.type));
+  console.log("---FETCHED RESULTS: ", resourcesData);
 
   return (
-    <ContainerLayout paddingTop="md"> 
-      <h4 className="text-center mb-4">Your Search: {formattedSearchName}</h4>
-      <div>
-        <SearchFilterMenu data={data} />
-      </div>
-    </ContainerLayout>  );
+    (!isLoading &&
+      <ContainerLayout paddingTop="md"> 
+        <h4 className="text-center mb-4">Your Search: {formattedSearchName}</h4>
+        <div>
+          <SearchFilterMenu resourcesData={resourcesData}/>
+        </div>
+      </ContainerLayout>  
+    )
+  );
 };
 
 export default SearchResults;
