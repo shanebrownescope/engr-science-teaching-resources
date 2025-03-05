@@ -66,7 +66,19 @@ export const createTagPostFile = async (tags: string[], fileId: number) => {
           console.error(`Failed to process tag "${tagName}":`, tagResponse.failure);
           return null;
         }
-        
+
+        // Associate tag with file in FileTags table
+        const fileTagQuery = `INSERT INTO FileTags_v3 (fileId, tagId) VALUES (?, ?)`;
+        const { results: fileTagResult, error: fileTagError } = await dbConnect(fileTagQuery, [
+          fileId,
+          tagResponse.tagId
+        ]);
+
+        if (fileTagError) {
+          console.error(`Error associating tag "${tagName}" with file:`, fileTagError);
+          return null;
+        }
+
         return { name: tagName, id: tagResponse.tagId };
       })
     );

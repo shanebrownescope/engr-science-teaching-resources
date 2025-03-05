@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Pagination } from "@mantine/core";
-import { AllFilesAndLinksDataFormatted } from "@/utils/types";
+import { AllFilesAndLinksDataFormatted } from "@/utils/types_v2";
 import { SearchResultBox } from "@/components/custom/search/SearchResultBox";
 
 type ResourcesListPaginatedProps = {
@@ -57,6 +57,8 @@ const ResourcesListPaginated = ({ data }: ResourcesListPaginatedProps) => {
               urlName={item.urlName}
               description={item.description}
               tags={item.tags}
+              resourceType={item.resourceType}
+              contributor={item.contributor || "Anonymous"}
             />
           </div>
         ))}

@@ -42,7 +42,6 @@ type FormErrorsLinkUpload = {
 };
 
 export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
-  console.log("data: ", coursesOptionsData);
   const router = useRouter();
   const role = useCurrentRole();
   if (role != "admin") {
@@ -145,7 +144,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       return tagsCopy;
     });
   };
-  console.log("== tags: ", tags);
 
   const handleRemoveTag = (indexToRemove: number) => {
     setTags((prevTags) => prevTags.filter((_, index) => index !== indexToRemove));
@@ -237,9 +235,9 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           formattedContributor.length > 0 ? formattedContributor : "Anonymous",
         uploadDate: currentDateWithoutTime!,
       });
-      // const signedURLResult = await getSignedURL()
 
       if (linkResult?.failure) {
+        console.log("failure in link upload");
         setStatusMessage("Failed" + linkResult?.failure);
         setLoading(false);
         setErrors({ ...errors, root: linkResult?.failure });
@@ -275,6 +273,21 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         }
 
         setStatusMessage("successful uploaded, created");
+
+        // Clear all fields
+        setLinkUrl("")
+        setSelectedCoursesOption(undefined)
+        setCourseTopicsOptionData(undefined)
+        setSelectedCourseTopicsOption(undefined)
+        setSelectedResourceTypeOption(undefined)
+        setContributor("")
+        setErrors({
+          linkUrl: undefined,
+          courses: undefined,
+          courseTopics: undefined,
+          resourceType: undefined
+        })
+        setTags([""])
       }
     } catch (error) {
       console.error("Error during link upload:", error);
@@ -283,8 +296,6 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       setLoading(false);
     }
   };
-
-  console.log("valid url: ", isValidUrl);
 
   return (
     <div className={styles.formAdminWrapper}>

@@ -25,7 +25,6 @@ CREATE TABLE PasswordResetTokens_v3 (
   FOREIGN KEY (userId) REFERENCES Users_v3(id) ON DELETE CASCADE
 );
 
-
 CREATE TABLE Courses_v3 (
   id INT NOT NULL AUTO_INCREMENT,
   courseName VARCHAR(255) NOT NULL,
@@ -40,18 +39,44 @@ CREATE TABLE CourseTopics_v3 (
   FOREIGN KEY (courseId) REFERENCES Courses_v3(id)
 );
 
-
 CREATE TABLE Files_v3 (
   id INT NOT NULL AUTO_INCREMENT,
   fileName VARCHAR(255),
   s3Url VARCHAR(512),
   description TEXT,
   uploadDate DATE,
-  contributor VARCHAR(255),
+  contributorId INT,
   resourceType ENUM('exercise', 'notes', 'video', 'interactive') DEFAULT 'exercise' NOT NULL,
   uploadedUserId INT,
   PRIMARY KEY (id),
+  FOREIGN KEY (contributorId) REFERENCES Contributors_v3(id) ON DELETE CASCADE,
   FOREIGN KEY (uploadedUserId) REFERENCES Users_v3(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Links_v3 (
+  id INT NOT NULL AUTO_INCREMENT,
+  linkName VARCHAR(255),
+  linkUrl VARCHAR(255) NOT NULL,
+  description TEXT,
+  uploadDate DATE,
+  contributorId INT,
+  resourceType ENUM('exercise', 'notes', 'video', 'interactive') DEFAULT 'exercise' NOT NULL,
+  uploadedUserId INT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (contributorId) REFERENCES Contributors_v3(id) ON DELETE CASCADE,
+  FOREIGN KEY (uploadedUserId) REFERENCES Users_v3(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Tags_v3 (
+  id INT NOT NULL AUTO_INCREMENT,
+  tagName VARCHAR(255),
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE Contributors_v3 (
+  id INT NOT NULL AUTO_INCREMENT,
+  contributorName VARCHAR(255),
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE CourseTopicFiles_v3 (
@@ -63,11 +88,13 @@ CREATE TABLE CourseTopicFiles_v3 (
   FOREIGN KEY (fileId) REFERENCES Files_v3(id) ON DELETE CASCADE
 );
 
-
-CREATE TABLE Tags_v3 (
+CREATE TABLE CourseTopicLinks_v3 (
   id INT NOT NULL AUTO_INCREMENT,
-  tagName VARCHAR(255),
-  PRIMARY KEY (id)
+  courseTopicId INT,
+  linkId INT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (courseTopicId) REFERENCES CourseTopics_v3(id) ON DELETE CASCADE,
+  FOREIGN KEY (linkId) REFERENCES Links_v3(id) ON DELETE CASCADE
 );
 
 CREATE TABLE FileTags_v3 (
@@ -78,30 +105,6 @@ CREATE TABLE FileTags_v3 (
   FOREIGN KEY (tagId) REFERENCES Tags_v3(id) ON DELETE CASCADE,
   FOREIGN KEY (fileId) REFERENCES Files_v3(id) ON DELETE CASCADE
 );
-
-
-CREATE TABLE Links_v3 (
-  id INT NOT NULL AUTO_INCREMENT,
-  linkName VARCHAR(255),
-  linkUrl VARCHAR(255) NOT NULL,
-  description TEXT,
-  uploadDate DATE,
-  contributor VARCHAR(255),
-  resourceType ENUM('exercise', 'notes', 'video', 'interactive') DEFAULT 'exercise' NOT NULL,
-  uploadedUserId INT,
-  PRIMARY KEY (id),
-  FOREIGN KEY (uploadedUserId) REFERENCES Users_v3(id) ON DELETE CASCADE
-);
-
-CREATE TABLE CourseTopicLinks_v3 (
-  id INT NOT NULL AUTO_INCREMENT,
-  courseTopicId INT,
-  linkId INT,
-  PRIMARY KEY (id),
-  FOREIGN KEY (courseTopicId) REFERENCES CourseTopics_v3(id) ON DELETE CASCADE,
-  FOREIGN KEY (linkId) REFERENCES Links_v3(id) ON DELETE CASCADE
-);
-
 
 CREATE TABLE LinkTags_v3 (
   id INT NOT NULL AUTO_INCREMENT,
@@ -137,6 +140,7 @@ CREATE TABLE LinkComments_v3 (
   FOREIGN KEY (parentCommentId) REFERENCES LinkComments_v3(id),
   FOREIGN KEY (linkId) REFERENCES Links_v3(id) ON DELETE CASCADE
 );
+
 CREATE TABLE ExternalRequests_v3 (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL,

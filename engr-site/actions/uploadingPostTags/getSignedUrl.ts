@@ -6,6 +6,7 @@ import dbConnect from "@/database/dbConnector";
 import { getCurrentUser } from "@/utils/authHelpers";
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { fetchFileByName } from "../fetching/files/fetchFileByName";
+import { fetchContributorByName } from "../fetching/contributors/fetchContributorByName";
 
 /**
  * Adds '.pdf' extension to the given file name if it's not already present.
@@ -126,7 +127,7 @@ export const getSignedURL = async ({
     // Check if the fileName already exists in the database
     fileExists = await fetchFileByName({name: fileName});
 
-  } while (fileExists.failure)
+  } while (fileExists.success)
 
   // Generate the unique file name
   const uniqueFileName = generateTimestampedKey(fileName);
@@ -148,14 +149,39 @@ export const getSignedURL = async ({
     expiresIn: 60,
   });
 
+  // Fetch contributor information in db if exists, o/w create a new entry
+  let contributorId = null
+  if (contributor != "Anonymous") {
+    const fetchedContributor = await fetchContributorByName({name: contributor})
+
+    if (fetchedContributor.success) {
+      contributorId = fetchedContributor.success?.id
+    } else {
+      const query = `INSERT INTO Contributors_v3 (contributorName) VALUES (?)`
+
+      try {
+        const { results, error } = await dbConnect(query, [contributor]);
+        if (error) {
+          return { failure: "error in inserting new Contributor" };
+        }
+        const [contributorResult] = results;
+        contributorId = contributorResult.insertId;
+
+      } catch (error) {
+        return { failure: "Internal server error" };
+      }
+    }
+  }
+
+
   // Insert the file metadata into the database
   const query = `
-    INSERT INTO Files_v3 (fileName, s3Url, uploadDate, contributor, resourceType, uploadedUserId) VALUES (?, ?, ?, ?, ?, ?)`;
+    INSERT INTO Files_v3 (fileName, s3Url, uploadDate, contributorId, resourceType, uploadedUserId) VALUES (?, ?, ?, ?, ?, ?)`;
   const values = [
     uniqueFileName,
     signedURL.split("?")[0],
     uploadDate,
-    contributor,
+    contributorId,
     resourceType,
     user?.id,
   ];
@@ -167,9 +193,21 @@ export const getSignedURL = async ({
     }
 
     const [fileResult] = results;
-
     const fileId = fileResult.insertId;
+
     if (fileId) {
+      // Insert the Course Topics associated with this File
+      const query2 = `
+        INSERT INTO CourseTopicFiles_v3 (fileId, courseTopicId) VALUES (?, ?)
+      `;
+      // Loop through each courseTopic and insert a record into CourseTopicFiles
+      for (const courseTopicId of courseTopics) {
+        const { results, error } = await dbConnect(query2, [fileId, courseTopicId]);
+        if (error) {
+          console.error("Error inserting into CourseTopicFiles", error);
+          return { failure: "Error inserting into CourseTopicFiles" };
+        }
+      }
       return { success: { url: signedURL, fileId: fileId } };
     }
   } catch (error) {

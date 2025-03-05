@@ -4,7 +4,7 @@ import dbConnect from "@/database/dbConnector";
 import { processFile } from "@/utils/helpers";
 import { FileData, FetchedFile } from "@/utils/types_v2";
 
-type fetchFilesByNameProps = {
+type fetchFileByNameProps = {
   name: string;
 };
 
@@ -14,22 +14,22 @@ export type FetchedFileData = {
 };
 
 /**
- * Asynchronously fetches a file from the database by its id
- * @param {fetchFilesByNameProps} props - An object containing the id of the file to fetch
+ * Asynchronously fetches a file from the database by its name
+ * @param {fetchFileByNameProps} props - An object containing the name of the file to fetch
  * @returns {Promise<FetchedFileData>} An object containing the fetched file or an error message
  */
 export const fetchFileByName = async ({
   name
-}: fetchFilesByNameProps): Promise<FetchedFileData> => {
+}: fetchFileByNameProps): Promise<FetchedFileData> => {
   try {
     const selectQuery = `
-      SELECT f.id, f.fileName, f.s3Url, f.uploadDate, f.contributor,
+      SELECT f.id, f.fileName, f.s3Url, f.uploadDate, c.contributorName,
         JSON_ARRAYAGG(t.tagName) AS tagNames
       FROM Files_v3 f
       LEFT JOIN FileTags_v3 ft ON f.id = ft.fileId
       LEFT JOIN Tags_v3 t ON ft.tagId = t.id
-      WHERE f.id = ?
-      GROUP BY f.id;`;
+      LEFT JOIN Contributors_v3 c ON f.contributorId = c.id
+      WHERE f.fileName = ?`;
 
     const { results: fileResult, error } = await dbConnect(selectQuery, [name]);
 
