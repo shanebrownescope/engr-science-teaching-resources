@@ -167,7 +167,12 @@ export const processFilesAndLinks = (item: AllFilesAndLinksData) => {
   // Convert the concatenated tags string to an array
   // Split the 'Tags' string into an array by commas and remove whitespace from each tag with trim()
   const tags = item.tags ? item.tags.split(",").map((tag) => tag.trim()) : [];
-  console.log(tags);
+
+  // Split the 'Courses' string into an array by commas and remove whitespace from each course with trim()
+  const courses = item.courses ? item.courses.split(",").map((course) => course.trim()) : [];
+
+  // Split the 'CourseTopics' string into an array by commas and remove whitespace from each courseTopic with trim()
+  const courseTopics = item.courseTopics ? item.courseTopics.split(",").map((courseTopic) => courseTopic.trim()) : [];
 
   if (item.type === "file") {
     const fileNameSplit1 = item.name.substring(item.name.indexOf("_") + 1);
@@ -185,6 +190,8 @@ export const processFilesAndLinks = (item: AllFilesAndLinksData) => {
       urlName: urlName,
       uploadDate: new Date(item.uploadDate),
       tags: tags,
+      courses: courses,
+      courseTopics: courseTopics
     };
   } else if (item.type === "link") {
     const urlName = item.name.toLowerCase().replace(/ /g, "-");
@@ -194,6 +201,8 @@ export const processFilesAndLinks = (item: AllFilesAndLinksData) => {
       urlName: urlName,
       uploadDate: new Date(item.uploadDate),
       tags: tags,
+      courses: courses,
+      courseTopics: courseTopics
     };
   }
 };

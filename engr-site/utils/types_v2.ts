@@ -92,10 +92,12 @@ export type AllFilesAndLinksData = {
   name: string;
   type: string;
   resourceType: "exercise" | "notes" | "video" | "interactive";
-  contributor: string | null,
+  contributor: string | null;
   description: string;
   uploadDate: Date;
   tags: string | null;
+  courses: string | null;
+  courseTopics: string | null;
 };
 export type AllFilesAndLinksDataFormatted = {
   id: number;
@@ -105,8 +107,10 @@ export type AllFilesAndLinksDataFormatted = {
   uploadDate: Date;
   type: string;
   resourceType: "exercise" | "notes" | "video" | "interactive";
-  contributor: string | null,
+  contributor: string | null;
   tags: string[];
+  courses: string[];
+  courseTopics: string[];
 };
 
 export type FormFieldProps = {
