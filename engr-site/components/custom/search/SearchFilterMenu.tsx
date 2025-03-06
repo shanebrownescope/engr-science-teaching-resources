@@ -38,6 +38,8 @@ export const SearchFilterMenu = ({
   const [selectedContributors, setSelectedContributors] = useState<any[]>();
   const [selectedResourceType, setSelectedResourceType] = useState<any>();
 
+  const [filteredData, setFilteredData] = useState<AllFilesAndLinksDataFormatted[]>(resourcesData);
+
   // Fetch filter component options when page mounts
   useEffect(() => {
     const fetchFilterOptions = async () => {
@@ -76,7 +78,7 @@ export const SearchFilterMenu = ({
   // console.log(" -- coursesData: ", coursesData)
   // console.log(" -- contributorsData: ", contributorsData)
 
-  // Handle filter selection changes
+  // Functions to handle changes in filter selection
   const handleTagsSelect = async (value?: string[]) => {
     if (!value || value.length === 0) {
       setSelectedTags([]);
@@ -139,8 +141,56 @@ export const SearchFilterMenu = ({
     setSelectedContributors(value);
   };
 
-  // apply filters upon change
+  // Function to apply filters to resources data when selected value(s) change
+  // Idea: Resource must match any value in a single filter (UNION) across all filters (INTERSECTION) if selected
+  const applyFilters = () => {
+    return resourcesData.filter((resource) => {
+      // Filter by tags (if any tags are selected)
+      const matchesTags =
+        !selectedTags ||
+        selectedTags.length === 0 ||
+        selectedTags.some((tag) => resource.tags.includes(tag));
+  
+      // Filter by courses (if any courses are selected)
+      const matchesCourses =
+        !selectedCourses ||
+        selectedCourses.length === 0 ||
+        selectedCourses.some((course) => resource.courses.includes(course));
+  
+      // Filter by course topics (if any course topics are selected)
+      const matchesCourseTopics =
+        !selectedCourseTopics ||
+        selectedCourseTopics.length === 0 ||
+        selectedCourseTopics.some((topic) => resource.courseTopics.includes(topic));
+  
+      // Filter by resource type (if a resource type is selected)
+      const matchesResourceType =
+        !selectedResourceType || resource.resourceType == selectedResourceType;
+  
+      // Filter by contributor (if any contributors are selected)
+      const matchesContributors =
+        !selectedContributors ||
+        selectedContributors.length === 0 ||
+        selectedContributors.some((contributor) => resource.contributor == contributor);
+  
+      // Return true only if the resource matches all selected filters
+      return (
+        matchesTags &&
+        matchesCourses &&
+        matchesCourseTopics &&
+        matchesResourceType &&
+        matchesContributors
+      );
+    });
+  };
 
+  // applies filters whenever selected state changes
+  useEffect(() => {
+    const filteredResources = applyFilters();
+    setFilteredData(filteredResources);
+    console.log(`-- CURRENT FILTERS SELECTED:\nTags: ${selectedTags}\nCourses: ${selectedCourses}\nCourseTopics: ${selectedCourseTopics}\nResourceType: ${selectedResourceType}\nContributors: ${selectedContributors}`)
+    console.log(`--FILTERED RESULTS: `, filteredData)
+  }, [selectedTags, selectedCourses, selectedCourseTopics, selectedResourceType, selectedContributors]);
 
 
   // Function to handle sorting change
@@ -175,7 +225,7 @@ export const SearchFilterMenu = ({
           <MultiSelect
             label="Tags"
             data={tagsData?.map((tag) => ({
-              value: String(tag.id), 
+              value: tag.name, 
               label: tag.name
             }))}
             value={selectedTags || []}
@@ -216,7 +266,7 @@ export const SearchFilterMenu = ({
           <MultiSelect
             label="Contributor"
             data={contributorsData?.map((contributor) => ({
-              value: String(contributor.id), 
+              value: trimCapitalizeFirstLetter(contributor.name), 
               label: trimCapitalizeFirstLetter(contributor.name)
             }))}
             value={selectedContributors || []}
@@ -226,7 +276,7 @@ export const SearchFilterMenu = ({
         </div>
       }
 
-      <ResourcesListPaginated data={resourcesData} />
+      <ResourcesListPaginated data={filteredData} />
     </>
   );
 };
