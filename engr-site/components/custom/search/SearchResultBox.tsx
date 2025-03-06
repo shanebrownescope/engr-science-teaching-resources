@@ -10,6 +10,8 @@ type SearchResultBoxProps = {
   urlName: string;
   description: string;
   tags: string[];
+  courses: string[];
+  courseTopics: string[];
   resourceType: string;
   contributor: string
 };
@@ -27,6 +29,8 @@ export const SearchResultBox = ({
   urlName,
   description,
   tags,
+  courses,
+  courseTopics,
   resourceType,
   contributor
 }: SearchResultBoxProps) => {

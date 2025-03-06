@@ -57,6 +57,8 @@ const ResourcesListPaginated = ({ data }: ResourcesListPaginatedProps) => {
               urlName={item.urlName}
               description={item.description}
               tags={item.tags}
+              courses={item.courses}
+              courseTopics={item.courseTopics}
               resourceType={item.resourceType}
               contributor={item.contributor || "Anonymous"}
             />

@@ -24,6 +24,7 @@ const SearchResults = ({ params }: { params: { searchName: string } }) => {
   // Fetch all files+links resources data
   useEffect(() => {
     const fetchFilesAndLinks = async () => {
+      setIsLoading(true)
       try {
         const data: FetchedSearchResults = await fetchSearchResults(
           formattedSearchName.toLowerCase(),

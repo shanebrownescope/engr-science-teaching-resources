@@ -33,19 +33,22 @@ const fetchQuery = `
     f.uploadDate,
     c.contributorName AS contributor,
     f.resourceType,
-    IFNULL(GROUP_CONCAT(FileTagConcat.tagName SEPARATOR ', '), '') AS tags
+    IFNULL(FileTagConcat.tagName, '') AS tags,
+    IFNULL(FileCourseTopicConcat.courseTopicIds, '') AS courseTopics,
+    IFNULL(FileCourseTopicConcat.courseIds, '') AS courses
   FROM 
     Files_v3 AS f
   LEFT JOIN 
     (
       SELECT 
-        fileId, GROUP_CONCAT(t.tagName) AS tagName
+        ft.fileId, 
+        GROUP_CONCAT(t.tagName SEPARATOR ', ') AS tagName
       FROM 
         FileTags_v3 AS ft
       JOIN 
         Tags_v3 AS t ON ft.tagId = t.id
       GROUP BY 
-        fileId
+        ft.fileId
     ) AS FileTagConcat
   ON 
     f.id = FileTagConcat.fileId
@@ -53,6 +56,23 @@ const fetchQuery = `
     Contributors_v3 AS c 
   ON 
     f.contributorId = c.id
+  LEFT JOIN 
+    (
+      SELECT 
+        ctf.fileId,
+        GROUP_CONCAT(DISTINCT ct.id SEPARATOR ', ') AS courseTopicIds,
+        GROUP_CONCAT(DISTINCT ct.courseId SEPARATOR ', ') AS courseIds
+      FROM 
+        CourseTopicFiles_v3 AS ctf
+      LEFT JOIN 
+        CourseTopics_v3 AS ct ON ctf.courseTopicId = ct.id
+      LEFT JOIN 
+        Courses_v3 AS co ON ct.courseId = co.id
+      GROUP BY 
+        ctf.fileId
+    ) AS FileCourseTopicConcat 
+  ON 
+    f.id = FileCourseTopicConcat.fileId
   WHERE 
     ((FileTagConcat.tagName LIKE CONCAT('%', ?, '%') OR f.fileName LIKE CONCAT('%', ?, '%')) OR (f.fileName LIKE CONCAT('%', ?, '%') AND (FileTagConcat.tagName IS NULL OR FileTagConcat.tagName = '')))
   GROUP BY 
@@ -68,19 +88,22 @@ const fetchQuery = `
     l.uploadDate,
     c.contributorName AS contributor,
     l.resourceType,
-    IFNULL(GROUP_CONCAT(LinkTagConcat.tagName SEPARATOR ', '), '') AS tags
+    IFNULL(LinkTagConcat.tagName, '') AS tags,
+    IFNULL(LinkCourseTopicConcat.courseTopicIds, '') AS courseTopics,
+    IFNULL(LinkCourseTopicConcat.courseIds, '') AS courses
   FROM 
     Links_v3 AS l
   LEFT JOIN  
     (
       SELECT 
-        linkId, GROUP_CONCAT(t.tagName) AS tagName
+        lt.linkId, 
+        GROUP_CONCAT(t.tagName SEPARATOR ', ') AS tagName
       FROM 
         LinkTags_v3 AS lt
       JOIN 
         Tags_v3 AS t ON lt.tagId = t.id
       GROUP BY 
-        linkId
+        lt.linkId
     ) AS LinkTagConcat
   ON 
     l.id = LinkTagConcat.linkId
@@ -88,11 +111,27 @@ const fetchQuery = `
     Contributors_v3 AS c 
   ON 
     l.contributorId = c.id
+  LEFT JOIN 
+    (
+      SELECT 
+        ctl.linkId,
+        GROUP_CONCAT(DISTINCT ct.id SEPARATOR ', ') AS courseTopicIds,
+        GROUP_CONCAT(DISTINCT ct.courseId SEPARATOR ', ') AS courseIds
+      FROM 
+        CourseTopicLinks_v3 AS ctl
+      LEFT JOIN 
+        CourseTopics_v3 AS ct ON ctl.courseTopicId = ct.id
+      LEFT JOIN 
+        Courses_v3 AS co ON ct.courseId = co.id
+      GROUP BY 
+        ctl.linkId
+    ) AS LinkCourseTopicConcat 
+  ON l.id = LinkCourseTopicConcat.linkId
   WHERE 
     ((LinkTagConcat.tagName LIKE CONCAT('%', ?, '%') OR l.linkName LIKE CONCAT('%', ?, '%')) OR (l.linkName LIKE CONCAT('%', ?, '%') AND (LinkTagConcat.tagName IS NULL OR LinkTagConcat.tagName = '')))
   GROUP BY 
     l.id;
-`;
+  `;
 
 /**
  * Fetches search results from the database based on a search query
@@ -114,6 +153,7 @@ export const fetchSearchResults = async (
     ]);
 
     if (error) {
+      console.log("Error fetching search results: ", error)
       return { failure: "Internal server error" };
     }
 
