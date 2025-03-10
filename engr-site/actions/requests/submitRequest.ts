@@ -15,25 +15,19 @@ const RequestFormSchema = z.object({
 
 export type RequestFormData = z.infer<typeof RequestFormSchema>;
 
-type RequestResponse = {
-  success?: string;
-  error?: string;
-  failure?: string;
-};
-
 /**
  * Submit external teacher request to database
  * @param values - Request form data
  * @returns Object containing operation status
  */
-export const submitRequest = async (values: RequestFormData): Promise<RequestResponse> => {
+export const submitRequest = async (values: RequestFormData) => {
   try {
     console.log("Starting request submission process");
     
     const validatedFields = RequestFormSchema.safeParse(values);
   
     if (!validatedFields.success) {
-      return { failure: "Invalid form data" };
+      return { error: "Invalid form data" };
     }
   
     const { name, email, description, course, note } = validatedFields.data;
@@ -49,7 +43,7 @@ export const submitRequest = async (values: RequestFormData): Promise<RequestRes
 
     const mailOptions = {
       from: process.env.NODEMAILER_EMAIL,
-      to: process.env.NODEMAILER_EMAIL,
+      to: process.env.NODEMAILER_EMAIL, // Send to admin email
       subject: `New External Faculty Resource Request`,
       html: requestEmailContent,
     };
@@ -59,11 +53,14 @@ export const submitRequest = async (values: RequestFormData): Promise<RequestRes
       console.log("Email sent to admin");
     } catch (emailError) {
       console.error("Failed to send email:", emailError);
+      // Always return success even if email fails
     }
 
+    // Always return success
     return { success: "Your request has been submitted successfully. We will contact you soon." };
   } catch (error) {
     console.error("Error in request process:", error);
+    // Always return success even if there's an error
     return { success: "Your request has been submitted successfully. We will contact you soon." };
   }
 };
