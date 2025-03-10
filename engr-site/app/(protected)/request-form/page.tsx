@@ -8,6 +8,8 @@ import {
   Container,
   Select,
   Alert,
+  Text,
+  Box,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
@@ -96,7 +98,15 @@ export default function RequestForm() {
         >
           External Faculty Request Form
         </Title>
-
+        
+        {/* Add Notes below the Title */}
+        <Box mb="xl">
+          <Text ta="center" c="dimmed" size="sm">
+          If you would like to share teaching materials with us and have them featured on our website,{'\n'}
+          please fill out this form, and we will get in touch with you as soon as possible.
+          </Text>
+        </Box>     
+        
         <SimpleGrid cols={{ base: 1, sm: 2 }} mb="md">
           <TextInput
             label="Name"
