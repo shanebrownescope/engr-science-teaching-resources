@@ -8,6 +8,8 @@ import {
   Container,
   Select,
   Alert,
+  Text,
+  Box,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
@@ -15,29 +17,22 @@ import { useEffect, useState } from "react";
 import { FormattedData } from "@/utils/formatting";
 import { submitRequest, RequestFormData } from "@/actions/requests/submitRequest";
 import { IconAlertCircle, IconCheck } from '@tabler/icons-react';
+import { z } from 'zod';
 
 export default function RequestForm() {
   const [courses, setCourses] = useState<FormattedData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-
-  useEffect(() => {
-    const getCourses = async () => {
-      const courseData = await fetchCourses();
-      if (courseData.success) {
-        setCourses(courseData.success);
-      }
-    };
-    getCourses();
-  }, []);
-
+  
+  // 移除独立的 note 状态，改为在 useForm 中管理
   const form = useForm({
     initialValues: {
       name: "",
       email: "",
       description: "",
       course: "",
+      note: "", // 添加 note 字段
     },
     validate: {
       name: (value) => value.trim().length < 2 ? 'Name must be at least 2 characters' : null,
@@ -47,7 +42,23 @@ export default function RequestForm() {
     },
   });
 
-  const handleSubmit = async (values: RequestFormData) => {
+  // 获取课程数据
+  useEffect(() => {
+    const loadCourses = async () => {
+      try {
+        const coursesData = await fetchCourses();
+        if (coursesData && coursesData.length > 0) {
+          setCourses(coursesData);
+        }
+      } catch (err) {
+        console.error("Failed to load courses:", err);
+      }
+    };
+    
+    loadCourses();
+  }, []);
+  
+  const handleSubmit = async (values: any) => {
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -70,7 +81,7 @@ export default function RequestForm() {
       setLoading(false);
     }
   };
-
+  
   return (
     <Container size="md" my={40}>
       {error && (
@@ -92,10 +103,18 @@ export default function RequestForm() {
           style={{ fontFamily: "Greycliff CF, var(--mantine-font-family)" }}
           fw={900}
           ta="center"
-          mb="xl"
+          mb="md"
         >
           External Faculty Request Form
         </Title>
+
+        {/* Add Notes below the Title */}
+        <Box mb="xl">
+          <Text ta="center" c="dimmed" size="sm">
+          If you would like to share teaching materials with us and have them featured on our website,{'\n'}
+          please fill out this form, and we will get in touch with you as soon as possible.
+          </Text>
+        </Box>
 
         <SimpleGrid cols={{ base: 1, sm: 2 }} mb="md">
           <TextInput
