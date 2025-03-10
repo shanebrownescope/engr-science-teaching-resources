@@ -10,6 +10,7 @@ const RequestFormSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   description: z.string().min(1, "Description cannot be empty"),
   course: z.string().min(1, "Please select a course"),
+  note: z.string().optional(), // 添加可选的注释字段
 });
 
 export type RequestFormData = z.infer<typeof RequestFormSchema>;
@@ -29,24 +30,21 @@ export const submitRequest = async (values: RequestFormData): Promise<RequestRes
   try {
     console.log("Starting request submission process");
     
-    // Validate form data
     const validatedFields = RequestFormSchema.safeParse(values);
   
-    console.log("Validation result:", validatedFields.success);
     if (!validatedFields.success) {
       return { failure: "Invalid form data" };
     }
   
-    const { name, email, description, course } = validatedFields.data;
-    console.log("Validated data:", { name, email, description, course });
-
-    // Send email to admin instead of database insertion
+    const { name, email, description, course, note } = validatedFields.data;
+    // 修改邮件内容，添加注释信息
     const requestEmailContent = `
       <p>New External Faculty Request:</p>
       <p>Name: ${name}</p>
       <p>Email: ${email}</p>
       <p>Course ID: ${course}</p>
       <p>Description: ${description}</p>
+      ${note ? `<p>Additional Notes: ${note}</p>` : ''}
     `;
 
     const mailOptions = {
