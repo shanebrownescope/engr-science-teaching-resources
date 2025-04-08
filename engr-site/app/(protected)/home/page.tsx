@@ -1,4 +1,3 @@
-//* home page when users first log in
 // "use client";
 import "@mantine/core/styles.css";
 import { SearchButton } from "@/components/mantine";
@@ -28,7 +27,7 @@ const Home = async () => {
             all sources are tagged by the concepts they are related to. For
             example, this site has strength of materials content about normal
             stress in beams. To locate that content you could use the search
-            terms “normal tree” and “beams." <br /> <br /> You can also simply
+            terms "normal tree" and "beams." <br /> <br /> You can also simply
             click on the image of the class that you're teaching to get a full
             list of all of the teaching materials within that course. Each
             course includes weekly lecture material, homework, class worksheets,
@@ -40,20 +39,14 @@ const Home = async () => {
       </div>
 
       <div className="class-section">
-        <Link href="/courses/statics" passHref>
-          <div className="class-button">
+        <Link href={`/search/${"Statics".toLowerCase().replace(/\s+/g, '-')}`} passHref>
+          <div className="class-button class-button-spaced" style={{ left: "calc(33% - 100px)" }}>
             <img src="/statics.png" alt="Statics" />
             <p className="class-text">Statics</p>
           </div>
         </Link>
-        <Link href="/courses/dynamics" passHref>
-          <div className="class-button">
-            <img src="/dynamics.png" alt="Dynamics" />
-            <p className="class-text">Dynamics</p>
-          </div>
-        </Link>
-        <Link href="/courses/strengths-of-materials" passHref>
-          <div className="class-button">
+        <Link href={`/search/${"Strengths of Materials".toLowerCase().replace(/\s+/g, '-')}`} passHref>
+          <div className="class-button class-button-spaced" style={{ left: "calc(67% - 100px)" }}>
             <img src="/strengthsOfMaterials.png" alt="Strengths of Materials" />
             <p className="class-text">Strengths of Materials</p>
           </div>

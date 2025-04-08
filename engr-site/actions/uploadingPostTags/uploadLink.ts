@@ -1,19 +1,18 @@
 "use server";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import s3 from "@/utils/s3Client";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dbConnect from "@/database/dbConnector";
 import { getCurrentUser } from "@/utils/authHelpers";
 import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { sanitizeUrl, validUrlPattern } from "@/utils/helpers";
+import { fetchContributorByName } from "../fetching/contributors/fetchContributorByName";
+import { fetchLinkByName } from "../fetching/links/fetchLinkByName";
 
 type UploadLinkProps = {
-  linkName: string;
   linkUrl: string;
-  conceptId: number;
-  description: string | null;
   contributor: string;
   uploadDate: string;
+  courses: string[];
+  courseTopics: string[];
+  resourceType: string;
 };
 
 /**
@@ -22,12 +21,12 @@ type UploadLinkProps = {
  * @returns {Promise<{success: {linkId: number}} | {failure: string}>} - A promise that resolves to an object with the success message and the ID of the link if the upload was successful, or a failure message if the upload was not successful.
  */
 export const uploadLink = async ({
-  linkName,
   linkUrl,
-  conceptId,
-  description,
   contributor,
   uploadDate,
+  courses,
+  courseTopics,
+  resourceType
 }: UploadLinkProps) => {
   const user = await getCurrentUser();
   if (user?.role && user.role !== "admin") {
@@ -55,19 +54,65 @@ export const uploadLink = async ({
   }
 
   // Check if all required fields are present
-  if (!linkName || !linkUrl || !conceptId || !uploadDate) {
+  if (
+    !linkUrl ||
+    !courses ||
+    courses.length == 0 ||
+    !courseTopics ||
+    courseTopics.length == 0 ||
+    !resourceType ||
+    !uploadDate
+  ) {
     return { failure: "Missing required fields" };
   }
 
+  // Generate random sequence of characters for linkName
+  let linkName;
+  let linkExists;
+  const length = 16;
+
+  do {
+    // Generate a random string for the linkName
+    linkName = Math.random().toString(36).substring(2, length + 2);
+
+    // Check if the linkName already exists in the database
+    linkExists = await fetchLinkByName({name: linkName});
+
+  } while (linkExists.success)
+
+  // Fetch contributor information in db if exists, o/w create a new entry
+  let contributorId = null
+  if (contributor != "Anonymous") {
+    const fetchedContributor = await fetchContributorByName({name: contributor})
+
+    if (fetchedContributor.success) {
+      contributorId = fetchedContributor.success?.id
+    } else {
+      const query = `INSERT INTO Contributors_v3 (contributorName) VALUES (?)`
+
+      try {
+        const { results, error } = await dbConnect(query, [contributor]);
+        if (error) {
+          return { failure: "error in inserting new Contributor" };
+        }
+        const [contributorResult] = results;
+        contributorId = contributorResult.insertId;
+
+      } catch (error) {
+        return { failure: "Internal server error" };
+      }
+    }
+  }
+
+  // Insert the link metadata into the database
   const query = `
-    INSERT INTO Links_v2 (linkName, linkUrl, description, uploadDate, contributor, conceptId, uploadedUserId) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    INSERT INTO Links_v3 (linkName, linkUrl, uploadDate, contributorId, resourceType, uploadedUserId) VALUES (?, ?, ?, ?, ?, ?)`;
   const values = [
     linkName,
     sanitizedUrl,
-    description,
     uploadDate,
-    contributor,
-    conceptId,
+    contributorId,
+    resourceType,
     user?.id,
   ];
 
@@ -75,15 +120,28 @@ export const uploadLink = async ({
     const { results, error } = await dbConnect(query, values);
 
     if (error) {
-      return { failure: "error in inserting data in Files" };
+      return { failure: "error in inserting data in Links" };
     }
 
     const [linkResult] = results;
-
     const linkId = linkResult.insertId;
 
     if (linkId) {
+      // Insert the Course Topics associated with this Link
+      const query2 = `
+        INSERT INTO CourseTopicLinks_v3 (linkId, courseTopicId) VALUES (?, ?)
+      `;
+      // Loop through each courseTopic and insert a record into CourseTopicLinks
+      for (const courseTopicId of courseTopics) {
+        const { results, error } = await dbConnect(query2, [linkId, courseTopicId]);
+
+        if (error) {
+          console.error("Error inserting into CourseTopicLinks:", error);
+          return { failure: "Error inserting into CourseTopicLinks" };
+        }
+      }
       return { success: { linkId: linkId } };
+
     } else {
       return { failure: "error inserting link" };
     }
