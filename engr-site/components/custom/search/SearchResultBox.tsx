@@ -52,6 +52,26 @@ export const SearchResultBox = ({
             </span>
           ))}
         </div>
+        <div className={styles.tagsContainer}>
+          {courses.map((course: string, index: number) => (
+            <span
+              key={index}
+              className={`${styles.tag} ${styles.tag.toLowerCase()}`}
+            >
+              {course}
+            </span>
+          ))}
+        </div>
+        <div className={styles.tagsContainer}>
+          {courseTopics.map((courseTopic: string, index: number) => (
+            <span
+              key={index}
+              className={`${styles.tag} ${styles.tag.toLowerCase()}`}
+            >
+              {courseTopic}
+            </span>
+          ))}
+        </div>
       </Link>
     </div>
   );

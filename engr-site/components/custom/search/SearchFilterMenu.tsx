@@ -9,6 +9,8 @@ import { fetchCourseTopicsByCourseId } from "@/actions/fetching/courseTopics/fet
 import { trimCapitalizeFirstLetter } from "@/utils/helpers";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import { fetchContributors } from "@/actions/fetching/contributors/fetchContributors";
+import { fetchCourseTopicsByCourseName } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseName";
+import { lowercaseAndReplaceSpace } from "@/utils/formatting";
 
 type SearchFilterMenuProps = {
   resourcesData: AllFilesAndLinksDataFormatted[]
@@ -90,7 +92,7 @@ export const SearchFilterMenu = ({
   const handleCoursesSelect = async (value?: string[]) => {
     // Update the selected courses
     setSelectedCourses(value);
-  
+
     if (!value || value.length === 0) {
       // If no courses are selected, reset the course topics data and selected topics
       setCourseTopicsData([]);
@@ -101,7 +103,7 @@ export const SearchFilterMenu = ({
     try {
       // Fetch course topics for each course ID and combine the results (array of fetched objects)
       const results = await Promise.all(
-        value.map((courseId) => fetchCourseTopicsByCourseId(courseId))
+        value.map((courseName) => fetchCourseTopicsByCourseName(courseName))
       );
   
       // Combine all the course topics into a single array (flatMap == map + flat)
@@ -113,7 +115,7 @@ export const SearchFilterMenu = ({
       // Filter the selected course topics to keep only those associated with the remaining courses
       setSelectedCourseTopics((prevSelectedTopics) => {
         return prevSelectedTopics?.filter((topic) =>
-          combinedCourseTopics.some((ct) => ct.id == topic)
+          combinedCourseTopics.some((ct) => ct.name == topic)
         );
       });
     } catch (error) {
@@ -235,7 +237,7 @@ export const SearchFilterMenu = ({
           <MultiSelect
             label="Courses"
             data={coursesData?.map((course) => ({
-              value: String(course.id), 
+              value: course.name, 
               label: course.name
             }))}
             value={selectedCourses || []}
@@ -245,7 +247,7 @@ export const SearchFilterMenu = ({
           <MultiSelect
             label="Course Topics"
             data={courseTopicsData?.map((topic) => ({
-              value: String(topic.id), 
+              value: topic.name, 
               label: topic.name
             }))}
             value={selectedCourseTopics || []}

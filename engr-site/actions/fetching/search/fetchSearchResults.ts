@@ -34,8 +34,8 @@ const fetchQuery = `
     c.contributorName AS contributor,
     f.resourceType,
     IFNULL(FileTagConcat.tagName, '') AS tags,
-    IFNULL(FileCourseTopicConcat.courseTopicIds, '') AS courseTopics,
-    IFNULL(FileCourseTopicConcat.courseIds, '') AS courses
+    IFNULL(FileCourseTopicConcat.courseTopicNames, '') AS courseTopics,
+    IFNULL(FileCourseTopicConcat.courseNames, '') AS courses
   FROM 
     Files_v3 AS f
   LEFT JOIN 
@@ -60,8 +60,8 @@ const fetchQuery = `
     (
       SELECT 
         ctf.fileId,
-        GROUP_CONCAT(DISTINCT ct.id SEPARATOR ', ') AS courseTopicIds,
-        GROUP_CONCAT(DISTINCT ct.courseId SEPARATOR ', ') AS courseIds
+        GROUP_CONCAT(DISTINCT ct.courseTopicName SEPARATOR ', ') AS courseTopicNames,
+        GROUP_CONCAT(DISTINCT co.courseName SEPARATOR ', ') AS courseNames
       FROM 
         CourseTopicFiles_v3 AS ctf
       LEFT JOIN 
@@ -89,8 +89,8 @@ const fetchQuery = `
     c.contributorName AS contributor,
     l.resourceType,
     IFNULL(LinkTagConcat.tagName, '') AS tags,
-    IFNULL(LinkCourseTopicConcat.courseTopicIds, '') AS courseTopics,
-    IFNULL(LinkCourseTopicConcat.courseIds, '') AS courses
+    IFNULL(LinkCourseTopicConcat.courseTopicNames, '') AS courseTopics,
+    IFNULL(LinkCourseTopicConcat.courseNames, '') AS courses
   FROM 
     Links_v3 AS l
   LEFT JOIN  
@@ -115,8 +115,8 @@ const fetchQuery = `
     (
       SELECT 
         ctl.linkId,
-        GROUP_CONCAT(DISTINCT ct.id SEPARATOR ', ') AS courseTopicIds,
-        GROUP_CONCAT(DISTINCT ct.courseId SEPARATOR ', ') AS courseIds
+        GROUP_CONCAT(DISTINCT ct.courseTopicName SEPARATOR ', ') AS courseTopicNames,
+        GROUP_CONCAT(DISTINCT co.courseName SEPARATOR ', ') AS courseNames
       FROM 
         CourseTopicLinks_v3 AS ctl
       LEFT JOIN 
