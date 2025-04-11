@@ -1,9 +1,9 @@
-import { FetchedFile, FetchedLink } from "@/utils/types";
+import { AllFilesAndLinksDataFormatted, FetchedFile, FetchedLink } from "@/utils/types_v2";
 import styles from "./similarResource.module.css";
+import Link from "next/link";
 
 type SimilarItemProps = {
-  item: FetchedFile | FetchedLink;
-  type: "file" | "link";
+  item: AllFilesAndLinksDataFormatted;
 };
 
 /**
@@ -12,25 +12,28 @@ type SimilarItemProps = {
  * @param {SimilarItemProps} props - The props of the component.
  * @returns {JSX.Element} - The rendered SimilarItem component.
  */
-const SimilarItem = ({ item, type }: SimilarItemProps) => {
+const SimilarItem = ({ item }: SimilarItemProps) => {
   return (
     <div className={styles.container}>
-      <p className={styles.name}>
-        {type === "file"
-          ? (item as FetchedFile).fileName
-          : (item as FetchedLink).linkName}
-      </p>
+      <Link 
+        href={`/resources/${item.type}/${item.urlName}`}
+      >
+        <p className={styles.name}>
+          {item.urlName}
+        </p>
 
-      <p> {item.description} </p>
+        <p>{item.description}</p>
 
-      <div className={styles.tagsContainer}>
-        {item.tags?.map((tag: string, idx: number) => (
-          <div key={idx} className={styles.tag}>
-            {" "}
-            {tag}{" "}
-          </div>
-        ))}
-      </div>
+        <div className={styles.tagsContainer}>
+          {item.tags?.map((tag: string, idx: number) => (
+            <div key={idx} className={styles.tag}>
+              {" "}
+              {tag}{" "}
+            </div>
+          ))}
+        </div>
+        
+      </Link>
     </div>
   );
 };

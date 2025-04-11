@@ -1,13 +1,11 @@
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
-import { FetchedFile } from "@/utils/types";
+import { FetchedFile } from "@/utils/types_v2";
 
 type DisplayFileProps = {
   file: FetchedFile;
 };
 
 export const DisplayFile = ({ file }: DisplayFileProps) => {
-  console.log(typeof file.tags, file.tags);
-  file?.tags?.map((tag: any) => console.log(typeof tag));
   return (
     <ContainerLayout paddingTop="md">
       <div className="resource-container">

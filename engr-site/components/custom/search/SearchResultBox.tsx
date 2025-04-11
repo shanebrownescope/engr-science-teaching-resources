@@ -37,9 +37,7 @@ export const SearchResultBox = ({
   return (
     <div className={styles.resultBox}>
       <Link
-        href={`/resources/${type}/${urlName}?${new URLSearchParams({
-          id: id.toString(),
-        })}`}
+        href={`/resources/${type}/${urlName}`}
       >
         <h5 className={styles.resultTitle}>{title}</h5>
         <p className={styles.resultDescription}>{resourceType}</p>

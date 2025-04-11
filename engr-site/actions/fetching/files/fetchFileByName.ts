@@ -23,17 +23,65 @@ export const fetchFileByName = async ({
 }: fetchFileByNameProps): Promise<FetchedFileData> => {
   try {
     const selectQuery = `
-      SELECT f.id, f.fileName, f.s3Url, f.uploadDate, c.contributorName,
-        JSON_ARRAYAGG(t.tagName) AS tagNames
-      FROM Files_v3 f
-      LEFT JOIN FileTags_v3 ft ON f.id = ft.fileId
-      LEFT JOIN Tags_v3 t ON ft.tagId = t.id
-      LEFT JOIN Contributors_v3 c ON f.contributorId = c.id
-      WHERE f.fileName = ?`;
+      SELECT 
+        'file' AS type,
+        f.id,
+        f.fileName,
+        f.s3Url,
+        f.description,
+        f.uploadDate,
+        c.contributorName AS contributor,
+        f.resourceType,
+        f.uploadedUserId,
+        IFNULL(FileTagConcat.tagName, '') AS tags,
+        IFNULL(FileCourseTopicConcat.courseTopicIds, '') AS courseTopics,
+        IFNULL(FileCourseTopicConcat.courseIds, '') AS courses
+      FROM 
+        Files_v3 AS f
+      LEFT JOIN 
+        (
+          SELECT 
+            ft.fileId, 
+            GROUP_CONCAT(t.tagName SEPARATOR ', ') AS tagName
+          FROM 
+            FileTags_v3 AS ft
+          JOIN 
+            Tags_v3 AS t ON ft.tagId = t.id
+          GROUP BY 
+            ft.fileId
+        ) AS FileTagConcat
+      ON 
+        f.id = FileTagConcat.fileId
+      LEFT JOIN 
+        Contributors_v3 AS c 
+      ON 
+        f.contributorId = c.id
+      LEFT JOIN 
+        (
+          SELECT 
+            ctf.fileId,
+            GROUP_CONCAT(DISTINCT ct.id SEPARATOR ', ') AS courseTopicIds,
+            GROUP_CONCAT(DISTINCT ct.courseId SEPARATOR ', ') AS courseIds
+          FROM 
+            CourseTopicFiles_v3 AS ctf
+          LEFT JOIN 
+            CourseTopics_v3 AS ct ON ctf.courseTopicId = ct.id
+          LEFT JOIN 
+            Courses_v3 AS co ON ct.courseId = co.id
+          GROUP BY 
+            ctf.fileId
+        ) AS FileCourseTopicConcat 
+      ON 
+        f.id = FileCourseTopicConcat.fileId
+      WHERE f.fileName LIKE CONCAT('%\_', ?, '.%')
+      GROUP BY 
+        f.id
+    `;
 
     const { results: fileResult, error } = await dbConnect(selectQuery, [name]);
 
     if (error) {
+      console.log("Error when fetching file: ", error)
       return { failure: "Internal server error" };
     }
 

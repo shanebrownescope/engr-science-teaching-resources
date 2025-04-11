@@ -1,5 +1,5 @@
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
-import { FetchedLink } from "@/utils/types";
+import { FetchedLink } from "@/utils/types_v2";
 
 type DisplayLinkProps = {
   link: FetchedLink;

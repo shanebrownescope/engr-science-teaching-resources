@@ -1,11 +1,10 @@
-import { FetchedFile, FetchedLink } from "@/utils/types";
+import { AllFilesAndLinksDataFormatted, FetchedFile, FetchedLink, FetchedSearchResults } from "@/utils/types_v2";
 import styles from "./similarResource.module.css";
 import SimilarItem from "./SimilarItem";
 import ContainerLayout from "../containerLayout/ContainerLayout";
 
 type SimilarResourcesDataProps = {
-  similarResources: FetchedFile[] | FetchedLink[] | undefined;
-  type: "file" | "link";
+  similarResources: AllFilesAndLinksDataFormatted[] | undefined;
 };
 
 /**
@@ -15,8 +14,7 @@ type SimilarResourcesDataProps = {
  * @returns {JSX.Element} - The rendered SimilarResourcesData component.
  */
 const SimilarResourcesData = ({
-  similarResources,
-  type,
+  similarResources
 }: SimilarResourcesDataProps) => {
   return (
     <ContainerLayout paddingTop="md">
@@ -24,15 +22,8 @@ const SimilarResourcesData = ({
 
       <div className={styles.grid}>
         {similarResources &&
-          type === "file" &&
           similarResources.map((item, idx) => (
-            <SimilarItem key={idx} item={item as FetchedFile} type="file" />
-          ))}
-
-        {similarResources &&
-          type === "link" &&
-          similarResources.map((item, idx) => (
-            <SimilarItem key={idx} item={item as FetchedLink} type="link" />
+            <SimilarItem key={idx} item={item} />
           ))}
       </div>
 

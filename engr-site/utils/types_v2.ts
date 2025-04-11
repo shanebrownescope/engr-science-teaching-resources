@@ -18,6 +18,8 @@ export type FetchedFile = {
   resourceType: "exercise" | "notes" | "video" | "interactive";
   uploadedUserId: number;
   tags: string[];
+  courses: string[];
+  courseTopics: string[];
 };
 
 export type FetchedLink = {
@@ -32,10 +34,13 @@ export type FetchedLink = {
   resourceType: "exercise" | "notes" | "video" | "interactive";
   uploadedUserId: number;
   tags: string[];
+  courses: string[];
+  courseTopics: string[];
 };
 
 export type FileData = {
   id: number;
+  type: string;
   fileName: string;
   s3Url: string;
   description: string | undefined;
@@ -43,11 +48,14 @@ export type FileData = {
   contributor: string | null;
   resourceType: "exercise" | "notes" | "video" | "interactive";
   uploadedUserId: number;
-  tagNames: string[];
+  tags: string | null;
+  courses: string | null;
+  courseTopics: string | null;
 };
 
 export type LinkData = {
   id: number;
+  type: string,
   linkName: string;
   linkUrl: string;
   description: string | undefined;
@@ -55,7 +63,9 @@ export type LinkData = {
   contributor: string | null;
   resourceType: "exercise" | "notes" | "video" | "interactive";
   uploadedUserId: number;
-  tagNames: string[];
+  tags: string | null;
+  courses: string | null;
+  courseTopics: string | null;
 };
 
 export type searchParams = {
@@ -99,6 +109,7 @@ export type AllFilesAndLinksData = {
   courses: string | null;
   courseTopics: string | null;
 };
+
 export type AllFilesAndLinksDataFormatted = {
   id: number;
   originalName: string;

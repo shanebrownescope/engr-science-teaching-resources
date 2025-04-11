@@ -1,33 +1,34 @@
 "use server";
 
-import { getFileById } from "@/database/data/files";
+import { fetchFileByName } from "@/actions/fetching/files/fetchFileByName";
 import dbConnect from "@/database/dbConnector";
 import { formatTimeAgo } from "@/utils/formatting";
-import { CommentFileData, FetchedCommentFileData } from "@/utils/types";
+import { CommentFileData, FetchedCommentFileData } from "@/utils/types_v2";
 
 /**
- * Fetches comments for a file from the database by its id
- * @param {string} id - The id of the file
+ * Fetches comments for a file from the database by its name
+ * @param {string} name - The name of the file
  * @returns {Promise<FetchedCommentFileData | null>} - A promise that resolves to an object containing the fetched comments or an error message
  */
-export const fetchCommentsByFileId = async (
-  id: string,
+export const fetchCommentsByFileName = async (
+  name: string,
 ): Promise<FetchedCommentFileData | null> => {
   try {
-    const existingFile = getFileById(id);
-    if (!existingFile) {
+    const existingFile = await fetchFileByName({ name });
+    if (existingFile.failure) {
       return { failure: "File not found" };
     }
 
     const selectQuery = `
       SELECT fc.id, fc.fileId, fc.userId, fc.commentText, fc.uploadDate, u.name
-      FROM FileComments_v2 AS fc 
-      JOIN Users_v2 AS u ON fc.userId = u.id
+      FROM FileComments_v3 AS fc 
+      JOIN Users_v3 AS u ON fc.userId = u.id
       WHERE fc.fileId = ?`;
 
-    const { results: comments, error } = await dbConnect(selectQuery, [id]);
+    const { results: comments, error } = await dbConnect(selectQuery, [ existingFile.success?.id ]);
 
     if (error) {
+      console.error("An error occurred while fetching comment data:", error);
       return {
         failure:
           "Internal server error, error retrieving file comments from db",
