@@ -37,9 +37,7 @@ export const SearchResultBox = ({
   return (
     <div className={styles.resultBox}>
       <Link
-        href={`/resources/${type}/${urlName}?${new URLSearchParams({
-          id: id.toString(),
-        })}`}
+        href={`/resources/${type}/${urlName}`}
       >
         <h5 className={styles.resultTitle}>{title}</h5>
         <p className={styles.resultDescription}>{resourceType}</p>
@@ -51,6 +49,26 @@ export const SearchResultBox = ({
               className={`${styles.tag} ${styles.tag.toLowerCase()}`}
             >
               {tag}
+            </span>
+          ))}
+        </div>
+        <div className={styles.tagsContainer}>
+          {courses.map((course: string, index: number) => (
+            <span
+              key={index}
+              className={`${styles.tag} ${styles.tag.toLowerCase()}`}
+            >
+              {course}
+            </span>
+          ))}
+        </div>
+        <div className={styles.tagsContainer}>
+          {courseTopics.map((courseTopic: string, index: number) => (
+            <span
+              key={index}
+              className={`${styles.tag} ${styles.tag.toLowerCase()}`}
+            >
+              {courseTopic}
             </span>
           ))}
         </div>

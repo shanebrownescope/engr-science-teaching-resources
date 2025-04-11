@@ -1,14 +1,16 @@
 "use server";
 
 import { getUserById } from "@/database/data/user";
+import { fetchFileByName } from "../fetching/files/fetchFileByName";
 import dbConnect from "@/database/dbConnector";
 import { CommentSchema } from "@/schemas";
 import z from "zod";
+import { FetchedFileData } from "@/utils/types_v2";
 
 type UploadFileCommentProps = {
   values: z.infer<typeof CommentSchema>;
   userId: string;
-  fileId: string;
+  fileName: string;
 };
 
 /**
@@ -20,16 +22,20 @@ type UploadFileCommentProps = {
 export const uploadFileComment = async ({
   values,
   userId,
-  fileId,
+  fileName,
 }: UploadFileCommentProps): Promise<{
   failure?: string;
   success?: boolean;
 }> => {
   try {
     const existingUser = await getUserById(userId);
+    const file: FetchedFileData = await fetchFileByName({ name: fileName })
 
     if (!existingUser) {
       return { failure: "User not found" };
+    }
+    else if (file.failure) {
+      return { failure: "File not found" }
     }
 
     const validatedFields = CommentSchema.safeParse(values);
@@ -42,13 +48,12 @@ export const uploadFileComment = async ({
     const { commentText } = validatedFields.data;
 
     const uploadDate = new Date();
-    console.log("uploadDate: ", uploadDate);
 
     const uploadQuery = `
-      INSERT INTO FileComments_v2 (fileId, userId, commentText, uploadDate) VALUES (?, ?, ?, ?)`;
+      INSERT INTO FileComments_v3 (fileId, userId, commentText, uploadDate) VALUES (?, ?, ?, ?)`;
 
     const { results, error } = await dbConnect(uploadQuery, [
-      fileId,
+      file.success?.id,
       userId,
       commentText,
       uploadDate,

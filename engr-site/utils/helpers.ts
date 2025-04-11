@@ -51,19 +51,15 @@ export const getNameFromKey = async (Contents: _Object[] | undefined) => {
 
 
 export const processFile = async (file: any): Promise<any> => {
-  console.log("tagNames: ", file.tagNames);
-  let tags: any;
+  // Convert the concatenated tags string to an array
+  // Split the 'Tags' string into an array by commas and remove whitespace from each tag with trim()
+  const tags = file.tags ? file.tags.split(",").map((tag: string) => tag.trim()) : [];
 
-  // Convert [null] to an empty array if the first element is null
-  if (file.tagNames?.length === 1 && file.tagNames[0] === null) {
-    tags = [];
-  } else {
-    tags = file.tagNames;
-  }
+  // Split the 'Courses' string into an array by commas and remove whitespace from each course with trim()
+  const courses = file.courses ? file.courses.split(",").map((course: string) => course.trim()) : [];
 
-  // const tags = file.tagNames?.some((tag: string | null) => tag === null)
-  //   ? []
-  //   : file.tagNames;
+  // Split the 'CourseTopics' string into an array by commas and remove whitespace from each courseTopic with trim()
+  const courseTopics = file.courseTopics ? file.courseTopics.split(",").map((courseTopic: string) => courseTopic.trim()) : [];
 
   const retrievedDate = new Date(file.uploadDate);
   const formattedDate = retrievedDate.toLocaleDateString("en-US", {
@@ -79,36 +75,32 @@ export const processFile = async (file: any): Promise<any> => {
     0,
     fileNameSplit1.indexOf(".pdf"),
   );
-  console.log(formattedFileName);
 
-  // const originalFileName = capitalizeAndReplaceDash(formattedFileName);
   const originalFileName = formattedFileName.replace(/-/g, " ");
-  console.log(originalFileName);
-
-  console.log(file.contributor);
-  console.log(file.tagNames);
-
   const urlName = lowercaseAndReplaceSpaceString(formattedFileName);
 
   return {
     ...file,
-    type: "file",
     fileName: originalFileName,
     urlName: urlName,
     uploadDate: formattedDate,
     tags: tags,
+    courses: courses,
+    courseTopics: courseTopics
   };
 };
 
 
 export const processLink = async (link: any): Promise<any> => {
-  let tags: any;
-  // Convert [null] to an empty array if the first element is null
-  if (link.tagNames?.length === 1 && link.tagNames[0] === null) {
-    tags = [];
-  } else {
-    tags = link.tagNames;
-  }
+  // Convert the concatenated tags string to an array
+  // Split the 'Tags' string into an array by commas and remove whitespace from each tag with trim()
+  const tags = link.tags ? link.tags.split(",").map((tag: string) => tag.trim()) : [];
+
+  // Split the 'Courses' string into an array by commas and remove whitespace from each course with trim()
+  const courses = link.courses ? link.courses.split(",").map((course: string) => course.trim()) : [];
+
+  // Split the 'CourseTopics' string into an array by commas and remove whitespace from each courseTopic with trim()
+  const courseTopics = link.courseTopics ? link.courseTopics.split(",").map((courseTopic: string) => courseTopic.trim()) : [];
 
   const retrievedDate = new Date(link.uploadDate);
   const formattedDate = retrievedDate.toLocaleDateString("en-US", {
@@ -116,20 +108,17 @@ export const processLink = async (link: any): Promise<any> => {
     day: "2-digit",
     year: "numeric",
   });
-  console.log(formattedDate);
 
   const urlName = link.linkName.toLowerCase().replace(/ /g, "-");
 
-  console.log(link.contributor);
-
-  console.log(link.description);
-
   return {
     ...link,
-    type: "link",
+    linkName: link.linkName,
     urlName: urlName,
     uploadDate: formattedDate,
     tags: tags,
+    courses: courses,
+    courseTopics: courseTopics
   };
 };
 

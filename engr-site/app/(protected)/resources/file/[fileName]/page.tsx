@@ -1,11 +1,10 @@
 import { Textarea, Button } from "@mantine/core";
 
 import { fetchFileById } from "@/actions/fetching/files/fetchFileById";
-import { fetchSimilarFilesByTags } from "@/actions/fetching/files/fetchSimilarFilesByTags";
 
 import { DisplayFile } from "@/app/(protected)/_components/DisplayFile";
-import { FetchedFile } from "@/utils/types";
-import { fetchCommentsByFileId } from "@/actions/fetching/comments/fetchCommentsByFileId";
+import { FetchedCommentFileData, FetchedCommentLinkData, FetchedFile, FetchedSearchResults } from "@/utils/types_v2";
+import { fetchCommentsByFileName } from "@/actions/fetching/comments/fetchCommentsByFileName";
 import CommentFileThread from "@/components/custom/comments/thread/CommentFileThread";
 import CommentForm from "@/components/custom/comments/form/CommentForm";
 import { getCurrentUser } from "@/utils/authHelpers";
@@ -14,33 +13,27 @@ import { revalidatePath } from "next/cache";
 import SimilarResourcesData from "@/components/custom/similar-resources/SimilarResourcesData";
 import requireAuth from "@/actions/auth/requireAuth";
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
+import { fetchFileByName } from "@/actions/fetching/files/fetchFileByName";
+import { fetchSimilarResourcesByTags } from "@/actions/fetching/similarResources/fetchSimilarResourcesByTags";
 
-type searchParams = {
-  id: string;
-};
 
 const ResourceFilePage = async ({
-  params,
-  searchParams,
+  params
 }: {
   params: { fileName: string };
-  searchParams: searchParams;
 }) => {
   await requireAuth();
 
   const { fileName } = params;
-  const { id } = searchParams;
 
   const user = await getCurrentUser();
 
-  const fileData = await fetchFileById({ id: id });
-  const similarFiles = await fetchSimilarFilesByTags({
-    fileId: id,
+  const fileData = await fetchFileByName({ name: fileName });
+  const similarResources: FetchedSearchResults = await fetchSimilarResourcesByTags({
+    name: fileName,
     tags: fileData?.success?.tags || [],
   });
-  const commentThread = await fetchCommentsByFileId(id);
-
-  console.log("commentThread: ", commentThread);
+  const commentThread: FetchedCommentFileData | null = await fetchCommentsByFileName(fileName);
 
   const handleFormSubmit = async (values: any) => {
     "use server";
@@ -52,12 +45,10 @@ const ResourceFilePage = async ({
       const results = await uploadFileComment({
         values: values,
         userId: user.id,
-        fileId: id,
+        fileName: fileName,
       });
       revalidatePath(
-        `/resources/file/${fileName}?${new URLSearchParams({
-          id: id,
-        })}`,
+        `/resources/file/${fileName}`,
       );
     } catch (error) {
       console.error(error);
@@ -67,13 +58,10 @@ const ResourceFilePage = async ({
   return (
     <div>
       {fileData.success && (
-        <DisplayFile file={fileData.success as FetchedFile} />
+        <DisplayFile file={fileData.success} />
       )}
 
-      <SimilarResourcesData
-        similarResources={similarFiles?.success}
-        type="file"
-      />
+      <SimilarResourcesData similarResources={similarResources?.success} />
 
       <CommentForm handleFormSubmit={handleFormSubmit} />
       <CommentFileThread commentThread={commentThread?.success} />

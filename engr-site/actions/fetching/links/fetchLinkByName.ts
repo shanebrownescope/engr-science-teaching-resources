@@ -23,17 +23,65 @@ export const fetchLinkByName = async ({
 }: fetchLinkByNameProps): Promise<FetchedLinkData> => {
   try {
     const selectQuery = `
-      SELECT l.id, l.linkName, l.linkUrl, l.uploadDate, c.contributorName,
-        JSON_ARRAYAGG(t.tagName) AS tagNames
-      FROM Links_v3 l
-      LEFT JOIN LinkTags_v3 lt ON l.id = lt.linkId
-      LEFT JOIN Tags_v3 t ON lt.tagId = t.id
-      LEFT JOIN Contributors_v3 c ON l.contributorId = c.id
-      WHERE l.linkName = ?`;
+      SELECT 
+        'link' AS type,
+        l.id,
+        l.linkName,
+        l.linkUrl,
+        l.description,
+        l.uploadDate,
+        c.contributorName AS contributor,
+        l.resourceType,
+        l.uploadedUserId,
+        IFNULL(LinkTagConcat.tagName, '') AS tags,
+        IFNULL(LinkCourseTopicConcat.courseTopicNames, '') AS courseTopics,
+        IFNULL(LinkCourseTopicConcat.courseNames, '') AS courses
+      FROM 
+        Links_v3 AS l
+      LEFT JOIN 
+        (
+          SELECT 
+            lt.linkId, 
+            GROUP_CONCAT(t.tagName SEPARATOR ', ') AS tagName
+          FROM 
+            LinkTags_v3 AS lt
+          JOIN 
+            Tags_v3 AS t ON lt.tagId = t.id
+          GROUP BY 
+            lt.linkId
+        ) AS LinkTagConcat
+      ON 
+        l.id = LinkTagConcat.linkId
+      LEFT JOIN 
+        Contributors_v3 AS c 
+      ON 
+        l.contributorId = c.id
+      LEFT JOIN 
+        (
+          SELECT 
+            ctl.linkId,
+            GROUP_CONCAT(DISTINCT ct.courseTopicName SEPARATOR ', ') AS courseTopicNames,
+            GROUP_CONCAT(DISTINCT co.courseName SEPARATOR ', ') AS courseNames
+          FROM 
+            CourseTopicLinks_v3 AS ctl
+          LEFT JOIN 
+            CourseTopics_v3 AS ct ON ctl.courseTopicId = ct.id
+          LEFT JOIN 
+            Courses_v3 AS co ON ct.courseId = co.id
+          GROUP BY 
+            ctl.linkId
+        ) AS LinkCourseTopicConcat 
+      ON 
+        l.id = LinkCourseTopicConcat.linkId
+      WHERE l.linkName = ?
+      GROUP BY 
+        l.id
+    `;
 
     const { results: linkResult, error } = await dbConnect(selectQuery, [name]);
 
     if (error) {
+      console.log("Error when fetching link: ", error)
       return { failure: "Internal server error" };
     }
 

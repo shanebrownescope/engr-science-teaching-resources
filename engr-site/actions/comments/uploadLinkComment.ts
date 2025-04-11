@@ -3,12 +3,14 @@
 import { getUserById } from "@/database/data/user";
 import dbConnect from "@/database/dbConnector";
 import { CommentSchema } from "@/schemas";
+import { FetchedLinkData } from "@/utils/types_v2";
 import z from "zod";
+import { fetchLinkByName } from "../fetching/links/fetchLinkByName";
 
 type UploadLinkCommentProps = {
   values: z.infer<typeof CommentSchema>;
   userId: string;
-  linkId: string;
+  linkName: string;
 };
 
 /**
@@ -20,15 +22,21 @@ type UploadLinkCommentProps = {
 export const uploadLinkComment = async ({
   values,
   userId,
-  linkId,
+  linkName,
 }: UploadLinkCommentProps) => {
   try {
     const existingUser = await getUserById(userId);
+    const link: FetchedLinkData = await fetchLinkByName({ name: linkName })
+
     if (!existingUser) {
       return { failure: "User not found" };
     }
+    else if (link.failure) {
+      return { failure: "Link not found" }
+    }
 
     const validatedFields = CommentSchema.safeParse(values);
+
     if (!validatedFields.success) {
       return { failure: "Invalid comment!" };
     }
@@ -36,13 +44,12 @@ export const uploadLinkComment = async ({
     const { commentText } = validatedFields.data;
 
     const uploadDate = new Date();
-    console.log("uploadDate: ", uploadDate);
 
     const uploadQuery = `
-      INSERT INTO LinkComments_v2 (linkId, userId, commentText, uploadDate) VALUES (?, ?, ?, ?)`;
+      INSERT INTO LinkComments_v3 (linkId, userId, commentText, uploadDate) VALUES (?, ?, ?, ?)`;
 
     const { results, error } = await dbConnect(uploadQuery, [
-      linkId,
+      link.success?.id,
       userId,
       commentText,
       uploadDate,

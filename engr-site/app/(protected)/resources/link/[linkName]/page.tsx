@@ -1,46 +1,39 @@
 import { Textarea, Button } from "@mantine/core";
 import { fetchLinkById } from "@/actions/fetching/links/fetchLinkById";
-import { fetchSimilarLinksByTags } from "@/actions/fetching/links/fetchSimilarLinksByTags";
 
 import { DisplayLink } from "@/app/(protected)/_components/DisplayLink";
 import { FetchedLink } from "@/utils/types";
 import { notFound } from "next/navigation";
 import { getCurrentUser } from "@/utils/authHelpers";
-import { fetchCommentsByLinkId } from "@/actions/fetching/comments/fetchCommentsByLinkId";
+import { fetchCommentsByLinkName } from "@/actions/fetching/comments/fetchCommentsByLinkName";
 import { uploadLinkComment } from "@/actions/comments/uploadLinkComment";
 import { revalidatePath } from "next/cache";
 import CommentForm from "@/components/custom/comments/form/CommentForm";
 import CommentLinkThread from "@/components/custom/comments/thread/CommentLinkThread";
 import SimilarResourcesData from "@/components/custom/similar-resources/SimilarResourcesData";
 import requireAuth from "@/actions/auth/requireAuth";
+import { fetchLinkByName } from "@/actions/fetching/links/fetchLinkByName";
+import { FetchedCommentLinkData, FetchedSearchResults } from "@/utils/types_v2";
+import { fetchSimilarResourcesByTags } from "@/actions/fetching/similarResources/fetchSimilarResourcesByTags";
 
-type searchParams = {
-  id: string;
-  searchParams: { [key: string]: string | string[] | undefined };
-};
 
 const ResourceLinkPage = async ({
-  params,
-  searchParams,
+  params
 }: {
   params: { linkName: string };
-  searchParams: searchParams;
 }) => {
   await requireAuth();
 
   const { linkName } = params;
-  const { id } = searchParams;
 
   const user = await getCurrentUser();
 
-  const linkData = await fetchLinkById({ id: id });
-  const similarLinks = await fetchSimilarLinksByTags({
-    linkId: id,
+  const linkData = await fetchLinkByName({ name: linkName });
+  const similarResources: FetchedSearchResults = await fetchSimilarResourcesByTags({
+    name: linkName,
     tags: linkData?.success?.tags || [],
   });
-  const commentThread = await fetchCommentsByLinkId(id);
-
-  console.log("commentThread: ", commentThread);
+  const commentThread: FetchedCommentLinkData | null = await fetchCommentsByLinkName(linkName);
 
   const handleFormSubmit = async (values: any) => {
     "use server";
@@ -52,12 +45,10 @@ const ResourceLinkPage = async ({
       const results = await uploadLinkComment({
         values: values,
         userId: user.id,
-        linkId: id,
+        linkName: linkName,
       });
       revalidatePath(
-        `/resources/link/${linkName}?${new URLSearchParams({
-          id: id,
-        })}`,
+        `/resources/link/${linkName}`
       );
     } catch (error) {
       console.error(error);
@@ -67,13 +58,10 @@ const ResourceLinkPage = async ({
   return (
     <div>
       {linkData?.success && (
-        <DisplayLink link={linkData.success as FetchedLink} />
+        <DisplayLink link={linkData?.success} />
       )}
 
-      <SimilarResourcesData
-        similarResources={similarLinks?.success}
-        type="link"
-      />
+      <SimilarResourcesData similarResources={similarResources?.success} />
 
       <CommentForm handleFormSubmit={handleFormSubmit} />
       <CommentLinkThread commentThread={commentThread?.success} />
