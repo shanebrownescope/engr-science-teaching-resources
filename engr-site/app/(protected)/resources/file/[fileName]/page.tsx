@@ -1,7 +1,6 @@
 import { Textarea, Button } from "@mantine/core";
 
 import { fetchFileById } from "@/actions/fetching/files/fetchFileById";
-import { fetchSimilarFilesByTags } from "@/actions/fetching/files/fetchSimilarFilesByTags";
 
 import { DisplayFile } from "@/app/(protected)/_components/DisplayFile";
 import { FetchedCommentFileData, FetchedCommentLinkData, FetchedFile, FetchedSearchResults } from "@/utils/types_v2";

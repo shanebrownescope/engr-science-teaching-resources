@@ -9,11 +9,11 @@ export const DisplayFile = ({ file }: DisplayFileProps) => {
   return (
     <ContainerLayout paddingTop="md">
       <div className="resource-container">
-        <h2> {file.fileName} </h2>
-        <div>
-          <p> {file.uploadDate} </p>
-          <p> {file.description} </p>
+
+        <div className="resource-info-container">
+          <p> Uploaded on: {file.uploadDate} </p>
           <p> Posted By: {file.contributor}</p>
+          <p> Resource Type: {file.resourceType} </p>
         </div>
         <iframe
           src={file.s3Url}
@@ -22,12 +22,42 @@ export const DisplayFile = ({ file }: DisplayFileProps) => {
             height: "790px",
           }}
         />
+        
         <div className="resource-tags-container">
+          <p> Tags: </p>
           {file?.tags?.map((tag: any, index: number) => {
             if (typeof tag === "string") {
               return (
                 <p key={index} className="resource-tag-item">
                   {tag}
+                </p>
+              );
+            }
+            return null; // or handle non-string tags as needed
+          })}
+        </div>
+
+        <div className="resource-tags-container">
+          <p> Relevant Courses: </p>
+          {file?.courses?.map((course: any, index: number) => {
+            if (typeof course === "string") {
+              return (
+                <p key={index} className="resource-tag-item">
+                  {course}
+                </p>
+              );
+            }
+            return null; // or handle non-string courses as needed
+          })}
+        </div>
+
+        <div className="resource-tags-container">
+          <p> Relevant Course Topics: </p>
+          {file?.courseTopics?.map((courseTopic: any, index: number) => {
+            if (typeof courseTopic === "string") {
+              return (
+                <p key={index} className="resource-tag-item">
+                  {courseTopic}
                 </p>
               );
             }

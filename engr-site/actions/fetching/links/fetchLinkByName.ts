@@ -34,8 +34,8 @@ export const fetchLinkByName = async ({
         l.resourceType,
         l.uploadedUserId,
         IFNULL(LinkTagConcat.tagName, '') AS tags,
-        IFNULL(LinkCourseTopicConcat.courseTopicIds, '') AS courseTopics,
-        IFNULL(LinkCourseTopicConcat.courseIds, '') AS courses
+        IFNULL(LinkCourseTopicConcat.courseTopicNames, '') AS courseTopics,
+        IFNULL(LinkCourseTopicConcat.courseNames, '') AS courses
       FROM 
         Links_v3 AS l
       LEFT JOIN 
@@ -60,8 +60,8 @@ export const fetchLinkByName = async ({
         (
           SELECT 
             ctl.linkId,
-            GROUP_CONCAT(DISTINCT ct.id SEPARATOR ', ') AS courseTopicIds,
-            GROUP_CONCAT(DISTINCT ct.courseId SEPARATOR ', ') AS courseIds
+            GROUP_CONCAT(DISTINCT ct.courseTopicName SEPARATOR ', ') AS courseTopicNames,
+            GROUP_CONCAT(DISTINCT co.courseName SEPARATOR ', ') AS courseNames
           FROM 
             CourseTopicLinks_v3 AS ctl
           LEFT JOIN 

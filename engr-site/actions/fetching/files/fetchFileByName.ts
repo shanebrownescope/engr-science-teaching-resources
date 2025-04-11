@@ -34,8 +34,8 @@ export const fetchFileByName = async ({
         f.resourceType,
         f.uploadedUserId,
         IFNULL(FileTagConcat.tagName, '') AS tags,
-        IFNULL(FileCourseTopicConcat.courseTopicIds, '') AS courseTopics,
-        IFNULL(FileCourseTopicConcat.courseIds, '') AS courses
+        IFNULL(FileCourseTopicConcat.courseTopicNames, '') AS courseTopics,
+        IFNULL(FileCourseTopicConcat.courseNames, '') AS courses
       FROM 
         Files_v3 AS f
       LEFT JOIN 
@@ -60,8 +60,8 @@ export const fetchFileByName = async ({
         (
           SELECT 
             ctf.fileId,
-            GROUP_CONCAT(DISTINCT ct.id SEPARATOR ', ') AS courseTopicIds,
-            GROUP_CONCAT(DISTINCT ct.courseId SEPARATOR ', ') AS courseIds
+            GROUP_CONCAT(DISTINCT ct.courseTopicName SEPARATOR ', ') AS courseTopicNames,
+            GROUP_CONCAT(DISTINCT co.courseName SEPARATOR ', ') AS courseNames
           FROM 
             CourseTopicFiles_v3 AS ctf
           LEFT JOIN 
