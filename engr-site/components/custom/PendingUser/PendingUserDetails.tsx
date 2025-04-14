@@ -27,22 +27,22 @@ export const PendingUserDetails = ({
 }: PendingUserDetailsProps) => {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
-      <Stack spacing="xs">
+      <Stack gap="xs">
         <Text fw={500} size="lg">
           {firstName} {lastName}
         </Text>
         
-        <Group position="apart">
+        <Group justify="apart">
           <Text size="sm" c="dimmed">Email:</Text>
           <Text size="sm">{email}</Text>
         </Group>
         
-        <Group position="apart">
+        <Group justify="apart">
           <Text size="sm" c="dimmed">Username:</Text>
           <Text size="sm" fw={500}>{username}</Text>
         </Group>
         
-        <Group position="apart">
+        <Group justify="apart">
           <Text size="sm" c="dimmed">Status:</Text>
           <Badge color={status === "pending" ? "yellow" : "blue"}>
             {status}
@@ -51,7 +51,7 @@ export const PendingUserDetails = ({
         
         <Divider my="sm" />
         
-        <Group position="right" spacing="md">
+        <Group justify="right" gap="md">
           <Button 
             color="green" 
             onClick={handleApprove}
