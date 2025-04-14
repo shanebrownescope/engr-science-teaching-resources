@@ -84,7 +84,7 @@ const PendingUserListPaginated = ({
               firstName={item.firstName}
               lastName={item.lastName}
               email={item.email}
-              username={item.name}
+              username={item.username}
               status={item.accountStatus}
               handleApprove={() =>
                 handleApprove({
