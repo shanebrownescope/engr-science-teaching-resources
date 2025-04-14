@@ -5,6 +5,10 @@ import { Pagination, Group } from "@mantine/core";
 import { PendingUserDetails } from "@/components/custom/PendingUser/PendingUserDetails";
 import { UserData } from "@/utils/types";
 
+type ExtendedUserData = {
+  name: string;
+} & Omit<UserData, 'username'>;
+
 type HandleUserActionProps = {
   userId: string;
   email: string;
@@ -13,7 +17,7 @@ type HandleUserActionProps = {
 };
 
 type PendingUserListPaginatedProps = {
-  data: UserData[];
+  data: ExtendedUserData[];
   handleApprove: ({
     userId,
     email,
@@ -72,7 +76,7 @@ const PendingUserListPaginated = ({
     <>
       {/* Render currentPageItems */}
       <div>
-        {currentPageItems.map((item: UserData) => (
+        {currentPageItems.map((item: ExtendedUserData) => (
           // Render individual file/link item here
           <div key={item.id}>
             <PendingUserDetails
