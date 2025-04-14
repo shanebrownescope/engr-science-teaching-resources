@@ -102,7 +102,7 @@ const PendingUserListPaginated = ({
         ))}
       </div>
       {/* Render Pagination component with better layout */}
-      <Group position="right" mt="md">
+      <Group justify="right" mt="md">
         <Pagination
           total={totalPages}
           value={currentPage}
