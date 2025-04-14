@@ -3,8 +3,12 @@
 import { getPendingUsers } from "@/database/data/user";
 import { UserData } from "@/utils/types";
 
+type ExtendedUserData = Omit<UserData, 'username'> & {
+  name: string;
+};
+
 export type FetchPendingUsersData =
-  | { success: UserData[] }
+  | { success: ExtendedUserData[] }
   | { failure: string };
 
 /**
@@ -19,7 +23,17 @@ export const fetchPendingUsers = async (): Promise<FetchPendingUsersData> => {
       return { failure: "No pending users" };
     }
 
-    return { success: results };
+    const transformedResults: ExtendedUserData[] = results.map(user => ({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      name: user.name,
+      accountStatus: user.accountStatus,
+      role: user.role
+    }));
+
+    return { success: transformedResults };
   } catch (error) {
     return {
       failure: "Internal server error, error retrieving modules from db",

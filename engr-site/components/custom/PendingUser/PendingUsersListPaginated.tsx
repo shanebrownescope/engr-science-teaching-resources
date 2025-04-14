@@ -5,9 +5,10 @@ import { Pagination, Group } from "@mantine/core";
 import { PendingUserDetails } from "@/components/custom/PendingUser/PendingUserDetails";
 import { UserData } from "@/utils/types";
 
-type ExtendedUserData = {
+// 定义扩展的类型
+type ExtendedUserData = Omit<UserData, 'username'> & {
   name: string;
-} & Omit<UserData, 'username'>;
+};
 
 type HandleUserActionProps = {
   userId: string;
