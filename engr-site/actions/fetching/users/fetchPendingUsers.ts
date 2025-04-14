@@ -3,6 +3,10 @@
 import { getPendingUsers } from "@/database/data/user";
 import { UserData } from "@/utils/types";
 
+type RawUserDataFromDB = Omit<UserData, 'username'> & {
+  name: string; 
+};
+  
 type ExtendedUserData = Omit<UserData, 'username'> & {
   name: string;
 };
@@ -35,6 +39,7 @@ export const fetchPendingUsers = async (): Promise<FetchPendingUsersData> => {
 
     return { success: transformedResults };
   } catch (error) {
+    console.error("Error fetching or transforming pending users:", error);
     return {
       failure: "Internal server error, error retrieving modules from db",
     };
