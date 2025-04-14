@@ -52,6 +52,9 @@ const PendingUserListPaginated = ({
   // State to keep track of which page the user is currently on
   // Initially set to page 1
   const [currentPage, setCurrentPage] = useState(1);
+  // Type annotation for the currentPage state variable
+  // It's a number because the value will be incremented or
+  // decremented, and we'll be using it in calculations
 
   // Calculate start and end index for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -70,6 +73,7 @@ const PendingUserListPaginated = ({
       {/* Render currentPageItems */}
       <div>
         {currentPageItems.map((item: UserData) => (
+          // Render individual file/link item here
           <div key={item.id}>
             <PendingUserDetails
               firstName={item.firstName}
@@ -98,7 +102,7 @@ const PendingUserListPaginated = ({
         ))}
       </div>
       {/* Render Pagination component with better layout */}
-      <Group justify="flex-end" mt="md">
+      <Group position="right" mt="md">
         <Pagination
           total={totalPages}
           value={currentPage}
