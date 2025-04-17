@@ -163,6 +163,13 @@ export const processFilesAndLinks = (item: AllFilesAndLinksData) => {
   // Split the 'CourseTopics' string into an array by commas and remove whitespace from each courseTopic with trim()
   const courseTopics = item.courseTopics ? item.courseTopics.split(",").map((courseTopic) => courseTopic.trim()) : [];
 
+  const retrievedDate = new Date(item.uploadDate);
+  const formattedDate = retrievedDate.toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+
   if (item.type === "file") {
     const fileNameSplit1 = item.name.substring(item.name.indexOf("_") + 1);
     const formattedFileName = fileNameSplit1
@@ -177,18 +184,19 @@ export const processFilesAndLinks = (item: AllFilesAndLinksData) => {
       ...item,
       originalName: formattedFileName,
       urlName: urlName,
-      uploadDate: new Date(item.uploadDate),
+      uploadDate: formattedDate,
       tags: tags,
       courses: courses,
       courseTopics: courseTopics
     };
   } else if (item.type === "link") {
     const urlName = item.name.toLowerCase().replace(/ /g, "-");
+    
     return {
       ...item,
       originalName: item.name,
       urlName: urlName,
-      uploadDate: new Date(item.uploadDate),
+      uploadDate: formattedDate,
       tags: tags,
       courses: courses,
       courseTopics: courseTopics

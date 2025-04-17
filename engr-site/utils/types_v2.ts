@@ -115,7 +115,7 @@ export type AllFilesAndLinksDataFormatted = {
   originalName: string;
   urlName: string;
   description: string;
-  uploadDate: Date;
+  uploadDate: string;
   type: string;
   resourceType: "exercise" | "notes" | "video" | "interactive";
   contributor: string | null;
