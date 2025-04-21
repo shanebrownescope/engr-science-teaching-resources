@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextInput,
   TextInputProps,
@@ -23,10 +23,11 @@ import {
 export function SearchButton(props: TextInputProps) {
   const theme = useMantineTheme();
 
-  const [inputValue, setInputValue] = useState(""); // Add this line to manage input value
+  // Use props.value if provided from parent, otherwise use internal state
+  const [inputValue, setInputValue] = useState(props.value?.toString() || ""); 
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setInputValue(event.currentTarget.value);
+    setInputValue(event.target.value);
 
   return (
     <TextInput
@@ -39,7 +40,9 @@ export function SearchButton(props: TextInputProps) {
       onChange={handleInputChange}
       leftSection={<IconSearch className="iconStyle" stroke={1.5} />}
       rightSection={
-        <Link href={`/search/${lowercaseAndReplaceSpaceString(inputValue)}`}>
+        <Link href={`/search?${new URLSearchParams({
+          q: inputValue
+        })}`}>
           <ActionIcon
             size={32}
             radius="xl"
@@ -50,7 +53,6 @@ export function SearchButton(props: TextInputProps) {
           </ActionIcon>
         </Link>
       }
-      {...props}
     />
   );
 }
