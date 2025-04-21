@@ -13,10 +13,14 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 import { SearchButton } from "@/components/mantine"; // Import the SearchButton component
 
-const SearchResults = ({ params }: { params: { searchName: string } }) => {
+type searchParams = {
+  q: string;
+}
+
+const SearchResults = ({ searchParams }: { searchParams: searchParams }) => {
   useRequireAuth();
   const formattedSearchName = capitalizeAndReplaceDash(
-    params.searchName.toLowerCase().replace(/-/g, " "),
+    searchParams.q.toLowerCase().replace(/-/g, " "),
   );
   const [isLoading, setIsLoading] = useState(true);
   const [resourcesData, setResourcesData] = useState<AllFilesAndLinksDataFormatted[]>([]);
@@ -41,16 +45,13 @@ const SearchResults = ({ params }: { params: { searchName: string } }) => {
       }
     };
     fetchFilesAndLinks();
-  }, [params.searchName]);
+  }, [searchParams.q]);
   
   return (
     (!isLoading &&
-      <ContainerLayout paddingTop="md"> 
-        {/* <h4 className="text-center mb-4">Your Search: {formattedSearchName}</h4> */}
-        
-        {/* Add the SearchButton component here */}
+      <ContainerLayout paddingTop="md">         
         <div className="mb-4">
-          <SearchButton />
+          <SearchButton value={searchParams.q}/>
         </div>
         
         <div>
