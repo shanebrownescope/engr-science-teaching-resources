@@ -21,6 +21,7 @@ export type FetchedFile = {
   courses: string[];
   courseTopics: string[];
   avgRating: number | null;
+  numReviews: number
 };
 
 export type FetchedLink = {
@@ -38,6 +39,7 @@ export type FetchedLink = {
   courses: string[];
   courseTopics: string[];
   avgRating: number | null;
+  numReviews: number;
 };
 
 export type FileData = {
@@ -54,6 +56,7 @@ export type FileData = {
   courses: string | null;
   courseTopics: string | null;
   avgRating: number | null;
+  numReviews: number;
 };
 
 export type LinkData = {
@@ -70,6 +73,7 @@ export type LinkData = {
   courses: string | null;
   courseTopics: string | null;
   avgRating: number | null;
+  numReviews: number;
 };
 
 export type searchParams = {
@@ -113,6 +117,7 @@ export type AllFilesAndLinksData = {
   courses: string | null;
   courseTopics: string | null;
   avgRating: number | null;
+  numReviews: number;
 };
 
 export type AllFilesAndLinksDataFormatted = {
@@ -128,6 +133,7 @@ export type AllFilesAndLinksDataFormatted = {
   courses: string[];
   courseTopics: string[];
   avgRating: number | null;
+  numReviews: number;
 };
 
 export type FormFieldProps = {

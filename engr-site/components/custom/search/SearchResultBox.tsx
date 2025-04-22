@@ -16,6 +16,7 @@ type SearchResultBoxProps = {
   resourceType: string;
   contributor: string;
   avgRating: number | null;
+  numReviews: number
 };
 
 /**
@@ -36,7 +37,8 @@ export const SearchResultBox = ({
   courseTopics,
   resourceType,
   contributor,
-  avgRating
+  avgRating,
+  numReviews
 }: SearchResultBoxProps) => {
   return (
     <div className={styles.resultBox}>
@@ -48,7 +50,9 @@ export const SearchResultBox = ({
           <p className={styles.resultDescription}> Uploaded on: {uploadDate} </p>
           <p className={styles.resultDescription}> Posted By: {contributor}</p>
           <p className={styles.resultDescription}> Resource Type: {resourceType} </p>
-          {avgRating && <p className={styles.resultDescription}> Average Rating: {avgRating} </p>}
+          <p className={styles.resultDescription}>
+            {avgRating ? `Average Rating: ${avgRating} (${numReviews})` : 'No Reviews'}
+          </p>
         </div>
         <div className={styles.tagsContainer}>
           <p> Tags: </p>

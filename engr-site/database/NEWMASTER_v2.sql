@@ -48,6 +48,8 @@ CREATE TABLE Files_v3 (
   contributorId INT,
   resourceType ENUM('exercise', 'notes', 'video', 'interactive') DEFAULT 'exercise' NOT NULL,
   uploadedUserId INT,
+  avgRating DECIMAL(3, 2),
+  numReviews INT DEFAULT 0 NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (contributorId) REFERENCES Contributors_v3(id) ON DELETE CASCADE,
   FOREIGN KEY (uploadedUserId) REFERENCES Users_v3(id) ON DELETE CASCADE
@@ -62,6 +64,8 @@ CREATE TABLE Links_v3 (
   contributorId INT,
   resourceType ENUM('exercise', 'notes', 'video', 'interactive') DEFAULT 'exercise' NOT NULL,
   uploadedUserId INT,
+  avgRating DECIMAL(3, 2),
+  numReviews INT DEFAULT 0 NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (contributorId) REFERENCES Contributors_v3(id) ON DELETE CASCADE,
   FOREIGN KEY (uploadedUserId) REFERENCES Users_v3(id) ON DELETE CASCADE

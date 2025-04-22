@@ -63,6 +63,7 @@ const ResourcesListPaginated = ({ data }: ResourcesListPaginatedProps) => {
               resourceType={item.resourceType}
               contributor={item.contributor || "Anonymous"}
               avgRating={item.avgRating}
+              numReviews={item.numReviews}
             />
           </div>
         ))}

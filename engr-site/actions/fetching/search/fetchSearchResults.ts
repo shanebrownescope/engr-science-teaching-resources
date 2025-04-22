@@ -36,7 +36,8 @@ const fetchQuery = `
     IFNULL(FileTagConcat.tagName, '') AS tags,
     IFNULL(FileCourseTopicConcat.courseTopicNames, '') AS courseTopics,
     IFNULL(FileCourseTopicConcat.courseNames, '') AS courses,
-    f.avgRating
+    f.avgRating,
+    f.numReviews
   FROM 
     Files_v3 AS f
   LEFT JOIN 
@@ -92,7 +93,8 @@ const fetchQuery = `
     IFNULL(LinkTagConcat.tagName, '') AS tags,
     IFNULL(LinkCourseTopicConcat.courseTopicNames, '') AS courseTopics,
     IFNULL(LinkCourseTopicConcat.courseNames, '') AS courses,
-    l.avgRating
+    l.avgRating,
+    l.numReviews
   FROM 
     Links_v3 AS l
   LEFT JOIN  

@@ -36,7 +36,8 @@ export const fetchLinkByName = async ({
         IFNULL(LinkTagConcat.tagName, '') AS tags,
         IFNULL(LinkCourseTopicConcat.courseTopicNames, '') AS courseTopics,
         IFNULL(LinkCourseTopicConcat.courseNames, '') AS courses,
-        l.avgRating
+        l.avgRating,
+        l.numReviews
       FROM 
         Links_v3 AS l
       LEFT JOIN 
