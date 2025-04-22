@@ -20,6 +20,7 @@ export type FetchedFile = {
   tags: string[];
   courses: string[];
   courseTopics: string[];
+  avgRating: number | null;
 };
 
 export type FetchedLink = {
@@ -36,6 +37,7 @@ export type FetchedLink = {
   tags: string[];
   courses: string[];
   courseTopics: string[];
+  avgRating: number | null;
 };
 
 export type FileData = {
@@ -51,6 +53,7 @@ export type FileData = {
   tags: string | null;
   courses: string | null;
   courseTopics: string | null;
+  avgRating: number | null;
 };
 
 export type LinkData = {
@@ -66,6 +69,7 @@ export type LinkData = {
   tags: string | null;
   courses: string | null;
   courseTopics: string | null;
+  avgRating: number | null;
 };
 
 export type searchParams = {
@@ -108,6 +112,7 @@ export type AllFilesAndLinksData = {
   tags: string | null;
   courses: string | null;
   courseTopics: string | null;
+  avgRating: number | null;
 };
 
 export type AllFilesAndLinksDataFormatted = {
@@ -122,6 +127,7 @@ export type AllFilesAndLinksDataFormatted = {
   tags: string[];
   courses: string[];
   courseTopics: string[];
+  avgRating: number | null;
 };
 
 export type FormFieldProps = {
@@ -201,3 +207,36 @@ export type FetchedCommentLinkData = {
   success?: CommentLinkData[];
   failure?: string;
 };
+
+export type RatingFileData = {
+  id: number;
+  fileId: number;
+  userId: number;
+  rating: number;
+  comments: string | null;
+  uploadDate: string | Date;
+  title: string;
+  userPublicName: string;
+};
+
+export type RatingLinkData = {
+  id: number;
+  linkId: number;
+  userId: number;
+  rating: number;
+  comments: string | null;
+  uploadDate: string | Date;
+  title: string;
+  userPublicName: string;
+};
+
+export type FetchedRatingsFileData = {
+  success?: RatingFileData[];
+  failure?: string;
+};
+
+export type FetchedRatingsLinkData = {
+  success?: RatingLinkData[];
+  failure?: string;
+};
+
