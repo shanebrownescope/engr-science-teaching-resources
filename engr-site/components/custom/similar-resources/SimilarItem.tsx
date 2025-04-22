@@ -24,6 +24,8 @@ const SimilarItem = ({ item }: SimilarItemProps) => {
 
         <p>{item.description}</p>
 
+        {item.avgRating ? `${item.avgRating} (${item.numReviews})` : 'No Reviews'}
+
         <div className={styles.tagsContainer}>
           {item.tags?.map((tag: string, idx: number) => (
             <div key={idx} className={styles.tag}>

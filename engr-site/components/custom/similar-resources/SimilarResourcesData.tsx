@@ -27,7 +27,7 @@ const SimilarResourcesData = ({
           ))}
       </div>
 
-      {similarResources?.length === 0 && <div> No similar resources </div>}
+      {similarResources?.length === 0 && <p> No similar resources </p>}
     </ContainerLayout>
   );
 };
