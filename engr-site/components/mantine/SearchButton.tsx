@@ -41,7 +41,7 @@ export function SearchButton(props: TextInputProps) {
       leftSection={<IconSearch className="iconStyle" stroke={1.5} />}
       rightSection={
         <Link href={`/search?${new URLSearchParams({
-          q: inputValue
+          q: inputValue.trim()
         })}`}>
           <ActionIcon
             size={32}
