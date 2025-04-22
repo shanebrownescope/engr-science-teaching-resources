@@ -208,7 +208,7 @@ export type FetchedCommentLinkData = {
   failure?: string;
 };
 
-export type RatingFileData = {
+export type ReviewsFileData = {
   id: number;
   fileId: number;
   userId: number;
@@ -219,7 +219,7 @@ export type RatingFileData = {
   userPublicName: string;
 };
 
-export type RatingLinkData = {
+export type ReviewsLinkData = {
   id: number;
   linkId: number;
   userId: number;
@@ -230,13 +230,13 @@ export type RatingLinkData = {
   userPublicName: string;
 };
 
-export type FetchedRatingsFileData = {
-  success?: RatingFileData[];
+export type FetchedReviewsFileData = {
+  success?: ReviewsFileData[];
   failure?: string;
 };
 
-export type FetchedRatingsLinkData = {
-  success?: RatingLinkData[];
+export type FetchedReviewsLinkData = {
+  success?: ReviewsLinkData[];
   failure?: string;
 };
 
