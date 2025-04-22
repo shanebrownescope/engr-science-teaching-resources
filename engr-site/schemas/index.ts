@@ -139,10 +139,11 @@ export const CommentSchema = z.object({
 export const ReviewSchema = z.object({
   title: z.string().min(1, {
     message: "Title is required"
-  }),
+  }).trim(),
   userPublicName: z.string().min(1, {
     message: "User public name is required"
-  }),
+  }).trim(),
+  comments: z.string().trim(),
   rating: z.number()
     .min(0, {
       message: "Rating must be at least 0"
