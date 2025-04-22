@@ -14,6 +14,7 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
           <p> Uploaded on: {link.uploadDate} </p>
           <p> Posted By: {link.contributor}</p>
           <p> Resource Type: {link.resourceType} </p>
+          {link.avgRating && <p> Average Rating: {link.avgRating} </p>}
         </div>
         <a href={link.linkUrl}> Visit resource </a>
 

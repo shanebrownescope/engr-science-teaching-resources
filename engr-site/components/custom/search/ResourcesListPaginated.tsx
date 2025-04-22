@@ -62,6 +62,7 @@ const ResourcesListPaginated = ({ data }: ResourcesListPaginatedProps) => {
               courseTopics={item.courseTopics}
               resourceType={item.resourceType}
               contributor={item.contributor || "Anonymous"}
+              avgRating={item.avgRating}
             />
           </div>
         ))}

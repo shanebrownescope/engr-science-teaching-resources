@@ -35,7 +35,8 @@ export const fetchFileByName = async ({
         f.uploadedUserId,
         IFNULL(FileTagConcat.tagName, '') AS tags,
         IFNULL(FileCourseTopicConcat.courseTopicNames, '') AS courseTopics,
-        IFNULL(FileCourseTopicConcat.courseNames, '') AS courses
+        IFNULL(FileCourseTopicConcat.courseNames, '') AS courses,
+        f.avgRating
       FROM 
         Files_v3 AS f
       LEFT JOIN 

@@ -14,6 +14,7 @@ export const DisplayFile = ({ file }: DisplayFileProps) => {
           <p> Uploaded on: {file.uploadDate} </p>
           <p> Posted By: {file.contributor}</p>
           <p> Resource Type: {file.resourceType} </p>
+          {file.avgRating && <p> Average Rating: {file.avgRating} </p>}
         </div>
         <iframe
           src={file.s3Url}

@@ -14,7 +14,8 @@ type SearchResultBoxProps = {
   courses: string[];
   courseTopics: string[];
   resourceType: string;
-  contributor: string
+  contributor: string;
+  avgRating: number | null;
 };
 
 /**
@@ -34,7 +35,8 @@ export const SearchResultBox = ({
   courses,
   courseTopics,
   resourceType,
-  contributor
+  contributor,
+  avgRating
 }: SearchResultBoxProps) => {
   return (
     <div className={styles.resultBox}>
@@ -46,6 +48,7 @@ export const SearchResultBox = ({
           <p className={styles.resultDescription}> Uploaded on: {uploadDate} </p>
           <p className={styles.resultDescription}> Posted By: {contributor}</p>
           <p className={styles.resultDescription}> Resource Type: {resourceType} </p>
+          {avgRating && <p className={styles.resultDescription}> Average Rating: {avgRating} </p>}
         </div>
         <div className={styles.tagsContainer}>
           <p> Tags: </p>
