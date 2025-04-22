@@ -135,3 +135,26 @@ export const CommentSchema = z.object({
     message: "Comment is required",
   }),
 });
+
+export const ReviewSchema = z.object({
+  title: z.string().min(1, {
+    message: "Title is required"
+  }),
+  userPublicName: z.string().min(1, {
+    message: "User public name is required"
+  }),
+  rating: z.number()
+    .min(0, {
+      message: "Rating must be at least 0"
+    })
+    .max(5, {
+      message: "Rating cannot exceed 5"
+    })
+    .refine(val => {
+      // Convert to string and check decimal places
+      const decimalPart = val.toString().split('.')[1];
+      return !decimalPart || decimalPart.length <= 2;
+    }, {
+      message: "Rating can have at most 2 decimal places"
+    })
+})

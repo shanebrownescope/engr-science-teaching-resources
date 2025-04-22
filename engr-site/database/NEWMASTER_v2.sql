@@ -141,7 +141,7 @@ CREATE TABLE LinkComments_v3 (
   FOREIGN KEY (linkId) REFERENCES Links_v3(id) ON DELETE CASCADE
 );
 
-CREATE TABLE FileRatings_v3 (
+CREATE TABLE FileReviews_v3 (
   id INT NOT NULL AUTO_INCREMENT,
   fileId INT NOT NULL,
   userId INT NOT NULL,
@@ -155,7 +155,7 @@ CREATE TABLE FileRatings_v3 (
   FOREIGN KEY (fileId) REFERENCES Files_v3(id) ON DELETE CASCADE
 );
 
-CREATE TABLE LinkRatings_v3 (
+CREATE TABLE LinkReviews_v3 (
   id INT NOT NULL AUTO_INCREMENT,
   linkId INT NOT NULL,
   userId INT NOT NULL,
