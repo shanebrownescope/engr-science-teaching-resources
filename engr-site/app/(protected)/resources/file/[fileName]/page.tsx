@@ -3,7 +3,7 @@ import { Textarea, Button } from "@mantine/core";
 import { fetchFileById } from "@/actions/fetching/files/fetchFileById";
 
 import { DisplayFile } from "@/app/(protected)/_components/DisplayFile";
-import { FetchedCommentFileData, FetchedCommentLinkData, FetchedFile, FetchedSearchResults } from "@/utils/types_v2";
+import { FetchedCommentFileData, FetchedCommentLinkData, FetchedFile, FetchedReviewsFileData, FetchedSearchResults } from "@/utils/types_v2";
 import { fetchCommentsByFileName } from "@/actions/fetching/comments/fetchCommentsByFileName";
 import CommentFileThread from "@/components/custom/comments/thread/CommentFileThread";
 import CommentForm from "@/components/custom/comments/form/CommentForm";
@@ -15,6 +15,9 @@ import requireAuth from "@/actions/auth/requireAuth";
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 import { fetchFileByName } from "@/actions/fetching/files/fetchFileByName";
 import { fetchSimilarResourcesByTags } from "@/actions/fetching/similarResources/fetchSimilarResourcesByTags";
+import { ReviewsThread } from "@/components/custom/reviews/thread/ReviewsThread";
+import { fetchReviewsByFileName } from "@/actions/fetching/reviews/fetchReviewsByFileName";
+import { ReviewsFileData } from "@/utils/types_v2";
 
 
 const ResourceFilePage = async ({
@@ -33,7 +36,8 @@ const ResourceFilePage = async ({
     name: fileName,
     tags: fileData?.success?.tags || [],
   });
-  const commentThread: FetchedCommentFileData | null = await fetchCommentsByFileName(fileName);
+  const reviewsThread: FetchedReviewsFileData | null = await fetchReviewsByFileName(fileName)
+  // const commentThread: FetchedCommentFileData | null = await fetchCommentsByFileName(fileName);
 
   const handleFormSubmit = async (values: any) => {
     "use server";
@@ -63,8 +67,10 @@ const ResourceFilePage = async ({
 
       <SimilarResourcesData similarResources={similarResources?.success} />
 
-      <CommentForm handleFormSubmit={handleFormSubmit} />
-      <CommentFileThread commentThread={commentThread?.success} />
+      <ReviewsThread reviews={reviewsThread?.success} />
+
+      {/* <CommentForm handleFormSubmit={handleFormSubmit} />
+      <CommentFileThread commentThread={commentThread?.success} /> */}
     </div>
   );
 };

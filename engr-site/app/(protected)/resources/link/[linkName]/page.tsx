@@ -13,9 +13,11 @@ import CommentLinkThread from "@/components/custom/comments/thread/CommentLinkTh
 import SimilarResourcesData from "@/components/custom/similar-resources/SimilarResourcesData";
 import requireAuth from "@/actions/auth/requireAuth";
 import { fetchLinkByName } from "@/actions/fetching/links/fetchLinkByName";
-import { FetchedCommentLinkData, FetchedSearchResults } from "@/utils/types_v2";
+import { FetchedCommentLinkData, FetchedReviewsLinkData, FetchedSearchResults } from "@/utils/types_v2";
 import { fetchSimilarResourcesByTags } from "@/actions/fetching/similarResources/fetchSimilarResourcesByTags";
-
+import { fetchReviewsByLinkName } from "@/actions/fetching/reviews/fetchReviewsByLinkName";
+import { ReviewsThread } from "@/components/custom/reviews/thread/ReviewsThread";
+import { ReviewsLinkData } from "@/utils/types_v2";
 
 const ResourceLinkPage = async ({
   params
@@ -33,7 +35,8 @@ const ResourceLinkPage = async ({
     name: linkName,
     tags: linkData?.success?.tags || [],
   });
-  const commentThread: FetchedCommentLinkData | null = await fetchCommentsByLinkName(linkName);
+  const reviewsThread: FetchedReviewsLinkData | null = await fetchReviewsByLinkName(linkName)
+  // const commentThread: FetchedCommentLinkData | null = await fetchCommentsByLinkName(linkName);
 
   const handleFormSubmit = async (values: any) => {
     "use server";
@@ -63,8 +66,10 @@ const ResourceLinkPage = async ({
 
       <SimilarResourcesData similarResources={similarResources?.success} />
 
-      <CommentForm handleFormSubmit={handleFormSubmit} />
-      <CommentLinkThread commentThread={commentThread?.success} />
+      <ReviewsThread reviews={reviewsThread?.success} />
+
+      {/* <CommentForm handleFormSubmit={handleFormSubmit} />
+      <CommentLinkThread commentThread={commentThread?.success} /> */}
     </div>
   );
 };
