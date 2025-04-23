@@ -2,6 +2,7 @@ import React from "react";
 
 import styles from "@/components/custom/search/SearchResultBox.module.css";
 import Link from "next/link";
+import { Rating } from "@mantine/core";
 
 type SearchResultBoxProps = {
   type: string;
@@ -50,9 +51,13 @@ export const SearchResultBox = ({
           <p className={styles.resultDescription}> Uploaded on: {uploadDate} </p>
           <p className={styles.resultDescription}> Posted By: {contributor}</p>
           <p className={styles.resultDescription}> Resource Type: {resourceType} </p>
-          <p className={styles.resultDescription}>
-            {avgRating ? `Average Rating: ${avgRating} (${numReviews})` : 'No Reviews'}
-          </p>
+          {avgRating ? (
+            <div className="resource-rating-container">
+              <p>Average Rating: </p> 
+              <Rating value={avgRating} fractions={2} readOnly />
+              <p>(${numReviews})</p>
+            </div>
+          ) : <p>No Reviews</p>}
         </div>
         <div className={styles.tagsContainer}>
           <p> Tags: </p>

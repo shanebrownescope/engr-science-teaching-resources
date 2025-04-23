@@ -19,15 +19,13 @@ const SimilarResourcesData = ({
   return (
     <ContainerLayout paddingTop="md">
       <h5 className="mb-4">Similar resources </h5>
-
-      <div className={styles.grid}>
-        {similarResources &&
-          similarResources.map((item, idx) => (
-            <SimilarItem key={idx} item={item} />
-          ))}
-      </div>
-
-      {similarResources?.length === 0 && <p> No similar resources </p>}
+        {similarResources ? (
+            <div className={styles.grid}>
+              {similarResources.map((item, idx) => (
+                <SimilarItem key={idx} item={item} />
+              ))}
+            </div>
+        ) : <p> No similar resources </p>}
     </ContainerLayout>
   );
 };

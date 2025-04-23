@@ -1,5 +1,6 @@
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 import { FetchedFile } from "@/utils/types_v2";
+import { Rating } from "@mantine/core";
 
 type DisplayFileProps = {
   file: FetchedFile;
@@ -14,7 +15,12 @@ export const DisplayFile = ({ file }: DisplayFileProps) => {
           <p> Uploaded on: {file.uploadDate} </p>
           <p> Posted By: {file.contributor}</p>
           <p> Resource Type: {file.resourceType} </p>
-          {file.avgRating && <p> Average Rating: {file.avgRating} </p>}
+          {file.avgRating && (
+            <div className="resource-rating-container">
+              <p>Average Rating: </p> 
+              <Rating value={file.avgRating} fractions={2} readOnly />
+            </div>
+          )}
         </div>
         <iframe
           src={file.s3Url}
