@@ -1,39 +1,96 @@
-"use client";
-import React, { useEffect, useState } from "react";
+'use client';
+
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Rating, TextInput, Textarea, Button, Title, Container } from '@mantine/core';
-import { Notification } from '@mantine/core';
-import { IconSearch, IconArrowRight } from "@tabler/icons-react";
-import classes from "./ReviewForm.module.css";
-import Link from "next/link";
+import { Rating, TextInput, Textarea, Button } from '@mantine/core';
 
 type ReviewFormProps = {
-  reviewData: {
-    rating: number;
-    title: string;
-    comments: string;
-    userPublicName: string;
-  };
-  isLoading: boolean;
-  onChange: (field: string, value: string | number) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  onCancel: () => void;
-}
+  resourceName: string;
+  userId: string;
+  type: string;
+  updateAvgRating: ({}: any) => Promise<{
+    failure?: string;
+    success?: boolean;
+  }>;
+  uploadReview: ({}: any) => Promise<{
+    failure?: string;
+    success?: boolean;
+  }>
+};
 
-export function ReviewForm({
-  reviewData,
-  isLoading,
-  onChange,
-  onSubmit,
-  onCancel
+export default function ReviewForm({
+  resourceName,
+  userId,
+  type,
+  updateAvgRating,
+  uploadReview
 }: ReviewFormProps) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [reviewData, setReviewData] = useState({
+    rating: 0,
+    title: '',
+    comments: '',
+    userPublicName: ''
+  });
+
+  // handle on change event for review form values
+  const handleChange = (field: string, value: string | number) => {
+    setReviewData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // handle on submit event (update resource average rating and upload new review)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const resultForUpdate = await updateAvgRating({ 
+        resourceName, 
+        newRating: reviewData.rating 
+      });
+
+      if (resultForUpdate.failure) {
+        console.log("Failed to update resource average rating: ", resultForUpdate.failure)
+        return
+      }
+
+      const resultForUpload = await uploadReview({ 
+        values: reviewData, 
+        userId, 
+        resourceName 
+      });
+
+      if (resultForUpload.failure) {
+        console.log("Failed to upload resource review: ", resultForUpload.failure)
+        return
+      }
+
+      router.push(`/resources/${type}/${resourceName}`);
+      
+    } catch (error) {
+      console.log("Error occured when submitting resource review: ", error)
+      return
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // handle on cancel event
+  const handleCancel = () => {
+    router.push(`/resources/${type}/${resourceName}`);
+  };
+
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <label className="block mb-2 font-medium">Your Rating</label>
         <Rating
           value={reviewData.rating}
-          onChange={(value) => onChange('rating', value)}
+          onChange={(value) => handleChange('rating', value)}
           fractions={2}
           count={5}
           size="lg"
@@ -44,7 +101,7 @@ export function ReviewForm({
         label="Review Title"
         placeholder="Summarize your experience"
         value={reviewData.title}
-        onChange={(e) => onChange('title', e.target.value)}
+        onChange={(e) => handleChange('title', e.target.value)}
         required
       />
 
@@ -52,7 +109,7 @@ export function ReviewForm({
         label="Your Review"
         placeholder="Share details about your experience with this resource"
         value={reviewData.comments}
-        onChange={(e) => onChange('comments', e.target.value)}
+        onChange={(e) => handleChange('comments', e.target.value)}
         required
         minRows={5}
       />
@@ -61,7 +118,7 @@ export function ReviewForm({
         label="Display Name"
         placeholder="How you want your name to appear"
         value={reviewData.userPublicName}
-        onChange={(e) => onChange('userPublicName', e.target.value)}
+        onChange={(e) => handleChange('userPublicName', e.target.value)}
         required
       />
 
@@ -76,7 +133,7 @@ export function ReviewForm({
         
         <Button
           variant="outline"
-          onClick={onCancel}
+          onClick={handleCancel}
           disabled={isLoading}
         >
           Cancel
