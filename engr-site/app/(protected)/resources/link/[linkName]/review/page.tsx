@@ -13,31 +13,31 @@ export default async function CreateReviewPage({
 }: { 
   params: { linkName: string } 
 }) {
-    let user: any
-    try {
-        // Server-side user authorization (must have an active session and no reviews already created for this resource)
-        await requireAuth();
+  let user: any
+  try {
+    // Server-side user authorization (must have an active session and no reviews already created for this resource)
+    await requireAuth();
 
-        user = await getCurrentUser();
+    user = await getCurrentUser();
 
-        if (!user || !user.id) {
-            return;
-        }
-
-        // Check for existing reviews
-        const existingReviews: FetchedReviewsLinkData | null = await fetchReviewsByLinkNameAndUserId(
-            params.linkName, 
-            user.id
-        );
-        
-        if (existingReviews?.success?.length) {
-            console.log("Unauthorized: User already left a review for this resource")
-            redirect('/unauthorized');
-        }
-    } catch (error) {
-        console.log("Failed to authorize user: ", error)
-        return
+    if (!user || !user.id) {
+      return;
     }
+
+    // Check for existing reviews
+    const existingReviews: FetchedReviewsLinkData | null = await fetchReviewsByLinkNameAndUserId(
+      params.linkName, 
+      user.id
+    );
+    
+    if (existingReviews?.success?.length) {
+      console.log("Unauthorized: User already left a review for this resource")
+      redirect('/unauthorized');
+    }
+  } catch (error) {
+    console.log("Failed to authorize user: ", error)
+    return
+  }
 
   return (
     <Container size="md" py="xl">

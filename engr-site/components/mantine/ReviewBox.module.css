@@ -1,0 +1,11 @@
+.reviewCard {
+    transition: box-shadow 0.2s ease;
+}
+
+.reviewCard:hover {
+    box-shadow: var(--mantine-shadow-md);
+}
+
+.reviewBody {
+    white-space: pre-line;
+}
