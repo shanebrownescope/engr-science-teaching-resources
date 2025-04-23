@@ -27,7 +27,8 @@ const SimilarItem = ({ item }: SimilarItemProps) => {
 
         {item.avgRating ? (
             <div className="rating-container">
-              <Rating value={item.avgRating} fractions={2} readOnly />
+              <Rating value={item.avgRating} fractions={4} readOnly />
+              <p>{item.avgRating} / 5</p>
               <p>({item.numReviews})</p>
             </div>
         ) : <p>No Reviews</p>}
