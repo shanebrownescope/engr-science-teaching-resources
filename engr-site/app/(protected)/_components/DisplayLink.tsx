@@ -18,7 +18,8 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
           {link.avgRating && (
             <div className="resource-rating-container">
               <p>Average Rating: </p> 
-              <Rating value={link.avgRating} fractions={2} readOnly />
+              <Rating value={link.avgRating} fractions={4} readOnly />
+              <p>{link.avgRating} / 5</p>
             </div>
           )}
         </div>

@@ -54,7 +54,8 @@ export const SearchResultBox = ({
           {avgRating ? (
             <div className="resource-rating-container">
               <p className={styles.resultDescription}>Average Rating: </p> 
-              <Rating value={avgRating} fractions={2} readOnly />
+              <Rating value={avgRating} fractions={4} readOnly />
+              <p className={styles.resultDescription}>{avgRating} / 5</p>
               <p className={styles.resultDescription}>({numReviews})</p>
             </div>
           ) : <p className={styles.resultDescription}>No Reviews</p>}

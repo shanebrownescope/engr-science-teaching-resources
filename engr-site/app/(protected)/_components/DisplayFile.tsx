@@ -18,7 +18,8 @@ export const DisplayFile = ({ file }: DisplayFileProps) => {
           {file.avgRating && (
             <div className="resource-rating-container">
               <p>Average Rating: </p> 
-              <Rating value={file.avgRating} fractions={2} readOnly />
+              <Rating value={file.avgRating} fractions={4} readOnly />
+              <p>{file.avgRating} / 5</p>
             </div>
           )}
         </div>
