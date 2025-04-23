@@ -2,6 +2,7 @@
 
 import { Button, Text, Tooltip } from '@mantine/core';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 type CreateReviewButtonProps = {
     type: string;
@@ -17,8 +18,10 @@ export function CreateReviewButton({
     variant = 'filled' 
 }: CreateReviewButtonProps) {
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleClick = () => {
+        setIsLoading(true)
         router.push(`/resources/${type}/${resourceName}/review`);
     };
 
@@ -42,6 +45,8 @@ export function CreateReviewButton({
         <Button 
             variant={variant}
             onClick={handleClick}
+            loading={isLoading}
+            loaderProps={{ type: 'dots' }}
         >
             Write a Review
         </Button>
