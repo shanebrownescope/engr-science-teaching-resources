@@ -13,7 +13,7 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
 
         <div className="resource-info-container">
           <p> Uploaded on: {link.uploadDate} </p>
-          <p> Posted By: {link.contributor}</p>
+          <p> Creator: {link.contributor}</p>
           <p> Resource Type: {link.resourceType} </p>
           {link.avgRating && (
             <div className="resource-rating-container">

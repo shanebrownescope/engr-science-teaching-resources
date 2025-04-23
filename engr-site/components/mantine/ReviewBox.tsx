@@ -2,6 +2,7 @@
 
 import { Rating, Text, Group, Paper, Stack, Divider, Avatar } from '@mantine/core';
 import classes from './ReviewBox.module.css'; // Create this CSS module for custom styles
+import { getAvatarColor } from '@/utils/helpers';
 
 type ReviewBoxProps = {
     rating: number;
@@ -18,13 +19,14 @@ export function ReviewBox({
     userPublicName,
     uploadDate
 }: ReviewBoxProps) {
+  const avatarColor = getAvatarColor(userPublicName);
 
   return (
     <Paper withBorder p="md" radius="md" className={classes.reviewCard}>
         <Stack gap="xs">
             <Group justify="space-between">
                 <Group>
-                    <Avatar color="blue" radius="xl" size="md">
+                    <Avatar color={avatarColor} radius="xl" size="md">
                         {userPublicName.charAt(0).toUpperCase()}
                     </Avatar>
                     <Text fw={500}>{userPublicName}</Text>

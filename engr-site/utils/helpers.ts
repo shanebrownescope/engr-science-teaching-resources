@@ -212,3 +212,22 @@ export const transformObjectKeys = (object: any) => {
     return acc;
   }, {});
 };
+
+export const getAvatarColor = (name: string) => {
+  // List of Mantine's built-in colors (excluding grayscale)
+  const colors = [
+    'red', 'pink', 'grape', 'violet', 'indigo', 
+    'blue', 'cyan', 'teal', 'green', 'lime', 
+    'yellow', 'orange'
+  ];
+  
+  // Create a simple hash from the name
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  
+  // Use the hash to pick a consistent color for this name
+  const index = Math.abs(hash) % colors.length;
+  return colors[index];
+};
