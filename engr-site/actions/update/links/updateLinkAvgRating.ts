@@ -29,6 +29,7 @@ export const updateLinkAvgRating = async ({
     const linkData: FetchedLinkData = await fetchLinkByName({ name: linkName });
 
     if (linkData.failure) {
+      console.log("Failed to find link: ", linkData.failure)
       return { failure: "Link not found" };
     }
 

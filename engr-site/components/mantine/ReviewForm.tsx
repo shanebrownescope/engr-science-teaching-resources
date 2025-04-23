@@ -49,7 +49,7 @@ export default function ReviewForm({
 
     try {
       const resultForUpdate = await updateAvgRating({ 
-        resourceName, 
+        [`${type}Name`]: resourceName, 
         newRating: reviewData.rating 
       });
 
@@ -60,8 +60,8 @@ export default function ReviewForm({
 
       const resultForUpload = await uploadReview({ 
         values: reviewData, 
-        userId, 
-        resourceName 
+        userId: userId, 
+        [`${type}Name`]: resourceName 
       });
 
       if (resultForUpload.failure) {

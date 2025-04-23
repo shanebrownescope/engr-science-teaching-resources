@@ -29,6 +29,7 @@ export const updateFileAvgRating = async ({
     const fileData: FetchedFileData = await fetchFileByName({ name: fileName });
 
     if (fileData.failure) {
+      console.log("Failed to find file: ", fileData.failure)
       return { failure: "File not found" };
     }
 

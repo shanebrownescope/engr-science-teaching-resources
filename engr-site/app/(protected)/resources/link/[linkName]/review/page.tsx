@@ -31,6 +31,7 @@ export default async function CreateReviewPage({
         );
         
         if (existingReviews?.success?.length) {
+            console.log("Unauthorized: User already left a review for this resource")
             redirect('/unauthorized');
         }
     } catch (error) {
