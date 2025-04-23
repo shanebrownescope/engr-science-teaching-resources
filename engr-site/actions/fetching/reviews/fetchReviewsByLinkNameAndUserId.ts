@@ -8,12 +8,12 @@ import { ReviewsLinkData, FetchedReviewsLinkData } from "@/utils/types_v2";
 /**
  * Fetches reviews for a link from the database by its name
  * @param {string} name - The name of the link
- * @param {number} userId - The id of the user
+ * @param {string} userId - The id of the user
  * @returns {Promise<FetchedReviewsLinkData | null>} - A promise that resolves to an object containing the fetched reviews or an error message
  */
-export const fetchReviewsByLinkName = async (
+export const fetchReviewsByLinkNameAndUserId = async (
   name: string,
-  userId: number
+  userId: string
 ): Promise<FetchedReviewsLinkData | null> => {
   try {
     const existingLink = await fetchLinkByName({ name });

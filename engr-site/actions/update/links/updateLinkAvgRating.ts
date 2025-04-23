@@ -22,10 +22,14 @@ export const updateLinkAvgRating = async ({
   success?: boolean;
 }> => {
   try {
+    // Round the input rating to 2 decimal places immediately
+    const roundedNewRating = Math.round(newRating * 100) / 100;
+
     // First, fetch the current link data
     const linkData: FetchedLinkData = await fetchLinkByName({ name: linkName });
 
     if (linkData.failure) {
+      console.log("Failed to find link: ", linkData.failure)
       return { failure: "Link not found" };
     }
 
@@ -34,9 +38,9 @@ export const updateLinkAvgRating = async ({
     const currentReviewCount = link?.numReviews || 0;
 
     // Calculate the new average rating
-    const newTotalRating = currentAvgRating * currentReviewCount + newRating;
+    const newTotalRating = currentAvgRating * currentReviewCount + roundedNewRating;
     const newReviewCount = currentReviewCount + 1;
-    const updatedAvgRating = newTotalRating / newReviewCount;
+    const updatedAvgRating = Math.round((newTotalRating / newReviewCount) * 100) / 100;
 
     // Update the link's average rating in the database
     const updateQuery = `

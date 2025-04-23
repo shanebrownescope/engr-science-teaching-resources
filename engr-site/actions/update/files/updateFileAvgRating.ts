@@ -22,10 +22,14 @@ export const updateFileAvgRating = async ({
   success?: boolean;
 }> => {
   try {
+    // Round the input rating to 2 decimal places immediately
+    const roundedNewRating = Math.round(newRating * 100) / 100;
+
     // First, fetch the current file data
     const fileData: FetchedFileData = await fetchFileByName({ name: fileName });
 
     if (fileData.failure) {
+      console.log("Failed to find file: ", fileData.failure)
       return { failure: "File not found" };
     }
 
@@ -34,9 +38,9 @@ export const updateFileAvgRating = async ({
     const currentReviewCount = file?.numReviews || 0;
 
     // Calculate the new average rating
-    const newTotalRating = currentAvgRating * currentReviewCount + newRating;
+    const newTotalRating = currentAvgRating * currentReviewCount + roundedNewRating;
     const newReviewCount = currentReviewCount + 1;
-    const updatedAvgRating = newTotalRating / newReviewCount;
+    const updatedAvgRating = Math.round((newTotalRating / newReviewCount) * 100) / 100;
 
     // Update the file's average rating in the database
     const updateQuery = `

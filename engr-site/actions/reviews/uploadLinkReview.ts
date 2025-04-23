@@ -9,7 +9,7 @@ import { FetchedLinkData } from "@/utils/types_v2";
 
 type UploadLinkReviewProps = {
   values: z.infer<typeof ReviewSchema>;
-  userId: string;
+  userId: string | undefined;
   linkName: string;
 };
 
@@ -28,7 +28,8 @@ export const uploadLinkReview = async ({
   success?: boolean;
 }> => {
   try {
-    const existingUser = await getUserById(userId);
+    let existingUser
+    if (userId) { existingUser = await getUserById(userId); }
     const link: FetchedLinkData = await fetchLinkByName({ name: linkName })
 
     if (!existingUser) {

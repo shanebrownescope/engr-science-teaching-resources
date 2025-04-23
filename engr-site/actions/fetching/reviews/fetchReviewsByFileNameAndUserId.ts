@@ -8,12 +8,12 @@ import { ReviewsFileData, FetchedReviewsFileData } from "@/utils/types_v2";
 /**
  * Fetches reviews for a file from the database by its name
  * @param {string} name - The name of the file
- * @param {number} userId - The id of the user
+ * @param {string} userId - The id of the user
  * @returns {Promise<FetchedReviewsFileData | null>} - A promise that resolves to an object containing the fetched reviews or an error message
  */
 export const fetchReviewsByFileNameAndUserId = async (
   name: string,
-  userId: number
+  userId: string
 ): Promise<FetchedReviewsFileData | null> => {
   try {
     const existingFile = await fetchFileByName({ name });

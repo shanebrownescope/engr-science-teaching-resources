@@ -9,7 +9,7 @@ import { FetchedFileData } from "@/utils/types_v2";
 
 type UploadFileReviewProps = {
   values: z.infer<typeof ReviewSchema>;
-  userId: string;
+  userId: string | undefined;
   fileName: string;
 };
 
@@ -28,7 +28,8 @@ export const uploadFileReview = async ({
   success?: boolean;
 }> => {
   try {
-    const existingUser = await getUserById(userId);
+    let existingUser
+    if (userId) { existingUser = await getUserById(userId); }
     const file: FetchedFileData = await fetchFileByName({ name: fileName })
 
     if (!existingUser) {
