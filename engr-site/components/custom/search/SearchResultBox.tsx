@@ -49,15 +49,15 @@ export const SearchResultBox = ({
         <div className="resource-info-container">
           <p className={styles.resultDescription}>[{type}]</p>
           <p className={styles.resultDescription}> Uploaded on: {uploadDate} </p>
-          <p className={styles.resultDescription}> Posted By: {contributor}</p>
+          <p className={styles.resultDescription}> Creator: {contributor}</p>
           <p className={styles.resultDescription}> Resource Type: {resourceType} </p>
           {avgRating ? (
             <div className="resource-rating-container">
-              <p>Average Rating: </p> 
+              <p className={styles.resultDescription}>Average Rating: </p> 
               <Rating value={avgRating} fractions={2} readOnly />
-              <p>(${numReviews})</p>
+              <p className={styles.resultDescription}>({numReviews})</p>
             </div>
-          ) : <p>No Reviews</p>}
+          ) : <p className={styles.resultDescription}>No Reviews</p>}
         </div>
         <div className={styles.tagsContainer}>
           <p> Tags: </p>

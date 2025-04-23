@@ -13,7 +13,7 @@ export const DisplayFile = ({ file }: DisplayFileProps) => {
 
         <div className="resource-info-container">
           <p> Uploaded on: {file.uploadDate} </p>
-          <p> Posted By: {file.contributor}</p>
+          <p> Creator: {file.contributor}</p>
           <p> Resource Type: {file.resourceType} </p>
           {file.avgRating && (
             <div className="resource-rating-container">
