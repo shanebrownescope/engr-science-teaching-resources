@@ -26,7 +26,7 @@ export const SearchFilterMenu = ({
   resourcesData
 }: SearchFilterMenuProps) => {
 
-  const [sortBy, setSortBy] = useState<string | null>("");
+  const [selectedSortBy, setSelectedSortBy] = useState<string | null>('most-popular');
   const [isLoading, setIsLoading] = useState(true);
 
   const [tagsData, setTagsData] = useState<any[]>([]);
@@ -81,6 +81,11 @@ export const SearchFilterMenu = ({
   // console.log(" -- contributorsData: ", contributorsData)
 
   // Functions to handle changes in filter selection
+
+  const handleSortBySelect = (value: string | null) => {
+    setSelectedSortBy(value || null);
+  };
+
   const handleTagsSelect = async (value?: string[]) => {
     if (!value || value.length === 0) {
       setSelectedTags([]);
@@ -194,36 +199,81 @@ export const SearchFilterMenu = ({
     console.log(`--FILTERED RESULTS: `, filteredData)
   }, [selectedTags, selectedCourses, selectedCourseTopics, selectedResourceType, selectedContributors]);
 
+  
+  // applies sorting whenever sortBy filter state changes
+  useEffect(() => {
+    const sortResources = (data: AllFilesAndLinksDataFormatted[]): AllFilesAndLinksDataFormatted[] => {
+      const sortedData = [...data]; // copy data to avoid mutating original data
+      
+      switch (selectedSortBy) {
+        case 'most-popular':
+          sortedData.sort((a, b) => {
+            // First by average rating (descending)
+            const ratingDiff = (b.avgRating || 0) - (a.avgRating || 0);
+            if (ratingDiff !== 0) return ratingDiff;
+            
+            // Then by number of reviews (descending)
+            return b.numReviews - a.numReviews;
+          });
+          break;
 
-  // Function to handle sorting change
-  // const handleSortChange = (value: string | null) => {
-  //   setSortBy(value);
-  // };
+        case 'newest':
+          sortedData.sort((a, b) => 
+            new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime()
+          );
+          break;
 
-  // // Apply sorting based on the selected option
-  // let sortedData = resourcesData.slice(); // Create a copy of the data array
-  // if (sortBy === "Newest") {
-  //   sortedData = resourcesData
-  //     .slice()
-  //     .sort(
-  //       (a, b) =>
-  //         new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime()
-  //     );
-  // } else if (sortBy === "Oldest") {
-  //   sortedData = resourcesData
-  //     .slice()
-  //     .sort(
-  //       (a, b) =>
-  //         new Date(a.uploadDate).getTime() - new Date(b.uploadDate).getTime()
-  //     );
-  // }
+        case 'oldest':
+          sortedData.sort((a, b) => 
+            new Date(a.uploadDate).getTime() - new Date(b.uploadDate).getTime()
+          );
+          break;
 
-  // console.log(sortedData);
+        case 'new-trending':
+          sortedData.sort((a, b) => {
+            // Calculate a trending score combining recency and rating
+            const now = new Date().getTime();
+            const aDate = new Date(a.uploadDate).getTime();
+            const bDate = new Date(b.uploadDate).getTime();
+            
+            // Time decay factor (30 days)
+            const aTimeFactor = Math.max(0, 1 - (now - aDate) / (30 * 24 * 60 * 60 * 1000));
+            const bTimeFactor = Math.max(0, 1 - (now - bDate) / (30 * 24 * 60 * 60 * 1000));
+            
+            const aScore = (a.avgRating || 0) * aTimeFactor;
+            const bScore = (b.avgRating || 0) * bTimeFactor;
+            
+            return bScore - aScore;
+          });
+          break;
+
+        default:
+          // No sorting if unknown option
+          return data;
+      }
+
+      return sortedData;
+    };
+
+    setFilteredData(prev => sortResources(prev));
+
+  }, [selectedSortBy]);
 
   return (
     <>
       {!isLoading &&
         <div className={styles.filterMenu}>
+          <Select
+            label="Sort By"
+            data={[
+              { value: 'most-popular', label: 'Most Popular' },
+              { value: 'newest', label: 'Newest' },
+              { value: 'oldest', label: 'Oldest' },
+              { value: 'new-trending', label: 'New and Trending' },
+            ]}
+            onChange={handleSortBySelect}
+            value={selectedSortBy}
+          />
           <MultiSelect
             label="Tags"
             data={tagsData?.map((tag) => ({
