@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Pagination } from "@mantine/core";
+import { Container, Pagination, Text } from "@mantine/core";
 import { AllFilesAndLinksDataFormatted } from "@/utils/types_v2";
 import { SearchResultBox } from "@/components/custom/search/SearchResultBox";
 
@@ -42,6 +42,16 @@ const ResourcesListPaginated = ({ data }: ResourcesListPaginatedProps) => {
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
+
+  if (!totalItems) {
+    return (
+      <Container py="xl">
+        <Text size="lg" c="dimmed" ta="center">
+          No resources found
+        </Text>
+      </Container>
+    )
+  }
 
   return (
     <>
