@@ -62,11 +62,8 @@ const ResourcesListPaginated = ({ data }: ResourcesListPaginatedProps) => {
           <div key={item.id}>
             <SearchResultBox
               type={item.type}
-              id={item.id}
-              title={item.originalName}
               urlName={item.urlName}
               uploadDate={item.uploadDate}
-              description={item.description}
               tags={item.tags}
               courses={item.courses}
               courseTopics={item.courseTopics}

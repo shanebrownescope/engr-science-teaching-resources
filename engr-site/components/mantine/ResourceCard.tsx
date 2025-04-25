@@ -15,10 +15,8 @@ import classes from "./ResourceCard.module.css";
 
 type ResourceCardProps = {
   type: string;
-  title: string;
   urlName: string;
   uploadDate: string;
-  description: string;
   tags: string[];
   courses: string[];
   courseTopics: string[];
@@ -30,10 +28,8 @@ type ResourceCardProps = {
 
 export const ResourceCard = ({
   type,
-  title,
   urlName,
   uploadDate,
-  description,
   tags,
   courses,
   courseTopics,
@@ -71,18 +67,6 @@ export const ResourceCard = ({
             </Tooltip>
           </Group>
         </Group>
-
-        {title && (
-          <Text className={classes.title} fw={500} lineClamp={1}>
-            {title}
-          </Text>
-        )}
-
-        {description && (
-          <Text size="sm" c="dimmed" lineClamp={2}>
-            {description}
-          </Text>
-        )}
 
         <Group gap="xs" wrap="nowrap">
           <Tooltip label="Contributor">
