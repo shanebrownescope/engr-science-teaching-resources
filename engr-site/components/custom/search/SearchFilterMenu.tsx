@@ -39,6 +39,7 @@ export const SearchFilterMenu = ({
   const [selectedCourseTopics, setSelectedCourseTopics] = useState<any[]>()
   const [selectedContributors, setSelectedContributors] = useState<any[]>();
   const [selectedResourceType, setSelectedResourceType] = useState<any>();
+  const [selectedMaterialType, setSelectedMaterialType] = useState<any>();
 
   const [filteredData, setFilteredData] = useState<AllFilesAndLinksDataFormatted[]>(resourcesData);
 
@@ -140,6 +141,10 @@ export const SearchFilterMenu = ({
     setSelectedResourceType(value || null);
   };
 
+  const handleMaterialTypeSelect = (value: string | null) => {
+    setSelectedMaterialType(value || null);
+  };
+
   const handleContributorsSelect = async (value?: string[]) => {
     if (!value || value.length === 0) {
       setSelectedContributors([]);
@@ -173,6 +178,10 @@ export const SearchFilterMenu = ({
       // Filter by resource type (if a resource type is selected)
       const matchesResourceType =
         !selectedResourceType || resource.resourceType == selectedResourceType;
+
+      // Filter by material type (if a material type is selected)
+      const matchesMaterialType =
+        !selectedMaterialType || resource.type == selectedMaterialType;
   
       // Filter by contributor (if any contributors are selected)
       const matchesContributors =
@@ -186,6 +195,7 @@ export const SearchFilterMenu = ({
         matchesCourses &&
         matchesCourseTopics &&
         matchesResourceType &&
+        matchesMaterialType &&
         matchesContributors
       );
     });
@@ -195,9 +205,9 @@ export const SearchFilterMenu = ({
   useEffect(() => {
     const filteredResources = applyFilters();
     setFilteredData(filteredResources);
-    console.log(`-- CURRENT FILTERS SELECTED:\nTags: ${selectedTags}\nCourses: ${selectedCourses}\nCourseTopics: ${selectedCourseTopics}\nResourceType: ${selectedResourceType}\nContributors: ${selectedContributors}`)
+    console.log(`-- CURRENT FILTERS SELECTED:\nTags: ${selectedTags}\nCourses: ${selectedCourses}\nCourseTopics: ${selectedCourseTopics}\nResourceType: ${selectedResourceType}\nMaterialType: ${selectedMaterialType}\nContributors: ${selectedContributors}`)
     console.log(`--FILTERED RESULTS: `, filteredData)
-  }, [selectedTags, selectedCourses, selectedCourseTopics, selectedResourceType, selectedContributors]);
+  }, [selectedTags, selectedCourses, selectedCourseTopics, selectedResourceType, selectedMaterialType, selectedContributors]);
 
   
   // applies sorting whenever sortBy filter state changes
@@ -314,6 +324,15 @@ export const SearchFilterMenu = ({
             ]}
             onChange={handleResourceTypeSelect}
             value={selectedResourceType || null}
+          />
+          <Select
+            label="Material Type"
+            data={[
+              { value: 'file', label: 'File' },
+              { value: 'link', label: 'Link' },
+            ]}
+            onChange={handleMaterialTypeSelect}
+            value={selectedMaterialType || null}
           />
           <MultiSelect
             label="Contributor"
