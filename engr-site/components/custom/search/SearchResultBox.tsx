@@ -7,11 +7,8 @@ import { ResourceCard } from "@/components/mantine/ResourceCard";
 
 type SearchResultBoxProps = {
   type: string;
-  id: number;
-  title: string;
   urlName: string;
   uploadDate: string;
-  description: string;
   tags: string[];
   courses: string[];
   courseTopics: string[];
@@ -29,11 +26,8 @@ type SearchResultBoxProps = {
  */
 export const SearchResultBox = ({
   type,
-  id,
-  title,
   urlName,
   uploadDate,
-  description,
   tags,
   courses,
   courseTopics,
@@ -45,10 +39,8 @@ export const SearchResultBox = ({
   return (
     <ResourceCard 
       type={type}
-      title={title}
       urlName={urlName}
       uploadDate={uploadDate}
-      description={description}
       tags={tags}
       courses={courses}
       courseTopics={courseTopics}
