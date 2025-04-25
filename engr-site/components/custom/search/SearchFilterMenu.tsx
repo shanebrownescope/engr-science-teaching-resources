@@ -294,6 +294,7 @@ export const SearchFilterMenu = ({
                   ]}
                   onChange={handleSortBySelect}
                   value={selectedSortBy}
+                  allowDeselect={false}
                 />
                 <MultiSelect
                   label="Tags"
