@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ComboboxItem, MultiSelect, Select, Text } from "@mantine/core";
+import { ComboboxItem, MultiSelect, Select, Text, Tooltip } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons-react"; 
 import { YearSlider } from "../../mantine";
 import styles from "@/components/custom/search/SearchFilterMenu.module.css";
 import { AllFilesAndLinksDataFormatted } from "@/utils/types_v2";
@@ -127,7 +128,7 @@ export const SearchFilterMenu = ({
 
   const handleCourseTopicsSelect = async (value?: string[]) => {
     if (!value || value.length === 0) {
-      setCourseTopicsData([]);
+      setSelectedCourseTopics([]);
       return;
     }
     setSelectedCourseTopics(value);
@@ -277,6 +278,16 @@ export const SearchFilterMenu = ({
     selectedContributors
   ]);
 
+  // Helper function to render label with tooltip
+  const renderLabelWithTooltip = (label: string, tooltip: string) => (
+    <div className={styles.labelWithTooltip}>
+      <span>{label}</span>
+      <Tooltip label={tooltip} position="right" withArrow>
+        <IconInfoCircle size={16} className={styles.infoIcon} />
+      </Tooltip>
+    </div>
+  );
+
   return (
     <>
       {!isLoading &&
@@ -297,7 +308,7 @@ export const SearchFilterMenu = ({
                   allowDeselect={false}
                 />
                 <MultiSelect
-                  label="Tags"
+                  label={renderLabelWithTooltip("Tags", "Filter resources by specific keywords or categories")}
                   data={tagsData?.map((tag) => ({
                     value: tag.name, 
                     label: tag.name
@@ -307,7 +318,7 @@ export const SearchFilterMenu = ({
                   searchable
                 />
                 <MultiSelect
-                  label="Courses"
+                  label={renderLabelWithTooltip("Courses", "Filter resources by specific courses")}
                   data={coursesData?.map((course) => ({
                     value: course.name, 
                     label: course.name
@@ -316,18 +327,26 @@ export const SearchFilterMenu = ({
                   onChange={handleCoursesSelect}
                   searchable
                 />
-                <MultiSelect
-                  label="Course Topics"
-                  data={courseTopicsData?.map((topic) => ({
-                    value: topic.name, 
-                    label: topic.name
-                  }))}
-                  value={selectedCourseTopics || []}
-                  onChange={handleCourseTopicsSelect}
-                  searchable
-                />
+                <div className={styles.topicSectionContainer}>
+                  <MultiSelect
+                    label={renderLabelWithTooltip("Course Topics", "Filter resources by specific topics within courses")}
+                    data={courseTopicsData?.map((topic) => ({
+                      value: topic.name, 
+                      label: topic.name
+                    }))}
+                    value={selectedCourseTopics || []}
+                    onChange={handleCourseTopicsSelect}
+                    searchable
+                    disabled={!selectedCourses || selectedCourses.length === 0}
+                  />
+                  {(!selectedCourses || selectedCourses.length === 0) && (
+                    <Text size="xs" color="dimmed" className={styles.warningText}>
+                      Please select a course first to view topics
+                    </Text>
+                  )}
+                </div>
                 <Select
-                  label="Resource Type"
+                  label={renderLabelWithTooltip("Resource Type", "Filter by the category of resource (Exercise, Notes, etc.)")}
                   data={[
                     { value: 'exercise', label: 'Exercise' },
                     { value: 'notes', label: 'Notes' },
@@ -338,7 +357,7 @@ export const SearchFilterMenu = ({
                   value={selectedResourceType || null}
                 />
                 <Select
-                  label="Material Type"
+                  label={renderLabelWithTooltip("Material Type", "Filter by whether the resource is a file or external link")}
                   data={[
                     { value: 'file', label: 'File' },
                     { value: 'link', label: 'Link' },
@@ -347,7 +366,7 @@ export const SearchFilterMenu = ({
                   value={selectedMaterialType || null}
                 />
                 <MultiSelect
-                  label="Contributor"
+                  label={renderLabelWithTooltip("Contributor", "Filter resources by the person who uploaded them")}
                   data={contributorsData?.map((contributor) => ({
                     value: trimCapitalizeFirstLetter(contributor.name), 
                     label: trimCapitalizeFirstLetter(contributor.name)
