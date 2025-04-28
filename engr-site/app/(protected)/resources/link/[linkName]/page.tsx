@@ -13,9 +13,13 @@ import CommentLinkThread from "@/components/custom/comments/thread/CommentLinkTh
 import SimilarResourcesData from "@/components/custom/similar-resources/SimilarResourcesData";
 import requireAuth from "@/actions/auth/requireAuth";
 import { fetchLinkByName } from "@/actions/fetching/links/fetchLinkByName";
-import { FetchedCommentLinkData, FetchedSearchResults } from "@/utils/types_v2";
+import { FetchedCommentLinkData, FetchedReviewsFileData, FetchedReviewsLinkData, FetchedSearchResults } from "@/utils/types_v2";
 import { fetchSimilarResourcesByTags } from "@/actions/fetching/similarResources/fetchSimilarResourcesByTags";
-
+import { fetchReviewsByLinkName } from "@/actions/fetching/reviews/fetchReviewsByLinkName";
+import { ReviewsThread } from "@/components/custom/reviews/thread/ReviewsThread";
+import { ReviewsLinkData } from "@/utils/types_v2";
+import { CreateReviewButton } from "@/components/custom/reviews/createButton/createReviewButton";
+import { fetchReviewsByLinkNameAndUserId } from "@/actions/fetching/reviews/fetchReviewsByLinkNameAndUserId";
 
 const ResourceLinkPage = async ({
   params
@@ -27,33 +31,39 @@ const ResourceLinkPage = async ({
   const { linkName } = params;
 
   const user = await getCurrentUser();
+  if (!user || !user.id) {
+    console.log("No user is logged in")
+    return;
+  }
 
   const linkData = await fetchLinkByName({ name: linkName });
   const similarResources: FetchedSearchResults = await fetchSimilarResourcesByTags({
     name: linkName,
     tags: linkData?.success?.tags || [],
   });
-  const commentThread: FetchedCommentLinkData | null = await fetchCommentsByLinkName(linkName);
+  const reviewsByUser: FetchedReviewsLinkData | null = await fetchReviewsByLinkNameAndUserId(linkName, user.id)
+  const reviewsThread: FetchedReviewsLinkData | null = await fetchReviewsByLinkName(linkName)
 
-  const handleFormSubmit = async (values: any) => {
-    "use server";
-    if (!user || !user.id) {
-      return;
-    }
+  // const commentThread: FetchedCommentLinkData | null = await fetchCommentsByLinkName(linkName);
+  // const handleFormSubmit = async (values: any) => {
+  //   "use server";
+  //   if (!user || !user.id) {
+  //     return;
+  //   }
 
-    try {
-      const results = await uploadLinkComment({
-        values: values,
-        userId: user.id,
-        linkName: linkName,
-      });
-      revalidatePath(
-        `/resources/link/${linkName}`
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //   try {
+  //     const results = await uploadLinkComment({
+  //       values: values,
+  //       userId: user.id,
+  //       linkName: linkName,
+  //     });
+  //     revalidatePath(
+  //       `/resources/link/${linkName}`
+  //     );
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <div>
@@ -63,8 +73,15 @@ const ResourceLinkPage = async ({
 
       <SimilarResourcesData similarResources={similarResources?.success} />
 
-      <CommentForm handleFormSubmit={handleFormSubmit} />
-      <CommentLinkThread commentThread={commentThread?.success} />
+      <CreateReviewButton 
+        type="link"
+        resourceName={linkName}
+        disabled={!!(reviewsByUser?.success?.length)}
+      />
+      <ReviewsThread reviews={reviewsThread?.success} />
+
+      {/* <CommentForm handleFormSubmit={handleFormSubmit} />
+      <CommentLinkThread commentThread={commentThread?.success} /> */}
     </div>
   );
 };

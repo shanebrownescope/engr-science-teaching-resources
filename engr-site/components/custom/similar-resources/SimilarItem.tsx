@@ -1,6 +1,7 @@
 import { AllFilesAndLinksDataFormatted, FetchedFile, FetchedLink } from "@/utils/types_v2";
 import styles from "./similarResource.module.css";
 import Link from "next/link";
+import { Rating } from "@mantine/core";
 
 type SimilarItemProps = {
   item: AllFilesAndLinksDataFormatted;
@@ -23,6 +24,14 @@ const SimilarItem = ({ item }: SimilarItemProps) => {
         </p>
 
         <p>{item.description}</p>
+
+        {item.avgRating ? (
+            <div className="rating-container">
+              <Rating value={item.avgRating} fractions={4} readOnly />
+              <p>{item.avgRating} / 5</p>
+              <p>({item.numReviews})</p>
+            </div>
+        ) : <p>No Reviews</p>}
 
         <div className={styles.tagsContainer}>
           {item.tags?.map((tag: string, idx: number) => (

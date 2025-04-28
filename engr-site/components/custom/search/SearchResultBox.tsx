@@ -2,18 +2,20 @@ import React from "react";
 
 import styles from "@/components/custom/search/SearchResultBox.module.css";
 import Link from "next/link";
+import { Rating } from "@mantine/core";
+import { ResourceCard } from "@/components/mantine/ResourceCard";
 
 type SearchResultBoxProps = {
   type: string;
-  id: number;
-  title: string;
   urlName: string;
-  description: string;
+  uploadDate: string;
   tags: string[];
   courses: string[];
   courseTopics: string[];
   resourceType: string;
-  contributor: string
+  contributor: string;
+  avgRating: number | null;
+  numReviews: number
 };
 
 /**
@@ -24,55 +26,28 @@ type SearchResultBoxProps = {
  */
 export const SearchResultBox = ({
   type,
-  id,
-  title,
   urlName,
-  description,
+  uploadDate,
   tags,
   courses,
   courseTopics,
   resourceType,
-  contributor
+  contributor,
+  avgRating,
+  numReviews
 }: SearchResultBoxProps) => {
   return (
-    <div className={styles.resultBox}>
-      <Link
-        href={`/resources/${type}/${urlName}`}
-      >
-        <h5 className={styles.resultTitle}>{title}</h5>
-        <p className={styles.resultDescription}>{resourceType}</p>
-        <p className={styles.resultDescription}>{contributor}</p>
-        <div className={styles.tagsContainer}>
-          {tags.map((tag: string, index: number) => (
-            <span
-              key={index}
-              className={`${styles.tag} ${styles.tag.toLowerCase()}`}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-        <div className={styles.tagsContainer}>
-          {courses.map((course: string, index: number) => (
-            <span
-              key={index}
-              className={`${styles.tag} ${styles.tag.toLowerCase()}`}
-            >
-              {course}
-            </span>
-          ))}
-        </div>
-        <div className={styles.tagsContainer}>
-          {courseTopics.map((courseTopic: string, index: number) => (
-            <span
-              key={index}
-              className={`${styles.tag} ${styles.tag.toLowerCase()}`}
-            >
-              {courseTopic}
-            </span>
-          ))}
-        </div>
-      </Link>
-    </div>
+    <ResourceCard 
+      type={type}
+      urlName={urlName}
+      uploadDate={uploadDate}
+      tags={tags}
+      courses={courses}
+      courseTopics={courseTopics}
+      resourceType={resourceType}
+      contributor={contributor}
+      avgRating={avgRating}
+      numReviews={numReviews}
+    />
   );
 };

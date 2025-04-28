@@ -1,3 +1,5 @@
+import { Button, Card, Group, Text, Badge, Stack, Divider } from "@mantine/core";
+
 type PendingUserDetailsProps = {
   firstName: string;
   lastName: string;
@@ -24,15 +26,47 @@ export const PendingUserDetails = ({
   handleReject,
 }: PendingUserDetailsProps) => {
   return (
-    <div>
-      <p>
-        Name: {firstName} {lastName}
-      </p>
-      <p> Email: {email} </p>
-      <p> Username: {username} </p>
-      <p> Status: {status} </p>
-      <button onClick={handleApprove}> Approve </button>
-      <button onClick={handleReject}> Reject </button>
-    </div>
+    <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+      <Stack gap="xs">
+        <Text fw={500} size="lg">
+          {firstName} {lastName}
+        </Text>
+        
+        <Group justify="apart">
+          <Text size="sm" c="dimmed">Email:</Text>
+          <Text size="sm">{email}</Text>
+        </Group>
+        
+        <Group justify="apart">
+          <Text size="sm" c="dimmed">Username:</Text>
+          <Text size="sm" fw={500}>{username}</Text>
+        </Group>
+        
+        <Group justify="apart">
+          <Text size="sm" c="dimmed">Status:</Text>
+          <Badge color={status === "pending" ? "yellow" : "blue"}>
+            {status}
+          </Badge>
+        </Group>
+        
+        <Divider my="sm" />
+        
+        <Group justify="right" gap="md">
+          <Button 
+            color="green" 
+            onClick={handleApprove}
+          >
+            Approve
+          </Button>
+          <Button 
+            color="red" 
+            onClick={handleReject}
+            variant="filled"
+          >
+            Reject
+          </Button>
+        </Group>
+      </Stack>
+    </Card>
   );
 };

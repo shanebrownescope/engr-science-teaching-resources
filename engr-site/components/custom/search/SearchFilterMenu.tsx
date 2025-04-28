@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ComboboxItem, MultiSelect, Select } from "@mantine/core";
+import { ComboboxItem, MultiSelect, Select, Text, Tooltip } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons-react"; 
 import { YearSlider } from "../../mantine";
 import styles from "@/components/custom/search/SearchFilterMenu.module.css";
 import { AllFilesAndLinksDataFormatted } from "@/utils/types_v2";
@@ -26,7 +27,7 @@ export const SearchFilterMenu = ({
   resourcesData
 }: SearchFilterMenuProps) => {
 
-  const [sortBy, setSortBy] = useState<string | null>("");
+  const [selectedSortBy, setSelectedSortBy] = useState<string | null>('most-popular');
   const [isLoading, setIsLoading] = useState(true);
 
   const [tagsData, setTagsData] = useState<any[]>([]);
@@ -39,6 +40,7 @@ export const SearchFilterMenu = ({
   const [selectedCourseTopics, setSelectedCourseTopics] = useState<any[]>()
   const [selectedContributors, setSelectedContributors] = useState<any[]>();
   const [selectedResourceType, setSelectedResourceType] = useState<any>();
+  const [selectedMaterialType, setSelectedMaterialType] = useState<any>();
 
   const [filteredData, setFilteredData] = useState<AllFilesAndLinksDataFormatted[]>(resourcesData);
 
@@ -76,11 +78,12 @@ export const SearchFilterMenu = ({
 
   }, []);
 
-  // console.log(" -- tagsData: ", tagsData)
-  // console.log(" -- coursesData: ", coursesData)
-  // console.log(" -- contributorsData: ", contributorsData)
-
   // Functions to handle changes in filter selection
+
+  const handleSortBySelect = (value: string | null) => {
+    setSelectedSortBy(value || null);
+  };
+
   const handleTagsSelect = async (value?: string[]) => {
     if (!value || value.length === 0) {
       setSelectedTags([]);
@@ -125,7 +128,7 @@ export const SearchFilterMenu = ({
 
   const handleCourseTopicsSelect = async (value?: string[]) => {
     if (!value || value.length === 0) {
-      setCourseTopicsData([]);
+      setSelectedCourseTopics([]);
       return;
     }
     setSelectedCourseTopics(value);
@@ -133,6 +136,10 @@ export const SearchFilterMenu = ({
 
   const handleResourceTypeSelect = (value: string | null) => {
     setSelectedResourceType(value || null);
+  };
+
+  const handleMaterialTypeSelect = (value: string | null) => {
+    setSelectedMaterialType(value || null);
   };
 
   const handleContributorsSelect = async (value?: string[]) => {
@@ -168,6 +175,10 @@ export const SearchFilterMenu = ({
       // Filter by resource type (if a resource type is selected)
       const matchesResourceType =
         !selectedResourceType || resource.resourceType == selectedResourceType;
+
+      // Filter by material type (if a material type is selected)
+      const matchesMaterialType =
+        !selectedMaterialType || resource.type == selectedMaterialType;
   
       // Filter by contributor (if any contributors are selected)
       const matchesContributors =
@@ -181,104 +192,197 @@ export const SearchFilterMenu = ({
         matchesCourses &&
         matchesCourseTopics &&
         matchesResourceType &&
+        matchesMaterialType &&
         matchesContributors
       );
     });
   };
 
-  // applies filters whenever selected state changes
+  // applies filters and/or sorting whenever selected state changes
   useEffect(() => {
-    const filteredResources = applyFilters();
-    setFilteredData(filteredResources);
-    console.log(`-- CURRENT FILTERS SELECTED:\nTags: ${selectedTags}\nCourses: ${selectedCourses}\nCourseTopics: ${selectedCourseTopics}\nResourceType: ${selectedResourceType}\nContributors: ${selectedContributors}`)
-    console.log(`--FILTERED RESULTS: `, filteredData)
-  }, [selectedTags, selectedCourses, selectedCourseTopics, selectedResourceType, selectedContributors]);
+    const sortAndFilterResources = () => {
+      // First apply all filters
+      const filteredResources: AllFilesAndLinksDataFormatted[] = applyFilters();
 
+      // Copy array of filtered resources to avoid mutating original data
+      let sortedResources = [...filteredResources];
 
-  // Function to handle sorting change
-  // const handleSortChange = (value: string | null) => {
-  //   setSortBy(value);
-  // };
+      // Then apply sorting if selected
+      if (selectedSortBy) {
+        switch (selectedSortBy) {
+          case 'most-popular':
+            sortedResources.sort((a, b) => {
+              // First by average rating (descending)
+              const ratingDiff = (b.avgRating || 0) - (a.avgRating || 0);
+              if (ratingDiff !== 0) return ratingDiff;
+              
+              // Then by number of reviews (descending)
+              return b.numReviews - a.numReviews;
+            });
+            break;
 
-  // // Apply sorting based on the selected option
-  // let sortedData = resourcesData.slice(); // Create a copy of the data array
-  // if (sortBy === "Newest") {
-  //   sortedData = resourcesData
-  //     .slice()
-  //     .sort(
-  //       (a, b) =>
-  //         new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime()
-  //     );
-  // } else if (sortBy === "Oldest") {
-  //   sortedData = resourcesData
-  //     .slice()
-  //     .sort(
-  //       (a, b) =>
-  //         new Date(a.uploadDate).getTime() - new Date(b.uploadDate).getTime()
-  //     );
-  // }
+          case 'newest':
+            sortedResources.sort((a, b) => 
+              new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime()
+            );
+            break;
 
-  // console.log(sortedData);
+          case 'oldest':
+            sortedResources.sort((a, b) => 
+              new Date(a.uploadDate).getTime() - new Date(b.uploadDate).getTime()
+            );
+            break;
+
+          case 'new-trending':
+            sortedResources.sort((a, b) => {
+              // Boost ratings for recent items (last 7 days)
+              const now = Date.now();
+              const aDate = new Date(a.uploadDate).getTime();
+              const bDate = new Date(b.uploadDate).getTime();
+              
+              const aIsRecent = (now - aDate) < 7 * 24 * 60 * 60 * 1000;
+              const bIsRecent = (now - bDate) < 7 * 24 * 60 * 60 * 1000;
+              
+              // Add a small boost to recent items when comparing ratings
+              const aScore = (a.avgRating || 0) + (aIsRecent ? 0.75 : 0);
+              const bScore = (b.avgRating || 0) + (bIsRecent ? 0.75 : 0);
+              
+              const scoreDiff = bScore - aScore;
+              if (scoreDiff !== 0) return scoreDiff;
+              
+              // Fall back to upload date if scores are equal
+              return bDate - aDate;
+            });
+            break;
+
+          default:
+            // No sorting if unknown option
+            return sortedResources;
+        }
+      }
+
+      setFilteredData(sortedResources);
+      console.log(`-- CURRENT FILTERS SELECTED:\nSortBy: ${selectedSortBy}\nTags: ${selectedTags}\nCourses: ${selectedCourses}\nCourseTopics: ${selectedCourseTopics}\nResourceType: ${selectedResourceType}\nMaterialType: ${selectedMaterialType}\nContributors: ${selectedContributors}`)
+      console.log(`--FILTERED RESULTS: `, filteredData)
+    }
+
+    sortAndFilterResources()
+
+  }, [
+    selectedSortBy, 
+    selectedTags, 
+    selectedCourses, 
+    selectedCourseTopics, 
+    selectedResourceType, 
+    selectedMaterialType, 
+    selectedContributors
+  ]);
+
+  // Helper function to render label with tooltip
+  const renderLabelWithTooltip = (label: string, tooltip: string) => (
+    <div className={styles.labelWithTooltip}>
+      <span>{label}</span>
+      <Tooltip label={tooltip} position="right" withArrow>
+        <IconInfoCircle size={16} className={styles.infoIcon} />
+      </Tooltip>
+    </div>
+  );
 
   return (
     <>
       {!isLoading &&
-        <div className={styles.filterMenu}>
-          <MultiSelect
-            label="Tags"
-            data={tagsData?.map((tag) => ({
-              value: tag.name, 
-              label: tag.name
-            }))}
-            value={selectedTags || []}
-            onChange={handleTagsSelect}
-            searchable
-          />
-          <MultiSelect
-            label="Courses"
-            data={coursesData?.map((course) => ({
-              value: course.name, 
-              label: course.name
-            }))}
-            value={selectedCourses || []}
-            onChange={handleCoursesSelect}
-            searchable
-          />
-          <MultiSelect
-            label="Course Topics"
-            data={courseTopicsData?.map((topic) => ({
-              value: topic.name, 
-              label: topic.name
-            }))}
-            value={selectedCourseTopics || []}
-            onChange={handleCourseTopicsSelect}
-            searchable
-          />
-          <Select
-            label="Resource Type"
-            data={[
-              { value: 'exercise', label: 'Exercise' },
-              { value: 'notes', label: 'Notes' },
-              { value: 'video', label: 'Video' },
-              { value: 'interactive', label: 'Interactive Content' }
-            ]}
-            onChange={handleResourceTypeSelect}
-            value={selectedResourceType || null}
-          />
-          <MultiSelect
-            label="Contributor"
-            data={contributorsData?.map((contributor) => ({
-              value: trimCapitalizeFirstLetter(contributor.name), 
-              label: trimCapitalizeFirstLetter(contributor.name)
-            }))}
-            value={selectedContributors || []}
-            onChange={handleContributorsSelect}
-            searchable
-          />
+        <div className={styles.layoutContainer}>
+            <div className={styles.filterColumn}>
+              <div className={styles.filterMenu}>
+                <Text>Filters</Text>
+                <Select
+                  label="Sort By"
+                  data={[
+                    { value: 'most-popular', label: 'Most Popular' },
+                    { value: 'newest', label: 'Newest' },
+                    { value: 'oldest', label: 'Oldest' },
+                    { value: 'new-trending', label: 'New and Trending' },
+                  ]}
+                  onChange={handleSortBySelect}
+                  value={selectedSortBy}
+                  allowDeselect={false}
+                />
+                <MultiSelect
+                  label={renderLabelWithTooltip("Tags", "Filter resources by specific keywords or categories")}
+                  data={tagsData?.map((tag) => ({
+                    value: tag.name, 
+                    label: tag.name
+                  }))}
+                  value={selectedTags || []}
+                  onChange={handleTagsSelect}
+                  searchable
+                />
+                <MultiSelect
+                  label={renderLabelWithTooltip("Courses", "Filter resources by specific courses")}
+                  data={coursesData?.map((course) => ({
+                    value: course.name, 
+                    label: course.name
+                  }))}
+                  value={selectedCourses || []}
+                  onChange={handleCoursesSelect}
+                  searchable
+                />
+                <div className={styles.topicSectionContainer}>
+                  <MultiSelect
+                    label={renderLabelWithTooltip("Course Topics", "Filter resources by specific topics within courses")}
+                    data={courseTopicsData?.map((topic) => ({
+                      value: topic.name, 
+                      label: topic.name
+                    }))}
+                    value={selectedCourseTopics || []}
+                    onChange={handleCourseTopicsSelect}
+                    searchable
+                    disabled={!selectedCourses || selectedCourses.length === 0}
+                  />
+                  {(!selectedCourses || selectedCourses.length === 0) && (
+                    <Text size="xs" color="dimmed" className={styles.warningText}>
+                      Please select a course first to view topics
+                    </Text>
+                  )}
+                </div>
+                <Select
+                  label={renderLabelWithTooltip("Resource Type", "Filter by the category of resource (Exercise, Notes, etc.)")}
+                  data={[
+                    { value: 'exercise', label: 'Exercise' },
+                    { value: 'notes', label: 'Notes' },
+                    { value: 'video', label: 'Video' },
+                    { value: 'interactive', label: 'Interactive Content' }
+                  ]}
+                  onChange={handleResourceTypeSelect}
+                  value={selectedResourceType || null}
+                />
+                <Select
+                  label={renderLabelWithTooltip("Material Type", "Filter by whether the resource is a file or external link")}
+                  data={[
+                    { value: 'file', label: 'File' },
+                    { value: 'link', label: 'Link' },
+                  ]}
+                  onChange={handleMaterialTypeSelect}
+                  value={selectedMaterialType || null}
+                />
+                <MultiSelect
+                  label={renderLabelWithTooltip("Contributor", "Filter resources by the person who uploaded them")}
+                  data={contributorsData?.map((contributor) => ({
+                    value: trimCapitalizeFirstLetter(contributor.name), 
+                    label: trimCapitalizeFirstLetter(contributor.name)
+                  }))}
+                  value={selectedContributors || []}
+                  onChange={handleContributorsSelect}
+                  searchable
+                />
+              </div>
+            </div>
+
+          <div className={styles.resourcesColumn}>
+            <ResourcesListPaginated data={filteredData} />
+          </div>
         </div>
       }
-
-      <ResourcesListPaginated data={filteredData} />
     </>
   );
 };

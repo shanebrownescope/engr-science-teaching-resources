@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react"; // Ensure React is imported
-
+import React, { useEffect, useState } from "react";
 import { Pagination } from "@mantine/core";
 import { fetchSearchResults } from "@/actions/fetching/search/fetchSearchResults";
 import {
@@ -12,11 +11,16 @@ import { capitalizeAndReplaceDash } from "@/utils/formatting";
 import { SearchFilterMenu } from "@/components/custom/search/SearchFilterMenu";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
+import { SearchButton } from "@/components/mantine"; // Import the SearchButton component
 
-const SearchResults = ({ params }: { params: { searchName: string } }) => {
+type searchParams = {
+  q: string;
+}
+
+const SearchResults = ({ searchParams }: { searchParams: searchParams }) => {
   useRequireAuth();
   const formattedSearchName = capitalizeAndReplaceDash(
-    params.searchName.toLowerCase().replace(/-/g, " "),
+    searchParams.q.toLowerCase().replace(/-/g, " "),
   );
   const [isLoading, setIsLoading] = useState(true);
   const [resourcesData, setResourcesData] = useState<AllFilesAndLinksDataFormatted[]>([]);
@@ -29,7 +33,6 @@ const SearchResults = ({ params }: { params: { searchName: string } }) => {
         const data: FetchedSearchResults = await fetchSearchResults(
           formattedSearchName.toLowerCase(),
         );
-
         if (data?.failure) {
           console.log("Error loading search results")
           return;
@@ -41,17 +44,16 @@ const SearchResults = ({ params }: { params: { searchName: string } }) => {
         setIsLoading(false)
       }
     };
-
     fetchFilesAndLinks();
-
-  }, [params.searchName]);
-
-  console.log("---FETCHED RESULTS: ", resourcesData);
-
+  }, [searchParams.q]);
+  
   return (
     (!isLoading &&
-      <ContainerLayout paddingTop="md"> 
-        <h4 className="text-center mb-4">Your Search: {formattedSearchName}</h4>
+      <ContainerLayout paddingTop="md">         
+        <div className="mb-4">
+          <SearchButton value={searchParams.q}/>
+        </div>
+        
         <div>
           <SearchFilterMenu resourcesData={resourcesData}/>
         </div>

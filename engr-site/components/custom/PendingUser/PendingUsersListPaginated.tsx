@@ -1,16 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import { Pagination } from "@mantine/core";
+import { Pagination, Group } from "@mantine/core";
 import { PendingUserDetails } from "@/components/custom/PendingUser/PendingUserDetails";
-import { FetchedUserData, UserData } from "@/utils/types";
-import {
-  HandleUserActionProps,
-  sendUserUpdateEmailProps,
-} from "@/app/(protected)/dashboard/pending-users/page";
+import { UserData } from "@/utils/types";
+
+type HandleUserActionProps = {
+  userId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+};
 
 type PendingUserListPaginatedProps = {
-  data: any;
+  data: UserData[];
   handleApprove: ({
     userId,
     email,
@@ -98,12 +101,14 @@ const PendingUserListPaginated = ({
           </div>
         ))}
       </div>
-      {/* Render Pagination component */}
-      <Pagination
-        total={totalPages}
-        value={currentPage}
-        onChange={handlePageChange}
-      />
+      {/* Render Pagination component with better layout */}
+      <Group justify="right" mt="md">
+        <Pagination
+          total={totalPages}
+          value={currentPage}
+          onChange={handlePageChange}
+        />
+      </Group>
     </>
   );
 };

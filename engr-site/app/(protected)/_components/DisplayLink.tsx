@@ -1,5 +1,6 @@
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 import { FetchedLink } from "@/utils/types_v2";
+import { Rating } from "@mantine/core";
 
 type DisplayLinkProps = {
   link: FetchedLink;
@@ -12,8 +13,15 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
 
         <div className="resource-info-container">
           <p> Uploaded on: {link.uploadDate} </p>
-          <p> Posted By: {link.contributor}</p>
+          <p> Creator: {link.contributor}</p>
           <p> Resource Type: {link.resourceType} </p>
+          {link.avgRating && (
+            <div className="resource-rating-container">
+              <p>Average Rating: </p> 
+              <Rating value={link.avgRating} fractions={4} readOnly />
+              <p>{link.avgRating} / 5</p>
+            </div>
+          )}
         </div>
         <a href={link.linkUrl}> Visit resource </a>
 

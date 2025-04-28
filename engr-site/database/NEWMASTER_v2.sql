@@ -48,6 +48,8 @@ CREATE TABLE Files_v3 (
   contributorId INT,
   resourceType ENUM('exercise', 'notes', 'video', 'interactive') DEFAULT 'exercise' NOT NULL,
   uploadedUserId INT,
+  avgRating DECIMAL(3, 2),
+  numReviews INT DEFAULT 0 NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (contributorId) REFERENCES Contributors_v3(id) ON DELETE CASCADE,
   FOREIGN KEY (uploadedUserId) REFERENCES Users_v3(id) ON DELETE CASCADE
@@ -62,6 +64,8 @@ CREATE TABLE Links_v3 (
   contributorId INT,
   resourceType ENUM('exercise', 'notes', 'video', 'interactive') DEFAULT 'exercise' NOT NULL,
   uploadedUserId INT,
+  avgRating DECIMAL(3, 2),
+  numReviews INT DEFAULT 0 NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (contributorId) REFERENCES Contributors_v3(id) ON DELETE CASCADE,
   FOREIGN KEY (uploadedUserId) REFERENCES Users_v3(id) ON DELETE CASCADE
@@ -138,6 +142,34 @@ CREATE TABLE LinkComments_v3 (
   PRIMARY KEY (id),
   FOREIGN KEY (userId) REFERENCES Users_v3(id) ON DELETE CASCADE,
   FOREIGN KEY (parentCommentId) REFERENCES LinkComments_v3(id),
+  FOREIGN KEY (linkId) REFERENCES Links_v3(id) ON DELETE CASCADE
+);
+
+CREATE TABLE FileReviews_v3 (
+  id INT NOT NULL AUTO_INCREMENT,
+  fileId INT NOT NULL,
+  userId INT NOT NULL,
+  rating DECIMAL(3, 2) NOT NULL,
+  comments TEXT,
+  uploadDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  title VARCHAR(255) NOT NULL,
+  userPublicName VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (userId) REFERENCES Users_v3(id) ON DELETE CASCADE,
+  FOREIGN KEY (fileId) REFERENCES Files_v3(id) ON DELETE CASCADE
+);
+
+CREATE TABLE LinkReviews_v3 (
+  id INT NOT NULL AUTO_INCREMENT,
+  linkId INT NOT NULL,
+  userId INT NOT NULL,
+  rating DECIMAL(3, 2) NOT NULL,
+  comments TEXT,
+  uploadDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  title VARCHAR(255) NOT NULL,
+  userPublicName VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (userId) REFERENCES Users_v3(id) ON DELETE CASCADE,
   FOREIGN KEY (linkId) REFERENCES Links_v3(id) ON DELETE CASCADE
 );
 
