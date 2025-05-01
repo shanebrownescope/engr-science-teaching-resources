@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ComboboxItem, MultiSelect, Select, Text, Tooltip } from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react"; 
+import { Button, ComboboxItem, Group, MultiSelect, Select, Text, Tooltip } from "@mantine/core";
+import { IconFilterOff, IconInfoCircle } from "@tabler/icons-react"; 
 import { YearSlider } from "../../mantine";
 import styles from "@/components/custom/search/SearchFilterMenu.module.css";
 import { AllFilesAndLinksDataFormatted } from "@/utils/types_v2";
@@ -278,6 +278,18 @@ export const SearchFilterMenu = ({
     selectedContributors
   ]);
 
+  // Helper function to clear selected filter values
+  const resetAllFilters = () => {
+    setSelectedTags([]);
+    setSelectedCourses([]);
+    setSelectedCourseTopics([]);
+    setSelectedContributors([]);
+    setSelectedResourceType(null);
+    setSelectedMaterialType(null);
+    setSelectedSortBy('most-popular');
+    setCourseTopicsData([]); 
+  };
+
   // Helper function to render label with tooltip
   const renderLabelWithTooltip = (label: string, tooltip: string) => (
     <div className={styles.labelWithTooltip}>
@@ -294,7 +306,26 @@ export const SearchFilterMenu = ({
         <div className={styles.layoutContainer}>
             <div className={styles.filterColumn}>
               <div className={styles.filterMenu}>
-                <Text>Filters</Text>
+                <Group justify="space-between" align="center" mb="md">
+                  <Text fw={500}>Filters</Text>
+                  <Button 
+                    variant="subtle" 
+                    size="xs" 
+                    onClick={resetAllFilters}
+                    leftSection={<IconFilterOff size={14} />}
+                    disabled={
+                      !selectedTags?.length &&
+                      !selectedCourses?.length &&
+                      !selectedCourseTopics?.length &&
+                      !selectedContributors?.length &&
+                      !selectedResourceType &&
+                      !selectedMaterialType &&
+                      selectedSortBy === 'most-popular'
+                    }
+                  >
+                    Reset
+                  </Button>
+                </Group>
                 <Select
                   label="Sort By"
                   data={[
