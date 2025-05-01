@@ -66,7 +66,7 @@ const generateResetToken = async (user: UserData) => {
 
   const existingTokenQuery = `
     SELECT 1
-    FROM PasswordResetTokens_v2
+    FROM PasswordResetTokens_v3
     WHERE token = ?`;
 
   const { results: existingTokenResult } = await dbConnect(existingTokenQuery, [
@@ -86,7 +86,7 @@ const generateResetToken = async (user: UserData) => {
   }
 
   const insertQuery = `
-    INSERT INTO PasswordResetTokens_v2
+    INSERT INTO PasswordResetTokens_v3
     (userId, token, expiresAt) 
     VALUES (?, ?, ?)`;
 

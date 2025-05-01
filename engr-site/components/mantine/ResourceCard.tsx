@@ -54,7 +54,7 @@ export const ResourceCard = ({
     >
       <Stack gap="sm">
         <Group justify="space-between" wrap="nowrap">
-          <Badge color={type === 'file' ? 'blue' : 'cyan'} variant="light" tt="capitalize">
+          <Badge color={type === 'file' ? 'blue' : 'teal'} variant="light" tt="capitalize">
             {type}
           </Badge>
           
@@ -67,35 +67,6 @@ export const ResourceCard = ({
             </Tooltip>
           </Group>
         </Group>
-
-        <Group gap="xs" wrap="nowrap">
-          <Tooltip label="Contributor">
-            <Group gap={4}>
-              <IconUser size={14} />
-              <Text size="sm" lineClamp={1}>{contributor}</Text>
-            </Group>
-          </Tooltip>
-
-          <Tooltip label="Resource type">
-            <Group gap={4}>
-              <IconFileDescription size={14} />
-              <Text size="sm" lineClamp={1}>{resourceType}</Text>
-            </Group>
-          </Tooltip>
-        </Group>
-
-        {avgRating ? (
-          <Group gap="xs">
-            <Rating value={avgRating} fractions={4} readOnly size="sm" />
-            <Text size="sm">
-              {avgRating} ({numReviews} {numReviews === 1 ? 'review' : 'reviews'})
-            </Text>
-          </Group>
-        ) : (
-          <Text size="sm" c="dimmed">No reviews yet</Text>
-        )}
-
-        <Divider my="sm" />
 
         <Stack gap="xs">
           {tags.length > 0 && (
@@ -137,6 +108,35 @@ export const ResourceCard = ({
             </div>
           )}
         </Stack>
+
+        <Divider my="sm" />
+
+        <Group gap="xs" wrap="nowrap">
+          <Tooltip label="Resource type">
+            <Group gap={4}>
+              <IconFileDescription size={14} />
+              <Text size="sm" lineClamp={1}>{resourceType}</Text>
+            </Group>
+          </Tooltip>
+
+          <Tooltip label="Contributor">
+            <Group gap={4}>
+              <IconUser size={14} />
+              <Text size="sm" lineClamp={1}>{contributor}</Text>
+            </Group>
+          </Tooltip>
+        </Group>
+
+        {avgRating ? (
+          <Group gap="xs">
+            <Rating value={avgRating} fractions={4} readOnly size="sm" />
+            <Text size="sm">
+              {avgRating} ({numReviews} {numReviews === 1 ? 'review' : 'reviews'})
+            </Text>
+          </Group>
+        ) : (
+          <Text size="sm" c="dimmed">No reviews yet</Text>
+        )}
       </Stack>
     </Card>
   );

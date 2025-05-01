@@ -3,7 +3,7 @@ import dbConnect from "@/database/dbConnector";
 export const getUserByEmail = async (email: string) => {
   try {
     const selectQuery = `
-      SELECT * FROM Users_v2 WHERE email = ?`;
+      SELECT * FROM Users_v3 WHERE email = ?`;
 
     const { results: user, error } = await dbConnect(selectQuery, [email]);
 
@@ -20,7 +20,7 @@ export const getUserByEmail = async (email: string) => {
 export const getUserById = async (id: string) => {
   try {
     const selectQuery = `
-      SELECT * FROM Users_v2 WHERE id = ?`;
+      SELECT * FROM Users_v3 WHERE id = ?`;
 
     const { results: user, error } = await dbConnect(selectQuery, [id]);
 
@@ -37,7 +37,7 @@ export const getUserById = async (id: string) => {
 export const getPendingUsers = async () => {
   try {
     const selectQuery = `
-      SELECT * FROM Users_v2 WHERE accountStatus = 'pending'`;
+      SELECT * FROM Users_v3 WHERE accountStatus = 'pending'`;
 
     const { results: users, error } = await dbConnect(selectQuery);
 
@@ -54,7 +54,7 @@ export const getPendingUsers = async () => {
 export const fetchUserData = async () => {
   try {
     const selectQuery = `
-      SELECT * FROM Users_v2`;
+      SELECT * FROM Users_v3`;
 
     const { results: user, error } = await dbConnect(selectQuery);
 
