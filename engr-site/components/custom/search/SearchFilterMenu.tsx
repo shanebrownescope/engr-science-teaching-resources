@@ -397,7 +397,7 @@ export const SearchFilterMenu = ({
                   value={selectedMaterialType || null}
                 />
                 <MultiSelect
-                  label={renderLabelWithTooltip("Contributor", "Filter resources by the person who uploaded them")}
+                  label={renderLabelWithTooltip("Contributor", "Filter resources by the person who created them")}
                   data={contributorsData?.map((contributor) => ({
                     value: trimCapitalizeFirstLetter(contributor.name), 
                     label: trimCapitalizeFirstLetter(contributor.name)
