@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, KeyboardEvent } from "react";
 import {
   TextInput,
   TextInputProps,
@@ -9,6 +9,7 @@ import {
 import { IconSearch, IconArrowRight } from "@tabler/icons-react";
 import classes from "./SearchButton.module.css";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   lowercaseAndReplaceSpace,
   lowercaseAndReplaceSpaceString,
@@ -22,12 +23,24 @@ import {
  */
 export function SearchButton(props: TextInputProps) {
   const theme = useMantineTheme();
-
-  // Use props.value if provided from parent, otherwise use internal state
-  const [inputValue, setInputValue] = useState(props.value?.toString() || ""); 
+  const router = useRouter();
+  const [inputValue, setInputValue] = useState(props.value?.toString() || "");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setInputValue(event.target.value);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      performSearch();
+    }
+  };
+
+  const performSearch = () => {
+    if (inputValue.trim()) {
+      router.push(`/search?q=${encodeURIComponent(inputValue.trim())}`);
+    }
+  };
 
   return (
     <TextInput
@@ -38,20 +51,20 @@ export function SearchButton(props: TextInputProps) {
       rightSectionWidth={42}
       value={inputValue}
       onChange={handleInputChange}
+      onKeyDown={handleKeyDown}
       leftSection={<IconSearch className="iconStyle" stroke={1.5} />}
       rightSection={
-        <Link href={`/search?${new URLSearchParams({
-          q: inputValue.trim()
-        })}`}>
-          <ActionIcon
-            size={32}
-            radius="xl"
-            color={theme.primaryColor}
-            variant="filled"
-          >
-            <IconArrowRight className="iconStyle" stroke={1.5} />
-          </ActionIcon>
-        </Link>
+        <ActionIcon
+          size={32}
+          radius="xl"
+          color={theme.primaryColor}
+          variant="filled"
+          onClick={performSearch}
+          component={Link}
+          href={`/search?q=${encodeURIComponent(inputValue.trim())}`}
+        >
+          <IconArrowRight className="iconStyle" stroke={1.5} />
+        </ActionIcon>
       }
     />
   );
