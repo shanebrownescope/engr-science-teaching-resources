@@ -23,7 +23,7 @@ const Courses = async () => {
           <CourseCard
             title={item.name}
             description="description here"
-            href={`/search/${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+            href={`/courses/${item.name.toLowerCase().replace(/\s+/g, '-')}`}
           />
         ))}
       </div>
