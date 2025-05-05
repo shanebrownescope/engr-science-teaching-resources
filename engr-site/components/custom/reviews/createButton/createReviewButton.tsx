@@ -3,7 +3,7 @@
 import { Button, Tooltip } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import styles from './CreateReviewButton.module.css'; // Create this CSS file
+import styles from './createReviewButton.module.css'; // Create this CSS file
 
 type CreateReviewButtonProps = {
     type: string;
