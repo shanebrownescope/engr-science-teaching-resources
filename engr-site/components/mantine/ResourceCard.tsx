@@ -9,7 +9,7 @@ import {
   Divider,
   Tooltip
 } from "@mantine/core";
-import { IconCalendar, IconUser, IconFileDescription } from "@tabler/icons-react";
+import { IconCalendar, IconUser, IconFileDescription, IconFile, IconLink } from "@tabler/icons-react";
 import Link from "next/link";
 import classes from "./ResourceCard.module.css";
 
@@ -54,7 +54,14 @@ export const ResourceCard = ({
     >
       <Stack gap="sm">
         <Group justify="space-between" wrap="nowrap">
-          <Badge color={type === 'file' ? 'blue' : 'teal'} variant="light" tt="capitalize">
+          <Badge 
+            color={type === 'file' ? 'blue' : 'teal'} 
+            variant="light" 
+            size="sm"
+            leftSection={type === 'file' ? 
+              <IconFile size={12} style={{ marginRight: 4 }} /> : 
+              <IconLink size={12} style={{ marginRight: 4 }} />}
+          >
             {type}
           </Badge>
           
