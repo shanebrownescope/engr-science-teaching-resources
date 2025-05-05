@@ -1,0 +1,15 @@
+.form {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.rating {
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .formContainer {
+        padding: 0 1rem;
+    }
+}

@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Rating, TextInput, Textarea, Button } from '@mantine/core';
+import { Rating, TextInput, Textarea, Button, Stack, Title, Text, Group } from '@mantine/core';
+import ContainerLayout from '../custom/containerLayout/ContainerLayout';
+import classes from './ReviewForm.module.css';
 
 type ReviewFormProps = {
   resourceName: string;
@@ -85,60 +87,70 @@ export default function ReviewForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className="block mb-2 font-medium">Your Rating</label>
-        <Rating
-          value={reviewData.rating}
-          onChange={(value) => handleChange('rating', value)}
-          fractions={2}
-          count={5}
-          size="lg"
-        />
-      </div>
+    <ContainerLayout paddingTop='none'>
+      <form onSubmit={handleSubmit} className={classes.form}>
+        <Stack gap="lg">
+          <div>
+            <Text fw={500} mb="sm">Your Rating</Text>
+            <Rating
+              value={reviewData.rating}
+              onChange={(value) => handleChange('rating', value)}
+              fractions={2}
+              count={5}
+              size="xl"
+              className={classes.rating}
+            />
+          </div>
 
-      <TextInput
-        label="Review Title"
-        placeholder="Summarize your experience"
-        value={reviewData.title}
-        onChange={(e) => handleChange('title', e.target.value)}
-        required
-      />
+          <TextInput
+            label="Review Title"
+            placeholder="Summarize your experience"
+            value={reviewData.title}
+            onChange={(e) => handleChange('title', e.target.value)}
+            required
+            size="md"
+          />
 
-      <Textarea
-        label="Your Review"
-        placeholder="Share details about your experience with this resource"
-        value={reviewData.comments}
-        onChange={(e) => handleChange('comments', e.target.value)}
-        required
-        minRows={5}
-      />
+          <Textarea
+            label="Your Review"
+            placeholder="Share details about your experience with this resource"
+            value={reviewData.comments}
+            onChange={(e) => handleChange('comments', e.target.value)}
+            required
+            minRows={5}
+            size="md"
+            autosize
+          />
 
-      <TextInput
-        label="Display Name"
-        placeholder="How you want your name to appear"
-        value={reviewData.userPublicName}
-        onChange={(e) => handleChange('userPublicName', e.target.value)}
-        required
-      />
+          <TextInput
+            label="Display Name"
+            placeholder="How you want your name to appear"
+            value={reviewData.userPublicName}
+            onChange={(e) => handleChange('userPublicName', e.target.value)}
+            required
+            size="md"
+          />
 
-      <div className="flex gap-4 pt-4">
-        <Button
-          type="submit"
-          loading={isLoading}
-          loaderProps={{ type: 'dots' }}
-        >
-          Submit Review
-        </Button>
-        
-        <Button
-          variant="outline"
-          onClick={handleCancel}
-          disabled={isLoading}
-        >
-          Cancel
-        </Button>
-      </div>
-    </form>
+          <Group justify="flex-end" mt="xl" gap="md">
+            <Button
+              variant="outline"
+              onClick={handleCancel}
+              disabled={isLoading}
+              size="md"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              loading={isLoading}
+              loaderProps={{ type: 'dots' }}
+              size="md"
+            >
+              Submit Review
+            </Button>
+          </Group>
+        </Stack>
+      </form>
+    </ContainerLayout>
   );
 }

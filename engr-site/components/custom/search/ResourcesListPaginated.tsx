@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Pagination, Text } from "@mantine/core";
+import { Container, Pagination, Space, Stack, Text } from "@mantine/core";
 import { AllFilesAndLinksDataFormatted } from "@/utils/types_v2";
 import { SearchResultBox } from "@/components/custom/search/SearchResultBox";
 
@@ -56,7 +56,7 @@ const ResourcesListPaginated = ({ data }: ResourcesListPaginatedProps) => {
   return (
     <>
       {/* Render currentPageItems */}
-      <div> 
+      <Stack gap="md"> 
         {currentPageItems.map((item) => (
           // Render individual file/link item here
           <div key={item.id}>
@@ -74,8 +74,11 @@ const ResourcesListPaginated = ({ data }: ResourcesListPaginatedProps) => {
             />
           </div>
         ))}
-      </div>
-      <div className="middle"> 
+      </Stack>
+
+      <Space h="md" /> 
+
+      <div className="middle">
 
       {/* Render Pagination component */}
       <Pagination

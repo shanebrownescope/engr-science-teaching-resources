@@ -11,7 +11,7 @@ import {
   Box,
   Tooltip
 } from "@mantine/core";
-import { IconCalendar, IconUser, IconFile, IconTag, IconFileDescription } from "@tabler/icons-react";
+import { IconCalendar, IconUser, IconFile, IconTag, IconFileDescription, IconBook2, IconBook } from "@tabler/icons-react";
 import { trimCapitalizeFirstLetter } from "@/utils/helpers";
 import { FetchedLink } from "@/utils/types_v2";
 import classes from "./DisplayFileLink.module.css"; // Create this CSS module
@@ -95,7 +95,12 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
 
             {link.courses?.length > 0 && (
               <div>
-                <Title order={5} mb={4}>Relevant Courses</Title>
+                <Title order={5} mb={4}>
+                  <Group gap={4}>
+                    <IconBook2 size={16} />
+                    Relevant Courses
+                  </Group>
+                </Title>
                 <Group gap={4}>
                   {link.courses.map((course, index) => (
                     typeof course === 'string' && (
@@ -110,7 +115,12 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
 
             {link.courseTopics?.length > 0 && (
               <div>
-                <Title order={5} mb={4}>Course Topics</Title>
+                <Title order={5} mb={4}>
+                  <Group gap={4}>
+                    <IconBook size={16} />
+                    Relevant Course Topics
+                  </Group>
+                </Title>
                 <Group gap={4}>
                   {link.courseTopics.map((topic, index) => (
                     typeof topic === 'string' && (

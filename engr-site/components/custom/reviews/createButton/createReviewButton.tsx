@@ -4,6 +4,7 @@ import { Button, Tooltip } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import styles from './createReviewButton.module.css'; // Create this CSS file
+import { IconPencil } from '@tabler/icons-react';
 
 type CreateReviewButtonProps = {
     type: string;
@@ -35,8 +36,9 @@ export function CreateReviewButton({
                         variant={variant}
                         disabled
                         aria-disabled="true"
+                        leftSection={<IconPencil size={20} />}
                     >
-                        Write a Review
+                        <span className={styles.buttonText}>Write Review</span>
                     </Button>
                 </Tooltip>
             ) : (
@@ -46,8 +48,9 @@ export function CreateReviewButton({
                     onClick={handleClick}
                     loading={isLoading}
                     loaderProps={{ type: 'dots' }}
+                    leftSection={<IconPencil size={20} />}
                 >
-                    Write a Review
+                    <span className={styles.buttonText}>Write Review</span>
                 </Button>
             )}
         </div>

@@ -9,7 +9,7 @@ import {
   Divider,
   Tooltip
 } from "@mantine/core";
-import { IconCalendar, IconUser, IconFileDescription, IconFile, IconLink } from "@tabler/icons-react";
+import { IconCalendar, IconUser, IconFileDescription, IconFile, IconLink, IconTag, IconBook2, IconBook } from "@tabler/icons-react";
 import Link from "next/link";
 import classes from "./ResourceCard.module.css";
 
@@ -75,49 +75,6 @@ export const ResourceCard = ({
           </Group>
         </Group>
 
-        <Stack gap="xs">
-          {tags.length > 0 && (
-            <div>
-              <Text size="sm" fw={500} mb={4}>Tags</Text>
-              <div className={classes.tagGroup}>
-                {tags.map((tag, index) => (
-                  <Badge key={index} variant="light" radius="sm">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {courses.length > 0 && (
-            <div>
-              <Text size="sm" fw={500} mb={4}>Relevant Courses</Text>
-              <div className={classes.tagGroup}>
-                {courses.map((course, index) => (
-                  <Badge key={index} variant="default" color="dark" radius="sm">
-                    {course}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {courseTopics.length > 0 && (
-            <div>
-              <Text size="sm" fw={500} mb={4}>Relevant Course Topics</Text>
-              <div className={classes.tagGroup}>
-                {courseTopics.map((topic, index) => (
-                  <Badge key={index} variant="default" color="indigo" radius="sm">
-                    {topic}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-        </Stack>
-
-        <Divider my="sm" />
-
         <Group gap="xs" wrap="nowrap">
           <Tooltip label="Resource type">
             <Group gap={4}>
@@ -144,6 +101,58 @@ export const ResourceCard = ({
         ) : (
           <Text size="sm" c="dimmed">No reviews yet</Text>
         )}
+
+        <Divider my="sm" />
+
+        <Stack gap="xs">
+          {tags.length > 0 && (
+            <div>
+              <Group gap={4}>
+                <IconTag size={16} />
+                <Text size="sm" fw={500} mb={4}>Tags</Text>
+              </Group>
+              <div className={classes.tagGroup}>
+                {tags.map((tag, index) => (
+                  <Badge key={index} variant="light" radius="sm">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {courses.length > 0 && (
+            <div>
+              <Group gap={4}>
+                <IconBook2 size={16} />
+                <Text size="sm" fw={500} mb={4}>Relevant Courses</Text>
+              </Group>
+              <div className={classes.tagGroup}>
+                {courses.map((course, index) => (
+                  <Badge key={index} variant="default" color="dark" radius="sm">
+                    {course}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {courseTopics.length > 0 && (
+            <div>
+              <Group gap={4}>
+                <IconBook size={16} />
+                <Text size="sm" fw={500} mb={4}>Relevant Course Topics</Text>
+              </Group>
+              <div className={classes.tagGroup}>
+                {courseTopics.map((topic, index) => (
+                  <Badge key={index} variant="default" color="indigo" radius="sm">
+                    {topic}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+        </Stack>
       </Stack>
     </Card>
   );
