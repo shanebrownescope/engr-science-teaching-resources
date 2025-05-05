@@ -1,7 +1,7 @@
 import { AllFilesAndLinksDataFormatted } from "@/utils/types_v2";
 import { Badge, Group, Rating, Stack, Text, Tooltip } from "@mantine/core";
 import Link from "next/link";
-import { IconCalendar, IconUser, IconFile, IconLink, IconFileDescription } from "@tabler/icons-react";
+import { IconCalendar, IconUser, IconFile, IconLink, IconFileDescription, IconTag, IconBook2 } from "@tabler/icons-react";
 import { formatDistanceToNow } from "date-fns";
 import styles from "./similarResource.module.css";
 import { trimCapitalizeFirstLetter } from "@/utils/helpers";
@@ -77,6 +77,7 @@ const SimilarItem = ({ item }: SimilarItemProps) => {
         {(item.tags?.length > 0 || item.courses?.length > 0) && (
           <Stack gap={4} mt={5}>
             <Group gap={4}>
+              <IconTag size={16} />
               {item.tags?.map((tag, index) => (
                 <Tooltip key={index} label={`Tag: ${tag}`}>
                   <Badge variant="light" size="xs">
@@ -86,13 +87,14 @@ const SimilarItem = ({ item }: SimilarItemProps) => {
               ))}
             </Group>
             <Group gap={4}>
-            {item.courses?.slice(0, 2).map((course, index) => (
-              <Tooltip key={index} label={`Course: ${course}`}>
-                <Badge variant="outline" size="xs">
-                  {course}
-                </Badge>
-              </Tooltip>
-            ))}
+              <IconBook2 size={16} />
+              {item.courses?.slice(0, 3).map((course, index) => (
+                <Tooltip key={index} label={`Course: ${course}`}>
+                  <Badge variant="outline" size="xs">
+                    {course}
+                  </Badge>
+                </Tooltip>
+              ))}
             </Group>
           </Stack>
         )}
