@@ -11,7 +11,7 @@ import {
   Box,
   Tooltip
 } from "@mantine/core";
-import { IconCalendar, IconUser, IconFile, IconTag, IconFileDescription, IconBook2, IconBook } from "@tabler/icons-react";
+import { IconCalendar, IconUser, IconFile, IconTag, IconFileDescription, IconBook2, IconBook, IconExternalLink } from "@tabler/icons-react";
 import { trimCapitalizeFirstLetter } from "@/utils/helpers";
 import { FetchedLink } from "@/utils/types_v2";
 import classes from "./DisplayFileLink.module.css"; // Create this CSS module
@@ -68,7 +68,12 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
           <Divider my="sm" />
 
           <Box>
-            <a href={link.linkUrl}>Visit Resource</a>
+            <a href={link.linkUrl}>
+            <Group gap={4} align="center">
+              <span>Visit Resource</span>
+              <IconExternalLink size={16} />
+            </Group>
+            </a>
           </Box>
 
           {/* Tags Section */}
