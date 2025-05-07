@@ -263,7 +263,7 @@ export const SearchFilterMenu = ({
 
       setFilteredData(sortedResources);
       console.log(`-- CURRENT FILTERS SELECTED:\nSortBy: ${selectedSortBy}\nTags: ${selectedTags}\nCourses: ${selectedCourses}\nCourseTopics: ${selectedCourseTopics}\nResourceType: ${selectedResourceType}\nMaterialType: ${selectedMaterialType}\nContributors: ${selectedContributors}`)
-      console.log(`--FILTERED RESULTS: `, filteredData)
+      console.log(`--FINAL FILTERED+SORTED RESULTS: `, filteredData)
     }
 
     sortAndFilterResources()
