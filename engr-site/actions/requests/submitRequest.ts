@@ -40,7 +40,32 @@ export const submitRequest = async (values: RequestFormData): Promise<RequestRes
     const { name, email, description, course } = validatedFields.data;
     console.log("Validated data:", { name, email, description, course });
 
-    // Send email to admin instead of database insertion
+    // Insert request into database
+    try {
+      const insertQuery = `
+        INSERT INTO ExternalRequests_v3 (name, email, description, courseId, status)
+        VALUES (?, ?, ?, ?, 'pending')
+      `;
+      
+      const { results, error } = await dbConnect(insertQuery, [
+        name,
+        email,
+        description,
+        course
+      ]);
+      
+      if (error) {
+        console.error("Database error:", error);
+        return { error: "Failed to save your request. Please try again later." };
+      }
+      
+      console.log("Request saved to database with ID:", results[0].insertId);
+    } catch (dbError) {
+      console.error("Database operation failed:", dbError);
+      return { error: "Database operation failed. Please try again later." };
+    }
+
+    // Send email to admin
     const requestEmailContent = `
       <p>New External Faculty Request:</p>
       <p>Name: ${name}</p>
@@ -61,11 +86,12 @@ export const submitRequest = async (values: RequestFormData): Promise<RequestRes
       console.log("Email sent to admin");
     } catch (emailError) {
       console.error("Failed to send email:", emailError);
+      // Continue even if email fails, since we've saved to the database
     }
 
     return { success: "Your request has been submitted successfully. We will contact you soon." };
   } catch (error) {
     console.error("Error in request process:", error);
-    return { success: "Your request has been submitted successfully. We will contact you soon." };
+    return { error: "An unexpected error occurred. Please try again later." };
   }
 };
