@@ -158,4 +158,14 @@ export const ReviewSchema = z.object({
     }, {
       message: "Rating can have at most 2 decimal places"
     })
-})
+});
+
+export const ExternalRequestSchema = z.object({
+  name: z.string().min(1, { message: "Name is required" }),
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  courseId: z.preprocess(
+    (val) => (typeof val === 'string' && val.trim() !== '' ? parseInt(val, 10) : val),
+    z.number({ required_error: "Please select a course", invalid_type_error: "Course ID must be a number" }).int().positive({ message: "Please select a valid course" })
+  ),
+  description: z.string().min(10, { message: "Description must be at least 10 characters" }),
+});

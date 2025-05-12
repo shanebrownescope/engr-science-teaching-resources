@@ -179,9 +179,9 @@ CREATE TABLE ExternalRequests_v3 (
   email VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
   courseId INT NOT NULL,
-  requestDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
-  responseDate TIMESTAMP NULL,
+  updatedAt TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   responseNotes TEXT,
   PRIMARY KEY (id),
   FOREIGN KEY (courseId) REFERENCES Courses_v3(id)

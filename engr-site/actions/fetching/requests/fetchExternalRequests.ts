@@ -19,7 +19,7 @@ export const fetchExternalRequests = async () => {
     const query = `
       SELECT er.id, er.name, er.email, er.courseId, c.courseName, er.description, 
              er.status, er.createdAt
-      FROM ExternalRequests er
+      FROM ExternalRequests_v3 er
       LEFT JOIN Courses c ON er.courseId = c.id
       ORDER BY er.createdAt DESC
     `;

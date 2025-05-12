@@ -15,10 +15,14 @@ import { useForm } from "@mantine/form";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import { useEffect, useState } from "react";
 import { FormattedData } from "@/utils/formatting";
-import { submitRequest, RequestFormData } from "@/actions/requests/submitRequest";
+import { RequestFormData } from "@/actions/requests/submitRequest";
+import { submitExternalRequest } from "@/actions/requests/submitExternalRequest";
 import { IconAlertCircle, IconCheck } from '@tabler/icons-react';
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 export default function RequestForm() {
+  useRequireAuth();
+  
   const [courses, setCourses] = useState<FormattedData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,9 +30,15 @@ export default function RequestForm() {
 
   useEffect(() => {
     const getCourses = async () => {
-      const courseData = await fetchCourses();
-      if (courseData.success) {
-        setCourses(courseData.success);
+      try {
+        const courseData = await fetchCourses();
+        if (courseData.success) {
+          setCourses(courseData.success);
+        } else {
+          console.error("Failed to fetch courses:", courseData.failure || courseData.error);
+        }
+      } catch (err) {
+        console.error("Error fetching courses:", err);
       }
     };
     getCourses();
@@ -43,7 +53,7 @@ export default function RequestForm() {
     },
     validate: {
       name: (value) => value.trim().length < 2 ? 'Name must be at least 2 characters' : null,
-      email: (value) => !/^\S+@\S+$/.test(value) ? 'Invalid email' : null,
+      email: (value) => value.trim().length === 0 ? 'Email is required' : null,
       description: (value) => value.trim().length === 0 ? 'Description is required' : null,
       course: (value) => !value ? 'Please select a course' : null,
     },
@@ -55,21 +65,37 @@ export default function RequestForm() {
     setSuccess(null);
     
     try {
-      console.log("Form data submitted:", values); // Changed to English
-      const result = await submitRequest(values);
+      const formattedValues = {
+        name: values.name.trim(),
+        email: values.email.trim(),
+        description: values.description.trim(),
+        courseId: Number(values.course) 
+      };
+      
+      console.log("Form data submitted:", formattedValues);
+      
+      if (isNaN(formattedValues.courseId)) {
+        setError("Invalid course selection");
+        setLoading(false);
+        return;
+      }
+      
+      const result = await submitExternalRequest(formattedValues);
       
       if (result.success) {
         setSuccess(result.success);
-        form.reset(); // Reset form
+        form.reset();
       } else if (result.error) {
-        console.error("Submission error:", result.error); // Changed to English
+        console.error("Submission error:", result.error);
         setError(result.error);
       } else if (result.failure) {
-        console.error("Submission failed:", result.failure); // Changed to English
+        console.error("Submission failed:", result.failure);
         setError(result.failure);
+      } else {
+        setError('An unknown error occurred while submitting the request');
       }
     } catch (err) {
-      console.error("Submission exception:", err); // Changed to English
+      console.error("Submission exception:", err);
       setError('An error occurred while submitting the request. Please try again later.');
     } finally {
       setLoading(false);
@@ -102,10 +128,9 @@ export default function RequestForm() {
           External Faculty Request Form
         </Title>
         
-        {/* Add Notes below the Title */}
         <Box mb="xl">
           <Text ta="center" c="dimmed" size="sm">
-          If you would like to share teaching materials with us and have them featured on our website,{'\n'}
+          If you would like to share teaching materials with us and have them featured on our website,
           please fill out this form, and we will get in touch with you as soon as possible.
           </Text>
         </Box>     
