@@ -20,3 +20,5 @@ export { GetInTouchSimple } from "./GetInTouchSimple.tsx";
 export { EmailBanner } from "./EmailBanner";
 export { FeaturesCards } from "./FeaturesCards";
 export { TechnologyOverview } from "./TechnologyOverview"
+export { InstructionsContainer } from "./InstructionsContainer"
+export { TeamContainer } from "./TeamContainer"
