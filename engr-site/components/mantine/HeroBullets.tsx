@@ -31,9 +31,9 @@ export function HeroBullets() {
           <Text c="dimmed" mt="md">
             Teaching a new class is an extremely daunting task. You have to
             scurry to create quality teaching material while coming up with
-            useful homework, practice exercises, and quality exams. We've put
-            together this website to ease the stress of teaching a new class by
-            creating a place where you can find nearly all of the material
+            useful content, practice exercises, and engaging activities for students. 
+            We've put together this website to ease the stress of teaching a new 
+            class by creating a place where you can find nearly all of the material
             required to effectively teach your class!
           </Text>
 
@@ -51,33 +51,32 @@ export function HeroBullets() {
             }
           >
             <List.Item>
-              <b>Comprehensive Lesson Plans</b> – Access detailed and adaptable
-              lesson plans for a variety of courses
+              <b>Diverse Resource Types</b> – Access exercises, lecture notes, instructional videos, 
+              and interactive content – all searchable by format and learning style
             </List.Item>
             <List.Item>
-              <b>Homework and Practice Exercises</b> – Find a wide range of
-              homework assignments and practice exercises to reinforce classroom
-              learning
+              <b>Course-Specific Materials</b> – Quickly find resources tailored to your 
+              specific course curriculum and academic level
             </List.Item>
             <List.Item>
-              <b>Quality Exam Resources</b> – Utilize extensive collection of
-              quizzes, tests, and exam prep materials
+              <b>Community Reviews & Ratings</b> – See peer evaluations and instructor 
+              reactions to resources before using them in your classroom
             </List.Item>
           </List>
 
-          <Group mt={30}>
+          {/* <Group mt={30}>
             <Button radius="xl" size="md" className={classes.control}>
               Get started
             </Button>
-            {/* <Button
+            <Button
               variant="default"
               radius="xl"
               size="md"
               className={classes.control}
             >
               Source code
-            </Button> */}
-          </Group>
+            </Button>
+          </Group> */}
         </div>
         <Image src={image.src} className={classes.image} />
       </div>
