@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 import "@mantine/core/styles.css";
 import { SearchButton } from "@/components/mantine";
 import Link from "next/link";
@@ -9,50 +9,50 @@ const Home = async () => {
   await requireAuth();
 
   return (
-    <div>
-      <div
+    <main className="home-container">
+      <section 
         className="banner"
         style={{
           backgroundImage: 'url("/banner.jpg")',
         }}
       >
-        <div className="banner-text">Welcome to Our E-SCoPe!</div>
-      </div>
+        <h1 className="banner-title">E-SCoPe</h1>
+        <p className="banner-subtitle">A searchable repository for university professors to share learning resources!</p>
+      </section>
 
-      <div className="searchButtonContainer">
-        <div className="shorterWidth">
+      <section className="search-section">
+        <div className="content-container">
           <SearchButton />
-          <p>
-            The site has engineering teaching resources for several courses and
-            all sources are tagged by the concepts they are related to. For
-            example, this site has strength of materials content about normal
-            stress in beams. To locate that content you could use the search
-            terms "normal tree" and "beams." <br /> <br /> You can also simply
-            click on the image of the class that you're teaching to get a full
-            list of all of the teaching materials within that course. Each
-            course includes weekly lecture material, homework, class worksheets,
-            exams, and other useful materials such as an example course
-            syllabus. Just click which topic you want to access and you'll be
-            provided with all of the resources for the given topic.
-          </p>
+          
+          <div className="instructions-container">
+            <h2 className="instructions-title">How to Use E-SCoPe</h2>
+            
+            <div className="instruction-steps">
+              <div className="instruction-step">
+                <h3>1. Search for Resources</h3>
+                <p>Use the search bar above to find teaching materials by entering keywords related to your topic of interest.</p>
+              </div>
+              
+              <div className="instruction-step">
+                <h3>2. Access Resources</h3>
+                <p>Select any resource to view details, download materials, and see related concepts and topics.</p>
+              </div>
+              
+              <div className="instruction-step">
+                <h3>3. Share Your Feedback</h3>
+                <p>Help the community by leaving reviews on resources you've used in your teaching.</p>
+              </div>
+              
+              <div className="instruction-step">
+                <h3>4. Contribute</h3>
+                <p>Have materials to share? Fill out our request form to contribute your own learning resources to the repository.</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className="class-section">
-        <Link href={`/search/${"Statics".toLowerCase().replace(/\s+/g, '-')}`} passHref>
-          <div className="class-button class-button-spaced" style={{ left: "calc(33% - 100px)" }}>
-            <img src="/statics.png" alt="Statics" />
-            <p className="class-text">Statics</p>
-          </div>
-        </Link>
-        <Link href={`/search/${"Strengths of Materials".toLowerCase().replace(/\s+/g, '-')}`} passHref>
-          <div className="class-button class-button-spaced" style={{ left: "calc(67% - 100px)" }}>
-            <img src="/strengthsOfMaterials.png" alt="Strengths of Materials" />
-            <p className="class-text">Strengths of Materials</p>
-          </div>
-        </Link>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
+
 export default Home;
