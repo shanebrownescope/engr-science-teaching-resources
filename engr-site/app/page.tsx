@@ -8,7 +8,8 @@ import {
   EmailBanner,
   FeaturesCards,
   TechnologyOverview,
-  InstructionsContainer
+  InstructionsContainer,
+  TeamContainer
 } from "@/components/mantine";
 import "@mantine/core/styles.css";
 import Footer from "@/components/custom/footer/Footer";
@@ -21,7 +22,7 @@ export default function Home() {
       <HeroBullets />
       <InstructionsContainer />
       <TechnologyOverview />
-      {/* <HeroText /> */}
+      <TeamContainer />
       <GetInTouchSimple />
       <Footer />
     </div>
