@@ -14,9 +14,9 @@ import classes from "./FeaturesCards.module.css";
 
 const mockdata = [
   {
-    title: "Connect with others",
+    title: "Share & Access",
     description:
-      "Connect with other instructors to share resources, ask questions, and get help.",
+      "Discover and share teaching materials with educators anytime and anywhere by accessing our vast library of resources!",
     icon: IconNetwork,
   },
   {
@@ -28,7 +28,7 @@ const mockdata = [
   {
     title: "Quality resources",
     description:
-      "All sorts of content from slides, to homework, to exams, to projects. We have it all!",
+      "All sorts of content from lecture notes, to practice exercises, to interactive learning activities. We have it all!",
     icon: IconNotebook,
   },
 ];
@@ -71,7 +71,7 @@ export function FeaturesCards() {
       </Group>
 
       <Title order={2} className={classes.title} ta="center" mt="sm">
-        A community for instructors all around the country
+        A resource platform for instructors all around the country
       </Title>
 
       {/* <Text c="dimmed" className={classes.description} ta="center" mt="md">
