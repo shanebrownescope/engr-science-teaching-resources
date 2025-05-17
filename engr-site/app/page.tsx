@@ -7,6 +7,7 @@ import {
   GetInTouchSimple,
   EmailBanner,
   FeaturesCards,
+  TechnologyOverview
 } from "@/components/mantine";
 import "@mantine/core/styles.css";
 import Footer from "@/components/custom/footer/Footer";
@@ -17,6 +18,7 @@ export default function Home() {
       <GuestHeaderMegaMenu />
       <HeroBullets />
       <FeaturesCards />
+      <TechnologyOverview />
       {/* <HeroText /> */}
       <GetInTouchSimple />
       <Footer />
