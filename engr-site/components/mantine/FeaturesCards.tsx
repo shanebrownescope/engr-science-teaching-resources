@@ -59,7 +59,7 @@ export function FeaturesCards() {
       </Group>
 
       <Title order={2} className={classes.title} ta="center" mt="sm">
-        The Interactive Learning & Engagement Repository
+        Interactive Learning & Engagement Repository
       </Title>
 
       <Text c="dimmed" className={classes.description} ta="center" mt="md">
