@@ -1,7 +1,7 @@
 import { FormattedData, capitalizeAndReplaceDash } from "@/utils/formatting";
 import { FetchedFormattedData } from "@/utils/types_v2";
 import Link from "next/link";
-import { ModuleCard } from "@/components/mantine";
+import { CourseCard, ModuleCard } from "@/components/mantine";
 import { fetchCourseTopicsByCourseName } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseName";
 import requireAuth from "@/actions/auth/requireAuth";
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
@@ -26,9 +26,9 @@ const CourseTopicsPage = async ({
         Course topics{" "}
       </p>
 
-      <div className="flex-col gap-1">
+      <div className="grid-container">
         {courseTopicList?.success?.map((item: FormattedData, index: number) => (
-          <ModuleCard
+          <CourseCard
             key={index}
             title={item.name}
             href={`/search?q=${encodeURIComponent(item.name.trim())}`}

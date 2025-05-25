@@ -7,6 +7,20 @@
   min-height: 100vh;
 }
 
+.title {
+  font-weight: 800;
+  font-size: 40px;
+  letter-spacing: -1px;
+  margin-bottom: 20px;
+}
+
+.titleDescription {
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+  font-size: 1.1rem;
+}
+
 .description {
   display: inherit;
   justify-content: inherit;

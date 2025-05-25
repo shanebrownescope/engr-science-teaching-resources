@@ -1,57 +1,52 @@
 "use client";
 import "@mantine/core/styles.css";
-import { SearchButton } from "@/components/mantine";
-import Link from "next/link";
-import "./page.css";
+import { Container, Title, Text, Group, Badge, Space, Flex } from "@mantine/core";
+import { FeaturesCards, GetInTouchSimple, InstructionsContainer, SearchButton } from "@/components/mantine";
+import classes from "./home.module.css";
 import requireAuth from "@/actions/auth/requireAuth";
 
 const Home = async () => {
   await requireAuth();
 
   return (
-    <main className="home-container">
-      <section 
-        className="banner"
-        style={{
-          backgroundImage: 'url("/banner.jpg")',
-        }}
-      >
-        <h1 className="banner-title">E-SCoPe</h1>
-        <p className="banner-subtitle">A searchable repository for university professors to share learning resources!</p>
-      </section>
-
-      <section className="search-section">
-        <div className="content-container">
-          <SearchButton />
+    <div className={classes.wrapper}>
+      <Flex className={classes.hero}>
+        <Container size="lg">
+          <Group justify="center">
+            <Badge variant="filled" size="lg">
+              Welcome to E-SCoPe
+            </Badge>
+          </Group>
           
-          <div className="instructions-container">
-            <h2 className="instructions-title">How to Use E-SCoPe</h2>
-            
-            <div className="instruction-steps">
-              <div className="instruction-step">
-                <h3>1. Search for Resources</h3>
-                <p>Use the search bar above to find teaching materials by entering keywords related to your topic of interest.</p>
-              </div>
-              
-              <div className="instruction-step">
-                <h3>2. Access Resources</h3>
-                <p>Select any resource to view details, download materials, and see related concepts and topics.</p>
-              </div>
-              
-              <div className="instruction-step">
-                <h3>3. Share Your Feedback</h3>
-                <p>Help the community by leaving reviews on resources you've used in your teaching.</p>
-              </div>
-              
-              <div className="instruction-step">
-                <h3>4. Contribute</h3>
-                <p>Have materials to share? Fill out our request form to contribute your own learning resources to the repository.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
+          <Space h="md" />
+          
+          <Title order={1} ta="center" fw={700} className={classes.mainTitle}>
+            Interactive Learning and Engagement Repository
+          </Title>
+          
+          <Space h="xl" />
+          
+          <Text c="dimmed" className={classes.description} ta="center" maw={800} mx="auto">
+            Discover ready-to-use active learning materials, share your best resources with colleagues, 
+            and help shape the future of engaged education through our community-powered platform.
+          </Text>
+
+          <Container size="md" mt={50}>
+            <SearchButton />
+          </Container>
+        </Container>
+      </Flex>
+
+      <Container size="lg" py={20} pt={0}>
+        <InstructionsContainer />
+      </Container>
+
+      <Container size="lg" py={20}>
+        <FeaturesCards />
+      </Container>
+
+      <GetInTouchSimple />
+    </div>
   );
 };
 

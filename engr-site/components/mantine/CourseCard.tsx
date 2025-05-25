@@ -32,8 +32,7 @@ export function CourseCard({ title, description, href }: CourseCardProps) {
         </Text>
       }
       <Link href={href} passHref legacyBehavior>
-        {/* TODO: Fix Button componen */}
-        <Button component="a" className="button--primary">
+        <Button component="a" className="button--primary" mt="md">
           View
         </Button>
       </Link>
