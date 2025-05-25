@@ -17,8 +17,9 @@ const Courses = async () => {
       <h2 className="text-center h2-mb-md heading-3">Courses</h2>
 
       <div className="grid-container">
-        {courseData.success?.map((item: FormattedData) => (
+        {courseData.success?.map((item: FormattedData, index) => (
           <CourseCard
+            key={index}
             title={item.name}
             href={`/courses/${item.name.toLowerCase().replace(/\s+/g, '-')}`}
           />
