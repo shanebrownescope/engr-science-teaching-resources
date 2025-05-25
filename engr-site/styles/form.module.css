@@ -115,3 +115,170 @@
     width: 500px;
   }
 }
+
+.editSection {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border: 2px solid black;
+  border-radius: 0.5em;
+  background: white;
+}
+
+.existingCoursesSection {
+  margin-top: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: black;
+}
+
+.courseList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.courseItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #b7b6b6;
+  border-radius: 0.5em;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.courseItem:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.courseItemEditing {
+  border-color: black;
+  border-width: 2px;
+  background: #f8f9fa;
+}
+
+.courseInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.courseName {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: black;
+}
+
+.courseId {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.courseActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editButton {
+  background: black;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+  transition: opacity 0.2s ease;
+}
+
+.editButton:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.editButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.deleteButton {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+  transition: background-color 0.2s ease;
+}
+
+.deleteButton:hover:not(:disabled) {
+  background: #c82333;
+}
+
+.deleteButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.formActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.cancelButton {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: capitalize;
+  transition: background-color 0.2s ease;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background: #5a6268;
+}
+
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.navigationHelper {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #b7b6b6;
+  border-radius: 0.5em;
+  text-align: center;
+}
+
+.navigationHelper p {
+  color: black;
+  font-weight: 500;
+}
+
+.linkButton {
+  background: none;
+  border: none;
+  color: black;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+.linkButton:hover {
+  opacity: 0.8;
+}
