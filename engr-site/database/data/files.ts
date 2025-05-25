@@ -1,10 +1,10 @@
-import { FileData } from "@/utils/types";
+import { FileData } from "@/utils/types_v2";
 import dbConnect from "../dbConnector";
 
 export const getFileById = async (id: string): Promise<FileData | null> => {
   try {
     const selectQuery = `
-      SELECT * FROM Files_v2 WHERE id = ?`;
+      SELECT * FROM Files_v3 WHERE id = ?`;
 
     const { results: file, error } = await dbConnect(selectQuery, [id]);
 

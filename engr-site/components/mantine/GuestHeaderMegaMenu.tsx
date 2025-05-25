@@ -52,16 +52,6 @@ export function GuestHeaderMegaMenu() {
         <Group justify="space-between" h="100%">
           <div className="site-logo"> E-SCoPe</div>
 
-          <Group h="100%" gap={0} visibleFrom="sm">
-            <a href="#" className={classes.link}>
-              Home
-            </a>
-            <a href="#" className={classes.link}>
-              Learn
-            </a>
-           
-          </Group>
-
           <Group visibleFrom="sm">
             <Link href={"/auth/login"}>
               <Button variant="default">Log in</Button>

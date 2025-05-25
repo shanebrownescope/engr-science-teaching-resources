@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FetchedFormattedData } from "@/utils/types";
+import { FetchedFormattedData } from "@/utils/types_v2";
 import { CourseCard } from "@/components/mantine";
 import "./page.css";
 import { FormattedData } from "@/utils/formatting";
@@ -8,27 +8,25 @@ import requireAuth from "@/actions/auth/requireAuth";
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 
 const Courses = async () => {
-  const authResult = await requireAuth();
+  await requireAuth();
 
   const courseData: FetchedFormattedData = await fetchCourses();
-
-  console.log("--courseData: ", courseData);
 
   return (
     <ContainerLayout>
       <h2 className="text-center h2-mb-md heading-3">Courses</h2>
 
       <div className="grid-container">
-        {courseData?.success?.map((item: FormattedData) => (
+        {courseData.success?.map((item: FormattedData, index) => (
           <CourseCard
+            key={index}
             title={item.name}
-            description="description here"
-            href={`/search/${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+            href={`/courses/${item.name.toLowerCase().replace(/\s+/g, '-')}`}
           />
         ))}
       </div>
 
-      {courseData?.failure && <div>No courses</div>}
+      {courseData.failure && <div>No courses</div>}
     </ContainerLayout>
   );
 };

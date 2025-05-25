@@ -4,6 +4,7 @@ import styles from "@/components/custom/search/SearchResultBox.module.css";
 import Link from "next/link";
 import { Rating } from "@mantine/core";
 import { ResourceCard } from "@/components/mantine/ResourceCard";
+import { trimCapitalizeFirstLetter } from "@/utils/helpers";
 
 type SearchResultBoxProps = {
   type: string;
@@ -44,7 +45,7 @@ export const SearchResultBox = ({
       tags={tags}
       courses={courses}
       courseTopics={courseTopics}
-      resourceType={resourceType}
+      resourceType={trimCapitalizeFirstLetter(resourceType)}
       contributor={contributor}
       avgRating={avgRating}
       numReviews={numReviews}

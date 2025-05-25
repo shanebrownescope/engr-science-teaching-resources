@@ -36,7 +36,7 @@ const createCourse = async (values: z.infer<typeof CreateCourseSchema>) => {
       return { error: "Course name already in use" };
     }
 
-    const insertQuery = `INSERT INTO Courses_v2 (courseName) VALUES (?)`;
+    const insertQuery = `INSERT INTO Courses_v3 (courseName) VALUES (?)`;
     const formattedCourseName = capitalizeWords(courseName);
     const { results, error } = await dbConnect(insertQuery, [
       formattedCourseName,

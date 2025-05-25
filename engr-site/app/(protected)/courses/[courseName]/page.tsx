@@ -1,7 +1,7 @@
 import { FormattedData, capitalizeAndReplaceDash } from "@/utils/formatting";
-import { FetchedFormattedData } from "@/utils/types";
+import { FetchedFormattedData } from "@/utils/types_v2";
 import Link from "next/link";
-import { ModuleCard } from "@/components/mantine";
+import { CourseCard, ModuleCard } from "@/components/mantine";
 import { fetchCourseTopicsByCourseName } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseName";
 import requireAuth from "@/actions/auth/requireAuth";
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
@@ -12,33 +12,26 @@ const CourseTopicsPage = async ({
 }: {
   params: { courseName: string };
 }) => {
-  const authResult = await requireAuth();
-  const courseTopicName = capitalizeAndReplaceDash(params.courseName);
-  const courseTopicList: FetchedFormattedData =
-    await fetchCourseTopicsByCourseName(courseTopicName);
-  console.log(params.courseName);
-
-  console.log("== success: ", courseTopicList.success);
+  await requireAuth();
+  
+  const courseNameFormatted = capitalizeAndReplaceDash(params.courseName);
+  const courseTopicList: FetchedFormattedData = await fetchCourseTopicsByCourseName(courseNameFormatted);
 
   return (
     <ContainerLayout>
-      <h2 className="text-center mb-4 heading-3"> {courseTopicName} </h2>
+      <h2 className="text-center mb-4 heading-3"> {courseNameFormatted} </h2>
 
       <p className="label-primary h2-mb-md text-center label">
         {" "}
         Course topics{" "}
       </p>
 
-      <div className="flex-col gap-1">
+      <div className="grid-container">
         {courseTopicList?.success?.map((item: FormattedData, index: number) => (
-          <ModuleCard
+          <CourseCard
+            key={index}
             title={item.name}
-            description=""
-            href={`/courses/${params.courseName}/${item.url}?${new URLSearchParams(
-              {
-                id: item.id.toString(),
-              },
-            ).toString()}`}
+            href={`/search?q=${encodeURIComponent(item.name.trim())}`}
           />
         ))}
       </div>

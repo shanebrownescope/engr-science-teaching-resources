@@ -6,7 +6,7 @@ import { ForgetPasswordSchema } from "@/schemas";
 import dbConnect from "@/database/dbConnector";
 import { getUserByEmail } from "@/database/data/user";
 import { transformObjectKeys } from "@/utils/helpers";
-import { FetchedUserData, UserData } from "@/utils/types";
+import { FetchedUserData, UserData } from "@/utils/types_v2";
 import { transporter } from "@/utils/email";
 
 /**
@@ -66,7 +66,7 @@ const generateResetToken = async (user: UserData) => {
 
   const existingTokenQuery = `
     SELECT 1
-    FROM PasswordResetTokens_v2
+    FROM PasswordResetTokens_v3
     WHERE token = ?`;
 
   const { results: existingTokenResult } = await dbConnect(existingTokenQuery, [
@@ -86,7 +86,7 @@ const generateResetToken = async (user: UserData) => {
   }
 
   const insertQuery = `
-    INSERT INTO PasswordResetTokens_v2
+    INSERT INTO PasswordResetTokens_v3
     (userId, token, expiresAt) 
     VALUES (?, ?, ?)`;
 

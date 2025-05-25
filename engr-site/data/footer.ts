@@ -25,5 +25,14 @@ export const footerData: FooterData[] = [
         link: "/courses",
       },
     ],
+  },
+  {
+    title: "Docs",
+    links: [
+      {
+        label: "Github",
+        link: "https://github.com/shanebrownescope/engr-science-teaching-resources",
+      },
+    ],
   }
 ]

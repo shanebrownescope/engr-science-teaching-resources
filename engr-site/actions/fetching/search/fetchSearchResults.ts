@@ -76,7 +76,12 @@ const fetchQuery = `
   ON 
     f.id = FileCourseTopicConcat.fileId
   WHERE 
-    ((FileTagConcat.tagName LIKE CONCAT('%', ?, '%') OR f.fileName LIKE CONCAT('%', ?, '%')) OR (f.fileName LIKE CONCAT('%', ?, '%') AND (FileTagConcat.tagName IS NULL OR FileTagConcat.tagName = '')))
+    f.fileName LIKE CONCAT('%', ?, '%') OR 
+    f.resourceType LIKE CONCAT('%', ?, '%') OR 
+    COALESCE(c.contributorName, '') LIKE CONCAT('%', ?, '%') OR 
+    COALESCE(FileTagConcat.tagName, '') LIKE CONCAT('%', ?, '%') OR 
+    FileCourseTopicConcat.courseTopicNames LIKE CONCAT('%', ?, '%') OR 
+    FileCourseTopicConcat.courseNames LIKE CONCAT('%', ?, '%')
   GROUP BY 
     f.id
 
@@ -132,7 +137,12 @@ const fetchQuery = `
     ) AS LinkCourseTopicConcat 
   ON l.id = LinkCourseTopicConcat.linkId
   WHERE 
-    ((LinkTagConcat.tagName LIKE CONCAT('%', ?, '%') OR l.linkName LIKE CONCAT('%', ?, '%')) OR (l.linkName LIKE CONCAT('%', ?, '%') AND (LinkTagConcat.tagName IS NULL OR LinkTagConcat.tagName = '')))
+    l.linkName LIKE CONCAT('%', ?, '%') OR 
+    l.resourceType LIKE CONCAT('%', ?, '%') OR 
+    COALESCE(c.contributorName, '') LIKE CONCAT('%', ?, '%') OR 
+    COALESCE(LinkTagConcat.tagName, '') LIKE CONCAT('%', ?, '%') OR 
+    LinkCourseTopicConcat.courseTopicNames LIKE CONCAT('%', ?, '%') OR 
+    LinkCourseTopicConcat.courseNames LIKE CONCAT('%', ?, '%')
   GROUP BY 
     l.id;
   `;
@@ -148,12 +158,8 @@ export const fetchSearchResults = async (
   try {
     // searchQuery is used multiple times in the query
     const { results, error } = await dbConnect(fetchQuery, [
-      searchQuery,
-      searchQuery,
-      searchQuery,
-      searchQuery,
-      searchQuery,
-      searchQuery,
+      searchQuery, searchQuery, searchQuery, searchQuery, searchQuery, searchQuery,
+      searchQuery, searchQuery, searchQuery, searchQuery, searchQuery, searchQuery,
     ]);
 
     if (error) {
@@ -167,15 +173,15 @@ export const fetchSearchResults = async (
           return processFilesAndLinks(item);
         },
       );
-
       return { success: formattedData, failure: undefined };
     }
 
     return { success: [] };
 
   } catch (error) {
+    console.log("Internal server error when fetching search results:", error)
     return {
-      failure: "Internal server error, error retrieving modules from db",
+      failure: "Internal server error, error retrieving search results from db",
     };
   }
 };

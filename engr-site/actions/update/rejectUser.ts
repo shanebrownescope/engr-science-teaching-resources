@@ -14,7 +14,7 @@ import { revalidatePath } from "next/cache";
 export const rejectUser = async (userId: string) => {
   try {
     const updateQuery = `
-      UPDATE Users_v2 SET accountStatus = 'rejected' WHERE id = ${userId}`;
+      UPDATE Users_v3 SET accountStatus = 'rejected' WHERE id = ${userId}`;
 
     const { results: updatedUser } = await dbConnect(updateQuery);
 

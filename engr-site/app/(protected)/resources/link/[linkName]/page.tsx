@@ -1,20 +1,14 @@
 import { Textarea, Button } from "@mantine/core";
-import { fetchLinkById } from "@/actions/fetching/links/fetchLinkById";
 
 import { DisplayLink } from "@/app/(protected)/_components/DisplayLink";
-import { FetchedLink } from "@/utils/types";
 import { notFound } from "next/navigation";
 import { getCurrentUser } from "@/utils/authHelpers";
-import { fetchCommentsByLinkName } from "@/actions/fetching/comments/fetchCommentsByLinkName";
-import { uploadLinkComment } from "@/actions/comments/uploadLinkComment";
 import { revalidatePath } from "next/cache";
-import CommentForm from "@/components/custom/comments/form/CommentForm";
-import CommentLinkThread from "@/components/custom/comments/thread/CommentLinkThread";
 import SimilarResourcesData from "@/components/custom/similar-resources/SimilarResourcesData";
 import requireAuth from "@/actions/auth/requireAuth";
 import { fetchLinkByName } from "@/actions/fetching/links/fetchLinkByName";
-import { FetchedCommentLinkData, FetchedReviewsFileData, FetchedReviewsLinkData, FetchedSearchResults } from "@/utils/types_v2";
-import { fetchSimilarResourcesByTags } from "@/actions/fetching/similarResources/fetchSimilarResourcesByTags";
+import { FetchedReviewsLinkData, FetchedSearchResults } from "@/utils/types_v2";
+import { fetchSimilarResourcesByTagsAndCourseTopics } from "@/actions/fetching/similarResources/fetchSimilarResourcesByTagsAndCourseTopics";
 import { fetchReviewsByLinkName } from "@/actions/fetching/reviews/fetchReviewsByLinkName";
 import { ReviewsThread } from "@/components/custom/reviews/thread/ReviewsThread";
 import { ReviewsLinkData } from "@/utils/types_v2";
@@ -37,33 +31,13 @@ const ResourceLinkPage = async ({
   }
 
   const linkData = await fetchLinkByName({ name: linkName });
-  const similarResources: FetchedSearchResults = await fetchSimilarResourcesByTags({
+  const similarResources: FetchedSearchResults = await fetchSimilarResourcesByTagsAndCourseTopics({
     name: linkName,
     tags: linkData?.success?.tags || [],
+    courseTopics: linkData?.success?.courseTopics || []
   });
   const reviewsByUser: FetchedReviewsLinkData | null = await fetchReviewsByLinkNameAndUserId(linkName, user.id)
   const reviewsThread: FetchedReviewsLinkData | null = await fetchReviewsByLinkName(linkName)
-
-  // const commentThread: FetchedCommentLinkData | null = await fetchCommentsByLinkName(linkName);
-  // const handleFormSubmit = async (values: any) => {
-  //   "use server";
-  //   if (!user || !user.id) {
-  //     return;
-  //   }
-
-  //   try {
-  //     const results = await uploadLinkComment({
-  //       values: values,
-  //       userId: user.id,
-  //       linkName: linkName,
-  //     });
-  //     revalidatePath(
-  //       `/resources/link/${linkName}`
-  //     );
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   return (
     <div>
@@ -79,9 +53,6 @@ const ResourceLinkPage = async ({
         disabled={!!(reviewsByUser?.success?.length)}
       />
       <ReviewsThread reviews={reviewsThread?.success} />
-
-      {/* <CommentForm handleFormSubmit={handleFormSubmit} />
-      <CommentLinkThread commentThread={commentThread?.success} /> */}
     </div>
   );
 };
