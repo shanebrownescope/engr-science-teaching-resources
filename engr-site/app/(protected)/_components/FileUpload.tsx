@@ -103,7 +103,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
 
   const handleCourseTopicsOptionSelect = async (value?: string[]) => {
     if (!value || value.length === 0) {
-      setCourseTopicsOptionData([]);
+      setSelectedCourseTopicsOption([]);
       return;
     }
 

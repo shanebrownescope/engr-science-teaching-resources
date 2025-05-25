@@ -1,0 +1,32 @@
+.resourceContainer {
+    transition: box-shadow 150ms ease;
+}
+
+.resourceContainer:hover {
+    box-shadow: var(--mantine-shadow-md);
+}
+
+.iframeContainer {
+    position: relative;
+    overflow: hidden;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    border-radius: var(--mantine-radius-md);
+    background: var(--mantine-color-gray-1);
+}
+
+.iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .iframeContainer {
+        padding-top: 75%; /* 4:3 Aspect Ratio for mobile */
+    }
+}

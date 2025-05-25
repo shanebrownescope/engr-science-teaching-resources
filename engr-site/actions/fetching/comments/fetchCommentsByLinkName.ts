@@ -2,7 +2,7 @@
 
 import dbConnect from "@/database/dbConnector";
 import { formatTimeAgo } from "@/utils/formatting";
-import { CommentLinkData, FetchedCommentLinkData } from "@/utils/types";
+import { CommentLinkData, FetchedCommentLinkData } from "@/utils/types_v2";
 import { fetchLinkByName } from "../links/fetchLinkByName";
 
 /**

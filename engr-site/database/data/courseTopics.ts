@@ -13,7 +13,7 @@ export const getCourseTopicByNameAndId = async (
   console.log(name, id);
   try {
     const selectQuery = `
-      SELECT * FROM CourseTopics_v2 WHERE courseTopicName = ? AND id = ?`;
+      SELECT * FROM CourseTopics_v3 WHERE courseTopicName = ? AND id = ?`;
 
     const { results, error } = await dbConnect(selectQuery, [name, id]);
     console.log(results[0]);
@@ -33,7 +33,7 @@ export const getCourseTopicByName = async (
 ): Promise<CourseTopicData | null> => {
   try {
     const selectQuery = `
-      SELECT * FROM CourseTopics_v2 WHERE courseTopicName = ?`;
+      SELECT * FROM CourseTopics_v3 WHERE courseTopicName = ?`;
 
     const { results, error } = await dbConnect(selectQuery, [name]);
 
@@ -53,7 +53,7 @@ export const getCourseTopicById = async (
   console.log(id);
   try {
     const selectQuery = `
-      SELECT * FROM CourseTopics_v2 WHERE id = ?`;
+      SELECT * FROM CourseTopics_v3 WHERE id = ?`;
 
     const { results, error } = await dbConnect(selectQuery, [id]);
 
@@ -74,7 +74,7 @@ export const getCourseTopicByIdAndCourseId = async (
   console.log(courseTopicId, courseId);
   try {
     const selectQuery = `
-      SELECT * FROM CourseTopics_v2 WHERE id = ? AND courseId = ?`;
+      SELECT * FROM CourseTopics_v3 WHERE id = ? AND courseId = ?`;
 
     const { results, error } = await dbConnect(selectQuery, [
       courseTopicId,

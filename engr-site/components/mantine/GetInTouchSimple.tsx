@@ -1,90 +1,27 @@
-import {
-  TextInput,
-  Textarea,
-  SimpleGrid,
-  Group,
-  Title,
-  Button,
-  Container,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
+"use client";
+import { Button, Container, Tooltip, useMantineTheme } from "@mantine/core";
+import { IconMail } from "@tabler/icons-react";
+import classes from "./GetInTouchSimple.module.css";
 
-/**
- * Renders a simple form for users to get in touch.
- *
- * @returns {JSX.Element} - The rendered GetInTouchSimple component.
- */
 export function GetInTouchSimple() {
-  const form = useForm({
-    initialValues: {
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    },
-    validate: {
-      name: (value) => value.trim().length < 2,
-      email: (value) => !/^\S+@\S+$/.test(value),
-      subject: (value) => value.trim().length === 0,
-    },
-  });
+  const handleClick = () => {
+    const email = "escopeosu@gmail.com";
+    window.location.href = `mailto:${email}?subject=Website Inquiry`;
+  };
 
   return (
-    <Container style={{ width: "50%", margin: "0 auto" }} my={40}>
-      <form onSubmit={form.onSubmit(() => {})}>
-        <Title
-          order={2}
-          size="h1"
-          style={{ fontFamily: "Greycliff CF, var(--mantine-font-family)" }}
-          fw={900}
-          ta="center"
+    <Container className={classes.container}>
+      <Tooltip label="Contact Us" position="left" withArrow>
+        <Button
+          onClick={handleClick}
+          className={classes.circularButton}
+          radius={50}
+          variant="filled"
+          color="red"
         >
-          Get in touch
-        </Title>
-
-        <SimpleGrid cols={{ base: 1, sm: 2 }} mt="xl">
-          <TextInput
-            label="Name"
-            placeholder="Your name"
-            name="name"
-            variant="filled"
-            {...form.getInputProps("name")}
-          />
-          <TextInput
-            label="Email"
-            placeholder="Your email"
-            name="email"
-            variant="filled"
-            {...form.getInputProps("email")}
-          />
-        </SimpleGrid>
-
-        <TextInput
-          label="Subject"
-          placeholder="Subject"
-          mt="md"
-          name="subject"
-          variant="filled"
-          {...form.getInputProps("subject")}
-        />
-        <Textarea
-          mt="md"
-          label="Message"
-          placeholder="Your message"
-          maxRows={10}
-          minRows={5}
-          autosize
-          name="message"
-          variant="filled"
-          {...form.getInputProps("message")}
-        />
-
-        <Group justify="center" mt="xl">
-          <Button type="submit" size="md">
-            Send message
-          </Button>
-        </Group>
-      </form>
+          <IconMail size={24} />
+        </Button>
+      </Tooltip>
     </Container>
   );
 }

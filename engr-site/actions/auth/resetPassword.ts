@@ -54,7 +54,7 @@ export const resetPasswordAction = async (
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const updateQuery = `
-    UPDATE Users_v2
+    UPDATE Users_v3
     SET password = ?
     WHERE id = ?`;
 
@@ -68,7 +68,7 @@ export const resetPasswordAction = async (
   }
 
   const deleteQuery = `
-    DELETE FROM PasswordResetTokens_v2
+    DELETE FROM PasswordResetTokens_v3
     WHERE userId = ? AND id = ?`;
 
   await dbConnect(deleteQuery, [existingUser.id, existingToken.id]);

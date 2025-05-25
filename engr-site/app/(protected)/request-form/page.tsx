@@ -55,19 +55,22 @@ export default function RequestForm() {
     setSuccess(null);
     
     try {
+      console.log("Form data submitted:", values); // Changed to English
       const result = await submitRequest(values);
       
       if (result.success) {
         setSuccess(result.success);
-        form.reset(); // 重置表单
+        form.reset(); // Reset form
       } else if (result.error) {
+        console.error("Submission error:", result.error); // Changed to English
         setError(result.error);
       } else if (result.failure) {
+        console.error("Submission failed:", result.failure); // Changed to English
         setError(result.failure);
       }
     } catch (err) {
-      setError('An error occurred while submitting your request. Please try again later.');
-      console.error(err);
+      console.error("Submission exception:", err); // Changed to English
+      setError('An error occurred while submitting the request. Please try again later.');
     } finally {
       setLoading(false);
     }
