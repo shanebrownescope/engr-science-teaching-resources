@@ -5,7 +5,7 @@ import Link from "next/link";
 
 type CourseCardProps = {
   title: string;
-  description: string;
+  description?: string;
   href: string;
 };
 
@@ -26,9 +26,11 @@ export function CourseCard({ title, description, href }: CourseCardProps) {
           {title}
         </Text>
       </Group>
-      <Text mt="sm" mb="md" c="dimmed" fz="xs">
-        {description}
-      </Text>
+      {description &&
+        <Text mt="sm" mb="md" c="dimmed" fz="xs">
+          {description}
+        </Text>
+      }
       <Link href={href} passHref legacyBehavior>
         {/* TODO: Fix Button componen */}
         <Button component="a" className="button--primary">
