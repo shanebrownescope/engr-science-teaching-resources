@@ -2,6 +2,7 @@
 import styles from "@/styles/form.module.css";
 import { loginAction } from "@/actions/auth/loginAction";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
 
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";
@@ -21,6 +22,8 @@ type FormFields = z.infer<typeof LoginSchema>;
  */
 export const LoginForm = () => {
   const [success, setSuccess] = useState<string | undefined>("");
+  const router = useRouter();
+  
   const {
     register,
     handleSubmit,
@@ -57,6 +60,11 @@ export const LoginForm = () => {
 
       if (result && result.success) {
         setSuccess(result.success);
+        
+        // Add a small delay before redirect to ensure state is updated
+        setTimeout(() => {
+          window.location.href = "https://engr-science-teaching-resources.vercel.app/home";
+        }, 100);
       }
     } catch (error) {
       setError("root", { message: "Error" });
