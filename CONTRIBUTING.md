@@ -111,6 +111,8 @@ You can now call queries to the database and get results in the terminal.
 The file [MASTER.sql](./engr-site/database/MASTER.sql) contains all the
 tables for our database.
 
+**NOTE**: All relevant data objects and their type conventions can be found in the [types_v2](./engr-site/utils/types_v2.ts) file.
+
 ### Database connector
 
 The db connector can be found in the [dbConnector.ts](./engr-site/database/dbConnector.ts) file.
@@ -157,7 +159,7 @@ The files [useCurrentRole.ts](./engr-site/hooks/useCurrentRole.ts) and [useCurre
 
 ### Protected pages
 
-All projected pages calls either [requireAuth()](./engr-site/actions/auth/requireAuth.ts) (for server or async entities) or [useRequireAuth()](./engr-site/hooks/useRequireAuth.ts) (for client entities) to verify the user is authorized.
+All protected pages calls either [requireAuth()](./engr-site/actions/auth/requireAuth.ts) (for server or async entities) or [useRequireAuth()](./engr-site/hooks/useRequireAuth.ts) (for client entities) to verify the user is authorized.
 The user will be redirected to `/auth/login` if they're not authorized.
 
 ### For the future: Middleware
