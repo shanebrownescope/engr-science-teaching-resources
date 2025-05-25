@@ -10,9 +10,13 @@ import { getCurrentUser } from "@/utils/authHelpers";
  */
 export const fetchExternalRequests = async () => {
   try {
+    console.log("fetchExternalRequests: Starting...");
+    
     const user = await getCurrentUser();
+    console.log("fetchExternalRequests: Current user:", user);
 
     if (user?.role !== "admin") {
+      console.log("fetchExternalRequests: Unauthorized access - user role:", user?.role);
       return { failure: "Unauthorized access" };
     }
 
@@ -20,15 +24,23 @@ export const fetchExternalRequests = async () => {
       SELECT er.id, er.name, er.email, er.courseId, c.courseName, er.description, 
              er.status, er.createdAt
       FROM ExternalRequests_v3 er
-      LEFT JOIN Courses c ON er.courseId = c.id
+      LEFT JOIN Courses_v3 c ON er.courseId = c.id
       ORDER BY er.createdAt DESC
     `;
 
-    const { results } = await dbConnect(query, []);
+    console.log("fetchExternalRequests: Executing query...");
+    const { results, error } = await dbConnect(query, []);
 
-    return { success: results };
+    if (error) {
+      console.error("fetchExternalRequests: Database error:", error);
+      return { failure: "Error fetching external requests" };
+    }
+
+    console.log("fetchExternalRequests: Query successful. Found", results[0]?.length || 0, "records");
+    
+    return { success: results[0] };
   } catch (error) {
-    console.error("Failed to fetch external requests:", error);
+    console.error("fetchExternalRequests: Failed to fetch external requests:", error);
     return { failure: "Error fetching external requests" };
   }
 };

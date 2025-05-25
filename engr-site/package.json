@@ -24,6 +24,7 @@
     "bcryptjs": "^2.4.3",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.10",
+    "dotenv": "^16.5.0",
     "mysql2": "^3.9.1",
     "next": "^14.2.23",
     "next-auth": "^5.0.0-beta.5",
