@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Pagination, Group } from "@mantine/core";
 import { PendingUserDetails } from "@/components/custom/PendingUser/PendingUserDetails";
-import { UserData } from "@/utils/types";
+import { UserData } from "@/utils/types_v2";
 
 type HandleUserActionProps = {
   userId: string;

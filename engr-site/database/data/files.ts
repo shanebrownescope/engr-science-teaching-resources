@@ -1,4 +1,4 @@
-import { FileData } from "@/utils/types";
+import { FileData } from "@/utils/types_v2";
 import dbConnect from "../dbConnector";
 
 export const getFileById = async (id: string): Promise<FileData | null> => {

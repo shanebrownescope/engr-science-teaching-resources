@@ -1,5 +1,5 @@
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
-import { searchParams } from "@/utils/types";
+import { searchParams } from "@/utils/types_v2";
 import Link from "next/link";
 import { FileUpload } from "@/app/(protected)/_components/FileUpload";
 import { LinkUpload } from "@/app/(protected)/_components/LinkUpload";

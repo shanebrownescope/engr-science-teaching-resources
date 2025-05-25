@@ -108,7 +108,7 @@ You can now call queries to the database and get results in the terminal.
 
 ### Database schema
 
-The file [NEWMASTER.sql](./engr-site/database/NEWMASTER.sql) contains all the
+The file [MASTER.sql](./engr-site/database/MASTER.sql) contains all the
 tables for our database.
 
 ### Database connector

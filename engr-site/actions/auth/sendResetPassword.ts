@@ -6,7 +6,7 @@ import { ForgetPasswordSchema } from "@/schemas";
 import dbConnect from "@/database/dbConnector";
 import { getUserByEmail } from "@/database/data/user";
 import { transformObjectKeys } from "@/utils/helpers";
-import { FetchedUserData, UserData } from "@/utils/types";
+import { FetchedUserData, UserData } from "@/utils/types_v2";
 import { transporter } from "@/utils/email";
 
 /**
