@@ -22,6 +22,7 @@ type FormFields = z.infer<typeof LoginSchema>;
  */
 export const LoginForm = () => {
   const [success, setSuccess] = useState<string | undefined>("");
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const router = useRouter();
   
   const {
@@ -38,6 +39,9 @@ export const LoginForm = () => {
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    // Prevent multiple submissions
+    if (isSubmitting || isRedirecting) return;
+    
     // Reset the error and success messages
     setError("root", { message: "" });
     setSuccess("");
@@ -56,15 +60,19 @@ export const LoginForm = () => {
 
       if (result && result.error) {
         setError("root", { message: result.error });
+        return;
       }
 
       if (result && result.success) {
         setSuccess(result.success);
+        setIsRedirecting(true);
         
         // Wait longer for authentication state to be fully set in production
         setTimeout(() => {
+          // Force a hard navigation to ensure cookies/auth state is recognized
           window.location.replace("https://engr-science-teaching-resources.vercel.app/home");
-        }, 100);
+        }, 1000);
+        return;
       }
     } catch (error) {
       setError("root", { message: "Error" });
@@ -114,9 +122,9 @@ export const LoginForm = () => {
         <button
           className={styles.formButton}
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isRedirecting}
         >
-          Login
+          {isRedirecting ? "Redirecting..." : "Login"}
         </button>
       </form>
     </div>
