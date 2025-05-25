@@ -61,9 +61,9 @@ export const LoginForm = () => {
       if (result && result.success) {
         setSuccess(result.success);
         
-        // Add a small delay before redirect to ensure state is updated
+        // Wait longer for authentication state to be fully set in production
         setTimeout(() => {
-          window.location.href = "https://engr-science-teaching-resources.vercel.app/home";
+          window.location.replace("https://engr-science-teaching-resources.vercel.app/home");
         }, 100);
       }
     } catch (error) {
