@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import dbConnect from "@/database/dbConnector";
-import { ExternalRequestSchema } from "@/schemas"; 
+import { ExternalRequestSchema } from "@/schemas"; // 确保从 schemas/index.ts 导入
 import { revalidatePath } from "next/cache";
 
 export const submitExternalRequest = async (values: z.infer<typeof ExternalRequestSchema>) => {
