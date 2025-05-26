@@ -14,7 +14,7 @@ import { sendUserUpdateEmailProps } from "@/app/(protected)/dashboard/pending-us
 export const approveUser = async (userId: string) => {
   try {
     const updateQuery = `
-      UPDATE Users_v3 SET accountStatus = 'approved' WHERE id = ${userId}`;
+      UPDATE Users_v2 SET accountStatus = 'approved' WHERE id = ${userId}`;
 
     const { results: updatedUser } = await dbConnect(updateQuery);
 

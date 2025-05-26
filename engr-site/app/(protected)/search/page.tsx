@@ -34,7 +34,7 @@ const SearchResults = ({ searchParams }: { searchParams: searchParams }) => {
           formattedSearchName.toLowerCase(),
         );
         if (data?.failure) {
-          console.log("Failure loading search results:", data.failure)
+          console.log("Error loading search results")
           return;
         }
         setResourcesData(data?.success || []);

@@ -1,7 +1,7 @@
 import { FormattedData, capitalizeAndReplaceDash } from "@/utils/formatting";
-import { FetchedFormattedData } from "@/utils/types_v2";
+import { FetchedFormattedData } from "@/utils/types";
 import Link from "next/link";
-import { CourseCard, ModuleCard } from "@/components/mantine";
+import { ModuleCard } from "@/components/mantine";
 import { fetchCourseTopicsByCourseName } from "@/actions/fetching/courseTopics/fetchCourseTopicsByCourseName";
 import requireAuth from "@/actions/auth/requireAuth";
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
@@ -12,26 +12,33 @@ const CourseTopicsPage = async ({
 }: {
   params: { courseName: string };
 }) => {
-  await requireAuth();
-  
-  const courseNameFormatted = capitalizeAndReplaceDash(params.courseName);
-  const courseTopicList: FetchedFormattedData = await fetchCourseTopicsByCourseName(courseNameFormatted);
+  const authResult = await requireAuth();
+  const courseTopicName = capitalizeAndReplaceDash(params.courseName);
+  const courseTopicList: FetchedFormattedData =
+    await fetchCourseTopicsByCourseName(courseTopicName);
+  console.log(params.courseName);
+
+  console.log("== success: ", courseTopicList.success);
 
   return (
     <ContainerLayout>
-      <h2 className="text-center mb-4 heading-3"> {courseNameFormatted} </h2>
+      <h2 className="text-center mb-4 heading-3"> {courseTopicName} </h2>
 
       <p className="label-primary h2-mb-md text-center label">
         {" "}
         Course topics{" "}
       </p>
 
-      <div className="grid-container">
+      <div className="flex-col gap-1">
         {courseTopicList?.success?.map((item: FormattedData, index: number) => (
-          <CourseCard
-            key={index}
+          <ModuleCard
             title={item.name}
-            href={`/search?q=${encodeURIComponent(item.name.trim())}`}
+            description=""
+            href={`/courses/${params.courseName}/${item.url}?${new URLSearchParams(
+              {
+                id: item.id.toString(),
+              },
+            ).toString()}`}
           />
         ))}
       </div>

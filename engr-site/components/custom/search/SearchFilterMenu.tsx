@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button, ComboboxItem, Group, MultiSelect, Select, Text, Tooltip } from "@mantine/core";
-import { IconFilterOff, IconInfoCircle } from "@tabler/icons-react"; 
+import { ComboboxItem, MultiSelect, Select, Text, Tooltip } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons-react"; 
 import { YearSlider } from "../../mantine";
 import styles from "@/components/custom/search/SearchFilterMenu.module.css";
 import { AllFilesAndLinksDataFormatted } from "@/utils/types_v2";
@@ -263,7 +263,7 @@ export const SearchFilterMenu = ({
 
       setFilteredData(sortedResources);
       console.log(`-- CURRENT FILTERS SELECTED:\nSortBy: ${selectedSortBy}\nTags: ${selectedTags}\nCourses: ${selectedCourses}\nCourseTopics: ${selectedCourseTopics}\nResourceType: ${selectedResourceType}\nMaterialType: ${selectedMaterialType}\nContributors: ${selectedContributors}`)
-      console.log(`--FINAL FILTERED+SORTED RESULTS: `, filteredData)
+      console.log(`--FILTERED RESULTS: `, filteredData)
     }
 
     sortAndFilterResources()
@@ -277,18 +277,6 @@ export const SearchFilterMenu = ({
     selectedMaterialType, 
     selectedContributors
   ]);
-
-  // Helper function to clear selected filter values
-  const resetAllFilters = () => {
-    setSelectedTags([]);
-    setSelectedCourses([]);
-    setSelectedCourseTopics([]);
-    setSelectedContributors([]);
-    setSelectedResourceType(null);
-    setSelectedMaterialType(null);
-    setSelectedSortBy('most-popular');
-    setCourseTopicsData([]); 
-  };
 
   // Helper function to render label with tooltip
   const renderLabelWithTooltip = (label: string, tooltip: string) => (
@@ -306,26 +294,7 @@ export const SearchFilterMenu = ({
         <div className={styles.layoutContainer}>
             <div className={styles.filterColumn}>
               <div className={styles.filterMenu}>
-                <Group justify="space-between" align="center" mb="md">
-                  <Text fw={500}>Filters</Text>
-                  <Button 
-                    variant="subtle" 
-                    size="xs" 
-                    onClick={resetAllFilters}
-                    leftSection={<IconFilterOff size={14} />}
-                    disabled={
-                      !selectedTags?.length &&
-                      !selectedCourses?.length &&
-                      !selectedCourseTopics?.length &&
-                      !selectedContributors?.length &&
-                      !selectedResourceType &&
-                      !selectedMaterialType &&
-                      selectedSortBy === 'most-popular'
-                    }
-                  >
-                    Reset
-                  </Button>
-                </Group>
+                <Text>Filters</Text>
                 <Select
                   label="Sort By"
                   data={[
@@ -397,7 +366,7 @@ export const SearchFilterMenu = ({
                   value={selectedMaterialType || null}
                 />
                 <MultiSelect
-                  label={renderLabelWithTooltip("Contributor", "Filter resources by the person who created them")}
+                  label={renderLabelWithTooltip("Contributor", "Filter resources by the person who uploaded them")}
                   data={contributorsData?.map((contributor) => ({
                     value: trimCapitalizeFirstLetter(contributor.name), 
                     label: trimCapitalizeFirstLetter(contributor.name)

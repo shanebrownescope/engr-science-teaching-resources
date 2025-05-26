@@ -9,7 +9,7 @@ import {
   Divider,
   Tooltip
 } from "@mantine/core";
-import { IconCalendar, IconUser, IconFileDescription, IconFile, IconLink, IconTag, IconBook2, IconBook } from "@tabler/icons-react";
+import { IconCalendar, IconUser, IconFileDescription } from "@tabler/icons-react";
 import Link from "next/link";
 import classes from "./ResourceCard.module.css";
 
@@ -54,14 +54,7 @@ export const ResourceCard = ({
     >
       <Stack gap="sm">
         <Group justify="space-between" wrap="nowrap">
-          <Badge 
-            color={type === 'file' ? 'blue' : 'teal'} 
-            variant="light" 
-            size="sm"
-            leftSection={type === 'file' ? 
-              <IconFile size={12} style={{ marginRight: 4 }} /> : 
-              <IconLink size={12} style={{ marginRight: 4 }} />}
-          >
+          <Badge color={type === 'file' ? 'blue' : 'cyan'} variant="light" tt="capitalize">
             {type}
           </Badge>
           
@@ -76,17 +69,17 @@ export const ResourceCard = ({
         </Group>
 
         <Group gap="xs" wrap="nowrap">
-          <Tooltip label="Resource type">
-            <Group gap={4}>
-              <IconFileDescription size={14} />
-              <Text size="sm" lineClamp={1}>{resourceType}</Text>
-            </Group>
-          </Tooltip>
-
           <Tooltip label="Contributor">
             <Group gap={4}>
               <IconUser size={14} />
               <Text size="sm" lineClamp={1}>{contributor}</Text>
+            </Group>
+          </Tooltip>
+
+          <Tooltip label="Resource type">
+            <Group gap={4}>
+              <IconFileDescription size={14} />
+              <Text size="sm" lineClamp={1}>{resourceType}</Text>
             </Group>
           </Tooltip>
         </Group>
@@ -107,10 +100,7 @@ export const ResourceCard = ({
         <Stack gap="xs">
           {tags.length > 0 && (
             <div>
-              <Group gap={4}>
-                <IconTag size={16} />
-                <Text size="sm" fw={500} mb={4}>Tags</Text>
-              </Group>
+              <Text size="sm" fw={500} mb={4}>Tags</Text>
               <div className={classes.tagGroup}>
                 {tags.map((tag, index) => (
                   <Badge key={index} variant="light" radius="sm">
@@ -123,10 +113,7 @@ export const ResourceCard = ({
 
           {courses.length > 0 && (
             <div>
-              <Group gap={4}>
-                <IconBook2 size={16} />
-                <Text size="sm" fw={500} mb={4}>Relevant Courses</Text>
-              </Group>
+              <Text size="sm" fw={500} mb={4}>Relevant Courses</Text>
               <div className={classes.tagGroup}>
                 {courses.map((course, index) => (
                   <Badge key={index} variant="default" color="dark" radius="sm">
@@ -139,10 +126,7 @@ export const ResourceCard = ({
 
           {courseTopics.length > 0 && (
             <div>
-              <Group gap={4}>
-                <IconBook size={16} />
-                <Text size="sm" fw={500} mb={4}>Relevant Course Topics</Text>
-              </Group>
+              <Text size="sm" fw={500} mb={4}>Relevant Course Topics</Text>
               <div className={classes.tagGroup}>
                 {courseTopics.map((topic, index) => (
                   <Badge key={index} variant="default" color="indigo" radius="sm">

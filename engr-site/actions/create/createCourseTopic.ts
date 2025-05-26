@@ -34,7 +34,7 @@ const createCourseTopic = async (
       return { error: "Course id not found" };
     }
 
-    const insertQuery = `INSERT INTO CourseTopics_v3 (courseTopicName, courseId) VALUES (?, ?)`;
+    const insertQuery = `INSERT INTO CourseTopics_v2 (courseTopicName, courseId) VALUES (?, ?)`;
     const formattedCourseTopicName = capitalizeWords(courseTopicName);
     const { results } = await dbConnect(insertQuery, [
       formattedCourseTopicName,
@@ -45,37 +45,37 @@ const createCourseTopic = async (
       return { error: "Error creating course topic" };
     }
 
-    // if (results[0].insertId) {
-    //   const courseTopicId = results[0].insertId;
+    if (results[0].insertId) {
+      const courseTopicId = results[0].insertId;
 
-    //   const insertSectionQuery = `INSERT INTO ResourceTypes_v2 (resourceTypeName, courseTopicId) VALUES (?, ?)`;
+      const insertSectionQuery = `INSERT INTO ResourceTypes_v2 (resourceTypeName, courseTopicId) VALUES (?, ?)`;
 
-    //   const problemsSectionName = "Problems";
-    //   await dbConnect(insertSectionQuery, [problemsSectionName, courseTopicId]);
+      const problemsSectionName = "Problems";
+      await dbConnect(insertSectionQuery, [problemsSectionName, courseTopicId]);
 
-    //   const courseNotesSectionName = "Course Notes";
-    //   await dbConnect(insertSectionQuery, [
-    //     courseNotesSectionName,
-    //     courseTopicId,
-    //   ]);
+      const courseNotesSectionName = "Course Notes";
+      await dbConnect(insertSectionQuery, [
+        courseNotesSectionName,
+        courseTopicId,
+      ]);
 
-    //   const homeworkSectionName = "Homework";
-    //   await dbConnect(insertSectionQuery, [homeworkSectionName, courseTopicId]);
+      const homeworkSectionName = "Homework";
+      await dbConnect(insertSectionQuery, [homeworkSectionName, courseTopicId]);
 
-    //   const quizzesAndExamsSectionName = "Quizzes/Exams";
-    //   await dbConnect(insertSectionQuery, [
-    //     quizzesAndExamsSectionName,
-    //     courseTopicId,
-    //   ]);
+      const quizzesAndExamsSectionName = "Quizzes/Exams";
+      await dbConnect(insertSectionQuery, [
+        quizzesAndExamsSectionName,
+        courseTopicId,
+      ]);
 
-    //   const videoAndTutorialSectionName = "Videos/Tutorials";
-    //   await dbConnect(insertSectionQuery, [
-    //     videoAndTutorialSectionName,
-    //     courseTopicId,
-    //   ]);
+      const videoAndTutorialSectionName = "Videos/Tutorials";
+      await dbConnect(insertSectionQuery, [
+        videoAndTutorialSectionName,
+        courseTopicId,
+      ]);
 
-    //   return { success: "New course topic and sections created" };
-    // }
+      return { success: "New course topic and sections created" };
+    }
 
     return { success: "New course topic created" };
   } catch (error) {

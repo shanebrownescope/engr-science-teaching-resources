@@ -36,7 +36,7 @@ export const sendApprovalRequestToTeam = async (
     }
 
     const insertQuery = `
-      INSERT INTO Users_v3 (name, email, password, role, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?)`;
+      INSERT INTO Users_v2 (name, email, password, role, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?)`;
 
     const instructor = "instructor";
     const { results: insertedUser, error } = await dbConnect(insertQuery, [
