@@ -14,7 +14,7 @@ import SimilarResourcesData from "@/components/custom/similar-resources/SimilarR
 import requireAuth from "@/actions/auth/requireAuth";
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
 import { fetchFileByName } from "@/actions/fetching/files/fetchFileByName";
-import { fetchSimilarResourcesByTagsAndCourseTopics } from "@/actions/fetching/similarResources/fetchSimilarResourcesByTagsAndCourseTopics";
+import { fetchSimilarResourcesByTags } from "@/actions/fetching/similarResources/fetchSimilarResourcesByTags";
 import { ReviewsThread } from "@/components/custom/reviews/thread/ReviewsThread";
 import { fetchReviewsByFileName } from "@/actions/fetching/reviews/fetchReviewsByFileName";
 import { ReviewsFileData } from "@/utils/types_v2";
@@ -38,10 +38,9 @@ const ResourceFilePage = async ({
   }
 
   const fileData = await fetchFileByName({ name: fileName });
-  const similarResources: FetchedSearchResults = await fetchSimilarResourcesByTagsAndCourseTopics({
+  const similarResources: FetchedSearchResults = await fetchSimilarResourcesByTags({
     name: fileName,
     tags: fileData?.success?.tags || [],
-    courseTopics: fileData?.success?.courseTopics || []
   });
   const reviewsByUser: FetchedReviewsFileData | null = await fetchReviewsByFileNameAndUserId(fileName, user.id)
   const reviewsThread: FetchedReviewsFileData | null = await fetchReviewsByFileName(fileName)

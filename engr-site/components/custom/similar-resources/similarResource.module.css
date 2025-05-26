@@ -5,19 +5,32 @@
   gap: 16px;
 }
 
+/** ref: SimilarItem */
 .container {
-  border: 1px solid var(--mantine-color-gray-3);
-  border-radius: var(--mantine-radius-md);
-  padding: var(--mantine-spacing-xs);
-  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  border: 1px solid var(--grey-border-color);
+  border-radius: 5px;
+  padding: 1em;
+
+  .name {
+    font-size: 16px;
+    font-weight: 600;
+  }
 }
 
-.container:hover {
-  border-color: var(--mantine-color-blue-5);
-  box-shadow: var(--mantine-shadow-xs);
-}
+.tagsContainer {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 
-.link {
-  text-decoration: none;
-  color: inherit;
+  .tag {
+    font-size: 14px;
+    background: #2c2c2c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 500px;
+    text-transform: capitalize;
+  }
 }

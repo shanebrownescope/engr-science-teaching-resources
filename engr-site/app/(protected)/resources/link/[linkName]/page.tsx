@@ -14,7 +14,7 @@ import SimilarResourcesData from "@/components/custom/similar-resources/SimilarR
 import requireAuth from "@/actions/auth/requireAuth";
 import { fetchLinkByName } from "@/actions/fetching/links/fetchLinkByName";
 import { FetchedCommentLinkData, FetchedReviewsFileData, FetchedReviewsLinkData, FetchedSearchResults } from "@/utils/types_v2";
-import { fetchSimilarResourcesByTagsAndCourseTopics } from "@/actions/fetching/similarResources/fetchSimilarResourcesByTagsAndCourseTopics";
+import { fetchSimilarResourcesByTags } from "@/actions/fetching/similarResources/fetchSimilarResourcesByTags";
 import { fetchReviewsByLinkName } from "@/actions/fetching/reviews/fetchReviewsByLinkName";
 import { ReviewsThread } from "@/components/custom/reviews/thread/ReviewsThread";
 import { ReviewsLinkData } from "@/utils/types_v2";
@@ -37,10 +37,9 @@ const ResourceLinkPage = async ({
   }
 
   const linkData = await fetchLinkByName({ name: linkName });
-  const similarResources: FetchedSearchResults = await fetchSimilarResourcesByTagsAndCourseTopics({
+  const similarResources: FetchedSearchResults = await fetchSimilarResourcesByTags({
     name: linkName,
     tags: linkData?.success?.tags || [],
-    courseTopics: linkData?.success?.courseTopics || []
   });
   const reviewsByUser: FetchedReviewsLinkData | null = await fetchReviewsByLinkNameAndUserId(linkName, user.id)
   const reviewsThread: FetchedReviewsLinkData | null = await fetchReviewsByLinkName(linkName)

@@ -4,54 +4,66 @@ import {
   Title,
   Text,
   Card,
+  SimpleGrid,
   Container,
   rem,
   useMantineTheme,
-  Image,
-  Flex,
-  Box,
 } from "@mantine/core";
-import { IconSearch, IconUpload, IconStar, IconSend } from "@tabler/icons-react";
+import { IconNotebook, IconUser, IconNetwork } from "@tabler/icons-react";
 import classes from "./FeaturesCards.module.css";
 
-const features = [
+const mockdata = [
   {
-    title: "Discover Resources",
+    title: "Connect with others",
     description:
-      "Powerful search tools to find exactly what you need by course, topic, or resource type. Filter by exercises, notes, videos, and interactive content.",
-    icon: IconSearch,
-    image: "/images/search.png",
+      "Connect with other instructors to share resources, ask questions, and get help.",
+    icon: IconNetwork,
   },
   {
-    title: "Access Anytime",
+    title: "Privacy focused",
     description:
-      "Instant access to our entire resource library. Download materials or use them directly from our platform with seamless cloud syncing.",
-    icon: IconUpload,
-    image: "/images/access.png",
-    reverse: true,
+      "Only authenticated instructors can access the site. We don't sell your data to third parties. We don't even have ads!",
+    icon: IconUser,
   },
   {
-    title: "Rate & Review",
+    title: "Quality resources",
     description:
-      "Community-driven quality ratings help you identify the best resources. See instructor feedback and student outcomes for each material.",
-    icon: IconStar,
-    image: "/images/review.png",
-  },
-  {
-    title: "Share Resources",
-    description:
-      "Submit your best materials through our simple request form. Help build the repository while getting recognition for your contributions.",
-    icon: IconSend,
-    image: "/images/share.png",
-    reverse: true,
+      "All sorts of content from slides, to homework, to exams, to projects. We have it all!",
+    icon: IconNotebook,
   },
 ];
 
+/**
+ * Renders a set of cards with features of the website.
+ *
+ * @returns {JSX.Element} - The rendered FeaturesCards component.
+ */
 export function FeaturesCards() {
   const theme = useMantineTheme();
+  const features = mockdata.map((feature) => (
+    <Card
+      key={feature.title}
+      shadow="md"
+      radius="md"
+      className={classes.card}
+      padding="xl"
+    >
+      <feature.icon
+        style={{ width: rem(50), height: rem(50) }}
+        stroke={2}
+        color={theme.colors.blue[6]}
+      />
+      <Text fz="lg" fw={500} className={classes.cardTitle} mt="md">
+        {feature.title}
+      </Text>
+      <Text fz="sm" c="dimmed" mt="sm">
+        {feature.description}
+      </Text>
+    </Card>
+  ));
 
   return (
-    <Container size="lg" py="xl" className={classes.container}>
+    <Container size="lg" py="xl">
       <Group justify="center">
         <Badge variant="filled" size="lg">
           Brought to you by Oregon State University
@@ -59,53 +71,17 @@ export function FeaturesCards() {
       </Group>
 
       <Title order={2} className={classes.title} ta="center" mt="sm">
-        Interactive Learning & Engagement Repository
+        A community for instructors all around the country
       </Title>
 
-      <Text c="dimmed" className={classes.description} ta="center" mt="md">
-        Connecting educators through curated, community-rated learning materials
-      </Text>
+      {/* <Text c="dimmed" className={classes.description} ta="center" mt="md">
+        Every once in a while, you’ll see a Golbat that’s missing some fangs.
+        This happens when hunger drives it to try biting a Steel-type Pokémon.
+      </Text> */}
 
-      <Box mt={50} className={classes.featuresContainer}>
-        {features.map((feature, index) => (
-          <Card
-            key={feature.title}
-            shadow="sm"
-            radius="lg"
-            className={classes.featureCard}
-            p={0}
-          >
-            <Flex
-              direction={{ base: "column", md: feature.reverse ? "row-reverse" : "row" }}
-              gap={0}
-            >
-              <Box p="xl" className={classes.textContent}>
-                <feature.icon
-                  style={{ width: rem(40), height: rem(40) }}
-                  stroke={2}
-                  color={theme.colors.blue[6]}
-                  className={classes.featureIcon}
-                />
-                <Title order={3} className={classes.featureTitle} mt="sm">
-                  {feature.title}
-                </Title>
-                <Text fz="md" mt="sm" className={classes.featureDescription}>
-                  {feature.description}
-                </Text>
-              </Box>
-              
-              <Box className={classes.imageContainer}>
-                <Image
-                  src={feature.image}
-                  alt={feature.title}
-                  height={300}
-                  className={classes.featureImage}
-                />
-              </Box>
-            </Flex>
-          </Card>
-        ))}
-      </Box>
+      <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl" mt={50}>
+        {features}
+      </SimpleGrid>
     </Container>
   );
 }
