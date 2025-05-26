@@ -117,7 +117,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
 
   const handleCourseTopicsOptionSelect = async (value?: string[]) => {
     if (!value || value.length === 0) {
-      setSelectedCourseTopicsOption([]);
+      setCourseTopicsOptionData([]);
       return;
     }
     

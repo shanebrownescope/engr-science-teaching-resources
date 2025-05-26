@@ -1,5 +1,5 @@
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
-import { searchParams } from "@/utils/types_v2";
+import { searchParams } from "@/utils/types";
 
 const ResetPasswordPage = ({ searchParams }: searchParams) => {
   return (

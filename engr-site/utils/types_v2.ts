@@ -184,6 +184,36 @@ export type TransformedPasswordResetToken = {
   expiresAt: Date;
 };
 
+export type CommentFileData = {
+  id: number;
+  fileId: number;
+  userId: number;
+  parentCommentId: number | null;
+  commentText: string;
+  uploadDate: string | Date;
+  name: string;
+};
+
+export type CommentLinkData = {
+  id: number;
+  linkId: number;
+  userId: number;
+  parentCommentId: number | null;
+  commentText: string;
+  uploadDate: string | Date;
+  name: string;
+};
+
+export type FetchedCommentFileData = {
+  success?: CommentFileData[];
+  failure?: string;
+};
+
+export type FetchedCommentLinkData = {
+  success?: CommentLinkData[];
+  failure?: string;
+};
+
 export type ReviewsFileData = {
   id: number;
   fileId: number;

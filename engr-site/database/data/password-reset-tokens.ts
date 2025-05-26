@@ -3,7 +3,7 @@ import dbConnect from "../dbConnector";
 export const getPasswordResetTokenByToken = async (token: string) => {
   try {
     const selectQuery = `
-      SELECT * FROM PasswordResetTokens_v3 WHERE token = ?`;
+      SELECT * FROM PasswordResetTokens_v2 WHERE token = ?`;
 
     const { results: passwordToken, error } = await dbConnect(selectQuery, [
       token,
@@ -22,7 +22,7 @@ export const getPasswordResetTokenByToken = async (token: string) => {
 export const getPasswordResetTokenByUserId = async (userId: string) => {
   try {
     const selectQuery = `
-      SELECT * FROM PasswordResetTokens_v3 WHERE userId = ?`;
+      SELECT * FROM PasswordResetTokens_v2 WHERE userId = ?`;
 
     const { results: passwordToken } = await dbConnect(selectQuery, [userId]);
 

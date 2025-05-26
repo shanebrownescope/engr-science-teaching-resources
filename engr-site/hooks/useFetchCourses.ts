@@ -1,6 +1,6 @@
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import { FormattedData } from "@/utils/formatting";
-import { FetchedFormattedData } from "@/utils/types_v2";
+import { FetchedFormattedData } from "@/utils/types";
 import { useState, useEffect } from "react";
 
 const useFetchCourses = (limit?: number) => {

@@ -1,7 +1,7 @@
 "use server";
 import dbConnect from "@/database/dbConnector";
 import { FormattedData, lowercaseAndReplaceSpace } from "@/utils/formatting";
-import { FetchedFormattedData } from "@/utils/types_v2";
+import { FetchedFormattedData } from "@/utils/types";
 
 /**
  * Fetches tags by tag id from the database

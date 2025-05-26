@@ -3,7 +3,7 @@
 import { getPasswordResetTokenByToken } from "@/database/data/password-reset-tokens";
 import { getUserById } from "@/database/data/user";
 import { ResetPasswordSchema } from "@/schemas";
-import { PasswordResetTokenData, UserData } from "@/utils/types_v2";
+import { PasswordResetTokenData, UserData } from "@/utils/types";
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/database/dbConnector";
@@ -54,7 +54,7 @@ export const resetPasswordAction = async (
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const updateQuery = `
-    UPDATE Users_v3
+    UPDATE Users_v2
     SET password = ?
     WHERE id = ?`;
 
@@ -68,7 +68,7 @@ export const resetPasswordAction = async (
   }
 
   const deleteQuery = `
-    DELETE FROM PasswordResetTokens_v3
+    DELETE FROM PasswordResetTokens_v2
     WHERE userId = ? AND id = ?`;
 
   await dbConnect(deleteQuery, [existingUser.id, existingToken.id]);
