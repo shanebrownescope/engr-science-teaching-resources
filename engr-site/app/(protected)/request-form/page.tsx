@@ -35,7 +35,7 @@ export default function RequestForm() {
         if (courseData.success) {
           setCourses(courseData.success);
         } else {
-          console.error("Failed to fetch courses:", courseData.failure || "Unknown error");
+          console.error("Failed to fetch courses:", courseData.failure || courseData.error);
         }
       } catch (err) {
         console.error("Error fetching courses:", err);
@@ -88,6 +88,9 @@ export default function RequestForm() {
       } else if (result.error) {
         console.error("Submission error:", result.error);
         setError(result.error);
+      } else if (result.failure) {
+        console.error("Submission failed:", result.failure);
+        setError(result.failure);
       } else {
         setError('An unknown error occurred while submitting the request');
       }
