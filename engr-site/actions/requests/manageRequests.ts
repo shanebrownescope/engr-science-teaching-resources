@@ -18,7 +18,7 @@ export const approveExternalRequest = async (id: number) => {
     }
 
     const updateQuery = `
-      UPDATE ExternalRequests 
+      UPDATE ExternalRequests_v3 
       SET status = 'approved', updatedAt = NOW() 
       WHERE id = ?
     `;
@@ -49,7 +49,7 @@ export const rejectExternalRequest = async (id: number) => {
     }
 
     const updateQuery = `
-      UPDATE ExternalRequests 
+      UPDATE ExternalRequests_v3 
       SET status = 'rejected', updatedAt = NOW() 
       WHERE id = ?
     `;
