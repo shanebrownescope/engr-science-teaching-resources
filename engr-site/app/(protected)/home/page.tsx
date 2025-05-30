@@ -4,9 +4,10 @@ import { Container, Title, Text, Group, Badge, Space, Flex } from "@mantine/core
 import { FeaturesCards, GetInTouchSimple, InstructionsContainer, SearchButton } from "@/components/mantine";
 import classes from "./home.module.css";
 import requireAuth from "@/actions/auth/requireAuth";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const Home = async () => {
-  await requireAuth();
+  useRequireAuth()
 
   return (
     <div className={classes.wrapper}>
