@@ -15,7 +15,6 @@ import { useForm } from "@mantine/form";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import { useEffect, useState } from "react";
 import { FormattedData } from "@/utils/formatting";
-import { RequestFormData } from "@/actions/requests/submitRequest";
 import { submitExternalRequest } from "@/actions/requests/submitExternalRequest";
 import { IconAlertCircle, IconCheck } from '@tabler/icons-react';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
@@ -52,14 +51,14 @@ export default function RequestForm() {
       course: "",
     },
     validate: {
-      name: (value) => value.trim().length < 2 ? 'Name must be at least 2 characters' : null,
+      name: (value) => value.trim().length === 0 ? 'Name is required' : null,
       email: (value) => value.trim().length === 0 ? 'Email is required' : null,
       description: (value) => value.trim().length === 0 ? 'Description is required' : null,
       course: (value) => !value ? 'Please select a course' : null,
     },
   });
 
-  const handleSubmit = async (values: RequestFormData) => {
+  const handleSubmit = async (values: any) => {
     setLoading(true);
     setError(null);
     setSuccess(null);

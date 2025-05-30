@@ -167,5 +167,5 @@ export const ExternalRequestSchema = z.object({
     (val) => (typeof val === 'string' && val.trim() !== '' ? parseInt(val, 10) : val),
     z.number({ required_error: "Please select a course", invalid_type_error: "Course ID must be a number" }).int().positive({ message: "Please select a valid course" })
   ),
-  description: z.string().min(10, { message: "Description must be at least 10 characters" }),
+  description: z.string().min(1, { message: "Description cannot be empty" }),
 });

@@ -4,8 +4,21 @@ import * as z from "zod";
 import dbConnect from "@/database/dbConnector";
 import { ExternalRequestSchema } from "@/schemas"; 
 import { revalidatePath } from "next/cache";
+import { transporter } from "@/utils/email";
 
-export const submitExternalRequest = async (values: z.infer<typeof ExternalRequestSchema>) => {
+type RequestFormData = z.infer<typeof ExternalRequestSchema>;
+
+type RequestResponse = {
+  success?: string;
+  error?: string;
+};
+
+/**
+ * Submit external teacher request to database
+ * @param values - Request form data
+ * @returns Object containing operation status
+ */
+export const submitExternalRequest = async (values: RequestFormData): Promise<RequestResponse> => {
   const validatedFields = ExternalRequestSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -14,45 +27,60 @@ export const submitExternalRequest = async (values: z.infer<typeof ExternalReque
 
   const { name, email, courseId, description } = validatedFields.data;
   
-  console.log("=== submitExternalRequest Debug ===");
-  console.log("Submitting request with data:", { name, email, courseId, description });
-  
   try {
     const insertQuery = `
       INSERT INTO ExternalRequests_v3 (name, email, courseId, description, status, createdAt, updatedAt)
       VALUES (?, ?, ?, ?, 'pending', NOW(), NOW())
     `;
 
-    console.log("Executing query:", insertQuery);
-    console.log("With parameters:", [name, email, courseId, description]);
-
-    const dbResult = await dbConnect(insertQuery, [
+    const { results, error } = await dbConnect(insertQuery, [
       name,
       email,
       courseId,
       description
     ]);
 
-    console.log("Database result:", dbResult);
-
-    if (dbResult.error) {
-      console.error("Database error: Unable to submit request:", dbResult.error);
+    if (error) {
+      console.error("Database error: Unable to submit request:", error);
       return { error: "Database error: Unable to submit request." };
     }
 
-    // Assuming the dbConnect returns a results structure where the first element contains insertId (e.g., mysql2)
-    const insertId = dbResult.results?.[0]?.insertId;
-    console.log("Insert ID:", insertId);
-    console.log("Full results:", dbResult.results);
+    const insertId = results[0].insertId;
 
     if (insertId) {
+      
+      // Send email to admin
+      const requestEmailContent = `
+        <p>New External Faculty Request:</p>
+        <p>Name: ${name}</p>
+        <p>Email: ${email}</p>
+        <p>Course ID: ${courseId}</p>
+        <p>Description: ${description}</p>
+      `;
+
+      const mailOptions = {
+        from: process.env.NODEMAILER_EMAIL,
+        to: process.env.NODEMAILER_EMAIL,
+        subject: `New External Faculty Resource Request`,
+        html: requestEmailContent,
+      };
+
+      try {
+        await transporter.sendMail(mailOptions);
+        console.log("Email sent to admin");
+      } catch (emailError) {
+        console.error("Failed to send email:", emailError);
+        // Continue even if email fails, since we've saved to the database
+      }
+
       // After successful data insertion, revalidate the pending requests page cache path so administrators can see the latest list
       console.log("Revalidating path: /dashboard/pending-requests");
       await revalidatePath("/dashboard/pending-requests");
       console.log("Request submitted successfully!");
       return { success: "Request submitted successfully. Administrators will review it." };
+
     } else {
-      console.error("Failed to get insertId after request submission:", dbResult.results);
+      console.error("Failed to get insertId after request submission:", results);
       return { error: "Failed to submit request. Please try again later." };
     }
 
