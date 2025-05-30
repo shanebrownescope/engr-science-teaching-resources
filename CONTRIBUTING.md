@@ -21,9 +21,9 @@ As stated in the [README.md](./README.md) file, credentials are required to acce
 
 ## <span id="overview"> Architecture Overview </span>
 
-![architeture overview](./overview.jpg)
+![architeture overview](./overview.jpeg)
 
-**Figure 1.** Application interaction flow between end users and backend infrastructure
+**Figure 1.** Application interaction flow between end users and backend infrastructure.
 
 ## <span id="nextjs"> Next.js </span>
 
@@ -31,7 +31,7 @@ The project is currently on <a href="https://nextjs.org/blog/next-14">version</a
 
 ## <span id="server-actions"> Server Actions </span>
 
-The project uses server actions for fetching, mutating, and creating data. 
+The project uses server actions for fetching, mutating, and creating data, essentially acting as our API.
 
 All these actions can be found in the [actions](./engr-site/actions/) directory (Please see files for documentation).
 
@@ -186,13 +186,11 @@ Here are some resources about the issue with **the edge**:
 
 ## <span id="features"> Features Implemented </span>
 
-## Implemented Features
-
 Below are the main project requirements that have been successfully implemented:
 
 ### Core Functionality
 - **Advanced Search System**
-  - Keyword search bar (searches resource metadata (matches against all fields in file/link table))
+  - Keyword search bar (searches resource (file/link) metadata)
   - Multi-filter capability:
     - By content type: Exercises | Notes | Interactive | Video
     - By material type: File | Link
@@ -212,17 +210,17 @@ Below are the main project requirements that have been successfully implemented:
 
 ### Content Management
 - **Course Organization**
-  - Course → Course Topic hierarchy
+  - Course → Course Topic (hierarchy)
   - AWS RDS for metadata storage
 - **Resource Uploads**
   - File uploads to AWS S3
-  - Link submissions
+  - Link submissions to AWS RDS
   - Tag resources during upload
 
 ### Community Features
 - **Ratings & Reviews**
   - 5-star rating system
-  - User reviews thread
+  - User reviews thread per resource
 - **Request to Share Resources**
   - External Request Form to share resources
 
