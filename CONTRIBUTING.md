@@ -2,20 +2,28 @@
 
 This is for contributors maintaining the project.
 
+**NOTE** 
+
+As stated in the [README.md](./README.md) file, credentials are required to access all of the services used by this project. Please contact Shane Brown or any of the previous developers for access to these credentials in order to make changes to the live website. 
+
 ## Content
 
 <ol>
-
-<li> <a href="#nextjs"> Next.js </a> </li>
-
- <li> <a href="#server-actions"> Server actions </a> </li>
-
- <li> <a href="#mantine"> Mantinue UI </a></li>
-
- <li><a href="#mysql"> MySQL </a></li>
-
- <li><a href="#next-auth"> Next.auth </a></li>
+  <li><a href="#overview"> Architecture Overview </a></li>
+  <li> <a href="#nextjs"> Next.js </a> </li>
+  <li> <a href="#server-actions"> Server actions </a> </li>
+  <li> <a href="#mantine"> Mantinue UI </a></li>
+  <li><a href="#mysql"> MySQL </a></li>
+  <li><a href="#next-auth"> Next.auth </a></li>
+  <li><a href="#features"> Features Implemented </a></li>
+  <li><a href="#future"> Known Issues and Future Enhancements </a></li>  
 </ol>
+
+## <span id="overview"> Architecture Overview </span>
+
+![architeture overview](./overview.jpg)
+
+**Figure 1.** Application interaction flow between end users and backend infrastructure
 
 ## <span id="nextjs"> Next.js </span>
 
@@ -23,9 +31,9 @@ The project is currently on <a href="https://nextjs.org/blog/next-14">version</a
 
 ## <span id="server-actions"> Server Actions </span>
 
-The project uses server actions for fetching, mutating, and creating data.
+The project uses server actions for fetching, mutating, and creating data. 
 
-All these actions can be found in the [actions](./engr-site/actions/) directory.
+All these actions can be found in the [actions](./engr-site/actions/) directory (Please see files for documentation).
 
 Server actions are sorted by their functionality. (e.g. any auth server action are in `./engr-site/actions/auth`).
 
@@ -87,7 +95,6 @@ Custom components that may also use Mantine objects are loated in the ```custom`
 
 We use Mantine's built-in theming capabilities to ensure a consistent look and feel across the application. The theme configuration can be found in ```/app/layout.tsx```.
 
-
 ## <span id="mysql"> MySQL </span>
 
 Files related to the database can be found in the [database](./engr-site/database) directory.
@@ -108,8 +115,7 @@ You can now call queries to the database and get results in the terminal.
 
 ### Database schema
 
-The file [MASTER.sql](./engr-site/database/MASTER.sql) contains all the
-tables for our database.
+The file [MASTER.sql](./engr-site/database/MASTER.sql) contains all the tables for our database (appended with ```_v3```)
 
 **NOTE**: All relevant data objects and their type conventions can be found in the [types_v2](./engr-site/utils/types_v2.ts) file.
 
@@ -177,3 +183,90 @@ Here are some resources about the issue with **the edge**:
 <ul>
 <li><a href="https://authjs.dev/guides/edge-compatibility#middleware">Edge Compatibility </a> </li>
 </ul>
+
+## <span id="features"> Features Implemented </span>
+
+## Implemented Features
+
+Below are the main project requirements that have been successfully implemented:
+
+### Core Functionality
+- **Advanced Search System**
+  - Keyword search bar (searches resource metadata (matches against all fields in file/link table))
+  - Multi-filter capability:
+    - By content type: Exercises | Notes | Interactive | Video
+    - By material type: File | Link
+    - By taxonomy: Tags | Courses | Course Topics
+    - By contributor
+  - Hierarchical navigation:
+    - Navbar browse path: Courses → Course Topics → Resources
+
+### User Management
+- **Role-Based Access Control**
+  - Roles: Admin | Instructor
+  - Account statuses: Pending | Approved | Activated | Rejected
+- **Authentication**
+  - NextAuth.js implementation: Sign In | Sign Out | Register | Change Password
+  - Email verification
+  - Session management
+
+### Content Management
+- **Course Organization**
+  - Course → Course Topic hierarchy
+  - AWS RDS for metadata storage
+- **Resource Uploads**
+  - File uploads to AWS S3
+  - Link submissions
+  - Tag resources during upload
+
+### Community Features
+- **Ratings & Reviews**
+  - 5-star rating system
+  - User reviews thread
+- **Request to Share Resources**
+  - External Request Form to share resources
+
+### Administrative Tools
+- **Admin Dashboard**
+  - Upload Resources: File | Link
+  - Add Content: Courses | Course Topics
+  - Approve/Reject User Registration Requests
+  - Approve/Reject External Resource Requests 
+
+### Technical Infrastructure
+- **Cloud Services**
+  - AWS S3 for file storage
+  - AWS RDS for database
+- **Responsive UI**
+  - Mantine component library
+
+## <span id="future"> Known Issues and Future Enhancements </span>
+
+### Known Issues
+- **Dashboard Button Rendering**  
+  The Dashboard button in the Navbar occasionally fails to render correctly based on the logged-in user's role, often requiring a page refresh to display properly.
+
+### Future Enhancements
+
+#### Technical Improvements
+- **Automated Testing Pipeline**  
+  Implement CI/CD with Jest, Cypress, or Playwright for end-to-end testing.
+- **Tech Stack Updates**  
+  Upgrade core dependencies (React, Next.js, TypeScript) to their latest stable versions.
+- **Security Audit**  
+  Conduct regular vulnerability scans and implement security best practices.
+
+#### Feature Additions
+- **Admin Creation**
+  Add a feature that allows admins to create other admins. Currently, admins can only be created by manually changing the user's role in the ```Users_v3``` database table.
+- **File Type Support**  
+  Expand supported resource upload formats beyond PDFs (e.g., DOCX, PPT, images).
+- **UI/UX Polish**  
+  - Improve responsive design for all screen sizes . 
+  - Refine visual consistency and accessibility.
+
+#### Testing & Quality
+- **Usability Testing**  
+  Conduct user testing sessions to identify pain points.
+- **Edge Case Testing**  
+  Expand test coverage for uncommon but critical scenarios.

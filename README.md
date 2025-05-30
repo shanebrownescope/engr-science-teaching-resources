@@ -1,6 +1,6 @@
 # E-SCoPe
 
-E-SCoPE is a centralized educational platform tailored to professors seeking to access teaching materials. 
+A centralized educational platform tailored to professors seeking to access and share resources that facilitate active learning and engagement. 
 
 ## Tech Stack
 * <a href="https://nextjs.org" > Next.js </a>
@@ -72,11 +72,82 @@ npm run dev
 
 <a href="https://next-auth.js.org/configuration/nextjs"> Next.auth configuration for Next.js</a>
 
+## Deployment Procedures
+This project is deployed using <a href="https://www.vercel.com" > Vercel </a> and is currently being maintained on our sponsor's Vercel account where deployments and build/runtime logs of the website can be monitored. 
+
+Please contact our project's sponsor, Shane Brown @ OSU, for access to this account if you are interested in helping to maintain this project.
+
+Updates to this project's main branch are automatically deployed, and can be viewed under *Deployments* in the side pane of this repository.
+
+## Maintenance Guidelines
+To keep the project up-to-date, we recommend performing regular maintenance tasks such as the following:
+
+### Dependency Updates  
+- Run `npm outdated` periodically to check for outdated packages.  
+- Update dependencies with `npm update` and test thoroughly.  
+- **Stack Updates**:  
+  - Monitor [Next.js release notes](https://nextjs.org/blog) for breaking changes.  
+  - Track [React.js updates](https://react.dev/blog) for deprecations or new features.  
+  - Subscribe to newsletters (e.g., Mantine, NextAuth) for security patches.  
+
+### Database Backups  
+- Ensure automated backups are enabled in AWS RDS.  
+- Verify backup retention policies.  
+
+### AWS Resource Monitoring  
+- Monitor AWS RDS (CPU, memory, storage) via services such as AWS CloudWatch.  
+- Check S3 bucket storage usage and access logs.  
+
+### Security Audits  
+- Rotate AWS keys and `AUTH_SECRET` every 3–6 months.  
+- Review NextAuth.js and Nodemailer configurations for vulnerabilities.  
+
+### Performance Optimization  
+- Clear unused files from S3 buckets.  
+- Optimize database queries (e.g., add indexes for frequent searches).  
+
+### Technology Upgrade Plan  
+1. **Next.js/React.js**:  
+   - Test upgrades in a staging environment before deploying.  
+   - Use `npm install next@latest react@latest` to target latest stable versions.  
+2. **TypeScript**:  
+   - Review [TS release notes](https://devblogs.microsoft.com/typescript/) for type-checking improvements.  
+3. **Breaking Changes**:  
+   - Check `npm audit` for vulnerabilities after upgrades.  
+   - Refer to [Next.js migration guides](https://nextjs.org/docs/app/getting-started) for version-specific steps.  
+
+## Troubleshooting
+Common errors we've encountered: 
+
+### Database Connection Failures
+
+**Symptoms**:
+- "DB timeout" or "ECONNREFUSED" errors  
+- "Too many connections" errors  
+
+**Solutions**:
+1. **Basic Checks**:
+   - Verify `.env.local` RDS credentials (ensure no typos).  
+   - Confirm AWS RDS instance is running (check AWS Console).  
+   - Ensure security group allows inbound traffic on port `3306`.  
+
+2. **Connection Pool Issues**:
+   - If seeing "Too many connections":
+     - Close all locally running instances of the project and wait a few minutes before relaunching.
+
+### Vercel Deployment Failures
+
+**Symptoms**:
+- Build Errors during deployment.
+
+**Solutions**:
+1. **Basic Checks**:
+   - Review Vercel’s build logs for any conflicts and make changes accordingly.
+
 ## Joining the community
 Before users can login and use the site, they first have to sign up and get authenticated by our team.
 
 Once approved or rejected, the user will get an email informing them and the user will be able to login and use the site if approved.
-
 
 ## Contributing Information
 Users that want to contribute to site will need to submit a form with the necessary details of the resources they want to add. 
