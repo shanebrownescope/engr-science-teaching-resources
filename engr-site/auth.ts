@@ -76,5 +76,8 @@ export const {
   },
   // adapter: TypeORMAdapter(process.env.AUTH_TYPEORM_CONNECTION!),
   session: { strategy: "jwt" },
+  pages: {
+    signIn: "/auth/login",
+  },
   ...authConfig,
 });

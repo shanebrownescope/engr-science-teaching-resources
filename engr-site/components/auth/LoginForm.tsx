@@ -57,6 +57,7 @@ export const LoginForm = () => {
 
       if (result && result.success) {
         setSuccess(result.success);
+        window.location.href = "/home"; // Force full page reload
       }
     } catch (error) {
       setError("root", { message: "Error" });
