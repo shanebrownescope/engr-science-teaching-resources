@@ -244,6 +244,9 @@ Below are the main project requirements that have been successfully implemented:
 - **Dashboard Button Rendering**  
   The Dashboard button in the Navbar occasionally fails to render correctly based on the logged-in user's role, often requiring a page refresh to display properly.
 
+- **Handle Duplicate Course Topics**  
+  When selecting 'Add Course Topics' on the Dashboard menu, duplicate course topics can be added. This issue was overlooked and came to our attention too late during the project. Course topic names should be unique under each Course. 
+
 ### Future Enhancements
 
 #### Technical Improvements
