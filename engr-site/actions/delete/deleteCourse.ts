@@ -13,13 +13,19 @@ const deleteCourse = async (courseId: string) => {
   try {
     const user = await getCurrentUser();
 
-    if (user?.role && user.role !== "admin") {
-      return { error: "Not authenticated" };
+    if (!user || user.role !== "admin") {
+      return { error: "Not authenticated" }; 
+    }
+
+    // Normalize and validate `courseId` before any DB calls
+    const id = parseInt(String(courseId).trim(), 10);
+    if (Number.isNaN(id) || id <= 0) {
+      return { error: "Invalid courseId" };
     }
 
     // Check if course exists
-    const checkCourseQuery = `SELECT * FROM Courses_v2 WHERE id = ?`;
-    const { results: existingCourseResults, error: checkError } = await dbConnect(checkCourseQuery, [parseInt(courseId)]);
+    const checkCourseQuery = `SELECT * FROM Courses_v3 WHERE id = ?`;
+    const { results: existingCourseResults, error: checkError } = await dbConnect(checkCourseQuery, [id]);
 
     if (checkError) {
       return { error: "Failed to check existing course" };
@@ -29,14 +35,10 @@ const deleteCourse = async (courseId: string) => {
       return { error: "Course not found" };
     }
 
-    // WIP/Optional: Check for related data before deletion (not sure if needed yet)
-    // We might want to prevent deletion if there are course topics or resources
-    // Uncomment the following if you want to check for related data:
-
-    /*
+    // Check for related data before deletion
     // Check for course topics
-    const checkTopicsQuery = `SELECT COUNT(*) as count FROM CourseTopics_v2 WHERE courseId = ?`;
-    const { results: topicsResults, error: topicsError } = await dbConnect(checkTopicsQuery, [parseInt(courseId)]);
+    const checkTopicsQuery = `SELECT COUNT(*) as count FROM CourseTopics_v3 WHERE courseId = ?`;
+    const { results: topicsResults, error: topicsError } = await dbConnect(checkTopicsQuery, [id]);
     
     if (topicsError) {
       return { error: "Failed to check course topics" };
@@ -46,22 +48,21 @@ const deleteCourse = async (courseId: string) => {
       return { error: "Cannot delete course with existing course topics. Please delete all course topics first." };
     }
 
-    // Check for resources
-    const checkResourcesQuery = `SELECT COUNT(*) as count FROM Resources WHERE courseId = ?`;
-    const { results: resourcesResults, error: resourcesError } = await dbConnect(checkResourcesQuery, [parseInt(courseId)]);
+    // Check for external requests
+    const checkRequestsQuery = `SELECT COUNT(*) as count FROM ExternalRequests_v3 WHERE courseId = ?`;
+    const { results: requestsResults, error: requestsError } = await dbConnect(checkRequestsQuery, [id]);
     
-    if (resourcesError) {
-      return { error: "Failed to check course resources" };
+    if (requestsError) {
+      return { error: "Failed to check external requests" };
     }
     
-    if (resourcesResults && resourcesResults[0]?.count > 0) {
-      return { error: "Cannot delete course with existing resources. Please delete all resources first." };
+    if (requestsResults && requestsResults[0]?.count > 0) {
+      return { error: "Cannot delete course with existing external requests. Please handle all external requests first." };
     }
-    */
 
     // Delete the course
-    const deleteQuery = `DELETE FROM Courses_v2 WHERE id = ?`;
-    const { results, error } = await dbConnect(deleteQuery, [parseInt(courseId)]);
+    const deleteQuery = `DELETE FROM Courses_v3 WHERE id = ?`;
+    const { results, error } = await dbConnect(deleteQuery, [id]);
 
     if (error) {
       return { error: "Failed to delete course" };
