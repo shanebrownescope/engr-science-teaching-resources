@@ -21,15 +21,20 @@ jobs:
 
     - name: Install dependencies
       run: npm install
+      working-directory: ./engr-site
 
     - name: Run TypeScript type check
       run: npx tsc --noEmit
+      working-directory: ./engr-site
 
     - name: Run build
       run: npm run build
+      working-directory: ./engr-site
 
     - name: Run tests
       run: npm test || echo "No tests defined yet"
+      working-directory: ./engr-site
 
     - name: Audit dependencies
       run: npm audit --audit-level=moderate
+      working-directory: ./engr-site
