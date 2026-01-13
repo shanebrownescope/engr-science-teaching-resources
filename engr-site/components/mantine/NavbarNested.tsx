@@ -41,12 +41,15 @@ const mockdataDesktop = [
     ],
   },
   {
-    label: "Add content",
+    label: "Add Content",
     icon: IconCalendarStats,
     initiallyOpened: true,
     links: [
       { label: "Courses", link: "/dashboard/courses" },
       { label: "Course Topics", link: "/dashboard/course-topics" },
+      { label: "Resource Types", link: "/dashboard/resource-types" },
+      { label: "Concepts", link: "/dashboard/concepts" },
+      { label: "Manage Courses", link: "/courses/manage" },
     ],
   },
   {

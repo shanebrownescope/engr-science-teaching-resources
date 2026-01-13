@@ -5,10 +5,12 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { FormattedData } from "@/utils/formatting";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
+import { useCurrentRole } from "@/hooks/useCurrentRole";
 
 export const Navbar = () => {
   const pathname = usePathname();
   const [courseList, setCourseList] = useState<any>();
+  const role = useCurrentRole();
 
   // const [courseList, setCourseList] = useState<formattedData[] | undefined>()
 
@@ -86,6 +88,18 @@ export const Navbar = () => {
                 {item.name}
               </Link>
             ))}
+            
+            {/* Add Manage Courses link for admins */}
+            {role === "admin" && (
+              <Link 
+                href="/courses/manage"
+                className={`${styles.manageCourses} ${
+                  pathname === "/courses/manage" && styles.selected
+                }`}
+              >
+                Manage Courses
+              </Link>
+            )}
           </div>
         </div>
 
