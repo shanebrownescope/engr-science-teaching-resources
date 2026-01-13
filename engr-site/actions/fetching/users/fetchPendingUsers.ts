@@ -1,7 +1,7 @@
 "use server";
 
 import { getPendingUsers } from "@/database/data/user";
-import { UserData } from "@/utils/types";
+import { UserData } from "@/utils/types_v2";
 
 export type FetchPendingUsersData =
   | { success: UserData[] }

@@ -3,7 +3,7 @@
 import { getPasswordResetTokenByToken } from "@/database/data/password-reset-tokens";
 import { getUserById } from "@/database/data/user";
 import { ResetPasswordSchema } from "@/schemas";
-import { PasswordResetTokenData, UserData } from "@/utils/types";
+import { PasswordResetTokenData, UserData } from "@/utils/types_v2";
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/database/dbConnector";

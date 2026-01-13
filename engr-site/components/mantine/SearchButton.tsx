@@ -37,9 +37,7 @@ export function SearchButton(props: TextInputProps) {
   };
 
   const performSearch = () => {
-    if (inputValue.trim()) {
-      router.push(`/search?q=${encodeURIComponent(inputValue.trim())}`);
-    }
+    router.push(`/search?q=${encodeURIComponent(inputValue.trim())}`);
   };
 
   return (

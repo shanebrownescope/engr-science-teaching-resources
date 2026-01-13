@@ -1,0 +1,39 @@
+.wrapper {
+  position: relative;
+}
+
+.hero {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  padding-bottom: 0;
+}
+
+.mainTitle {
+  font-size: 2.8rem;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  background: linear-gradient(to right, #ffa860, #ff2e2e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 70vh;
+  }
+  .mainTitle {
+    font-size: 2rem;
+  }
+}
+
+.description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}

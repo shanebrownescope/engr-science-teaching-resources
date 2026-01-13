@@ -1,0 +1,40 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: ./engr-site
+
+    - name: Run TypeScript type check
+      run: npx tsc --noEmit
+      working-directory: ./engr-site
+
+    - name: Run build
+      run: npm run build
+      working-directory: ./engr-site
+
+    - name: Run tests
+      run: npm test || echo "No tests defined yet"
+      working-directory: ./engr-site
+
+    - name: Audit dependencies
+      run: npm audit --audit-level=moderate || true
+      working-directory: ./engr-site

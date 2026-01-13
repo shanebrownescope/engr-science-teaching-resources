@@ -10,7 +10,7 @@ import { FormError } from "@/components/FormError";
 import { FormSuccess } from "@/components/FormSuccess";
 
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
-import { FormSelectProps } from "@/utils/types";
+import { FormSelectProps } from "@/utils/types_v2";
 import { useRouter } from "next/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import styles from "@/styles/form.module.css";

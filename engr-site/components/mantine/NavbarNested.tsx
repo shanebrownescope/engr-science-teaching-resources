@@ -53,12 +53,12 @@ const mockdataDesktop = [
     ],
   },
   {
-    label: "Registration Requests",
+    label: "Manage Requests",
     icon: IconNotes,
     initiallyOpened: true,
     links: [
-      { label: "Pending Users", link: "/dashboard/pending-users" },
-      { label: "Pending Request Forms", link: "/dashboard/pending-requests" }
+      { label: "User Registrations", link: "/dashboard/pending-users" },
+      { label: "Resource Request Forms", link: "/dashboard/pending-requests" }
     ],
   },
 ];

@@ -52,20 +52,6 @@ export function FeaturesCards() {
 
   return (
     <Container size="lg" py="xl" className={classes.container}>
-      <Group justify="center">
-        <Badge variant="filled" size="lg">
-          Brought to you by Oregon State University
-        </Badge>
-      </Group>
-
-      <Title order={2} className={classes.title} ta="center" mt="sm">
-        Interactive Learning & Engagement Repository
-      </Title>
-
-      <Text c="dimmed" className={classes.description} ta="center" mt="md">
-        Connecting educators through curated, community-rated learning materials
-      </Text>
-
       <Box mt={50} className={classes.featuresContainer}>
         {features.map((feature, index) => (
           <Card

@@ -173,9 +173,6 @@ export const fetchSearchResults = async (
           return processFilesAndLinks(item);
         },
       );
-
-      console.log("SEARCH RESULTS FOR ", searchQuery, " AFTER FORMATTING (num results: ", formattedData.length, "): ")
-
       return { success: formattedData, failure: undefined };
     }
 
