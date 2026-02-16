@@ -1,4 +1,4 @@
-import { LinkData } from "@/utils/types_v2";
+import { LinkData } from "@/utils/types";
 import dbConnect from "../dbConnector";
 
 export const getLinkById = async (id: string): Promise<LinkData | null> => {
