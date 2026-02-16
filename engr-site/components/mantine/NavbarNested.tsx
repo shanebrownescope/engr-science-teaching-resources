@@ -41,21 +41,24 @@ const mockdataDesktop = [
     ],
   },
   {
-    label: "Add content",
+    label: "Add Content",
     icon: IconCalendarStats,
     initiallyOpened: true,
     links: [
       { label: "Courses", link: "/dashboard/courses" },
       { label: "Course Topics", link: "/dashboard/course-topics" },
+      { label: "Resource Types", link: "/dashboard/resource-types" },
+      { label: "Concepts", link: "/dashboard/concepts" },
+      { label: "Manage Courses", link: "/courses/manage" },
     ],
   },
   {
-    label: "Manage Requests",
+    label: "Registration Requests",
     icon: IconNotes,
     initiallyOpened: true,
     links: [
-      { label: "User Registrations", link: "/dashboard/pending-users" },
-      { label: "Resource Request Forms", link: "/dashboard/pending-requests" }
+      { label: "Pending Users", link: "/dashboard/pending-users" },
+      { label: "Pending Request Forms", link: "/dashboard/pending-requests" }
     ],
   },
 ];
