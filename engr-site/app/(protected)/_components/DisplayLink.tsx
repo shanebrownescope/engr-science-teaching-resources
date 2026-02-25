@@ -1,10 +1,10 @@
-import { 
-  Container, 
-  Text, 
-  Group, 
-  Badge, 
-  Rating, 
-  Stack, 
+import {
+  Container,
+  Text,
+  Group,
+  Badge,
+  Rating,
+  Stack,
   Divider,
   Paper,
   Title,
@@ -15,6 +15,7 @@ import { IconCalendar, IconUser, IconFile, IconTag, IconFileDescription, IconBoo
 import { trimCapitalizeFirstLetter } from "@/utils/helpers";
 import { FetchedLink } from "@/utils/types_v2";
 import classes from "./DisplayFileLink.module.css"; // Create this CSS module
+import { DeleteLinkButton } from "./DeleteLinkButton";
 
 type DisplayLinkProps = {
   link: FetchedLink;
@@ -31,28 +32,32 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
     <Container size="xl" py="md">
       <Paper withBorder radius="md" p="md" className={classes.resourceContainer}>
         <Stack gap="sm">
-          {/* Metadata Section */}
-          <Group justify="space-between" wrap="nowrap">
-            <Tooltip label="Resource type">
-              <Group gap="xs">
-                <IconFileDescription size={16} />
-                <Text size="sm">{trimCapitalizeFirstLetter(link.resourceType)}</Text>
-              </Group>
-            </Tooltip>
+          {/* Metadata Section and Actions */}
+          <Group justify="space-between" align="center" wrap="nowrap">
+            <Group justify="flex-start" wrap="wrap" gap="md">
+              <Tooltip label="Resource type">
+                <Group gap="xs">
+                  <IconFileDescription size={16} />
+                  <Text size="sm">{trimCapitalizeFirstLetter(link.resourceType)}</Text>
+                </Group>
+              </Tooltip>
 
-            <Tooltip label="Contributor">
-              <Group gap="xs">
-                <IconUser size={16} />
-                <Text size="sm">{link.contributor || "Anonymous"}</Text>
-              </Group>
-            </Tooltip>
+              <Tooltip label="Contributor">
+                <Group gap="xs">
+                  <IconUser size={16} />
+                  <Text size="sm">{link.contributor || "Anonymous"}</Text>
+                </Group>
+              </Tooltip>
 
-            <Tooltip label="Upload Date">
-              <Group gap="xs">
-                <IconCalendar size={16} />
-                <Text size="sm">{formattedDate}</Text>
-              </Group>
-            </Tooltip>
+              <Tooltip label="Upload Date">
+                <Group gap="xs">
+                  <IconCalendar size={16} />
+                  <Text size="sm">{formattedDate}</Text>
+                </Group>
+              </Tooltip>
+            </Group>
+
+            <DeleteLinkButton linkId={link.id} uploadedUserId={link.uploadedUserId} />
           </Group>
 
           {/* Rating Section */}
@@ -69,10 +74,10 @@ export const DisplayLink = ({ link }: DisplayLinkProps) => {
 
           <Box>
             <a href={link.linkUrl}>
-            <Group gap={4} align="center">
-              <span>Visit Resource</span>
-              <IconExternalLink size={16} />
-            </Group>
+              <Group gap={4} align="center">
+                <span>Visit Resource</span>
+                <IconExternalLink size={16} />
+              </Group>
             </a>
           </Box>
 

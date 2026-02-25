@@ -1,10 +1,10 @@
-import { 
-  Container, 
-  Text, 
-  Group, 
-  Badge, 
-  Rating, 
-  Stack, 
+import {
+  Container,
+  Text,
+  Group,
+  Badge,
+  Rating,
+  Stack,
   Divider,
   Paper,
   Title,
@@ -15,6 +15,7 @@ import { IconCalendar, IconUser, IconFile, IconTag, IconFileDescription, IconBoo
 import { trimCapitalizeFirstLetter } from "@/utils/helpers";
 import { FetchedFile } from "@/utils/types_v2";
 import classes from "./DisplayFileLink.module.css"; // Create this CSS module
+import { DeleteFileButton } from "./DeleteFileButton";
 
 type DisplayFileProps = {
   file: FetchedFile;
@@ -31,28 +32,32 @@ export const DisplayFile = ({ file }: DisplayFileProps) => {
     <Container size="xl" py="md">
       <Paper withBorder radius="md" p="md" className={classes.resourceContainer}>
         <Stack gap="sm">
-          {/* Metadata Section */}
-          <Group justify="space-between" wrap="nowrap">
-            <Tooltip label="Resource type">
-              <Group gap="xs">
-                <IconFileDescription size={16} />
-                <Text size="sm">{trimCapitalizeFirstLetter(file.resourceType)}</Text>
-              </Group>
-            </Tooltip>
+          {/* Metadata Section and Actions */}
+          <Group justify="space-between" align="center" wrap="nowrap">
+            <Group justify="flex-start" wrap="wrap" gap="md">
+              <Tooltip label="Resource type">
+                <Group gap="xs">
+                  <IconFileDescription size={16} />
+                  <Text size="sm">{trimCapitalizeFirstLetter(file.resourceType)}</Text>
+                </Group>
+              </Tooltip>
 
-            <Tooltip label="Contributor">
-              <Group gap="xs">
-                <IconUser size={16} />
-                <Text size="sm">{file.contributor || "Anonymous"}</Text>
-              </Group>
-            </Tooltip>
+              <Tooltip label="Contributor">
+                <Group gap="xs">
+                  <IconUser size={16} />
+                  <Text size="sm">{file.contributor || "Anonymous"}</Text>
+                </Group>
+              </Tooltip>
 
-            <Tooltip label="Upload Date">
-              <Group gap="xs">
-                <IconCalendar size={16} />
-                <Text size="sm">{formattedDate}</Text>
-              </Group>
-            </Tooltip>
+              <Tooltip label="Upload Date">
+                <Group gap="xs">
+                  <IconCalendar size={16} />
+                  <Text size="sm">{formattedDate}</Text>
+                </Group>
+              </Tooltip>
+            </Group>
+
+            <DeleteFileButton fileId={file.id} uploadedUserId={file.uploadedUserId} />
           </Group>
 
           {/* Rating Section */}
