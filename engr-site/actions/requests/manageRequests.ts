@@ -25,6 +25,23 @@ export const approveExternalRequest = async (id: number) => {
 
     await dbConnect(updateQuery, [id]);
 
+    // Fetch the email for the approved request
+    const getEmailQuery = `SELECT email FROM ExternalRequests_v3 WHERE id = ?`;
+    const { results: requestResult } = await dbConnect(getEmailQuery, [id]);
+
+    if (requestResult && requestResult[0] && requestResult[0].length > 0) {
+      const requestEmail = requestResult[0][0].email;
+
+      // Upgrade the user's role to 'instructor'
+      const roleUpdateQuery = `
+        UPDATE Users_v3 
+        SET role = 'instructor' 
+        WHERE email = ?
+      `;
+      await dbConnect(roleUpdateQuery, [requestEmail]);
+      console.log(`Successfully upgraded role to instructor for user ${requestEmail}`);
+    }
+
     // Logic for sending email notification to user can be added here
 
     return { success: "Request approved" };
@@ -55,6 +72,23 @@ export const rejectExternalRequest = async (id: number) => {
     `;
 
     await dbConnect(updateQuery, [id]);
+
+    // Fetch the email for the rejected request
+    const getEmailQuery = `SELECT email FROM ExternalRequests_v3 WHERE id = ?`;
+    const { results: requestResult } = await dbConnect(getEmailQuery, [id]);
+
+    if (requestResult && requestResult[0] && requestResult[0].length > 0) {
+      const requestEmail = requestResult[0][0].email;
+
+      // Enforce the user's role as 'student'
+      const roleUpdateQuery = `
+        UPDATE Users_v3 
+        SET role = 'student' 
+        WHERE email = ?
+      `;
+      await dbConnect(roleUpdateQuery, [requestEmail]);
+      console.log(`Successfully enforced student role for user ${requestEmail} upon rejection`);
+    }
 
     // Logic for sending email notification to user can be added here
 
