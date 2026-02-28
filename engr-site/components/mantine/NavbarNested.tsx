@@ -28,6 +28,7 @@ import { LinksGroup } from "./NavbarLinksGroup";
 // import { Logo } from './Logo';
 import classes from "./NavbarNested.module.css";
 import { useDisclosure } from "@mantine/hooks";
+import { useCurrentRole } from "@/hooks/useCurrentRole";
 
 const mockdataDesktop = [
   { label: "Dashboard", icon: IconGauge },
@@ -68,8 +69,17 @@ const mockdataDesktop = [
 export function NavbarNested() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
+  const role = useCurrentRole();
 
-  const linksDesktop = mockdataDesktop.map((item) => (
+  const filteredMockData = mockdataDesktop.filter((item) => {
+    if (role === "admin") return true;
+    if (role === "instructor") {
+      return item.label === "Dashboard" || item.label === "Upload resource";
+    }
+    return false;
+  });
+
+  const linksDesktop = filteredMockData.map((item) => (
     <LinksGroup {...item} key={item.label} />
   ));
 
