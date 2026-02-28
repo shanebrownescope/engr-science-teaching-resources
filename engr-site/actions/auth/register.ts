@@ -38,12 +38,12 @@ export const sendApprovalRequestToTeam = async (
     const insertQuery = `
       INSERT INTO Users_v3 (name, email, password, role, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?)`;
 
-    const instructor = "instructor";
+    const student = "student";
     const { results: insertedUser, error } = await dbConnect(insertQuery, [
       username,
       email,
       hashedPassword,
-      instructor,
+      student,
       firstName,
       lastName,
     ]);
