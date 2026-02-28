@@ -10,8 +10,8 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const UploadFile = () => {
   const role = useCurrentRole();
-  if (role != "admin") {
-    console.log("-- not admin");
+  if (role !== "admin" && role !== "instructor") {
+    console.log("-- not admin or instructor");
     redirect("/unauthorized");
     // notFound()
   }
