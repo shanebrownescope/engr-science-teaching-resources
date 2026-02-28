@@ -29,7 +29,7 @@ export const uploadLink = async ({
   resourceType
 }: UploadLinkProps) => {
   const user = await getCurrentUser();
-  if (user?.role && user.role !== "admin") {
+  if (user?.role && user.role !== "admin" && user.role !== "instructor") {
     return { failure: "Not authenticated" };
   }
 
@@ -76,14 +76,14 @@ export const uploadLink = async ({
     linkName = Math.random().toString(36).substring(2, length + 2);
 
     // Check if the linkName already exists in the database
-    linkExists = await fetchLinkByName({name: linkName});
+    linkExists = await fetchLinkByName({ name: linkName });
 
   } while (linkExists.success)
 
   // Fetch contributor information in db if exists, o/w create a new entry
   let contributorId = null
   if (contributor != "Anonymous") {
-    const fetchedContributor = await fetchContributorByName({name: contributor})
+    const fetchedContributor = await fetchContributorByName({ name: contributor })
 
     if (fetchedContributor.success) {
       contributorId = fetchedContributor.success?.id
