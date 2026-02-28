@@ -6,8 +6,8 @@ import styles from "./page.module.css";
 
 const DashboardPage = () => {
   const role = useCurrentRole();
-  if (role != "admin") {
-    console.log("-- not admin");
+  if (role !== "admin" && role !== "instructor") {
+    console.log("-- not admin or instructor");
     redirect("/unauthorized");
     // redirect("/unauthorized");
   }
@@ -20,10 +20,12 @@ const DashboardPage = () => {
           <p className="heading-6 bold"> Want to upload a new resource?</p>
           <p> Click on the links below Upload resource </p>
         </div>
-        <div>
-          <p className="heading-6 bold"> Want to add content to the site?</p>
-          <p> Click on the links below Add content </p>
-        </div>
+        {role === "admin" && (
+          <div>
+            <p className="heading-6 bold"> Want to add content to the site?</p>
+            <p> Click on the links below Add content </p>
+          </div>
+        )}
       </div>
     </ContainerLayout>
   );
