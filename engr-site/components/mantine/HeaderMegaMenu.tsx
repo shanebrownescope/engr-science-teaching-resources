@@ -131,7 +131,7 @@ export function HeaderMegaMenu() {
               </HoverCard.Dropdown>
             </HoverCard>
 
-            {role === "admin" && (
+            {(role === "admin" || role === "instructor") && (
               <Link href="/dashboard" className={classes.link}>
                 Dashboard
               </Link>
