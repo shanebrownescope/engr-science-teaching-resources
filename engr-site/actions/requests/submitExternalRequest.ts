@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import dbConnect from "@/database/dbConnector";
-import { ExternalRequestSchema } from "@/schemas"; 
+import { ExternalRequestSchema } from "@/schemas";
 import { revalidatePath } from "next/cache";
 import { transporter } from "@/utils/email";
 
@@ -26,7 +26,7 @@ export const submitExternalRequest = async (values: RequestFormData): Promise<Re
   }
 
   const { name, email, courseId, description } = validatedFields.data;
-  
+
   try {
     const insertQuery = `
       INSERT INTO ExternalRequests_v3 (name, email, courseId, description, status, createdAt, updatedAt)
@@ -48,7 +48,7 @@ export const submitExternalRequest = async (values: RequestFormData): Promise<Re
     const insertId = results[0].insertId;
 
     if (insertId) {
-      
+
       // Send email to admin
       const requestEmailContent = `
         <p>New External Faculty Request:</p>
