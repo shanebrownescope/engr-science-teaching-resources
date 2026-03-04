@@ -3,18 +3,24 @@ import { useState, useEffect } from "react";
 import { fetchCourses } from "@/actions/fetching/courses/fetchCourses";
 import { FormattedData } from "@/utils/formatting";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
-import { notFound, redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { LinkUpload } from "../../_components/LinkUpload";
+import { useSession } from "next-auth/react";
 
 const UploadLink = () => {
+  const { status } = useSession();
   const role = useCurrentRole();
-  if (role !== "admin" && role !== "instructor") {
-    console.log("-- not admin or instructor");
-    redirect("/unauthorized");
-    // notFound()
-  }
+  const router = useRouter();
 
   const [coursesOptionsData, setCoursesOptionsData] = useState<FormattedData[] | undefined>();
+
+  useEffect(() => {
+    if (status === "authenticated" && role !== "admin" && role !== "instructor") {
+      console.log("-- not admin or instructor, redirecting");
+      router.push("/unauthorized");
+    }
+  }, [status, role, router]);
+
   useEffect(() => {
     const fetchAllCourses = async () => {
       const fetchedCourses = await fetchCourses();
@@ -26,6 +32,10 @@ const UploadLink = () => {
 
     fetchAllCourses();
   }, []);
+
+  if (status === "loading" || (status === "authenticated" && role !== "admin" && role !== "instructor")) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
