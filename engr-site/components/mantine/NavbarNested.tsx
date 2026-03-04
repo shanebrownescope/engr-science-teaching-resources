@@ -30,12 +30,13 @@ import classes from "./NavbarNested.module.css";
 import { useDisclosure } from "@mantine/hooks";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 
-const mockdataDesktop = [
-  { label: "Dashboard", icon: IconGauge },
+const allNavData = [
+  { label: "Dashboard", icon: IconGauge, roles: ["admin", "instructor"] },
   {
     label: "Upload resource",
     icon: IconNotes,
     initiallyOpened: true,
+    roles: ["admin", "instructor"],
     links: [
       { label: "Files", link: "/dashboard/upload-file" },
       { label: "Links", link: "/dashboard/upload-link" },
@@ -45,6 +46,7 @@ const mockdataDesktop = [
     label: "Add content",
     icon: IconCalendarStats,
     initiallyOpened: true,
+    roles: ["admin"],
     links: [
       { label: "Courses", link: "/dashboard/courses" },
       { label: "Course Topics", link: "/dashboard/course-topics" },
@@ -54,6 +56,7 @@ const mockdataDesktop = [
     label: "Manage Requests",
     icon: IconNotes,
     initiallyOpened: true,
+    roles: ["admin"],
     links: [
       { label: "User Registrations", link: "/dashboard/pending-users" },
       { label: "Resource Request Forms", link: "/dashboard/pending-requests" }
@@ -71,15 +74,11 @@ export function NavbarNested() {
     useDisclosure(false);
   const role = useCurrentRole();
 
-  const filteredMockData = mockdataDesktop.filter((item) => {
-    if (role === "admin") return true;
-    if (role === "instructor") {
-      return item.label === "Dashboard" || item.label === "Upload resource";
-    }
-    return false;
-  });
+  const navData = allNavData.filter((item) =>
+    item.roles.includes(role ?? "")
+  );
 
-  const linksDesktop = filteredMockData.map((item) => (
+  const linksDesktop = navData.map((item) => (
     <LinksGroup {...item} key={item.label} />
   ));
 
