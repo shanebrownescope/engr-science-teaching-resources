@@ -1,6 +1,7 @@
 "use server";
 
 import { getCourseById, getCourseByName } from "@/database/data/courses";
+import { getCourseTopicByNameAndCourseId } from "@/database/data/courseTopics";
 import dbConnect from "@/database/dbConnector";
 import { CreateCourseTopicsSchema } from "@/schemas";
 import { getCurrentUser } from "@/utils/authHelpers";
@@ -28,14 +29,19 @@ const createCourseTopic = async (
     }
 
     const { courseTopicName, courseId } = validatedFields.data;
+    const formattedCourseTopicName = capitalizeWords(courseTopicName);
 
     const existingCourse = await getCourseById(courseId);
     if (!existingCourse) {
       return { error: "Course id not found" };
     }
 
+    const existingTopic = await getCourseTopicByNameAndCourseId(formattedCourseTopicName, courseId);
+    if (existingTopic) {
+      return { error: "Topic name already exists in this course" };
+    }
+
     const insertQuery = `INSERT INTO CourseTopics_v3 (courseTopicName, courseId) VALUES (?, ?)`;
-    const formattedCourseTopicName = capitalizeWords(courseTopicName);
     const { results } = await dbConnect(insertQuery, [
       formattedCourseTopicName,
       courseId,

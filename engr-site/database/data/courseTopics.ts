@@ -28,6 +28,21 @@ export const getCourseTopicByNameAndId = async (
   }
 };
 
+export const getCourseTopicByNameAndCourseId = async (
+  name: string,
+  courseId: string,
+): Promise<CourseTopicData | null> => {
+  try {
+    const selectQuery = `
+      SELECT * FROM CourseTopics_v3 WHERE courseTopicName = ? AND courseId = ?`;
+    const { results, error } = await dbConnect(selectQuery, [name, courseId]);
+    if (results[0].length > 0) return results[0][0];
+    return null;
+  } catch (error) {
+    return null;
+  }
+};
+
 export const getCourseTopicByName = async (
   name: string,
 ): Promise<CourseTopicData | null> => {
