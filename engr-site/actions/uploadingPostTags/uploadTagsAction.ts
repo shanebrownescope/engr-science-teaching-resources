@@ -49,7 +49,7 @@ export const createTagPostFile = async (tags: string[], fileId: number) => {
   console.log("Processing tags:", tags);
 
   const user = await getCurrentUser();
-  if (!user?.id || user?.role !== "admin") {
+  if (!user?.id || (user?.role !== "admin" && user?.role !== "instructor")) {
     return { failure: "Not authenticated" };
   }
 
@@ -94,7 +94,7 @@ export const createTagPostFile = async (tags: string[], fileId: number) => {
     return {
       success: true,
       tags: validTags,
-      message: `Successfully processed tags: ${validTags.map((t: {name: string, id: any}) => t.name).join(', ')}`,
+      message: `Successfully processed tags: ${validTags.map((t: { name: string, id: any }) => t.name).join(', ')}`,
     };
   } catch (error) {
     console.error("Error processing tags:", error);
@@ -106,7 +106,7 @@ export const createTagPostLink = async (tags: string[], linkId: number) => {
   console.log("Processing tags for link:", tags);
 
   const user = await getCurrentUser();
-  if (!user?.id || user?.role !== "admin") {
+  if (!user?.id || (user?.role !== "admin" && user?.role !== "instructor")) {
     return { failure: "Not authenticated" };
   }
 
@@ -123,7 +123,7 @@ export const createTagPostLink = async (tags: string[], linkId: number) => {
           console.error(`Failed to process tag "${tagName}":`, tagResponse.failure);
           return null;
         }
-        
+
         // Associate tag with link in LinkTags table
         const linkTagQuery = `INSERT INTO LinkTags_v3 (linkId, tagId) VALUES (?, ?)`;
         const { results: linkTagResult, error: linkTagError } = await dbConnect(linkTagQuery, [
@@ -151,7 +151,7 @@ export const createTagPostLink = async (tags: string[], linkId: number) => {
     return {
       success: true,
       tags: validTags,
-      message: `Successfully associated tags with link: ${validTags.map((t: {name: string, id: any}) => t.name).join(', ')}`,
+      message: `Successfully associated tags with link: ${validTags.map((t: { name: string, id: any }) => t.name).join(', ')}`,
     };
   } catch (error) {
     console.error("Error processing link tags:", error);

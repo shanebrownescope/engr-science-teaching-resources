@@ -44,8 +44,8 @@ type FormErrorsLinkUpload = {
 export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
   const router = useRouter();
   const role = useCurrentRole();
-  if (role != "admin") {
-    console.log("-- not admin");
+  if (role !== "admin" && role !== "instructor") {
+    console.log("-- not admin or instructor");
     router.push("/unauthorized");
   }
   //* state for form
@@ -109,7 +109,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     } catch (error) {
       console.error('Error fetching course topics:', error);
       setStatusMessage("Failed to fetch course topics");
-      setErrors({ ...errors, root: error as string });
+      setErrors({ ...errors, root: error instanceof Error ? error.message : String(error) });
       setCourseTopicsOptionData([]);
       setSelectedCourseTopicsOption([]);
     }
@@ -120,7 +120,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
       setSelectedCourseTopicsOption([]);
       return;
     }
-    
+
     setSelectedCourseTopicsOption(value);
   };
 
@@ -322,7 +322,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           <label> Select course(s) </label>
           <MultiSelect
             data={coursesOptionsData?.map((course) => ({
-              value: String(course.id), 
+              value: String(course.id),
               label: course.name
             }))}
             value={selectedCoursesOption || []}
@@ -335,10 +335,10 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
         </div>
 
         <div>
-        <label> Select course topic(s) </label>
+          <label> Select course topic(s) </label>
           <MultiSelect
             data={courseTopicsOptionData?.map((topic) => ({
-              value: String(topic.id), 
+              value: String(topic.id),
               label: topic.name
             }))}
             value={selectedCourseTopicsOption || []}
@@ -383,14 +383,14 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
           loading={loading}
           handleAddTag={handleAddTag}
           handleTagChange={handleTagChange}
-          handleRemoveTag={handleRemoveTag} 
+          handleRemoveTag={handleRemoveTag}
         />
 
         <button
           className={styles.formButton}
           disabled={loading}
           type="submit"
-          // disable={linkUrl != undefined ? true : false}
+        // disable={linkUrl != undefined ? true : false}
         >
           Upload
         </button>

@@ -84,8 +84,8 @@ export const getSignedURL = async ({
 }: GetSignedURLProps) => {
   const user = await getCurrentUser();
 
-  // If the user is not logged in, or is not an admin, return an error
-  if (user?.role && user.role !== "admin") {
+  // If the user is not logged in, or is not an admin/instructor, return an error
+  if (user?.role && user.role !== "admin" && user.role !== "instructor") {
     return { failure: "Not authenticated" };
   }
 
@@ -125,7 +125,7 @@ export const getSignedURL = async ({
     fileName = Math.random().toString(36).substring(2, length + 2);
 
     // Check if the fileName already exists in the database
-    fileExists = await fetchFileByName({name: fileName});
+    fileExists = await fetchFileByName({ name: fileName });
 
   } while (fileExists.success)
 
@@ -152,7 +152,7 @@ export const getSignedURL = async ({
   // Fetch contributor information in db if exists, o/w create a new entry
   let contributorId = null
   if (contributor != "Anonymous") {
-    const fetchedContributor = await fetchContributorByName({name: contributor})
+    const fetchedContributor = await fetchContributorByName({ name: contributor })
 
     if (fetchedContributor.success) {
       contributorId = fetchedContributor.success?.id
