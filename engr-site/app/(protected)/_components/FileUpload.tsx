@@ -95,7 +95,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     } catch (error) {
       console.error('Error fetching course topics:', error);
       setStatusMessage("Failed to fetch course topics");
-      setErrors({ ...errors, root: error as string });
+      setErrors({ ...errors, root: error instanceof Error ? error.message : String(error) });
       setCourseTopicsOptionData([]);
       setSelectedCourseTopicsOption([]);
     }
@@ -272,7 +272,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       }
     } catch (error) {
       console.error("Error during file upload:", error);
-      setErrors({ ...errors, root: error as string });
+      setErrors({ ...errors, root: error instanceof Error ? error.message : String(error) });
       setStatusMessage("failed");
     } finally {
       setLoading(false);
