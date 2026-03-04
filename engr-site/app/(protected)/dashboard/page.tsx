@@ -2,9 +2,9 @@
 import { useEffect } from "react";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import ContainerLayout from "@/components/custom/containerLayout/ContainerLayout";
+import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 const DashboardPage = () => {
   const { status } = useSession();
