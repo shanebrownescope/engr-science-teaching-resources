@@ -84,7 +84,7 @@ export const getSignedURL = async ({
 }: GetSignedURLProps) => {
   const user = await getCurrentUser();
 
-  // If the user is not logged in, or is not an admin, return an error
+  // If the user is not logged in, or is not an admin/instructor, return an error
   if (user?.role && user.role !== "admin" && user.role !== "instructor") {
     return { failure: "Not authenticated" };
   }
