@@ -109,7 +109,7 @@ export const LinkUpload = ({ coursesOptionsData }: LinkUploadProps) => {
     } catch (error) {
       console.error('Error fetching course topics:', error);
       setStatusMessage("Failed to fetch course topics");
-      setErrors({ ...errors, root: error as string });
+      setErrors({ ...errors, root: error instanceof Error ? error.message : String(error) });
       setCourseTopicsOptionData([]);
       setSelectedCourseTopicsOption([]);
     }
