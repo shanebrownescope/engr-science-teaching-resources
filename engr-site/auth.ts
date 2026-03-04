@@ -6,7 +6,7 @@ import { getUserById } from "./database/data/user";
 import { JWT } from "next-auth/jwt";
 
 type ExtendedUser = DefaultSession["user"] & {
-  role: "admin" | "instructor";
+  role: "admin" | "instructor" | "student";
 };
 
 declare module "next-auth" {
@@ -17,7 +17,7 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   interface JWT {
-    role?: "admin" | "instructor";
+    role?: "admin" | "instructor" | "student";
   }
 }
 
