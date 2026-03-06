@@ -305,7 +305,16 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
         {statusMessage && <p className={styles.messageStyle}> {statusMessage} </p>}
         <div>
           <label> Select file </label>
-          <input type="file" accept="pdf" disabled={loading} onChange={handleFileChange} />
+          {/* Added different files other than pdfs in the input field */}
+          <input
+            type="file"
+            accept=".pdf,.mp4,.pptx"
+            disabled={loading}
+            onChange={handleFileChange}
+          />
+          <p style={{ fontSize: "0.8rem", color: "#888", marginTop: "4px" }}>
+            Accepted formats: PDF, MP4, PPTX — Max size: 10MB
+          </p>
           {fileUrl && file && (
             <div>
               <iframe src={fileUrl} />
