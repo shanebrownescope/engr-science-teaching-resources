@@ -31,8 +31,8 @@ type FormErrorsFileUpload = {
 export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   const router = useRouter();
   const role = useCurrentRole();
-  if (role != "admin") {
-    console.log("-- not admin");
+  if (role !== "admin" && role !== "instructor") {
+    console.log("-- not admin or instructor");
     router.push("/unauthorized");
   }
   console.log("data: ", coursesOptionsData);
@@ -66,26 +66,26 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
   const handleCoursesOptionSelect = async (value?: string[]) => {
     // Update the selected courses
     setSelectedCoursesOption(value);
-  
+
     if (!value || value.length === 0) {
       // If no courses are selected, reset the course topics data and selected topics
       setCourseTopicsOptionData([]);
       setSelectedCourseTopicsOption([]);
       return;
     }
-  
+
     try {
       // Fetch course topics for each course ID and combine the results (array of fetched objects)
       const results = await Promise.all(
         value.map((courseId) => fetchCourseTopicsByCourseId(courseId))
       );
-  
+
       // Combine all the course topics into a single array (flatMap == map + flat)
       const combinedCourseTopics = results.flatMap((result) => result.success || []);
-  
+
       // Update the course topics data state
       setCourseTopicsOptionData(combinedCourseTopics);
-  
+
       // Filter the selected course topics to keep only those associated with the remaining courses
       setSelectedCourseTopicsOption((prevSelectedTopics) => {
         return prevSelectedTopics?.filter((topic) =>
@@ -95,7 +95,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
     } catch (error) {
       console.error('Error fetching course topics:', error);
       setStatusMessage("Failed to fetch course topics");
-      setErrors({ ...errors, root: error as string });
+      setErrors({ ...errors, root: error instanceof Error ? error.message : String(error) });
       setCourseTopicsOptionData([]);
       setSelectedCourseTopicsOption([]);
     }
@@ -272,7 +272,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
       }
     } catch (error) {
       console.error("Error during file upload:", error);
-      setErrors({ ...errors, root: error as string });
+      setErrors({ ...errors, root: error instanceof Error ? error.message : String(error) });
       setStatusMessage("failed");
     } finally {
       setLoading(false);
@@ -321,7 +321,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           <label>Select course(s)</label>
           <MultiSelect
             data={coursesOptionsData?.map((course) => ({
-              value: String(course.id), 
+              value: String(course.id),
               label: course.name
             }))}
             value={selectedCoursesOption || []}
@@ -337,7 +337,7 @@ export const FileUpload = ({ coursesOptionsData }: FileUploadProps) => {
           <label> Select course topic(s) </label>
           <MultiSelect
             data={courseTopicsOptionData?.map((topic) => ({
-              value: String(topic.id), 
+              value: String(topic.id),
               label: topic.name
             }))}
             value={selectedCourseTopicsOption || []}

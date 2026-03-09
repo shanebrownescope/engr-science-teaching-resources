@@ -28,13 +28,15 @@ import { LinksGroup } from "./NavbarLinksGroup";
 // import { Logo } from './Logo';
 import classes from "./NavbarNested.module.css";
 import { useDisclosure } from "@mantine/hooks";
+import { useCurrentRole } from "@/hooks/useCurrentRole";
 
-const mockdataDesktop = [
-  { label: "Dashboard", icon: IconGauge },
+const allNavData = [
+  { label: "Dashboard", icon: IconGauge, roles: ["admin", "instructor"] },
   {
     label: "Upload resource",
     icon: IconNotes,
     initiallyOpened: true,
+    roles: ["admin", "instructor"],
     links: [
       { label: "Files", link: "/dashboard/upload-file" },
       { label: "Links", link: "/dashboard/upload-link" },
@@ -44,6 +46,7 @@ const mockdataDesktop = [
     label: "Add Content",
     icon: IconCalendarStats,
     initiallyOpened: true,
+    roles: ["admin"],
     links: [
       { label: "Courses", link: "/dashboard/courses" },
       { label: "Course Topics", link: "/dashboard/course-topics" },
@@ -56,6 +59,7 @@ const mockdataDesktop = [
     label: "Registration Requests",
     icon: IconNotes,
     initiallyOpened: true,
+    roles: ["admin"],
     links: [
       { label: "Pending Users", link: "/dashboard/pending-users" },
       { label: "Pending Request Forms", link: "/dashboard/pending-requests" }
@@ -71,8 +75,13 @@ const mockdataDesktop = [
 export function NavbarNested() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
+  const role = useCurrentRole();
 
-  const linksDesktop = mockdataDesktop.map((item) => (
+  const navData = allNavData.filter((item) =>
+    item.roles.includes(role ?? "")
+  );
+
+  const linksDesktop = navData.map((item) => (
     <LinksGroup {...item} key={item.label} />
   ));
 

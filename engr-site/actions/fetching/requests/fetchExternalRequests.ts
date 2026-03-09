@@ -11,7 +11,7 @@ import { getCurrentUser } from "@/utils/authHelpers";
 export const fetchExternalRequests = async () => {
   try {
     console.log("fetchExternalRequests: Starting...");
-    
+
     const user = await getCurrentUser();
     console.log("fetchExternalRequests: Current user:", user);
 
@@ -37,7 +37,7 @@ export const fetchExternalRequests = async () => {
     }
 
     console.log("fetchExternalRequests: Query successful. Found", results[0]?.length || 0, "records");
-    
+
     return { success: results[0] };
   } catch (error) {
     console.error("fetchExternalRequests: Failed to fetch external requests:", error);
