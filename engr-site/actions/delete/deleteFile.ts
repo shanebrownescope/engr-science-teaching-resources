@@ -29,14 +29,14 @@ export const deleteFileAction = async (fileId: string | number) => {
         const checkFileQuery = `SELECT * FROM Files_v3 WHERE id = ?`;
         const { results: existingFileResults, error: checkError } = await dbConnect(checkFileQuery, [id]);
 
-        if (checkError || !existingFileResults || existingFileResults.length === 0) {
+        if (checkError || !existingFileResults || existingFileResults[0].length === 0) {
             return { error: "File not found" };
         }
 
-        const file = existingFileResults[0];
+        const file = existingFileResults[0][0];
 
         // Check permissions
-        if (user.role !== "admin" && user.id !== String(file.uploadedUserId)) {
+        if (user.role !== "admin" && !(user.role === "instructor" && user.id === String(file.uploadedUserId))) {
             return { error: "Not authorized to delete this file" };
         }
 
