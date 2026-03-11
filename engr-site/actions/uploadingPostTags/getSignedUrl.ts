@@ -42,7 +42,12 @@ const generateTimestampedKey = (originalFilename: string) => {
   return `${timestamp}_${filenameWithDashes}`;
 };
 
-const acceptedTypes = ["application/pdf"];
+// Allowed alternate file types
+const acceptedTypes = [
+  "application/pdf",
+  "video/mp4",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+];
 const maxFileSize = 1024 * 1024 * 10; //* 10MB
 let TESTUSERID = 26;
 
