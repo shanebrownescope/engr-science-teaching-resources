@@ -20,7 +20,7 @@ export const DeleteLinkButton = ({ linkId, uploadedUserId }: DeleteLinkButtonPro
     const router = useRouter();
 
     // Check if user has permission to delete this link
-    const canDelete = user?.role === "admin" || user?.id === String(uploadedUserId);
+    const canDelete = user?.role === "admin" || (user?.role === "instructor" && user?.id === String(uploadedUserId));
 
     if (!canDelete) {
         return null;
