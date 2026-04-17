@@ -4,7 +4,7 @@
 
   margin-inline: auto;
   margin-top: 5em;
-  width: 25%;
+  width: clamp(300px, 80%, 960px);
 }
 
 .category {

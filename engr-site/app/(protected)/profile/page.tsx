@@ -4,28 +4,10 @@ import { getCurrentUser } from "@/utils/authHelpers";
 import styles from "./profile.module.css";
 import requireAuth from "@/actions/auth/requireAuth";
 import { Button } from "@mantine/core";
+import { fetchUploadsByUserId } from "@/actions/fetching/uploads/fetchUploadsByUserId";
+import { UploadedItemsList } from "./_components/UploadedItemsList";
 
 const Profile = async () => {
-  /**
-   * * signout if using "use client"
-  import { useCurrentUser } from "@/hooks/useCurrentUser";
-  import { logoutAction } from "@/actions/auth/logoutAction"
-  
-  const user = useCurrentUser()
-  const handleSignOut = () => {
-      logoutAction()
-  }
-
-    return (
-      <div>
-        {JSON.stringify({user})}
-        <button onClick={handleSignOut} type="submit">
-          Sign out
-        </button>
-      </div>
-    )
-  */
-
   await requireAuth();
 
   const user = await getCurrentUser();
@@ -34,6 +16,13 @@ const Profile = async () => {
     "use server";
     await signOut();
   };
+
+  const canViewUploads = user?.role === "admin" || user?.role === "instructor";
+
+  const uploads =
+    canViewUploads && user?.id
+      ? await fetchUploadsByUserId(user.id)
+      : null;
 
   return (
     <div className={styles.container}>
@@ -55,6 +44,13 @@ const Profile = async () => {
       <form className={styles.signOut} action={handleSignOut}>
         <Button type="submit">Sign out</Button>
       </form>
+
+      {canViewUploads && uploads?.success && (
+        <UploadedItemsList
+          files={uploads.success.files}
+          links={uploads.success.links}
+        />
+      )}
     </div>
   );
 };
