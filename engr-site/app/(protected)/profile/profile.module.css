@@ -1,17 +1,6 @@
 .container {
-  display: flex;
-  flex-direction: column;
-
+  max-width: 900px;
   margin-inline: auto;
-  margin-top: 5em;
-  width: clamp(300px, 80%, 960px);
-}
-
-.category {
-  display: flex;
-  justify-content: space-between;
-}
-
-.signOut {
-  margin-top: 5em;
+  margin-top: 3rem;
+  padding-inline: 1rem;
 }
