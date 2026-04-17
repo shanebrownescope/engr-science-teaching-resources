@@ -1,9 +1,10 @@
 "use client";
 
-import { Badge, Table, Text, Title, Anchor, Stack } from "@mantine/core";
+import { Anchor, Badge, Table, Text, Title, Stack } from "@mantine/core";
 import Link from "next/link";
 import { FetchedFile, FetchedLink } from "@/utils/types_v2";
 import { trimCapitalizeFirstLetter } from "@/utils/helpers";
+import styles from "./UploadedItemsList.module.css";
 
 type Props = {
   files: FetchedFile[];
@@ -32,24 +33,15 @@ export const UploadedItemsList = ({ files, links }: Props) => {
           <Table striped highlightOnHover withTableBorder>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>Name</Table.Th>
                 <Table.Th>Resource Type</Table.Th>
                 <Table.Th>Upload Date</Table.Th>
                 <Table.Th>Courses</Table.Th>
+                <Table.Th></Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
               {files.map((file) => (
                 <Table.Tr key={file.id}>
-                  <Table.Td>
-                    <Anchor
-                      component={Link}
-                      href={`/resources/file/${file.urlName}`}
-                      size="sm"
-                    >
-                      {file.fileName}
-                    </Anchor>
-                  </Table.Td>
                   <Table.Td>
                     <Badge variant="light" size="sm">
                       {trimCapitalizeFirstLetter(file.resourceType)}
@@ -62,6 +54,11 @@ export const UploadedItemsList = ({ files, links }: Props) => {
                     <Text size="sm" c="dimmed">
                       {file.courses?.filter(Boolean).join(", ") || "—"}
                     </Text>
+                  </Table.Td>
+                  <Table.Td>
+                    <Anchor component={Link} href={`/resources/file/${file.urlName}`} size="sm" className={styles.viewLink}>
+                      View
+                    </Anchor>
                   </Table.Td>
                 </Table.Tr>
               ))}
@@ -76,23 +73,20 @@ export const UploadedItemsList = ({ files, links }: Props) => {
           <Table striped highlightOnHover withTableBorder>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>Name</Table.Th>
+                <Table.Th>URL</Table.Th>
                 <Table.Th>Resource Type</Table.Th>
                 <Table.Th>Upload Date</Table.Th>
                 <Table.Th>Courses</Table.Th>
+                <Table.Th></Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
               {links.map((link) => (
                 <Table.Tr key={link.id}>
                   <Table.Td>
-                    <Anchor
-                      component={Link}
-                      href={`/resources/link/${link.urlName}`}
-                      size="sm"
-                    >
-                      {link.linkName}
-                    </Anchor>
+                    <Text size="sm" c="dimmed" truncate="end" maw={220}>
+                      {link.linkUrl}
+                    </Text>
                   </Table.Td>
                   <Table.Td>
                     <Badge variant="light" size="sm" color="teal">
@@ -106,6 +100,11 @@ export const UploadedItemsList = ({ files, links }: Props) => {
                     <Text size="sm" c="dimmed">
                       {link.courses?.filter(Boolean).join(", ") || "—"}
                     </Text>
+                  </Table.Td>
+                  <Table.Td>
+                    <Anchor component={Link} href={`/resources/link/${link.urlName}`} size="sm" className={styles.viewLink}>
+                      View
+                    </Anchor>
                   </Table.Td>
                 </Table.Tr>
               ))}
