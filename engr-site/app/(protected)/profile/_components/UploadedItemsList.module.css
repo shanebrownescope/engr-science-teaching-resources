@@ -1,0 +1,5 @@
+.viewLink,
+.viewLink:visited {
+  color: var(--mantine-color-anchor);
+  text-decoration: none;
+}

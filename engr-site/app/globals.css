@@ -247,8 +247,18 @@ button {
   border: none;
 }
 
-.site-logo {
+.site-logo,
+.site-logo:visited {
   font-weight: bold;
+  text-decoration: none;
+  color: #000;
+  display: inline-block;
+  transition: transform 150ms ease, text-shadow 150ms ease;
+}
+
+.site-logo:hover {
+  transform: scale(1.08);
+  text-shadow: 0 0 8px rgba(215, 63, 9, 1), 0 0 20px rgba(215, 63, 9, 0.9), 0 0 40px rgba(215, 63, 9, 0.6);
 }
 
 .vertical-middle {

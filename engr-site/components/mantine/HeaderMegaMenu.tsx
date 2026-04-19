@@ -88,12 +88,9 @@ export function HeaderMegaMenu() {
     <Box>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
-          <div className="site-logo"> E-SCoPe</div>
+          <Link href="/home" className="site-logo"> E-SCoPe</Link>
 
           <Group h="100%" gap={0} visibleFrom="sm">
-            <Link href="/home" className={classes.link}>
-              Home
-            </Link>
             <HoverCard
               width={600}
               position="bottom"
@@ -164,9 +161,6 @@ export function HeaderMegaMenu() {
         <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
           <Divider my="sm" />
 
-          <a href="/" className={classes.link}>
-            Home
-          </a>
           <UnstyledButton className={classes.link} onClick={toggleLinks}>
             <Center inline>
               <Box component="span" mr={5}>
