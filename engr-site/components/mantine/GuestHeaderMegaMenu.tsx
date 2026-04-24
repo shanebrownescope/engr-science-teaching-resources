@@ -53,6 +53,9 @@ export function GuestHeaderMegaMenu() {
           <div className="site-logo"> E-SCoPe</div>
 
           <Group visibleFrom="sm">
+            <Link href={"/about"} className={classes.link}>
+              About
+            </Link>
             <Link href={"/auth/login"}>
               <Button variant="default">Log in</Button>
             </Link>
@@ -84,6 +87,9 @@ export function GuestHeaderMegaMenu() {
           <a href="#" className={classes.link}>
             Home
           </a>
+          <Link href="/about" className={classes.link}>
+            About
+          </Link>
           <UnstyledButton className={classes.link} onClick={toggleLinks}>
             <Center inline>
               <Box component="span" mr={5}>
