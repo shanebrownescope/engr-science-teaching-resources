@@ -1,5 +1,6 @@
 .hero {
-  padding-top: 100px;
+  margin-top: -60px;
+  padding-top: 80px;
   padding-bottom: 80px;
   background-image: linear-gradient(250deg, rgba(130, 201, 30, 0) 0%, #062343 70%), url('');
   background-size: cover;
@@ -123,4 +124,6 @@
 
 .roleBadge {
   margin-left: auto;
+  flex-shrink: 0;
+  white-space: nowrap;
 }

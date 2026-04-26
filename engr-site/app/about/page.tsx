@@ -30,46 +30,79 @@ import classes from "./page.module.css";
 import Link from "next/link";
 import "@mantine/core/styles.css";
 
-const teamMembers = [
+const currentTeam = [
   {
     name: "Shane Brown",
     role: "Sponsor",
     status: "Professor and Associate Head of Graduate Affairs | School of CCE at Oregon State University",
   },
   {
+    name: "Jeffrey Knowles",
+    role: "Sponsor",
+    status: "Assistant Professor of Teaching | School of CCE at Oregon State University",
+  },
+  {
+    name: "Jennifer Ceballos",
+    role: "Role",
+    status: "School of EECS at Oregon State University",
+  },
+  {
+    name: "Diego Diaz-Diaz",
+    role: "Role",
+    status: "School of EECS at Oregon State University",
+  },
+  {
+    name: "Samuel Richards",
+    role: "Role",
+    status: "School of EECS at Oregon State University",
+  },
+  {
+    name: "Ryan Shankar",
+    role: "Role",
+    status: "School of EECS at Oregon State University",
+  },
+  {
+    name: "Daniel Thien",
+    role: "Role",
+    status: "School of EECS at Oregon State University",
+  }
+];
+
+const pastContributors = [
+  {
     name: "Jacob Beitler",
     role: "Full-Stack Developer",
-    status: "Senior undergrad | School of EECS at Oregon State University",
+    status: "Past Contributor | School of EECS at Oregon State University",
   },
   {
     name: "Jonah Cadiz",
     role: "Full-Stack Developer",
-    status: "Senior undergrad | School of EECS at Oregon State University",
+    status: "Past Contributor | School of EECS at Oregon State University",
   },
   {
     name: "Eebbaa Felema",
     role: "Full-Stack Developer",
-    status: "Senior undergrad | School of EECS at Oregon State University",
+    status: "Past Contributor | School of EECS at Oregon State University",
   },
   {
     name: "Jim Huang",
     role: "Full-Stack Developer",
-    status: "Senior undergrad | School of EECS at Oregon State University",
+    status: "Past Contributor | School of EECS at Oregon State University",
   },
   {
     name: "Zhenghui Yin",
     role: "Full-Stack Developer",
-    status: "Senior undergrad | School of EECS at Oregon State University",
+    status: "Past Contributor | School of EECS at Oregon State University",
   },
   {
     name: "Joseph Babal",
     role: "Full-Stack Developer",
-    status: "Graduated | School of EECS at Oregon State University",
+    status: "Past Contributor | School of EECS at Oregon State University",
   },
   {
     name: "John Nguyen",
     role: "Full-Stack Developer",
-    status: "Graduated | School of EECS at Oregon State University",
+    status: "Past Contributor | School of EECS at Oregon State University",
   }
 ];
 
@@ -109,6 +142,7 @@ export default function AboutPage() {
             Educators often lack a unified platform to discover, rate, and share high-quality, practical learning materials.
             E-SCoPe solves this fragmented experience by providing an intuitive, centralized hub designed specifically for academic resource sharing.
           </Text>
+          <br />
           <Text className={classes.description} fw={500} c="white">
             Our platform empowers instructors to elevate their teaching effectiveness by easily leveraging and contributing to a collective library of proven educational assets.
           </Text>
@@ -118,8 +152,8 @@ export default function AboutPage() {
       {/* 2. Key Features or Highlights */}
       <section className={classes.section}>
         <Container size="lg">
-          <Title className={classes.sectionTitle}>Key Platform Features</Title>
-          <Text className={classes.sectionDescription}>
+          <Title ta="center" className={classes.sectionTitle}>Key Platform Features</Title>
+          <Text ta="center" mx="auto" className={classes.sectionDescription}>
             Designed from the ground up to streamline how educators access, evaluate, and share their best materials.
           </Text>
 
@@ -143,10 +177,10 @@ export default function AboutPage() {
           <Box mt={50}>
             <Title order={3} ta="center" mb="lg">E-SCoPe in Action</Title>
             <Card shadow="md" radius="lg" p={0} withBorder>
-              {/* <Image 
-                src="/overview.jpeg" 
+              <Image
+                src="/overview.jpeg"
                 alt="A full overview of the E-SCoPe dashboard and material catalog interface."
-              /> */}
+              />
             </Card>
           </Box>
         </Container>
@@ -155,8 +189,8 @@ export default function AboutPage() {
       {/* 3. How to Access or Try It */}
       <section className={classes.ctaSection}>
         <Container size="md">
-          <Title className={classes.ctaTitle}>Ready to improve your teaching toolkit?</Title>
-          <Text className={classes.ctaDescription}>
+          <Title ta="center" className={classes.ctaTitle}>Ready to improve your teaching toolkit?</Title>
+          <Text ta="center" mx="auto" className={classes.ctaDescription}>
             Join the community today and start discovering top-tier learning resources.
           </Text>
 
@@ -199,14 +233,14 @@ export default function AboutPage() {
               Team Credits
             </Badge>
           </Group>
-          <Title className={classes.sectionTitle}>Meet the Developers</Title>
-          <Text className={classes.sectionDescription}>
+          <Title ta="center" className={classes.sectionTitle}>Current Team</Title>
+          <Text ta="center" mx="auto" className={classes.sectionDescription}>
             E-SCoPe is a multi-year project proudly brought to you by students and faculty from Oregon State University.
           </Text>
 
-          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
-            {teamMembers.map((member) => (
-              <Card key={member.name} shadow="xs" radius="md" className={classes.teamCard} padding="lg">
+          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg" mb="xl">
+            {currentTeam.map((member, idx) => (
+              <Card key={`${member.name}-${idx}`} shadow="xs" radius="md" className={classes.teamCard} padding="lg">
                 <Flex align="center" justify="space-between">
                   <Box>
                     <Text fz="lg" fw={600}>
@@ -219,7 +253,32 @@ export default function AboutPage() {
                   <Badge
                     className={classes.roleBadge}
                     variant="light"
-                    color={member.name === "Shane Brown" ? `orange` : (member.status.includes("Graduated") ? "gray" : "blue")}
+                    color={member.role === "Sponsor" ? `orange` : "blue"}
+                  >
+                    {member.role}
+                  </Badge>
+                </Flex>
+              </Card>
+            ))}
+          </SimpleGrid>
+
+          <Title order={3} ta="center" mt={40} mb="lg">Past Contributors</Title>
+          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
+            {pastContributors.map((member, idx) => (
+              <Card key={`${member.name}-${idx}`} shadow="xs" radius="md" className={classes.teamCard} padding="lg">
+                <Flex align="center" justify="space-between">
+                  <Box>
+                    <Text fz="lg" fw={600}>
+                      {member.name}
+                    </Text>
+                    <Text fz="xs" c="dimmed" mt={4}>
+                      {member.status}
+                    </Text>
+                  </Box>
+                  <Badge
+                    className={classes.roleBadge}
+                    variant="light"
+                    color="gray"
                   >
                     {member.role}
                   </Badge>
