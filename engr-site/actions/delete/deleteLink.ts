@@ -27,14 +27,14 @@ export const deleteLinkAction = async (linkId: string | number) => {
         const checkLinkQuery = `SELECT * FROM Links_v3 WHERE id = ?`;
         const { results: existingLinkResults, error: checkError } = await dbConnect(checkLinkQuery, [id]);
 
-        if (checkError || !existingLinkResults || existingLinkResults.length === 0) {
+        if (checkError || !existingLinkResults || existingLinkResults[0].length === 0) {
             return { error: "Link not found" };
         }
 
-        const link = existingLinkResults[0];
+        const link = existingLinkResults[0][0];
 
         // Check permissions
-        if (user.role !== "admin" && user.id !== String(link.uploadedUserId)) {
+        if (user.role !== "admin" && !(user.role === "instructor" && user.id === String(link.uploadedUserId))) {
             return { error: "Not authorized to delete this link" };
         }
 
