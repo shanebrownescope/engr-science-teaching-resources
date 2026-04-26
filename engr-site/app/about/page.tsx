@@ -188,12 +188,20 @@ export default function AboutPage() {
           {/* Screenshot / Media Requirement */}
           <Box mt={50}>
             <Title order={3} ta="center" mb="lg">E-SCoPe in Action</Title>
-            <Card shadow="md" radius="lg" p={0} withBorder>
-              <Image
-                src="/overview.jpeg"
-                alt="A full overview of the E-SCoPe dashboard and material catalog interface."
-              />
-            </Card>
+            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
+              <Card shadow="md" radius="lg" p={0} withBorder className={classes.card}>
+                <Image src="/images/search.png" alt="Search and discovery interface" />
+              </Card>
+              <Card shadow="md" radius="lg" p={0} withBorder className={classes.card}>
+                <Image src="/images/access.png" alt="Accessing course resources" />
+              </Card>
+              <Card shadow="md" radius="lg" p={0} withBorder className={classes.card}>
+                <Image src="/images/review.png" alt="Reviewing and rating materials" />
+              </Card>
+              <Card shadow="md" radius="lg" p={0} withBorder className={classes.card}>
+                <Image src="/images/share.png" alt="Sharing and uploading materials" />
+              </Card>
+            </SimpleGrid>
           </Box>
         </Container>
       </section>
