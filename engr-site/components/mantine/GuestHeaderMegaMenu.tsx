@@ -50,7 +50,7 @@ export function GuestHeaderMegaMenu() {
     <Box pb={60}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
-          <div className="site-logo"> E-SCoPe</div>
+          <Link href="/" className="site-logo"> E-SCoPe</Link>
 
           <Group visibleFrom="sm">
             <Link href={"/about"} className={classes.link}>

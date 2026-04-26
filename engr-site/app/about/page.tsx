@@ -30,7 +30,14 @@ import classes from "./page.module.css";
 import Link from "next/link";
 import "@mantine/core/styles.css";
 
-const currentTeam = [
+type TeamMember = {
+  name: string;
+  role: string;
+  status: string;
+  link?: string;
+};
+
+const currentTeam: TeamMember[] = [
   {
     name: "Shane Brown",
     role: "Sponsor",
@@ -45,30 +52,35 @@ const currentTeam = [
     name: "Jennifer Ceballos",
     role: "Role",
     status: "School of EECS at Oregon State University",
+    link: "https://github.com/ceballje",
   },
   {
     name: "Diego Diaz-Diaz",
     role: "Role",
     status: "School of EECS at Oregon State University",
+    link: "https://github.com/JustATurtleDuck",
   },
   {
     name: "Samuel Richards",
     role: "Role",
     status: "School of EECS at Oregon State University",
+    link: "https://github.com/vacuoussaturn",
   },
   {
     name: "Ryan Shankar",
     role: "Role",
     status: "School of EECS at Oregon State University",
+    link: "https://github.com/Shankary23#-about-me",
   },
   {
     name: "Daniel Thien",
     role: "Role",
     status: "School of EECS at Oregon State University",
+    link: "https://github.com/",
   }
 ];
 
-const pastContributors = [
+const pastContributors: TeamMember[] = [
   {
     name: "Jacob Beitler",
     role: "Full-Stack Developer",
@@ -176,12 +188,20 @@ export default function AboutPage() {
           {/* Screenshot / Media Requirement */}
           <Box mt={50}>
             <Title order={3} ta="center" mb="lg">E-SCoPe in Action</Title>
-            <Card shadow="md" radius="lg" p={0} withBorder>
-              <Image
-                src="/overview.jpeg"
-                alt="A full overview of the E-SCoPe dashboard and material catalog interface."
-              />
-            </Card>
+            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
+              <Card shadow="md" radius="lg" p={0} withBorder className={classes.card}>
+                <Image src="/images/search.png" alt="Search and discovery interface" />
+              </Card>
+              <Card shadow="md" radius="lg" p={0} withBorder className={classes.card}>
+                <Image src="/images/access.png" alt="Accessing course resources" />
+              </Card>
+              <Card shadow="md" radius="lg" p={0} withBorder className={classes.card}>
+                <Image src="/images/review.png" alt="Reviewing and rating materials" />
+              </Card>
+              <Card shadow="md" radius="lg" p={0} withBorder className={classes.card}>
+                <Image src="/images/share.png" alt="Sharing and uploading materials" />
+              </Card>
+            </SimpleGrid>
           </Box>
         </Container>
       </section>
@@ -239,8 +259,8 @@ export default function AboutPage() {
           </Text>
 
           <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg" mb="xl">
-            {currentTeam.map((member, idx) => (
-              <Card key={`${member.name}-${idx}`} shadow="xs" radius="md" className={classes.teamCard} padding="lg">
+            {currentTeam.map((member, idx) => {
+              const content = (
                 <Flex align="center" justify="space-between">
                   <Box>
                     <Text fz="lg" fw={600}>
@@ -258,14 +278,24 @@ export default function AboutPage() {
                     {member.role}
                   </Badge>
                 </Flex>
-              </Card>
-            ))}
+              );
+
+              return member.link ? (
+                <Card key={`${member.name}-${idx}`} component="a" href={member.link} target="_blank" shadow="xs" radius="md" className={classes.teamCard} padding="lg" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {content}
+                </Card>
+              ) : (
+                <Card key={`${member.name}-${idx}`} shadow="xs" radius="md" className={classes.teamCard} padding="lg">
+                  {content}
+                </Card>
+              );
+            })}
           </SimpleGrid>
 
           <Title order={3} ta="center" mt={40} mb="lg">Past Contributors</Title>
           <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
-            {pastContributors.map((member, idx) => (
-              <Card key={`${member.name}-${idx}`} shadow="xs" radius="md" className={classes.teamCard} padding="lg">
+            {pastContributors.map((member, idx) => {
+              const content = (
                 <Flex align="center" justify="space-between">
                   <Box>
                     <Text fz="lg" fw={600}>
@@ -283,14 +313,24 @@ export default function AboutPage() {
                     {member.role}
                   </Badge>
                 </Flex>
-              </Card>
-            ))}
+              );
+
+              return member.link ? (
+                <Card key={`${member.name}-${idx}`} component="a" href={member.link} target="_blank" shadow="xs" radius="md" className={classes.teamCard} padding="lg" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {content}
+                </Card>
+              ) : (
+                <Card key={`${member.name}-${idx}`} shadow="xs" radius="md" className={classes.teamCard} padding="lg">
+                  {content}
+                </Card>
+              );
+            })}
           </SimpleGrid>
 
           <Box mt={60} ta="center">
             <Title order={4} mb="xs">Feedback & Questions</Title>
             <Text c="dimmed" mb="md">Experiencing issues or want to provide feedback?</Text>
-            <a href="https://github.com" target="_blank" rel="noreferrer">
+            <a href="https://github.com/shanebrownescope/engr-science-teaching-resources/issues" target="_blank" rel="noreferrer">
               <Button leftSection={<IconBrandGithub size={18} />} variant="default" radius="md">
                 Open an Issue on GitHub
               </Button>
