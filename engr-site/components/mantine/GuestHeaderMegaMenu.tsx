@@ -47,7 +47,7 @@ export function GuestHeaderMegaMenu() {
   const theme = useMantineTheme();
 
   return (
-    <Box pb={120}>
+    <Box pb={60}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
           <div className="site-logo"> E-SCoPe</div>
