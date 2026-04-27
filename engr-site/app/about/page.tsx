@@ -50,31 +50,31 @@ const currentTeam: TeamMember[] = [
   },
   {
     name: "Jennifer Ceballos",
-    role: "Role",
+    role: "Frontend Developer",
     status: "School of EECS at Oregon State University",
     link: "https://github.com/ceballje",
   },
   {
     name: "Diego Diaz-Diaz",
-    role: "Role",
+    role: "Full-Stack Developer",
     status: "School of EECS at Oregon State University",
     link: "https://github.com/JustATurtleDuck",
   },
   {
     name: "Samuel Richards",
-    role: "Role",
+    role: "Frontend Developer",
     status: "School of EECS at Oregon State University",
     link: "https://github.com/vacuoussaturn",
   },
   {
     name: "Ryan Shankar",
-    role: "Role",
+    role: "Full-Stack Developer",
     status: "School of EECS at Oregon State University",
     link: "https://github.com/Shankary23#-about-me",
   },
   {
     name: "Daniel Thien",
-    role: "Role",
+    role: "Frontend Developer",
     status: "School of EECS at Oregon State University",
     link: "https://github.com/",
   }
