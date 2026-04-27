@@ -158,7 +158,7 @@ export function HeaderMegaMenu() {
         hiddenFrom="sm"
         zIndex={1000000}
       >
-        <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
+        <ScrollArea h={`calc(100vh - ${rem(80)})`}>
           <Divider my="sm" />
         
       
@@ -167,6 +167,10 @@ export function HeaderMegaMenu() {
             Profile
           </Link>
       )}
+
+          <Link href="/home" className={classes.link} onClick={closeDrawer}>
+            Home
+          </Link>
 
           <UnstyledButton className={classes.link} onClick={toggleLinks}>
             <Center inline>
@@ -180,16 +184,14 @@ export function HeaderMegaMenu() {
             </Center>
           </UnstyledButton>
           <Collapse in={linksOpened}>{FinalCourseLinks}</Collapse>
-          <a href="#" className={classes.link}>
-            Learn
-          </a>
-          <a href="#" className={classes.link}>
-            Academy
-          </a>
+
+          {(role === "admin" || role === "instructor") && (
+            <Link href="/dashboard" className={classes.link} onClick={closeDrawer}>
+              Dashboard
+            </Link>
+          )}
 
           <Divider my="sm" />
-       
-          
         </ScrollArea>
       </Drawer>
     </Box>
