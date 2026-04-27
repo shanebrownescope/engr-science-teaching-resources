@@ -16,12 +16,15 @@ export function GuestHeaderMegaMenu() {
     useDisclosure(false);
 
   return (
-    <Box pb={120}>
+    <Box pb={60}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
           <Link href="/" className="site-logo"> E-SCoPe</Link>
 
           <Group visibleFrom="sm">
+            <Link href="/about" className={classes.link}>
+              About
+            </Link>
             <Link href="/auth/login">
               <Button variant="default">Log in</Button>
             </Link>
@@ -56,7 +59,11 @@ export function GuestHeaderMegaMenu() {
 
         <Divider mb="sm" />
 
-        <Group justify="center" grow pb="xl">
+        <Link href="/about" className={classes.link} onClick={closeDrawer}>
+          About
+        </Link>
+
+        <Group justify="center" grow pb="xl" mt="sm">
           <Link href="/auth/login" onClick={closeDrawer}>
             <Button variant="default" fullWidth>Log in</Button>
           </Link>
