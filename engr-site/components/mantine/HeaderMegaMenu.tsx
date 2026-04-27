@@ -160,6 +160,13 @@ export function HeaderMegaMenu() {
       >
         <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
           <Divider my="sm" />
+        
+      
+          {role && (
+          <Link href={"/profile"} className={classes.link}>
+            Profile
+          </Link>
+      )}
 
           <UnstyledButton className={classes.link} onClick={toggleLinks}>
             <Center inline>
@@ -181,11 +188,8 @@ export function HeaderMegaMenu() {
           </a>
 
           <Divider my="sm" />
-
-          <Group justify="center" grow pb="xl" px="md">
-            <Button variant="default">Log in</Button>
-            <Button>Sign up</Button>
-          </Group>
+       
+          
         </ScrollArea>
       </Drawer>
     </Box>
