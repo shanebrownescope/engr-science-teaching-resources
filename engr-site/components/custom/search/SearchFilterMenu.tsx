@@ -111,14 +111,19 @@ export const SearchFilterMenu = ({
   
       // Combine all the course topics into a single array (flatMap == map + flat)
       const combinedCourseTopics = results.flatMap((result) => result.success || []);
+
+      // Filter out duplicate topic names to prevent Mantine MultiSelect from throwing an error
+      const uniqueCourseTopics = Array.from(
+        new Map(combinedCourseTopics.map((item) => [item.name, item])).values()
+      );
   
       // Update the course topics data state
-      setCourseTopicsData(combinedCourseTopics);
+      setCourseTopicsData(uniqueCourseTopics);
   
       // Filter the selected course topics to keep only those associated with the remaining courses
       setSelectedCourseTopics((prevSelectedTopics) => {
         return prevSelectedTopics?.filter((topic) =>
-          combinedCourseTopics.some((ct) => ct.name == topic)
+          uniqueCourseTopics.some((ct) => ct.name == topic)
         );
       });
     } catch (error) {
