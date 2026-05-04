@@ -90,6 +90,7 @@ export function NavbarNested() {
         size="100%"
         padding="md"
         withCloseButton={false}
+        closeOnClickOutside={false}
         hiddenFrom="sm"
         zIndex={1000000}
       >

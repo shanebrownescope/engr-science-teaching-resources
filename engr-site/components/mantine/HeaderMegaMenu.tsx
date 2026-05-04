@@ -168,6 +168,7 @@ export function HeaderMegaMenu() {
         size="100%"
         padding="md"
         withCloseButton={false}
+        closeOnClickOutside={false}
         hiddenFrom="sm"
         zIndex={1000000}
       >
