@@ -9,7 +9,9 @@ const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return (
     <div className="flex">
       <NavbarNested />
-      <ContainerLayout paddingTop="md">{children}</ContainerLayout>
+      <div style={{ flex: 1, minWidth: 0, overflowX: "hidden" }}>
+        <ContainerLayout paddingTop="md">{children}</ContainerLayout>
+      </div>
     </div>
   );
 };

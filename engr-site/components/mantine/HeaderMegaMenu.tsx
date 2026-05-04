@@ -15,23 +15,19 @@ import {
   Drawer,
   Collapse,
   ScrollArea,
+  ActionIcon,
   rem,
   useMantineTheme,
 } from "@mantine/core";
-import { MantineLogo } from "@mantinex/mantine-logo";
 import { useDisclosure } from "@mantine/hooks";
 import {
-  IconNotification,
-  IconCode,
   IconBook,
-  IconChartPie3,
-  IconFingerprint,
-  IconCoin,
   IconChevronDown,
   IconAtom,
   IconArrowsMove,
   IconBarbell,
   IconBolt,
+  IconX,
 } from "@tabler/icons-react";
 import classes from "./HeaderMegaMenu.module.css";
 import Link from "next/link";
@@ -75,9 +71,26 @@ export function HeaderMegaMenu() {
             <Text size="sm" fw={500}>
               {item.title}
             </Text>
-            {/* <Text size="xs" c="dimmed">
-              {item?.description}
-            </Text> */}
+          </div>
+        </Group>
+      </UnstyledButton>
+    </Link>
+  ));
+
+  const MobileCourseLinks = newData?.map((item) => (
+    <Link href={`/courses/${item.url}`} key={item.url} passHref onClick={closeDrawer}>
+      <UnstyledButton className={classes.subLink}>
+        <Group wrap="nowrap" align="center">
+          <ThemeIcon size={34} variant="default" radius="md">
+            <item.icon
+              style={{ width: rem(22), height: rem(22) }}
+              color={theme.colors.dark[8]}
+            />
+          </ThemeIcon>
+          <div>
+            <Text size="sm" fw={500}>
+              {item.title}
+            </Text>
           </div>
         </Group>
       </UnstyledButton>
@@ -154,19 +167,26 @@ export function HeaderMegaMenu() {
         onClose={closeDrawer}
         size="100%"
         padding="md"
-        title="Navigation"
+        withCloseButton={false}
         hiddenFrom="sm"
         zIndex={1000000}
       >
+        <Group justify="space-between" mb="sm">
+          <span style={{ fontWeight: 600 }}>Navigation</span>
+          <ActionIcon onClick={closeDrawer} variant="subtle" size="lg">
+            <IconX size={18} />
+          </ActionIcon>
+        </Group>
+
         <ScrollArea h={`calc(100vh - ${rem(80)})`}>
           <Divider my="sm" />
         
       
           {role && (
-          <Link href={"/profile"} className={classes.link}>
-            Profile
-          </Link>
-      )}
+            <Link href={"/profile"} className={classes.link} onClick={closeDrawer}>
+              Profile
+            </Link>
+          )}
 
           <Link href="/home" className={classes.link} onClick={closeDrawer}>
             Home
@@ -183,7 +203,7 @@ export function HeaderMegaMenu() {
               />
             </Center>
           </UnstyledButton>
-          <Collapse in={linksOpened}>{FinalCourseLinks}</Collapse>
+          <Collapse in={linksOpened}>{MobileCourseLinks}</Collapse>
 
           {(role === "admin" || role === "instructor") && (
             <Link href="/dashboard" className={classes.link} onClick={closeDrawer}>

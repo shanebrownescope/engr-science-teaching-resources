@@ -1,27 +1,18 @@
 "use client";
 import {
-  Group,
-  Code,
   ScrollArea,
   rem,
   Burger,
-  Button,
   Divider,
   Drawer,
-  UnstyledButton,
-  Center,
-  Box,
-  Collapse,
+  Group,
+  ActionIcon,
 } from "@mantine/core";
+import { IconX } from "@tabler/icons-react";
 import {
   IconNotes,
   IconCalendarStats,
   IconGauge,
-  IconPresentationAnalytics,
-  IconFileAnalytics,
-  IconAdjustments,
-  IconLock,
-  IconChevronDown,
 } from "@tabler/icons-react";
 // import { UserButton } from '../UserButton/UserButton';
 import { LinksGroup } from "./NavbarLinksGroup";
@@ -85,6 +76,10 @@ export function NavbarNested() {
     <LinksGroup {...item} key={item.label} />
   ));
 
+  const linksMobile = navData.map((item) => (
+    <LinksGroup {...item} key={item.label} onLinkClick={closeDrawer} />
+  ));
+
   return (
     <div className={classes.sidebarContainer}>
       <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
@@ -94,14 +89,21 @@ export function NavbarNested() {
         onClose={closeDrawer}
         size="100%"
         padding="md"
-        title="Admin Menu"
+        withCloseButton={false}
         hiddenFrom="sm"
         zIndex={1000000}
       >
-        <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
+        <Group justify="space-between" mb="sm">
+          <span style={{ fontWeight: 600 }}>Admin Menu</span>
+          <ActionIcon onClick={closeDrawer} variant="subtle" size="lg">
+            <IconX size={18} />
+          </ActionIcon>
+        </Group>
+
+        <ScrollArea h={`calc(100vh - ${rem(80)})`}>
           <Divider my="sm" />
 
-          {linksDesktop}
+          {linksMobile}
         </ScrollArea>
       </Drawer>
 
