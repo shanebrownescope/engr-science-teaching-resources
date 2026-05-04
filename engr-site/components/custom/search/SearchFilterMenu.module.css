@@ -55,3 +55,19 @@
   margin-top: 4px;
   font-style: italic;
 }
+
+@media (max-width: 768px) {
+  .layoutContainer {
+    flex-direction: column;
+  }
+
+  .filterColumn {
+    width: 100%;
+    position: relative;
+    top: 0;
+  }
+
+  .yearSliderContainer {
+    width: 100%;
+  }
+}

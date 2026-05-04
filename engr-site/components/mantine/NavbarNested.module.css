@@ -2,7 +2,7 @@
   padding: var(--mantine-spacing-md);
   border-right: rem(1px) solid
     light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
-  height: rem(800px);
+  height: auto;
 }
 
 .desktopSidebar {
@@ -10,13 +10,11 @@
 }
 
 .navbar {
-  /* position: absolute;
-  top: 0; */
   background-color: light-dark(
     var(--mantine-color-white),
     var(--mantine-color-dark-6)
   );
-  height: rem(800px);
+  min-height: 100dvh;
   width: rem(300px);
   padding: var(--mantine-spacing-md);
   padding-bottom: 0;

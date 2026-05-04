@@ -58,11 +58,33 @@
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding: 40px 0;
+  }
+
   .imageContainer {
     min-height: 200px;
   }
-  
+
   .textContent {
     padding: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 20px 0;
+  }
+
+  .imageContainer {
+    min-height: 160px;
+  }
+
+  .textContent {
+    padding: 16px;
+  }
+
+  .featureTitle {
+    font-size: 1.2rem;
   }
 }
