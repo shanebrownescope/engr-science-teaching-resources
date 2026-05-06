@@ -1,37 +1,8 @@
-import {
-  HoverCard,
-  Group,
-  Button,
-  UnstyledButton,
-  Text,
-  SimpleGrid,
-  ThemeIcon,
-  Anchor,
-  Divider,
-  Center,
-  Box,
-  Burger,
-  Drawer,
-  Collapse,
-  ScrollArea,
-  rem,
-  useMantineTheme,
-} from "@mantine/core";
-import { MantineLogo } from "@mantinex/mantine-logo";
+"use client";
+
+import { Group, Button, Divider, Box, Burger, Drawer, ActionIcon } from "@mantine/core";
+import { IconX } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
-import {
-  IconNotification,
-  IconCode,
-  IconBook,
-  IconChartPie3,
-  IconFingerprint,
-  IconCoin,
-  IconChevronDown,
-  IconAtom,
-  IconArrowsMove,
-  IconBarbell,
-  IconBolt,
-} from "@tabler/icons-react";
 import classes from "./GuestHeaderMegaMenu.module.css";
 import Link from "next/link";
 
@@ -43,8 +14,6 @@ import Link from "next/link";
 export function GuestHeaderMegaMenu() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
-  const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
-  const theme = useMantineTheme();
 
   return (
     <Box pb={60}>
@@ -53,14 +22,14 @@ export function GuestHeaderMegaMenu() {
           <Link href="/" className="site-logo"> E-SCoPe</Link>
 
           <Group visibleFrom="sm">
-            <Link href={"/about"} className={classes.link}>
+            <Link href="/about" className={classes.link}>
               About
             </Link>
-            <Link href={"/auth/login"}>
+            <Link href="/auth/login">
               <Button variant="default">Log in</Button>
             </Link>
-            <Link href={"/auth/register"}>
-              <Button variant="default">Sign up</Button>
+            <Link href="/auth/register">
+              <Button>Sign up</Button>
             </Link>
           </Group>
 
@@ -77,44 +46,31 @@ export function GuestHeaderMegaMenu() {
         onClose={closeDrawer}
         size="100%"
         padding="md"
-        title="Navigation"
+        withCloseButton={false}
         hiddenFrom="sm"
         zIndex={1000000}
       >
-        <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
-          <Divider my="sm" />
+        <Group justify="space-between" mb="sm">
+          <span style={{ fontWeight: 600 }}>Navigation</span>
+          <ActionIcon onClick={closeDrawer} variant="subtle" size="lg">
+            <IconX size={18} />
+          </ActionIcon>
+        </Group>
 
-          <a href="#" className={classes.link}>
-            Home
-          </a>
-          <Link href="/about" className={classes.link}>
-            About
+        <Divider mb="sm" />
+
+        <Link href="/about" className={classes.link} onClick={closeDrawer}>
+          About
+        </Link>
+
+        <Group justify="center" grow pb="xl" mt="sm">
+          <Link href="/auth/login" onClick={closeDrawer}>
+            <Button variant="default" fullWidth>Log in</Button>
           </Link>
-          <UnstyledButton className={classes.link} onClick={toggleLinks}>
-            <Center inline>
-              <Box component="span" mr={5}>
-                Features
-              </Box>
-              <IconChevronDown
-                style={{ width: rem(16), height: rem(16) }}
-                color={theme.colors.blue[6]}
-              />
-            </Center>
-          </UnstyledButton>
-          <a href="#" className={classes.link}>
-            Learn
-          </a>
-          <a href="#" className={classes.link}>
-            Academy
-          </a>
-
-          <Divider my="sm" />
-
-          <Group justify="center" grow pb="xl" px="md">
-            <Button variant="default">Log in</Button>
-            <Button>Sign up</Button>
-          </Group>
-        </ScrollArea>
+          <Link href="/auth/register" onClick={closeDrawer}>
+            <Button fullWidth>Sign up</Button>
+          </Link>
+        </Group>
       </Drawer>
     </Box>
   );

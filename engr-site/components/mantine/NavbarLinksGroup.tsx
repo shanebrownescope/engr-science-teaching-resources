@@ -10,7 +10,7 @@ import {
   UnstyledButton,
   rem,
 } from "@mantine/core";
-import { IconCalendarStats, IconChevronRight } from "@tabler/icons-react";
+import { IconChevronRight } from "@tabler/icons-react";
 import classes from "./NavbarLinksGroup.module.css";
 import { usePathname } from "next/navigation";
 
@@ -19,23 +19,15 @@ interface LinksGroupProps {
   label: string;
   initiallyOpened?: boolean;
   links?: { label: string; link: string }[];
+  onLinkClick?: () => void;
 }
 
-/**
- * Renders a group of links in the navbar.
- *
- * @param {Object} props - The component props.
- * @param {React.FC<any>} props.icon - The icon to display.
- * @param {string} props.label - The label for the group.
- * @param {boolean} [props.initiallyOpened] - Indicates if the group should be initially opened.
- * @param {Array<{ label: string, link: string }>} [props.links] - The links to display.
- * @returns {JSX.Element} - The rendered LinksGroup component.
- */
 export function LinksGroup({
   icon: Icon,
   label,
   initiallyOpened,
   links,
+  onLinkClick,
 }: LinksGroupProps) {
   const pathname = usePathname();
   const hasLinks = Array.isArray(links);
@@ -46,6 +38,7 @@ export function LinksGroup({
       className={`${classes.link} ${pathname === link.link ? classes.active : ""}`}
       href={link.link}
       key={link.label}
+      onClick={onLinkClick}
     >
       {link.label}
     </Text>
