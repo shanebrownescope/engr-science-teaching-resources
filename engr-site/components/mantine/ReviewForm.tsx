@@ -29,7 +29,6 @@ export default function ReviewForm({
 }: ReviewFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [ratingError, setRatingError] = useState<string | null>(null);
   const [reviewData, setReviewData] = useState({
     rating: 0,
     title: '',
@@ -39,9 +38,6 @@ export default function ReviewForm({
 
   // handle on change event for review form values
   const handleChange = (field: string, value: string | number) => {
-    if (field === 'rating') {
-      setRatingError(null);
-    }
     setReviewData(prev => ({
       ...prev,
       [field]: value
@@ -51,18 +47,12 @@ export default function ReviewForm({
   // handle on submit event (update resource average rating and upload new review)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (reviewData.rating < 1) {
-      setRatingError('Please select a star rating before submitting');
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      const resultForUpdate = await updateAvgRating({
-        [`${type}Name`]: resourceName,
-        newRating: reviewData.rating
+      const resultForUpdate = await updateAvgRating({ 
+        [`${type}Name`]: resourceName, 
+        newRating: reviewData.rating 
       });
 
       if (resultForUpdate.failure) {
@@ -70,10 +60,10 @@ export default function ReviewForm({
         return
       }
 
-      const resultForUpload = await uploadReview({
-        values: reviewData,
-        userId: userId,
-        [`${type}Name`]: resourceName
+      const resultForUpload = await uploadReview({ 
+        values: reviewData, 
+        userId: userId, 
+        [`${type}Name`]: resourceName 
       });
 
       if (resultForUpload.failure) {
@@ -82,7 +72,7 @@ export default function ReviewForm({
       }
 
       router.push(`/resources/${type}/${resourceName}`);
-
+      
     } catch (error) {
       console.log("Error occured when submitting resource review: ", error)
       return
@@ -110,9 +100,6 @@ export default function ReviewForm({
               size="xl"
               className={classes.rating}
             />
-            {ratingError && (
-              <Text c="red" size="sm" mt="xs">{ratingError}</Text>
-            )}
           </div>
 
           <TextInput
