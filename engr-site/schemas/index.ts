@@ -145,8 +145,8 @@ export const ReviewSchema = z.object({
   }).trim(),
   comments: z.string().trim(),
   rating: z.number()
-    .min(0, {
-      message: "Rating must be at least 0"
+    .min(1, {
+      message: "Rating must have at least 1 star"
     })
     .max(5, {
       message: "Rating cannot exceed 5"
